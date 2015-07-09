@@ -1,4 +1,4 @@
-#include "ofxGuiExtendedGroup.h"
+#include "ofxGuiGroupExtended.h"
 using namespace std;
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(){

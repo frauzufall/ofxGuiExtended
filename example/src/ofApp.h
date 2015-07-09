@@ -24,7 +24,8 @@ public:
 
 private:
 
-    ofxGuiGroup panel;
+    ofxPanel panel;
+    ofxGuiGroup minimals;
 
     ofParameter<bool> toggle_param;
 

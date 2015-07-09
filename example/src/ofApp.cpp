@@ -4,10 +4,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    panel.setup("extended gui elements");
+    panel.setup("extended gui");
+    minimals.setup("minimal");
 
-    panel.add(new ofxMinimalToggle(toggle_param.set("toggle", false), 0, 30));
-    panel.add(new ofxMinimalButton("button", 0, 30));
+    minimals.add(new ofxMinimalToggle(toggle_param.set("toggle", false), 0, 30));
+    minimals.add(new ofxMinimalButton("button", 0, 30));
+
+    panel.add(&minimals);
 
 }
 
