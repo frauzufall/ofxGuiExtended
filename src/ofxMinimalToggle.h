@@ -4,6 +4,9 @@
 #include "ofxToggle.h"
 
 class ofxMinimalToggle : public ofxToggle {
+
+    friend class ofxToggleMatrix;
+
 public:
     ofxMinimalToggle();
     ~ofxMinimalToggle();
@@ -11,6 +14,9 @@ public:
 
     ofxMinimalToggle * setup(ofParameter<bool> _bVal, float width = defaultWidth, float height = defaultHeight);
     ofxMinimalToggle * setup(std::string toggleName, bool _bVal, float width = defaultWidth, float height = defaultHeight);
+
+    void resize(float w, float h);
+    void setParameter(bool v);
 
     virtual bool mouseReleased(ofMouseEventArgs & args);
     virtual bool mouseMoved(ofMouseEventArgs & args);

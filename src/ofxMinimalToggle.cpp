@@ -6,9 +6,6 @@ ofxMinimalToggle::ofxMinimalToggle(){
 }
 
 ofxMinimalToggle::ofxMinimalToggle(ofParameter<bool> _bVal, float width, float height):ofxToggle(){
-    if(width == 0) {
-        width = getTextWidth(_bVal.getName(), height);
-    }
     setup(_bVal, width, height);
 }
 
@@ -16,13 +13,15 @@ ofxMinimalToggle::~ofxMinimalToggle(){
 }
 
 ofxMinimalToggle * ofxMinimalToggle::setup(ofParameter<bool> _bVal, float width, float height){
+    if(width == 0) {
+        width = getTextWidth(_bVal.getName(), height);
+    }
     b.x = 0;
     b.y = 0;
     b.width = width;
     b.height = height;
     bGuiActive = false;
     value.makeReferenceTo(_bVal);
-    checkboxRect.set(1, 1, b.width - 2, b.height - 2);
 
     value.addListener(this,&ofxMinimalToggle::valueChanged);
     registerMouseEvents();
@@ -56,6 +55,7 @@ bool ofxMinimalToggle::mouseReleased(ofMouseEventArgs & args){
 
 
 void ofxMinimalToggle::generateDraw(){
+    checkboxRect.set(1, 1, b.width - 2, b.height - 2);
     bg.clear();
     bg.setFillColor(thisBackgroundColor);
     bg.rectangle(b.getPosition()+checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
@@ -110,7 +110,7 @@ bool ofxMinimalToggle::setValue(float mx, float my, bool bCheck){
 float ofxMinimalToggle::getTextWidth(string text, float _height) {
     float _width = 0;
     ofVboMesh mesh = getTextMesh(text, 0, _height / 2 + 4);
-    for(int i = 0; i < mesh.getVertices().size(); i++) {
+    for(uint i = 0; i < mesh.getVertices().size(); i++) {
         if(mesh.getVertex(i).x > _width) {
             _width = mesh.getVertex(i).x;
         }
@@ -121,4 +121,8 @@ float ofxMinimalToggle::getTextWidth(string text, float _height) {
 
 void ofxMinimalToggle::valueChanged(bool & value){
     ofxToggle::valueChanged(value);
+}
+
+void ofxMinimalToggle::setParameter(bool v) {
+    value.set(v);
 }

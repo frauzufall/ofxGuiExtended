@@ -5,12 +5,14 @@ using namespace std;
 ofxGuiGroupExtended::ofxGuiGroupExtended(){
     _bVertical = true;
     _bUseHeader = true;
+    _bAllowMultiple = true;
 }
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, string filename, float x, float y)
     :ofxGuiGroup(parameters, filename, x, y){
     _bVertical = true;
     _bUseHeader = true;
+    _bAllowMultiple = true;
 }
 
 ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string filename, float x, float y){
@@ -18,7 +20,7 @@ ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string f
     return this;
 }
 
-ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _parameters, string _filename, float x, float y){
+ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _parameters, string filename, float x, float y){
     ofxGuiGroup::setup(_parameters,filename,x,y);
     return this;
 }
@@ -41,11 +43,11 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
         b.width = element->getPosition().x + element->getWidth() - b.x + spacing;
     }
 
-    if(b.width < element->getWidth()) {
-        b.width = element->getWidth();
-        sizeChangedCB();
-        setNeedsRedraw();
-    }
+//    if(b.width < element->getWidth()) {
+//        b.width = element->getWidth();
+//        sizeChangedCB();
+//        setNeedsRedraw();
+//    }
 
     element->unregisterMouseEvents();
 
@@ -73,7 +75,7 @@ void ofxGuiGroupExtended::setWidthElements(float w){
 
 void ofxGuiGroupExtended::scaleWidthElements(float factor){
 
-    float w = this->b.getWidth()*factor;
+    float w = (this->b.getWidth()-spacing)*factor;
 
     if(_bVertical) {
         for(int i=0;i<(int)collection.size();i++){
@@ -90,7 +92,7 @@ void ofxGuiGroupExtended::scaleWidthElements(float factor){
         for(int i=(int)collection.size()-1;i>=0;i--){
             float w_i = collection[i]->getWidth()*factor;
             collection[i]->setSize(w_i,collection[i]->getHeight());
-            x += w_i;
+            x += w_i+spacing;
             collection[i]->setPosition(b.x + b.width-x,collection[i]->getPosition().y);
             ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(collection[i]);
             if(subgroup!=NULL){
@@ -126,7 +128,33 @@ bool ofxGuiGroupExtended::mousePressed(ofMouseEventArgs & args){
     if( bGuiActive ){
         ofMouseEventArgs a = args;
         for(int i = 0; i < (int)collection.size(); i++){
-            if(collection[i]->mousePressed(a)) return true;
+            ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[i]);
+            if(toggle && !_bAllowMultiple) {
+                if(processToggles(toggle, a)) return true;
+            }
+            else {
+                if(collection[i]->mousePressed(a)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool ofxGuiGroupExtended::processToggles(ofxMinimalToggle* toggle, ofMouseEventArgs a) {
+    if(!_bAllowMultiple) {
+        if(!toggle->getParameter().cast<bool>().get()) {
+            if(toggle->mousePressed(a)) {
+                for(int j = 0; j < (int)collection.size(); j++){
+                    if(ofxMinimalToggle* t = dynamic_cast<ofxMinimalToggle*>(collection[j])) {
+                        if(t != toggle) {
+                           t->setParameter(false);
+                        }
+                    }
+                }
+                return true;
+            }
         }
     }
     return false;
@@ -253,16 +281,13 @@ void ofxGuiGroupExtended::maximize(){
         }
     }
     else {
-        b.height = 0;
+        float max_h = 0;
         for(int i=0;i<(int)collection.size();i++){
-            if(b.height < collection[i]->getHeight()) {
-                b.height = collection[i]->getHeight();
+            if(max_h < collection[i]->getHeight()) {
+                max_h = collection[i]->getHeight();
             }
         }
-        b.height += spacing*2+spacingNextElement;
-        if(_bUseHeader) {
-            b.height += header;
-        }
+        b.height += max_h+spacing;
     }
     if(parent) parent->sizeChangedCB();
     setNeedsRedraw();
@@ -299,10 +324,7 @@ void ofxGuiGroupExtended::sizeChangedCB(){
     if(_bVertical) {
         for(int i=0;i<(int)collection.size();i++){
             collection[i]->setPosition(collection[i]->getPosition().x,y + spacing);
-            if(collection[i]->getWidth() < b.width - spacing) {
-                collection[i]->setSize(b.width - spacing, collection[i]->getHeight());
-            }
-            y += collection[i]->getHeight();
+            y += collection[i]->getHeight()+spacing;
         }
         b.height = y - b.y;
     }
@@ -311,13 +333,7 @@ void ofxGuiGroupExtended::sizeChangedCB(){
         float max_h = 0;
         for(int i=0;i<(int)collection.size();i++){
 
-            if(i == 0) {
-                collection[i]->setPosition(x,y + spacing);
-            }
-            else {
-                float x_i = collection[i-1]->getPosition().x + collection[i-1]->getWidth()+spacing;
-                collection[i]->setPosition(x, y+spacing);
-            }
+            collection[i]->setPosition(x,y + spacing);
 
             x += collection[i]->getWidth() + spacing;
             if(max_h < collection[i]->getHeight()) {
@@ -343,9 +359,16 @@ void ofxGuiGroupExtended::setAlignVertical() {
 }
 
 void ofxGuiGroupExtended::showHeader(bool show) {
+    if(show == false) {
+        if(minimized)
+            maximize();
+    }
     _bUseHeader = show;
     sizeChangedCB();
     setNeedsRedraw();
 
 }
 
+void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
+    _bAllowMultiple = allow;
+}

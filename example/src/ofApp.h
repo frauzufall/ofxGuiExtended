@@ -24,14 +24,16 @@ public:
 
 private:
 
-    ofxPanelExtended panel;
-    ofxGuiGroupExtended minimal;
+    ofxPanelExtended panel1, panel2;
     ofxGuiGroupExtended rotary;
-    ofxGuiGroupExtended horizontal;
+    ofxGuiMatrix matrix;
 
     ofParameter<bool> toggle_param;
     ofParameter<float> slider_param;
-    ofParameter<bool> toggle1_param, toggle2_param, toggle3_param;
+    ofParameter<bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;
+    vector<ofParameter<bool>> matrix_params;
+
+    void toggleGroupHeader(bool &val);
 
 };
 

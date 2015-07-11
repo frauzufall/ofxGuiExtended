@@ -6,3 +6,4 @@
 #include "ofxGuiGroupExtended.h"
 #include "ofxPanelExtended.h"
 #include "ofxRotarySlider.h"
+#include "ofxGuiMatrix.h"
