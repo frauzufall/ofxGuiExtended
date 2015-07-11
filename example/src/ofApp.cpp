@@ -78,6 +78,8 @@ void ofApp::draw(){
 void ofApp::toggleGroupHeader(bool &val) {
     rotary.showHeader(val);
     matrix.showHeader(val);
+    panel1.showHeader(val);
+    panel2.showHeader(val);
 }
 
 //--------------------------------------------------------------
