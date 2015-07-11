@@ -65,22 +65,11 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
     setNeedsRedraw();
 }
 
-//void ofxGuiGroupExtended::setWidthElements(float w){
-//    if(_bVertical) {
-//        for(int i=0;i<(int)collection.size();i++){
-//            float w_i = collection[i]->getWidth();
-//            if((int)w_i != (int)w) {
-//                collection[i]->setSize(w,collection[i]->getHeight());
-//                collection[i]->setPosition(b.x + b.width-w,collection[i]->getPosition().y);
-//                ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(collection[i]);
-//                if(subgroup!=NULL){
-//                    subgroup->setWidthElements(w);
-//                    cout << w/w_i << endl;
-//                }
-//            }
-//        }
-//    }
-//}
+void ofxGuiGroupExtended::setWidthElements(float w){
+    if((int)b.width != (int)w) {
+        scaleWidthElements(w / b.width);
+    }
+}
 
 void ofxGuiGroupExtended::scaleWidthElements(float factor){
 
