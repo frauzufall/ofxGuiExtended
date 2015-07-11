@@ -1,16 +1,33 @@
 #include "ofApp.h"
-#include "ofxGuiExtended.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 
     panel.setup("extended gui");
-    minimals.setup("minimal");
 
-    minimals.add(new ofxMinimalToggle(toggle_param.set("toggle", false), 0, 30));
-    minimals.add(new ofxMinimalButton("button", 0, 30));
+    minimal.setup("minimal");
+    minimal.setBorderColor(ofColor::red);
+    minimal.add(new ofxMinimalToggle(toggle_param.set("toggle", false), 0, 30));
+    minimal.add(new ofxMinimalToggle(toggle_param.set("toggle", false), 0, 30));
+    minimal.add(new ofxMinimalButton("button", 0, 30));
 
-    panel.add(&minimals);
+    horizontal.setup("horizontal");
+    horizontal.setAlignHorizontal();
+//    horizontal.showHeader(true);
+    horizontal.setBorderColor(ofColor::aquamarine);
+    horizontal.add(new ofxMinimalToggle(toggle1_param.set("toggle1", false), 80, 30));
+    horizontal.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 80, 30));
+    horizontal.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 80, 30));
+
+    rotary.setup("rotary");
+    rotary.setBorderColor(ofColor::blanchedAlmond);
+    rotary.add(new ofxRotarySlider<float>(slider_param.set("slider", 0.5, 0, 1), 66,66));
+    rotary.getControl("slider")->setFillColor(ofColor::white);
+    rotary.getControl("slider")->setBackgroundColor(ofColor::blanchedAlmond - ofColor(130));
+
+    panel.add(&minimal);
+    panel.add(&rotary);
+    panel.add(&horizontal);
 
 }
 

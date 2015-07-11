@@ -25,13 +25,22 @@ public:
     virtual bool mouseReleased(ofMouseEventArgs & args);
     virtual bool mouseScrolled(ofMouseEventArgs & args);
 
-    void setHeightElements(float h);
+    void setWidthElements(float w);
+    void scaleWidthElements(float factor);
+
+    void setAlignHorizontal();
+    void setAlignVertical();
+
+    void showHeader(bool show);
 
 protected:
     void sizeChangedCB();
     virtual void render();
     virtual void generateDraw();
-    bool vertical;
+    bool _bVertical;
+    bool _bUseHeader;
+
+    virtual bool setValue(float mx, float my, bool bCheck);
 
     ofxGuiGroupExtended * parent;
 

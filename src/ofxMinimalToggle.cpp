@@ -58,7 +58,7 @@ bool ofxMinimalToggle::mouseReleased(ofMouseEventArgs & args){
 void ofxMinimalToggle::generateDraw(){
     bg.clear();
     bg.setFillColor(thisBackgroundColor);
-    bg.rectangle(b);
+    bg.rectangle(b.getPosition()+checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
 
     fg.clear();
     if(value){

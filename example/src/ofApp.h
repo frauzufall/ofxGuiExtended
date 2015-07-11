@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGui.h"
+#include "ofxGuiExtended.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -24,10 +24,14 @@ public:
 
 private:
 
-    ofxPanel panel;
-    ofxGuiGroup minimals;
+    ofxPanelExtended panel;
+    ofxGuiGroupExtended minimal;
+    ofxGuiGroupExtended rotary;
+    ofxGuiGroupExtended horizontal;
 
     ofParameter<bool> toggle_param;
+    ofParameter<float> slider_param;
+    ofParameter<bool> toggle1_param, toggle2_param, toggle3_param;
 
 };
 
