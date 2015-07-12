@@ -54,9 +54,6 @@ void ofApp::setup(){
     panel2.add(new ofxGuiSpacer(30));
     panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
 
-    cout << "#rotary: " << panel1.getControl("rotary")->getPosition().y << endl;
-    cout << "#slider: " << rotary.getControl("slider")->getPosition().y << endl;
-
 }
 
 //--------------------------------------------------------------
