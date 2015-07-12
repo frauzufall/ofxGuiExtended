@@ -7,3 +7,4 @@
 #include "ofxPanelExtended.h"
 #include "ofxRotarySlider.h"
 #include "ofxGuiMatrix.h"
+#include "ofxGuiSpacer.h"

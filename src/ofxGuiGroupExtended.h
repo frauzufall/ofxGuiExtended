@@ -5,6 +5,7 @@
 class ofxGuiGroupExtended : public ofxGuiGroup {
 
     friend class ofxGuiMatrix;
+    friend class ofxGuiSpacer;
 
 public:
 
@@ -35,8 +36,12 @@ public:
     void setAlignHorizontal();
     void setAlignVertical();
 
+    bool isAlignedVertial();
+
     void showHeader(bool show);
     void allowMultipleActiveToggles(bool allow);
+
+    float getContentHeight();
 
 protected:
     virtual void sizeChangedCB();

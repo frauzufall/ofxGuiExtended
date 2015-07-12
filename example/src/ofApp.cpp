@@ -5,16 +5,25 @@ void ofApp::setup(){
 
     panel1.setup("extended gui");
 
+    /*
+     * minimal button and toggle
+     */
     panel1.add(new ofxMinimalToggle(toggle_param.set("toggle group header", true), 0, 30));
     toggle_param.addListener(this, &ofApp::toggleGroupHeader);
     panel1.add(new ofxMinimalButton("button", 0, 30));
 
+    /*
+     * rotary slider
+     */
     rotary.setup("rotary");
     rotary.setBorderColor(ofColor::blanchedAlmond);
     rotary.add(new ofxFloatRotarySlider(slider_param.set("slider", 0.5, 0, 1), 66,66));
     rotary.getControl("slider")->setFillColor(ofColor::white);
     rotary.getControl("slider")->setBackgroundColor(ofColor::blanchedAlmond - ofColor(130));
 
+    /*
+     * matrix with only one allowed active toggle
+     */
     matrix.setup("matrix");
     matrix.setBorderColor(ofColor::aquamarine);
     matrix.setColNum(3);
@@ -33,12 +42,16 @@ void ofApp::setup(){
     panel1.add(&rotary);
     panel1.add(&matrix);
 
+    /*
+     * horizontal panel with spacer
+     */
     panel2.setup("horizontal", "", 260, 10);
     panel2.setAlignHorizontal();
     panel2.setBackgroundColor(ofColor::black);
     panel2.add(new ofxToggle(toggle1_param.set("toggle1", false), 100, 30));
     panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
     panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
+    panel2.add(new ofxGuiSpacer(30));
     panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
 
 }

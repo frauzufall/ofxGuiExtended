@@ -358,6 +358,10 @@ void ofxGuiGroupExtended::setAlignVertical() {
     _bVertical = true;
 }
 
+bool ofxGuiGroupExtended::isAlignedVertial() {
+    return _bVertical;
+}
+
 void ofxGuiGroupExtended::showHeader(bool show) {
     if(show == false) {
         if(minimized)
@@ -371,4 +375,15 @@ void ofxGuiGroupExtended::showHeader(bool show) {
 
 void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
     _bAllowMultiple = allow;
+}
+
+float ofxGuiGroupExtended::getContentHeight() {
+    float h = b.height - spacing;
+    if(_bUseHeader) {
+       h -= header;
+    }
+    if(parent) {
+        h -= spacingNextElement;
+    }
+    return h;
 }
