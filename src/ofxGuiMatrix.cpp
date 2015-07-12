@@ -91,7 +91,8 @@ bool ofxGuiMatrix::mousePressed(ofMouseEventArgs & args){
     if( bGuiActive ){
         ofMouseEventArgs a = args;
         for(int i = 0; i < (int)collection.size(); i++){
-            if(ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[i])) {
+            ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[i]);
+            if(toggle && !_bAllowMultiple) {
                 if(processToggles(toggle, a)) return true;
             }
             else {
