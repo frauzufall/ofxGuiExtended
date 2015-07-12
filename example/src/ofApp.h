@@ -32,6 +32,7 @@ private:
     ofParameter<float> slider_param;
     ofParameter<bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;
     vector<ofParameter<bool>> matrix_params;
+    ofParameterGroup g;
 
     void toggleGroupHeader(bool &val);
 

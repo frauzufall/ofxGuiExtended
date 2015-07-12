@@ -4,11 +4,12 @@
 void ofApp::setup(){
 
     panel1.setup("extended gui");
+    panel1.setBorderColor(ofColor::black);
 
     /*
      * minimal button and toggle
      */
-    panel1.add(new ofxMinimalToggle(toggle_param.set("toggle group header", true), 0, 30));
+    panel1.add(new ofxMinimalToggle(toggle_param.set("show header", true), 0, 30));
     toggle_param.addListener(this, &ofApp::toggleGroupHeader);
     panel1.add(new ofxMinimalButton("button", 0, 30));
 
@@ -24,20 +25,19 @@ void ofApp::setup(){
     /*
      * matrix with only one allowed active toggle
      */
-    matrix.setup("matrix");
-    matrix.setBorderColor(ofColor::aquamarine);
-    matrix.setColNum(3);
-    matrix.setElementHeight(26);
-    matrix.allowMultipleActiveToggles(false);
     matrix_params.push_back(ofParameter<bool>("only",false));
     matrix_params.push_back(ofParameter<bool>("one",false));
     matrix_params.push_back(ofParameter<bool>("toggle",false));
     matrix_params.push_back(ofParameter<bool>("can",false));
     matrix_params.push_back(ofParameter<bool>("be",false));
     matrix_params.push_back(ofParameter<bool>("active",false));
+    matrix.setup("matrix",3);
     for(uint i = 0; i < matrix_params.size(); i++) {
         matrix.add(new ofxMinimalToggle(matrix_params.at(i)));
     }
+    matrix.setBorderColor(ofColor::aquamarine);
+    matrix.setElementHeight(26);
+    matrix.allowMultipleActiveToggles(false);
 
     panel1.add(&rotary);
     panel1.add(&matrix);
@@ -47,12 +47,15 @@ void ofApp::setup(){
      */
     panel2.setup("horizontal", "", 260, 10);
     panel2.setAlignHorizontal();
-    panel2.setBackgroundColor(ofColor::black);
+    panel2.setBorderColor(ofColor::black);
     panel2.add(new ofxToggle(toggle1_param.set("toggle1", false), 100, 30));
     panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
     panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
     panel2.add(new ofxGuiSpacer(30));
     panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
+
+    cout << "#rotary: " << panel1.getControl("rotary")->getPosition().y << endl;
+    cout << "#slider: " << rotary.getControl("slider")->getPosition().y << endl;
 
 }
 
@@ -75,7 +78,12 @@ void ofApp::draw(){
             ofSetColor(ofColor::azure);
         }
         else {
-            ofSetColor(ofColor::black);
+            if(matrix_params.at(0).get()) {
+                ofSetColor(ofColor::burlyWood);
+            }
+            else {
+                ofSetColor(ofColor::fromHex(0x2da1e3));
+            }
         }
     }
 
@@ -105,9 +113,6 @@ void ofApp::keyReleased(int key){
     case 'f': {
         ofToggleFullscreen();
         break;
-    }
-    case 't': {
-        cout << panel1.getHeight() << endl;
     }
     default: break;
     }

@@ -33,8 +33,8 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
         element->setPosition(b.x, b.y + b.height  + spacing);
 
         b.height += element->getHeight() + spacing;
-        if(b.width-spacing > element->getWidth() && _bVertical) {
-            element->setSize(b.width-spacing, element->getHeight());
+        if(b.width-1 > element->getWidth() && _bVertical) {
+            element->setSize(b.width-1, element->getHeight());
         }
     }
     else {
@@ -43,11 +43,9 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
         b.width = element->getPosition().x + element->getWidth() - b.x + spacing;
     }
 
-//    if(b.width < element->getWidth()) {
-//        b.width = element->getWidth();
-//        sizeChangedCB();
-//        setNeedsRedraw();
-//    }
+    if(b.width-1 < element->getWidth()) {
+        element->setSize(b.width-1, element->getHeight());
+    }
 
     element->unregisterMouseEvents();
 
@@ -75,7 +73,7 @@ void ofxGuiGroupExtended::setWidthElements(float w){
 
 void ofxGuiGroupExtended::scaleWidthElements(float factor){
 
-    float w = (this->b.getWidth()-spacing)*factor;
+    float w = b.getWidth()*factor;
 
     if(_bVertical) {
         for(int i=0;i<(int)collection.size();i++){

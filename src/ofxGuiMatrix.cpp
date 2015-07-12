@@ -5,19 +5,26 @@ using namespace std;
 ofxGuiMatrix::ofxGuiMatrix(){
 }
 
-ofxGuiMatrix::ofxGuiMatrix(const ofParameterGroup & parameters, int cols, string filename, float x, float y)
-    :ofxGuiGroupExtended(parameters, filename, x, y){
-    //TODO FIX
+ofxGuiMatrix::ofxGuiMatrix(string collectionName, int cols, string filename, float x, float y)
+    :ofxGuiGroupExtended(){
+    setup(collectionName, cols, filename, x, y);
 }
 
-ofxGuiMatrix * ofxGuiMatrix::setup(string collectionName, string filename, float x, float y){
+ofxGuiMatrix::ofxGuiMatrix(const ofParameterGroup & parameters, int cols, string filename, float x, float y)
+    :ofxGuiGroupExtended(parameters, filename, x, y){
+    setColNum(cols);
+    sizeChangedCB();
+    setNeedsRedraw();
+}
+
+ofxGuiMatrix * ofxGuiMatrix::setup(string collectionName, int cols, string filename, float x, float y){
+    setColNum(cols);
     ofxGuiGroupExtended::setup(collectionName,filename,x,y);
     w_matrix = b.width;
     return this;
 }
 
 ofxGuiMatrix * ofxGuiMatrix::setup(const ofParameterGroup & _parameters, int cols, string filename, float x, float y){
-    //TODO FIX
     setColNum(cols);
     ofxGuiGroupExtended::setup(_parameters,filename,x,y);
     w_matrix = b.width;
