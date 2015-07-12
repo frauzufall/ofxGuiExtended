@@ -8,3 +8,4 @@
 #include "ofxRotarySlider.h"
 #include "ofxGuiMatrix.h"
 #include "ofxGuiSpacer.h"
+#include "ofxGuiPage.h"
