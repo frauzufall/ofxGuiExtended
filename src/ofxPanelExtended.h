@@ -5,6 +5,9 @@
 class ofxGuiGroup;
 
 class ofxPanelExtended : public ofxGuiGroupExtended {
+
+    friend class ofxGuiPage;
+
 public:
     ofxPanelExtended();
     ofxPanelExtended(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
