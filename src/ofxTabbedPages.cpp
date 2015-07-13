@@ -125,9 +125,15 @@ bool ofxTabbedPages::mouseDragged(ofMouseEventArgs & args){
     if( bGuiActive ){
         ofMouseEventArgs a = args;
         for(int i = 0; i < (int)collection.size(); i++){
-            if(parameters_tabs.at(i-1).get()) {
+            if(i > 0) {
+                if(parameters_tabs.at(i-1).get()) {
+                    if(collection[i]->mouseDragged(a)) return true;
+                }
+            }
+            else {
                 if(collection[i]->mouseDragged(a)) return true;
             }
+
         }
     }
     return false;
