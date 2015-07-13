@@ -3,10 +3,12 @@
 using namespace std;
 
 ofxMinimalToggle::ofxMinimalToggle(){
+    thisBorderColor = thisFillColor;
 }
 
 ofxMinimalToggle::ofxMinimalToggle(ofParameter<bool> _bVal, float width, float height):ofxToggle(){
     setup(_bVal, width, height);
+    thisBorderColor = thisFillColor;
 }
 
 ofxMinimalToggle::~ofxMinimalToggle(){
@@ -56,35 +58,32 @@ bool ofxMinimalToggle::mouseReleased(ofMouseEventArgs & args){
 
 void ofxMinimalToggle::generateDraw(){
     checkboxRect.set(1, 1, b.width - 2, b.height - 2);
+
     bg.clear();
     bg.setFillColor(thisBackgroundColor);
     bg.rectangle(b.getPosition()+checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
 
     fg.clear();
-    if(value){
-        fg.setFilled(true);
-        fg.setFillColor(thisFillColor);
-    }else{
-        fg.setFilled(false);
-        fg.setStrokeWidth(1);
-        fg.setStrokeColor(thisFillColor);
-    }
+    fg.setFilled(true);
+    fg.setFillColor(thisFillColor);
     fg.rectangle(b.getPosition()+checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
+
+    border.clear();
+    border.setFilled(false);
+    border.setStrokeWidth(1);
+    border.setStrokeColor(thisBorderColor);
+    border.rectangle(b.getPosition()+checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
 
     textMesh = getTextMesh(getName(), b.x+textPadding, b.y+b.height / 2 + 4);
 }
 
 void ofxMinimalToggle::render(){
 
-    if(value) {
-        fg.setFilled(true);
-    }
-    else {
-        fg.setFilled(false);
-    }
-
     bg.draw();
-    fg.draw();
+    if(value) {
+        fg.draw();
+    }
+    border.draw();
 
     ofColor c = ofGetStyle().color;
     ofBlendMode blendMode = ofGetStyle().blendingMode;

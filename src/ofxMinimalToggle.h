@@ -42,5 +42,7 @@ protected:
 
     bool setValue(float mx, float my, bool bCheck);
     float getTextWidth(string text, float height);
+
+    ofPath border;
 };
 
