@@ -24,6 +24,25 @@ void ofxGuiPage::add(ofxBaseGui * element){
     setNeedsRedraw();
 }
 
+bool ofxGuiPage::mouseDragged(ofMouseEventArgs & args){
+    if(setValue(args.x, args.y, false)){
+        return true;
+    }
+    if( bGuiActive ){
+        ofMouseEventArgs a = args;
+        for(int i = 0; i < (int)collection.size(); i++){
+            if(collection[i]->mouseDragged(a)) {
+                collection[i]->setPosition(
+                            ofClamp(collection[i]->getPosition().x, b.getLeft(), b.getRight()-collection[i]->getWidth()),
+                            ofClamp(collection[i]->getPosition().y, b.getTop(), b.getBottom()-collection[i]->getHeight())
+                            );
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void ofxGuiPage::setWidthElements(float w){
 }
 
@@ -41,4 +60,6 @@ void ofxGuiPage::clear(){
 }
 
 void ofxGuiPage::sizeChangedCB(){
+    if(parent) parent->sizeChangedCB();
+    setNeedsRedraw();
 }
