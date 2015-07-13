@@ -1,6 +1,6 @@
 #pragma once
 #include "ofxGuiGroup.h"
-#include "ofxMinimalToggle.h"
+#include "ofxToggle.h"
 
 class ofxGuiGroupExtended : public ofxGuiGroup {
 
@@ -44,7 +44,7 @@ public:
 
     void allowMultipleActiveToggles(bool allow);
     bool setActiveToggle(int index);
-    bool setActiveToggle(ofxMinimalToggle* toggle);
+    bool setActiveToggle(ofxToggle* toggle);
     int getActiveToggleIndex();
 
     float getContentHeight();
@@ -60,8 +60,8 @@ protected:
     virtual bool setValue(float mx, float my, bool bCheck);
 
     int active_toggle_index;
-    bool processToggles(ofxMinimalToggle *toggle, ofMouseEventArgs a);
-    void deactivateAllOtherToggles(ofxMinimalToggle* toggle);
+    bool processToggles(ofxToggle *toggle, ofMouseEventArgs a);
+    void deactivateAllOtherToggles(ofxToggle* toggle);
 
     ofxGuiGroupExtended * parent;
 

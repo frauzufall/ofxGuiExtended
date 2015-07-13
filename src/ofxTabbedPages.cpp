@@ -1,5 +1,6 @@
 #include "ofxTabbedPages.h"
 #include "ofGraphics.h"
+#include "ofxMinimalToggle.h"
 using namespace std;
 
 ofxTabbedPages::ofxTabbedPages()

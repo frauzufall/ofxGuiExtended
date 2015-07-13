@@ -122,7 +122,3 @@ float ofxMinimalToggle::getTextWidth(string text, float _height) {
 void ofxMinimalToggle::valueChanged(bool & value){
     ofxToggle::valueChanged(value);
 }
-
-void ofxMinimalToggle::setParameter(bool v) {
-    value.set(v);
-}

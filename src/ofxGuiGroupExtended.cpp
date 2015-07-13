@@ -127,7 +127,7 @@ bool ofxGuiGroupExtended::mousePressed(ofMouseEventArgs & args){
     if( bGuiActive ){
         ofMouseEventArgs a = args;
         for(int i = 0; i < (int)collection.size(); i++){
-            ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[i]);
+            ofxToggle* toggle = dynamic_cast<ofxToggle*>(collection[i]);
             if(toggle && !_bAllowMultiple) {
                 if(processToggles(toggle, a)) return true;
             }
@@ -141,7 +141,7 @@ bool ofxGuiGroupExtended::mousePressed(ofMouseEventArgs & args){
     return false;
 }
 
-bool ofxGuiGroupExtended::processToggles(ofxMinimalToggle* toggle, ofMouseEventArgs a) {
+bool ofxGuiGroupExtended::processToggles(ofxToggle* toggle, ofMouseEventArgs a) {
     if(!_bAllowMultiple) {
         if(!toggle->getParameter().cast<bool>().get()) {
             if(toggle->mousePressed(a)) {
@@ -370,9 +370,9 @@ void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
     _bAllowMultiple = allow;
 }
 
-bool ofxGuiGroupExtended::setActiveToggle(ofxMinimalToggle* toggle) {
+bool ofxGuiGroupExtended::setActiveToggle(ofxToggle* toggle) {
     if(!toggle->getParameter().cast<bool>().get()) {
-        toggle->setParameter(true);
+        (ofxToggle)*toggle = true;
         deactivateAllOtherToggles(toggle);
         return true;
     }
@@ -380,7 +380,7 @@ bool ofxGuiGroupExtended::setActiveToggle(ofxMinimalToggle* toggle) {
 }
 
 bool ofxGuiGroupExtended::setActiveToggle(int index) {
-    if(ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[index])) {
+    if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(collection[index])) {
         return setActiveToggle(toggle);
     }
     else {
@@ -389,12 +389,12 @@ bool ofxGuiGroupExtended::setActiveToggle(int index) {
     }
 }
 
-void ofxGuiGroupExtended::deactivateAllOtherToggles(ofxMinimalToggle *toggle) {
+void ofxGuiGroupExtended::deactivateAllOtherToggles(ofxToggle *toggle) {
     if(!_bAllowMultiple) {
         for(int j = 0; j < (int)collection.size(); j++){
-            if(ofxMinimalToggle* t = dynamic_cast<ofxMinimalToggle*>(collection[j])) {
+            if(ofxToggle* t = dynamic_cast<ofxToggle*>(collection[j])) {
                 if(t != toggle) {
-                   t->setParameter(false);
+                   (ofxToggle)*t = false;
                 }
                 else {
                     active_toggle_index = j;
