@@ -11,7 +11,7 @@ ofxRotarySlider<Type>::ofxRotarySlider(){
 
 template<typename Type>
 ofxRotarySlider<Type>::~ofxRotarySlider(){
-    ofxSlider<Type>::~ofxSlider();
+    this->value.removeListener(this,&ofxRotarySlider::valueChanged);
 }
 
 template<typename Type>
