@@ -12,6 +12,7 @@ ofxMinimalToggle::ofxMinimalToggle(ofParameter<bool> _bVal, float width, float h
 }
 
 ofxMinimalToggle::~ofxMinimalToggle(){
+    value.removeListener(this,&ofxMinimalToggle::valueChanged);
 }
 
 ofxMinimalToggle * ofxMinimalToggle::setup(ofParameter<bool> _bVal, float width, float height){

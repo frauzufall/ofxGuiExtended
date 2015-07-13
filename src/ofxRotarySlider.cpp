@@ -11,7 +11,6 @@ ofxRotarySlider<Type>::ofxRotarySlider(){
 
 template<typename Type>
 ofxRotarySlider<Type>::~ofxRotarySlider(){
-    this->value.removeListener(this,&ofxRotarySlider::valueChanged);
 }
 
 template<typename Type>
@@ -160,11 +159,6 @@ bool ofxRotarySlider<Type>::setValue(float mx, float my, bool bCheck){
         return true;
     }
     return false;
-}
-
-template<typename Type>
-void ofxRotarySlider<Type>::valueChanged(Type & value){
-    this->setNeedsRedraw();
 }
 
 template class ofxRotarySlider<int>;

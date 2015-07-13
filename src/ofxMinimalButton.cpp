@@ -14,7 +14,7 @@ ofxMinimalButton::ofxMinimalButton(string toggleName, float width, float height)
 }
 
 ofxMinimalButton::~ofxMinimalButton(){
-	//
+    value.removeListener(this,&ofxMinimalButton::valueChanged);
 }
 
 ofxMinimalButton* ofxMinimalButton::setup(string toggleName, float width, float height){
@@ -57,10 +57,4 @@ bool ofxMinimalButton::mousePressed(ofMouseEventArgs & args){
 
 bool ofxMinimalButton::mouseDragged(ofMouseEventArgs & args){
     return ofxMinimalToggle::mouseDragged(args);
-}
-
-void ofxMinimalButton::valueChanged(bool & v){
-	if(!v){
-		ofNotifyEvent(triggerEvent, this);
-	}
 }
