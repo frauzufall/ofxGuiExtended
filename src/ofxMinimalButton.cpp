@@ -58,3 +58,7 @@ bool ofxMinimalButton::mousePressed(ofMouseEventArgs & args){
 bool ofxMinimalButton::mouseDragged(ofMouseEventArgs & args){
     return ofxMinimalToggle::mouseDragged(args);
 }
+
+void ofxMinimalButton::valueChanged(bool & value){
+    ofxMinimalToggle::valueChanged(value);
+}
