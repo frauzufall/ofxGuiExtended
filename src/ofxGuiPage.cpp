@@ -34,9 +34,20 @@ bool ofxGuiPage::mouseDragged(ofMouseEventArgs & args){
         ofMouseEventArgs a = args;
         for(int i = 0; i < (int)collection.size(); i++){
             if(collection[i]->mouseDragged(a)) {
+                //collection is only allowed to be moved within page boundaries
+                float tmp_header = 0;
+                if(_bUseHeader) {
+                    tmp_header += header + spacing;
+                }
                 collection[i]->setPosition(
-                            ofClamp(collection[i]->getPosition().x, b.getLeft(), b.getRight()-collection[i]->getWidth()),
-                            ofClamp(collection[i]->getPosition().y, b.getTop(), b.getBottom()-collection[i]->getHeight())
+                            ofClamp(
+                                collection[i]->getPosition().x,
+                                b.getLeft(),
+                                b.getRight()-collection[i]->getWidth()),
+                            ofClamp(
+                                collection[i]->getPosition().y,
+                                b.getTop()+tmp_header,
+                                b.getBottom()-collection[i]->getHeight())
                             );
                 return true;
             }
