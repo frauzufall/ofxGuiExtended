@@ -3,45 +3,25 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    page1.setup("page 1", "", 0, 0);
-    page1.setSize(ofGetWindowWidth(), ofGetWindowHeight());
-    page1.setBorderColor(0);
+    setupPage1();
+    setupPage2();
+    setupPage3();
 
-    /*
-     * minimal button and toggle
-     */
-    panel1.setup("panel1");
-    panel1.add(new ofxMinimalToggle(toggle_param.set("toggle", true), 0, 30));
-    panel1.add(new ofxMinimalButton("button", 0, 30));
+    page.setup("single page");
+    page.setSize(300, 300);
+    page.add(&panel3);
 
-    rotary.setup("rotary");
-    rotary.add(new ofxFloatRotarySlider(slider_param.set("slider", 0.5, 0, 1), 66,66));
-
-    matrix_params.push_back(ofParameter<bool>("all",false));
-    matrix_params.push_back(ofParameter<bool>("toggles",false));
-    matrix_params.push_back(ofParameter<bool>("can",false));
-    matrix_params.push_back(ofParameter<bool>("be",false));
-    matrix_params.push_back(ofParameter<bool>("active",false));
-    matrix.setup("matrix",2);
-    matrix.allowMultipleActiveToggles(true);
-    for(uint i = 0; i < matrix_params.size(); i++) {
-        matrix.add(new ofxMinimalToggle(matrix_params.at(i)));
-    }
-
-    panel1.add(&matrix);
-    panel1.add(&rotary);
-
-    /*
-     * horizontal panel with spacer
-     */
-    panel2.setup("horizontal", "", 260, 10);
-    panel2.setAlignHorizontal();
-    panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
-    panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
-    panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
-
+    page1.setup("page 1");
     page1.add(&panel1);
-    page1.add(&panel2);
+    page1.add(&rotary);
+
+    page2.setup("page 2");
+    page2.add(&panel2);
+
+    tabbed_pages.setup("tabbed pages", "", page.getShape().getRight()+10);
+    tabbed_pages.setSize(500, 300);
+    tabbed_pages.add(&page1);
+    tabbed_pages.add(&page2);
 
 }
 
@@ -58,8 +38,42 @@ void ofApp::draw(){
 
     ofSetColor(255);
 
-    page1.draw();
+    page.draw();
 
+    tabbed_pages.draw();
+
+}
+
+void ofApp::setupPage1() {
+    panel1.setup("panel1");
+
+    matrix.setup("matrix",2);
+    for(uint i = 0; i < 10; i++) {
+        matrix.add((new ofxMinimalToggle())->setup("toggle"+ofToString(i), false));
+    }
+    panel1.add(new ofxMinimalButton("button", 0, 30));
+    panel1.add(&matrix);
+
+    rotary.setup("rotary", "", panel1.getShape().getRight()+20, 20);
+    rotary.add(new ofxFloatRotarySlider(slider_param.set("slider", 0.5, 0, 1), 66,66));
+}
+
+void ofApp::setupPage2() {
+    panel2.setup("horizontal", "", 260, 10);
+    panel2.setAlignHorizontal();
+    ofParameter<bool> toggle2_param, toggle3_param, toggle4_param;
+    panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
+    panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
+    panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
+}
+
+void ofApp::setupPage3() {
+    panel3.setup("just some toggles", "", 60, 66);
+    panel3.setAlignHorizontal();
+    ofParameter<bool> toggle2_param, toggle3_param, toggle4_param;
+    panel3.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
+    panel3.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
+    panel3.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
 }
 
 //--------------------------------------------------------------

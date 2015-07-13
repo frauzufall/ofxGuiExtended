@@ -24,17 +24,20 @@ public:
 
 private:
 
+    ofxGuiPage page;
+
+    ofxTabbedPages tabbed_pages;
     ofxGuiPage page1, page2;
 
-    ofxPanelExtended panel1, panel2;
+    ofxPanelExtended panel1, panel2, panel3;
+
+    void setupPage1();
+    void setupPage2();
+    void setupPage3();
+
     ofxGuiGroupExtended rotary;
     ofxGuiMatrix matrix;
-
-    ofParameter<bool> toggle_param;
     ofParameter<float> slider_param;
-    ofParameter<bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;
-    vector<ofParameter<bool>> matrix_params;
-    ofParameterGroup g;
 
 };
 
