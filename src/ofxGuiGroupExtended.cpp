@@ -62,6 +62,7 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
     }
 
     parameters.add(element->getParameter());
+
     setNeedsRedraw();
 }
 
@@ -144,13 +145,7 @@ bool ofxGuiGroupExtended::processToggles(ofxMinimalToggle* toggle, ofMouseEventA
     if(!_bAllowMultiple) {
         if(!toggle->getParameter().cast<bool>().get()) {
             if(toggle->mousePressed(a)) {
-                for(int j = 0; j < (int)collection.size(); j++){
-                    if(ofxMinimalToggle* t = dynamic_cast<ofxMinimalToggle*>(collection[j])) {
-                        if(t != toggle) {
-                           t->setParameter(false);
-                        }
-                    }
-                }
+                deactivateAllOtherToggles(toggle);
                 return true;
             }
         }
@@ -181,7 +176,7 @@ bool ofxGuiGroupExtended::mouseScrolled(ofMouseEventArgs & args){
 
 void ofxGuiGroupExtended::generateDraw(){
     border.clear();
-    border.setFillColor(ofColor(thisBorderColor,180));
+    border.setFillColor(ofColor(thisBorderColor));
     border.setFilled(true);
     border.rectangle(b.x,b.y+ spacingNextElement,b.width+1,b.height);
 
@@ -373,6 +368,44 @@ void ofxGuiGroupExtended::showHeader(bool show) {
 
 void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
     _bAllowMultiple = allow;
+}
+
+bool ofxGuiGroupExtended::setActiveToggle(ofxMinimalToggle* toggle) {
+    if(!toggle->getParameter().cast<bool>().get()) {
+        toggle->setParameter(true);
+        deactivateAllOtherToggles(toggle);
+        return true;
+    }
+    return false;
+}
+
+bool ofxGuiGroupExtended::setActiveToggle(int index) {
+    if(ofxMinimalToggle* toggle = dynamic_cast<ofxMinimalToggle*>(collection[index])) {
+        return setActiveToggle(toggle);
+    }
+    else {
+        ofLogError("ofxGuiGroupExtended", "cannot activate control " + ofToString(index) + " because it's no ofxMinimalToggle.");
+        return false;
+    }
+}
+
+void ofxGuiGroupExtended::deactivateAllOtherToggles(ofxMinimalToggle *toggle) {
+    if(!_bAllowMultiple) {
+        for(int j = 0; j < (int)collection.size(); j++){
+            if(ofxMinimalToggle* t = dynamic_cast<ofxMinimalToggle*>(collection[j])) {
+                if(t != toggle) {
+                   t->setParameter(false);
+                }
+                else {
+                    active_toggle_index = j;
+                }
+            }
+        }
+    }
+}
+
+int ofxGuiGroupExtended::getActiveToggleIndex() {
+    return active_toggle_index;
 }
 
 float ofxGuiGroupExtended::getContentHeight() {

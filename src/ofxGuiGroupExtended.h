@@ -6,6 +6,8 @@ class ofxGuiGroupExtended : public ofxGuiGroup {
 
     friend class ofxGuiMatrix;
     friend class ofxGuiSpacer;
+    friend class ofxGuiPage;
+    friend class ofxTabbedPages;
 
 public:
 
@@ -39,7 +41,11 @@ public:
     bool isAlignedVertial();
 
     void showHeader(bool show);
+
     void allowMultipleActiveToggles(bool allow);
+    bool setActiveToggle(int index);
+    bool setActiveToggle(ofxMinimalToggle* toggle);
+    int getActiveToggleIndex();
 
     float getContentHeight();
 
@@ -53,7 +59,9 @@ protected:
 
     virtual bool setValue(float mx, float my, bool bCheck);
 
+    int active_toggle_index;
     bool processToggles(ofxMinimalToggle *toggle, ofMouseEventArgs a);
+    void deactivateAllOtherToggles(ofxMinimalToggle* toggle);
 
     ofxGuiGroupExtended * parent;
 
