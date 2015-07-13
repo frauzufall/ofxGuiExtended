@@ -1,10 +1,3 @@
-/*
- * ofPanel.cpp
- *
- *  Created on: 14/02/2012
- *      Author: arturo
- */
-
 #include "ofxPanelExtended.h"
 #include "ofGraphics.h"
 #include "ofImage.h"
@@ -64,26 +57,29 @@ void ofxPanelExtended::generateDraw(){
     border.setFilled(true);
     border.rectangle(b.x,b.y,b.width+1,b.height+1);
 
-
     if(_bUseHeader) {
-        headerBg.clear();
-        headerBg.setFillColor(ofColor(thisHeaderBackgroundColor,180));
-        headerBg.setFilled(true);
-        headerBg.rectangle(b.x,b.y+1,b.width,header);
-
-        float iconHeight = header*.5;
-        float iconWidth = loadIcon.getWidth()/loadIcon.getHeight()*iconHeight;
-        int iconSpacing = iconWidth*.5;
-
-        loadBox.x = b.getMaxX() - (iconWidth * 2 + iconSpacing + textPadding);
-        loadBox.y = b.y + header / 2. - iconHeight / 2.;
-        loadBox.width = iconWidth;
-        loadBox.height = iconHeight;
-        saveBox.set(loadBox);
-        saveBox.x += iconWidth + iconSpacing;
-
-        textMesh = getTextMesh(getName(), textPadding + b.x, header / 2 + 4 + b.y);
+        generateHeader();
     }
+}
+
+void ofxPanelExtended::generateHeader() {
+    headerBg.clear();
+    headerBg.setFillColor(ofColor(thisHeaderBackgroundColor,180));
+    headerBg.setFilled(true);
+    headerBg.rectangle(b.x,b.y+1,b.width,header);
+
+    float iconHeight = header*.5;
+    float iconWidth = loadIcon.getWidth()/loadIcon.getHeight()*iconHeight;
+    int iconSpacing = iconWidth*.5;
+
+    loadBox.x = b.getMaxX() - (iconWidth * 2 + iconSpacing + textPadding);
+    loadBox.y = b.y + header / 2. - iconHeight / 2.;
+    loadBox.width = iconWidth;
+    loadBox.height = iconHeight;
+    saveBox.set(loadBox);
+    saveBox.x += iconWidth + iconSpacing;
+
+    textMesh = getTextMesh(getName(), textPadding + b.x, header / 2 + 4 + b.y);
 }
 
 void ofxPanelExtended::render(){
@@ -99,19 +95,7 @@ void ofxPanelExtended::render(){
     ofColor c = ofGetStyle().color;
 
     if(_bUseHeader) {
-        ofSetColor(thisTextColor);
-
-        bindFontTexture();
-        textMesh.draw();
-        unbindFontTexture();
-
-        bool texHackEnabled = ofIsTextureEdgeHackEnabled();
-        ofDisableTextureEdgeHack();
-        loadIcon.draw(loadBox);
-        saveIcon.draw(saveBox);
-        if(texHackEnabled){
-            ofEnableTextureEdgeHack();
-        }
+        renderHeader();
     }
 
     for(int i = 0; i < (int)collection.size(); i++){
@@ -121,6 +105,22 @@ void ofxPanelExtended::render(){
     ofSetColor(c);
     if(blendMode!=OF_BLENDMODE_ALPHA){
         ofEnableBlendMode(blendMode);
+    }
+}
+
+void ofxPanelExtended::renderHeader() {
+    ofSetColor(thisTextColor);
+
+    bindFontTexture();
+    textMesh.draw();
+    unbindFontTexture();
+
+    bool texHackEnabled = ofIsTextureEdgeHackEnabled();
+    ofDisableTextureEdgeHack();
+    loadIcon.draw(loadBox);
+    saveIcon.draw(saveBox);
+    if(texHackEnabled){
+        ofEnableTextureEdgeHack();
     }
 }
 

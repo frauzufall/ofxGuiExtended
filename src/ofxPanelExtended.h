@@ -7,6 +7,7 @@ class ofxGuiGroup;
 class ofxPanelExtended : public ofxGuiGroupExtended {
 
     friend class ofxGuiPage;
+    friend class ofxTabbedPages;
 
 public:
     ofxPanelExtended();
@@ -22,8 +23,10 @@ public:
     ofEvent<void> savePressedE;
 protected:
     void render();
+    void renderHeader();
     bool setValue(float mx, float my, bool bCheck);
     void generateDraw();
+    void generateHeader();
     void loadIcons();
 private:
     ofRectangle loadBox, saveBox;
