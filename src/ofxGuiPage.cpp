@@ -18,6 +18,8 @@ void ofxGuiPage::add(ofxBaseGui * element){
         newpos.y += header;
     }
     element->setPosition(newpos);
+    b.width = max(element->getShape().getRight()-b.x+1, b.width);
+    b.height = max(element->getShape().getBottom()-b.y+1, b.height);
     element->unregisterMouseEvents();
 
     parameters.add(element->getParameter());
