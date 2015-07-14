@@ -16,6 +16,8 @@ public:
     virtual bool mouseReleased(ofMouseEventArgs & args){return false;}
     virtual bool mouseScrolled(ofMouseEventArgs & args){return false;}
 
+    virtual void setSize(float w, float h);
+
     virtual ofAbstractParameter & getParameter();
 
 protected:

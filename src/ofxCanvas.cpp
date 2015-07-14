@@ -17,25 +17,31 @@ ofxCanvas::~ofxCanvas(){
 }
 
 ofxCanvas* ofxCanvas::setup(string canvasName, ofTexture *tex, float w, float h) {
-    if(tex != 0) {
-        if(h == 0) {
-            if(w != 0) {
-                h = w * tex->getHeight()/tex->getWidth();
-            }
-            else {
-                h = tex->getHeight();
-            }
-        }
-        if(w == 0) {
-            w = h * tex->getWidth()/tex->getHeight();
-        }
-    }
-    this->setName(canvasName);
-    b.width  = w;
-    b.height = h;
+    setName(canvasName);
     texture = tex;
+    setSize(w,h);
     setNeedsRedraw();
     return this;
+}
+
+void ofxCanvas::setSize(float w, float h){
+    if(texture != 0) {
+        if(texture->bAllocated()) {
+            if(w == 0) {
+                if(h == 0) {
+                    w = texture->getWidth();
+                    h = texture->getHeight();
+                }
+                else {
+                    w = h * texture->getWidth()/texture->getHeight();
+                }
+            }
+            h = w*texture->getHeight()/texture->getWidth();
+            b.width = w;
+            b.height = h;
+            setNeedsRedraw();
+        }
+    }
 }
 
 void ofxCanvas::generateDraw(){
@@ -52,8 +58,12 @@ void ofxCanvas::render() {
     ofColor c = ofGetStyle().color;
 
     bg.draw();
-    if(texture)
-        texture->draw(b);
+    if(texture) {
+        if(texture->bAllocated()) {
+            texture->draw(b);
+        }
+    }
+
 
     ofBlendMode blendMode = ofGetStyle().blendingMode;
     if(blendMode!=OF_BLENDMODE_ALPHA){
