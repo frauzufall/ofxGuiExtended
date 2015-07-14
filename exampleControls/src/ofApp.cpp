@@ -57,10 +57,14 @@ void ofApp::setup(){
     /*
      * panel with canvas
      */
-    panel3.setup("more controls", "", 260, 90);
+    panel3.setup("canvas", "", 260, 90);
     img.load("images/ente.jpg");
     canvas.setup("some texture", &img.getTexture());
     panel3.add(&canvas);
+
+    panel4.setup("zoomable canvas", "", 500, 90);
+    zcanvas.setup("some texture", &img.getTexture());
+    panel4.add(&zcanvas);
 
 }
 
@@ -99,6 +103,7 @@ void ofApp::draw(){
     panel1.draw();
     panel2.draw();
     panel3.draw();
+    panel4.draw();
 
 }
 
@@ -108,6 +113,7 @@ void ofApp::toggleGroupHeader(bool &val) {
     panel1.showHeader(val);
     panel2.showHeader(val);
     panel3.showHeader(val);
+    panel4.showHeader(val);
 }
 
 //--------------------------------------------------------------
