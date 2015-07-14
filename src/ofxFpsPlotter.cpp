@@ -1,16 +1,16 @@
-#include "ofxFpsDisplay.h"
+#include "ofxFpsPlotter.h"
 #include "ofAppRunner.h"
 
-ofxFpsDisplay::ofxFpsDisplay() {}
+ofxFpsPlotter::ofxFpsPlotter() {}
 
-ofxFpsDisplay::ofxFpsDisplay(float minValue, float maxValue, int plotSize, float width, float height){
+ofxFpsPlotter::ofxFpsPlotter(float minValue, float maxValue, int plotSize, float width, float height){
     setup(minValue, maxValue, plotSize, width, height);
 }
 
-ofxFpsDisplay::~ofxFpsDisplay(){
+ofxFpsPlotter::~ofxFpsPlotter(){
 }
 
-ofxFpsDisplay* ofxFpsDisplay::setup(float minValue, float maxValue, int plotSize, float width, float height) {
+ofxFpsPlotter* ofxFpsPlotter::setup(float minValue, float maxValue, int plotSize, float width, float height) {
     if(minValue == maxValue) {
         if(ofGetTargetFrameRate() > 0) {
             minValue = 0;
@@ -22,7 +22,7 @@ ofxFpsDisplay* ofxFpsDisplay::setup(float minValue, float maxValue, int plotSize
     return this;
 }
 
-void ofxFpsDisplay::update() {
+void ofxFpsPlotter::update() {
     ofxValuePlotter::update(ofGetFrameRate());
 }
 

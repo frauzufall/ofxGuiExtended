@@ -13,4 +13,4 @@
 #include "ofxCanvas.h"
 #include "ofxZoomableCanvas.h"
 #include "ofxValuePlotter.h"
-#include "ofxFpsDisplay.h"
+#include "ofxFpsPlotter.h"
