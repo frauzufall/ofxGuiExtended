@@ -32,6 +32,8 @@ private:
     ofxCanvas canvas;
     ofxZoomableCanvas zcanvas;
 
+    ofxFpsDisplay fps;
+
     ofParameter<bool> toggle_param;
     ofParameter<float> slider_param;
     ofParameter<bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;

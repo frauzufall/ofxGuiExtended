@@ -3,8 +3,14 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    ofSetLogLevel(OF_LOG_VERBOSE);
+
+    ofSetFrameRate(120);
+
     panel1.setup("extended gui");
     panel1.setBorderColor(ofColor::black);
+
+    panel1.add(fps.setup(0,120));
 
     /*
      * minimal button and toggle
@@ -63,7 +69,7 @@ void ofApp::setup(){
     panel3.add(&canvas);
 
     panel4.setup("zoomable canvas", "", 500, 90);
-    zcanvas.setup("some texture", &img.getTexture());
+    zcanvas.setup("same texture", &img.getTexture());
     panel4.add(&zcanvas);
 
 }
@@ -74,6 +80,7 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+    fps.update();
 }
 
 //--------------------------------------------------------------

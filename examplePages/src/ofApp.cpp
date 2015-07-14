@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    ofSetLogLevel(OF_LOG_VERBOSE);
+
     setupPage1();
     setupPage2();
     setupPage3();
