@@ -54,6 +54,14 @@ void ofApp::setup(){
     panel2.add(new ofxGuiSpacer(30));
     panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
 
+    /*
+     * panel with canvas
+     */
+    panel3.setup("more controls", "", 260, 90);
+    img.load("images/ente.jpg");
+    canvas.setup("some texture", &img.getTexture());
+    panel3.add(&canvas);
+
 }
 
 //--------------------------------------------------------------
@@ -90,6 +98,7 @@ void ofApp::draw(){
 
     panel1.draw();
     panel2.draw();
+    panel3.draw();
 
 }
 
@@ -98,6 +107,7 @@ void ofApp::toggleGroupHeader(bool &val) {
     matrix.showHeader(val);
     panel1.showHeader(val);
     panel2.showHeader(val);
+    panel3.showHeader(val);
 }
 
 //--------------------------------------------------------------

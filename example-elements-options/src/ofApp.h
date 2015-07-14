@@ -24,9 +24,12 @@ public:
 
 private:
 
-    ofxPanelExtended panel1, panel2;
+    ofxPanelExtended panel1, panel2, panel3;
     ofxGuiGroupExtended rotary;
     ofxGuiMatrix matrix;
+
+    ofImage img;
+    ofxCanvas canvas;
 
     ofParameter<bool> toggle_param;
     ofParameter<float> slider_param;
