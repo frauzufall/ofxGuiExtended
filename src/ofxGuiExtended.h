@@ -11,3 +11,4 @@
 #include "ofxGuiPage.h"
 #include "ofxTabbedPages.h"
 #include "ofxCanvas.h"
+#include "ofxZoomableCanvas.h"
