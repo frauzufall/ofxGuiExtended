@@ -145,22 +145,23 @@ bool ofxPanelExtended::setValue(float mx, float my, bool bCheck){
         if( b.inside(mx, my) ){
             bGuiActive = true;
 
-            if( my > b.y && my <= b.y + header ){
-                bGrabbed = true;
-                grabPt.set(mx-b.x, my-b.y);
-            } else{
-                bGrabbed = false;
-            }
-
-            if(loadBox.inside(mx, my)) {
-                loadFromFile(filename);
-                ofNotifyEvent(loadPressedE,this);
-                return true;
-            }
-            if(saveBox.inside(mx, my)) {
-                saveToFile(filename);
-                ofNotifyEvent(savePressedE,this);
-                return true;
+            if(_bUseHeader) {
+                if( my > b.y && my <= b.y + header ){
+                    bGrabbed = true;
+                    grabPt.set(mx-b.x, my-b.y);
+                } else{
+                    bGrabbed = false;
+                }
+                if(loadBox.inside(mx, my)) {
+                    loadFromFile(filename);
+                    ofNotifyEvent(loadPressedE,this);
+                    return true;
+                }
+                if(saveBox.inside(mx, my)) {
+                    saveToFile(filename);
+                    ofNotifyEvent(savePressedE,this);
+                    return true;
+                }
             }
         }
     } else if( bGrabbed ){

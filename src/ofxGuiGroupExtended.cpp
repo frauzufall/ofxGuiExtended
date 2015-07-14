@@ -28,14 +28,15 @@ ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _param
 void ofxGuiGroupExtended::add(ofxBaseGui * element){
     collection.push_back( element );
 
-    if(b.width-1 < element->getWidth()) {
-        element->setSize(b.width-1, element->getHeight());
-    }
-
     if(_bVertical || collection.size() == 1) {
 
-        if(b.width-1 > element->getWidth() && _bVertical) {
-            element->setSize(b.width-1, element->getHeight());
+        if(_bVertical) {
+            if(b.width-1 < element->getWidth()) {
+                element->setSize(b.width-1, element->getHeight());
+            }
+            if(b.width-1 > element->getWidth()) {
+                element->setSize(b.width-1, element->getHeight());
+            }
         }
 
         element->setPosition(b.x, b.y + b.height  + spacing);
@@ -242,15 +243,17 @@ bool ofxGuiGroupExtended::setValue(float mx, float my, bool bCheck){
         if( b.inside(mx, my) ){
             bGuiActive = true;
 
-            ofRectangle minButton(b.x+b.width-textPadding*3,b.y,textPadding*3,header);
-            if(minButton.inside(mx,my)){
-                minimized = !minimized;
-                if(minimized){
-                    minimize();
-                }else{
-                    maximize();
+            if(_bUseHeader) {
+                ofRectangle minButton(b.x+b.width-textPadding*3,b.y,textPadding*3,header);
+                if(minButton.inside(mx,my)){
+                    minimized = !minimized;
+                    if(minimized){
+                        minimize();
+                    }else{
+                        maximize();
+                    }
+                    return true;
                 }
-                return true;
             }
         }
     }
