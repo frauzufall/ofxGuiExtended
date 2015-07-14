@@ -40,7 +40,10 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
     else {
         ofRectangle last_shape = collection[collection.size()-2]->getShape();
         element->setPosition(last_shape.x + last_shape.getWidth() + spacing, last_shape.y);
-        b.width = element->getPosition().x + element->getWidth() - b.x + spacing;
+        b.width = element->getPosition().x + element->getWidth() + spacing - b.x;
+        if(element->getHeight() > getContentHeight()) {
+            setContentHeight(element->getHeight());
+        }
     }
 
     if(b.width-1 < element->getWidth()) {
@@ -108,10 +111,7 @@ void ofxGuiGroupExtended::scaleWidthElements(float factor){
 void ofxGuiGroupExtended::clear(){
     collection.clear();
     parameters.clear();
-    b.height = spacing + spacingNextElement ;
-    if(_bUseHeader) {
-        b.height += header;
-    }
+    setContentHeight(0);
     sizeChangedCB();
 }
 
@@ -258,10 +258,7 @@ bool ofxGuiGroupExtended::setValue(float mx, float my, bool bCheck){
 
 void ofxGuiGroupExtended::minimize(){
     minimized=true;
-    b.height = spacing + spacingNextElement + 1 /*border*/;
-    if(_bUseHeader) {
-        b.height += header;
-    }
+    setContentHeight(0);
     if(parent) parent->sizeChangedCB();
     setNeedsRedraw();
 }
@@ -269,9 +266,11 @@ void ofxGuiGroupExtended::minimize(){
 void ofxGuiGroupExtended::maximize(){
     minimized=false;
     if(_bVertical) {
+        float h = 0;
         for(int i=0;i<(int)collection.size();i++){
-            b.height += collection[i]->getHeight() + spacing;
+            h += collection[i]->getHeight() + spacing;
         }
+        setContentHeight(h);
     }
     else {
         float max_h = 0;
@@ -280,7 +279,7 @@ void ofxGuiGroupExtended::maximize(){
                 max_h = collection[i]->getHeight();
             }
         }
-        b.height += max_h+spacing;
+        setContentHeight(max_h);
     }
     if(parent) parent->sizeChangedCB();
     setNeedsRedraw();
@@ -301,28 +300,19 @@ void ofxGuiGroupExtended::maximizeAll(){
 }
 
 void ofxGuiGroupExtended::sizeChangedCB(){
-    float x,y;
-    if(parent){
-        x = b.x + spacing + spacingNextElement;
-        y = b.y + spacing + spacingNextElement;
-    }else{
-        x = b.x + spacing;
-        y = b.y + spacing;
-
-    }
-    if(_bUseHeader) {
-        y += header;
-    }
+    float x=b.x + b.width - getContentWidth();
+    float y=b.y + b.height - getContentHeight();
+    float _x = x;
+    float _y = y;
 
     if(_bVertical) {
         for(int i=0;i<(int)collection.size();i++){
             collection[i]->setPosition(collection[i]->getPosition().x,y + spacing);
             y += collection[i]->getHeight()+spacing;
         }
-        b.height = y - b.y;
+        setContentHeight(y - _y);
     }
     else {
-        x -= spacing;
         float max_h = 0;
         for(int i=0;i<(int)collection.size();i++){
 
@@ -334,9 +324,8 @@ void ofxGuiGroupExtended::sizeChangedCB(){
             }
         }
         y += max_h+spacing;
-        x += spacing;
-        b.height = y - b.y;
-        b.width = x - b.x;
+        setContentWidth(x - _x);
+        setContentHeight(y - _y);
     }
 
     if(parent) parent->sizeChangedCB();
@@ -417,4 +406,31 @@ float ofxGuiGroupExtended::getContentHeight() {
         h -= spacingNextElement;
     }
     return h;
+}
+
+void ofxGuiGroupExtended::setContentHeight(float h) {
+    if(_bUseHeader) {
+        h += header;
+    }
+    if(parent) {
+        h += spacingNextElement;
+    }
+    h += spacing;
+    b.height = h;
+}
+
+float ofxGuiGroupExtended::getContentWidth() {
+    float w = b.width - spacing;
+    if(parent) {
+        w -= spacingNextElement;
+    }
+    return w;
+}
+
+void ofxGuiGroupExtended::setContentWidth(float w) {
+    if(parent) {
+        w += spacingNextElement;
+    }
+    w += spacing;
+    b.width = w;
 }

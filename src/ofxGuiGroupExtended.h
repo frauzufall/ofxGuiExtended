@@ -47,8 +47,6 @@ public:
     bool setActiveToggle(ofxToggle* toggle);
     int getActiveToggleIndex();
 
-    float getContentHeight();
-
 protected:
     virtual void sizeChangedCB();
     virtual void render();
@@ -62,6 +60,11 @@ protected:
     int active_toggle_index;
     bool processToggles(ofxToggle *toggle, ofMouseEventArgs a);
     void deactivateAllOtherToggles(ofxToggle* toggle);
+
+    float getContentHeight();
+    void setContentHeight(float h);
+    float getContentWidth();
+    void setContentWidth(float w);
 
     ofxGuiGroupExtended * parent;
 
