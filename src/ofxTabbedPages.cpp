@@ -230,7 +230,7 @@ void ofxTabbedPages::sizeChangedCB(){
         tabs.setSize(tabShape.width, tabs.getHeight());
     }
 
-    for(uint i = 1; i < collection.size(); i++) {
+    for(unsigned int i = 1; i < collection.size(); i++) {
         collection[i]->setShape(pagesShape);
     }
     if(parent) parent->sizeChangedCB();

@@ -49,7 +49,7 @@ void ofApp::setupPage1() {
     panel1.setup("panel1");
 
     matrix.setup("matrix",2);
-    for(uint i = 0; i < 10; i++) {
+    for(unsigned int i = 0; i < 10; i++) {
         matrix.add((new ofxMinimalToggle())->setup("toggle"+ofToString(i), false));
     }
     panel1.add(new ofxMinimalButton("button", 0, 30));

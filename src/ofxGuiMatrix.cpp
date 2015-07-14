@@ -199,7 +199,7 @@ void ofxGuiMatrix::sizeChangedCB(){
 
     x += b.width - w_matrix;
 
-    for(uint i = 0; i < collection.size(); i++) {
+    for(unsigned int i = 0; i < collection.size(); i++) {
         int x_e = i;
         if(numCol > 0) {
             x_e = x_e % numCol;

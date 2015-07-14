@@ -110,7 +110,7 @@ bool ofxMinimalToggle::setValue(float mx, float my, bool bCheck){
 float ofxMinimalToggle::getTextWidth(string text, float _height) {
     float _width = 0;
     ofVboMesh mesh = getTextMesh(text, 0, _height / 2 + 4);
-    for(uint i = 0; i < mesh.getVertices().size(); i++) {
+    for(unsigned int i = 0; i < mesh.getVertices().size(); i++) {
         if(mesh.getVertex(i).x > _width) {
             _width = mesh.getVertex(i).x;
         }
