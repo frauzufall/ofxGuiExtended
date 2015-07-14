@@ -28,14 +28,20 @@ ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _param
 void ofxGuiGroupExtended::add(ofxBaseGui * element){
     collection.push_back( element );
 
+    if(b.width-1 < element->getWidth()) {
+        element->setSize(b.width-1, element->getHeight());
+    }
+
     if(_bVertical || collection.size() == 1) {
+
+        if(b.width-1 > element->getWidth() && _bVertical) {
+            element->setSize(b.width-1, element->getHeight());
+        }
 
         element->setPosition(b.x, b.y + b.height  + spacing);
 
         b.height += element->getHeight() + spacing;
-        if(b.width-1 > element->getWidth() && _bVertical) {
-            element->setSize(b.width-1, element->getHeight());
-        }
+
     }
     else {
         ofRectangle last_shape = collection[collection.size()-2]->getShape();
@@ -44,10 +50,6 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
         if(element->getHeight() > getContentHeight()) {
             setContentHeight(element->getHeight());
         }
-    }
-
-    if(b.width-1 < element->getWidth()) {
-        element->setSize(b.width-1, element->getHeight());
     }
 
     element->unregisterMouseEvents();
