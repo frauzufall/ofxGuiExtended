@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ofxBaseGui.h"
 
 class ofxCanvas: public ofxBaseGui {

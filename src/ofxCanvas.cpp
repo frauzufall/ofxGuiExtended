@@ -1,6 +1,5 @@
 #include "ofxCanvas.h"
 #include "ofGraphics.h"
-#include "ofAppRunner.h"
 using namespace std;
 
 ofxCanvas::ofxCanvas() {}
@@ -26,7 +25,7 @@ ofxCanvas* ofxCanvas::setup(string canvasName, ofTexture *tex, float w, float h)
 
 void ofxCanvas::setSize(float w, float h){
     if(texture != 0) {
-        if(texture->bAllocated()) {
+        if(texture->isAllocated()) {
             if(w == 0) {
                 if(h == 0) {
                     w = texture->getWidth();
@@ -59,7 +58,7 @@ void ofxCanvas::render() {
 
     bg.draw();
     if(texture) {
-        if(texture->bAllocated()) {
+        if(texture->isAllocated()) {
             texture->draw(b);
         }
     }
