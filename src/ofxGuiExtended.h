@@ -12,3 +12,5 @@
 #include "ofxTabbedPages.h"
 #include "ofxCanvas.h"
 #include "ofxZoomableCanvas.h"
+#include "ofxValuePlotter.h"
+#include "ofxFpsDisplay.h"
