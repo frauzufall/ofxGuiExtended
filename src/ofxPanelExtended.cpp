@@ -20,7 +20,7 @@ ofxPanelExtended::ofxPanelExtended(const ofParameterGroup & parameters, string f
 }
 
 ofxPanelExtended::~ofxPanelExtended(){
-    //
+    unregisterMouseEvents();
 }
 
 ofxPanelExtended * ofxPanelExtended::setup(string collectionName, string filename, float x, float y){
