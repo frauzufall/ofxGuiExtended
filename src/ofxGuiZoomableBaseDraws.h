@@ -1,16 +1,16 @@
 #pragma once
 
-#include "ofxCanvas.h"
+#include "ofxGuiBaseDraws.h"
 #include "ofFbo.h"
 
-class ofxZoomableCanvas: public ofxCanvas {
+class ofxGuiZoomableBaseDraws: public ofxGuiBaseDraws {
 public:
-    ofxZoomableCanvas();
-    ofxZoomableCanvas(string canvasName, ofTexture* tex = 0, float w = 0, float h = 0);
-    ofxZoomableCanvas(ofTexture* tex, float w = defaultWidth, float h = 0);
-    virtual ~ofxZoomableCanvas();
+    ofxGuiZoomableBaseDraws();
+    ofxGuiZoomableBaseDraws(string canvasName, ofTexture* tex = 0, float w = 0, float h = 0);
+    ofxGuiZoomableBaseDraws(ofTexture* tex, float w = defaultWidth, float h = 0);
+    virtual ~ofxGuiZoomableBaseDraws();
 
-    ofxZoomableCanvas * setup(string canvasName = "", ofTexture* tex = 0, float w = 0, float h = 0);
+    ofxGuiZoomableBaseDraws * setup(string canvasName = "", ofTexture* tex = 0, float w = 0, float h = 0);
 
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}
     virtual bool mousePressed(ofMouseEventArgs & args);

@@ -1,24 +1,24 @@
-#include "ofxCanvas.h"
+#include "ofxGuiBaseDraws.h"
 #include "ofGraphics.h"
 using namespace std;
 
-ofxCanvas::ofxCanvas() {
+ofxGuiBaseDraws::ofxGuiBaseDraws() {
     _bLoaded = false;
 }
 
-ofxCanvas::ofxCanvas(string canvasName, ofBaseDraws *graphics, float w, float h){
+ofxGuiBaseDraws::ofxGuiBaseDraws(string canvasName, ofBaseDraws *graphics, float w, float h){
     _bLoaded = false;
     setup(canvasName,graphics,w,h);
 }
 
-ofxCanvas::ofxCanvas(ofBaseDraws* graphics, float w, float h){
+ofxGuiBaseDraws::ofxGuiBaseDraws(ofBaseDraws* graphics, float w, float h){
     setup("",graphics,w,h);
 }
 
-ofxCanvas::~ofxCanvas(){
+ofxGuiBaseDraws::~ofxGuiBaseDraws(){
 }
 
-ofxCanvas* ofxCanvas::setup(string canvasName, ofBaseDraws *graphics, float w, float h) {
+ofxGuiBaseDraws* ofxGuiBaseDraws::setup(string canvasName, ofBaseDraws *graphics, float w, float h) {
     if(graphics->getHeight() != 0 && graphics->getWidth() != 0) {
         _bLoaded = true;
         setName(canvasName);
@@ -32,7 +32,7 @@ ofxCanvas* ofxCanvas::setup(string canvasName, ofBaseDraws *graphics, float w, f
     return this;
 }
 
-void ofxCanvas::setSize(float w, float h){
+void ofxGuiBaseDraws::setSize(float w, float h){
     if(_bLoaded) {
         if(w == 0) {
             if(h == 0) {
@@ -50,7 +50,7 @@ void ofxCanvas::setSize(float w, float h){
     }
 }
 
-void ofxCanvas::generateDraw(){
+void ofxGuiBaseDraws::generateDraw(){
     bg.clear();
 
     bg.setFillColor(thisBackgroundColor);
@@ -60,7 +60,7 @@ void ofxCanvas::generateDraw(){
     textMesh = getTextMesh(getName(), b.x + textPadding, b.y + b.height-textPadding);
 }
 
-void ofxCanvas::render() {
+void ofxGuiBaseDraws::render() {
     ofColor c = ofGetStyle().color;
 
     bg.draw();
@@ -85,6 +85,6 @@ void ofxCanvas::render() {
     }
 }
 
-ofAbstractParameter & ofxCanvas::getParameter(){
+ofAbstractParameter & ofxGuiBaseDraws::getParameter(){
     return label;
 }

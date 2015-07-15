@@ -2,14 +2,14 @@
 
 #include "ofxBaseGui.h"
 
-class ofxCanvas: public ofxBaseGui {
+class ofxGuiBaseDraws: public ofxBaseGui {
 public:
-    ofxCanvas();
-    ofxCanvas(string canvasName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
-    ofxCanvas(ofBaseDraws *graphics, float w = defaultWidth, float h = 0);
-    virtual ~ofxCanvas();
+    ofxGuiBaseDraws();
+    ofxGuiBaseDraws(string canvasName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
+    ofxGuiBaseDraws(ofBaseDraws *graphics, float w = defaultWidth, float h = 0);
+    virtual ~ofxGuiBaseDraws();
 
-    ofxCanvas * setup(string canvasName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
+    ofxGuiBaseDraws * setup(string canvasName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
 
     // Abstract methods we must implement, but have no need for!
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}

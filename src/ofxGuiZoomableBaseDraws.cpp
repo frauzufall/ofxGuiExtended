@@ -1,30 +1,30 @@
-#include "ofxZoomableCanvas.h"
+#include "ofxGuiZoomableBaseDraws.h"
 #include "ofGraphics.h"
 using namespace std;
 
-ofxZoomableCanvas::ofxZoomableCanvas() {}
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws() {}
 
-ofxZoomableCanvas::ofxZoomableCanvas(string canvasName, ofTexture *tex, float w, float h){
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(string canvasName, ofTexture *tex, float w, float h){
     setup(canvasName,tex,w,h);
 }
 
-ofxZoomableCanvas::ofxZoomableCanvas(ofTexture *tex, float w, float h){
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(ofTexture *tex, float w, float h){
     setup("",tex,w,h);
 }
 
-ofxZoomableCanvas::~ofxZoomableCanvas(){
+ofxGuiZoomableBaseDraws::~ofxGuiZoomableBaseDraws(){
 }
 
-ofxZoomableCanvas* ofxZoomableCanvas::setup(string canvasName, ofTexture *tex, float w, float h) {
-    ofxCanvas::setup(canvasName, tex, w, h);
+ofxGuiZoomableBaseDraws* ofxGuiZoomableBaseDraws::setup(string canvasName, ofTexture *tex, float w, float h) {
+    ofxGuiBaseDraws::setup(canvasName, tex, w, h);
     zoom_factor = 0;
     zoom_speed = 0.1;
     dragging_dst = false;
     return this;
 }
 
-void ofxZoomableCanvas::setSize(float w, float h){
-    ofxCanvas::setSize(w,h);
+void ofxGuiZoomableBaseDraws::setSize(float w, float h){
+    ofxGuiBaseDraws::setSize(w,h);
     contentFbo.clear();
     if(_bLoaded) {
         contentFbo.allocate(b.width, b.height, GL_RGBA);
@@ -32,8 +32,8 @@ void ofxZoomableCanvas::setSize(float w, float h){
     setNeedsRedraw();
 }
 
-void ofxZoomableCanvas::generateDraw(){
-    ofxCanvas::generateDraw();
+void ofxGuiZoomableBaseDraws::generateDraw(){
+    ofxGuiBaseDraws::generateDraw();
 
     if(_bLoaded) {
 
@@ -62,7 +62,7 @@ void ofxZoomableCanvas::generateDraw(){
 
 }
 
-void ofxZoomableCanvas::render() {
+void ofxGuiZoomableBaseDraws::render() {
     ofColor c = ofGetStyle().color;
 
     bg.draw();
@@ -87,11 +87,11 @@ void ofxZoomableCanvas::render() {
     }
 }
 
-ofAbstractParameter & ofxZoomableCanvas::getParameter(){
+ofAbstractParameter & ofxGuiZoomableBaseDraws::getParameter(){
     return label;
 }
 
-bool ofxZoomableCanvas::mouseDragged(ofMouseEventArgs &args) {
+bool ofxGuiZoomableBaseDraws::mouseDragged(ofMouseEventArgs &args) {
     ofPoint mouse(args.x, args.y);
     if(dragging_dst) {
         zoom_point_offset += mouse - last_mouse;
@@ -101,7 +101,7 @@ bool ofxZoomableCanvas::mouseDragged(ofMouseEventArgs &args) {
     return false;
 }
 
-bool ofxZoomableCanvas::mousePressed(ofMouseEventArgs &args) {
+bool ofxGuiZoomableBaseDraws::mousePressed(ofMouseEventArgs &args) {
     ofPoint mouse(args.x, args.y);
     if(b.inside(mouse)) {
         dragging_dst = true;
@@ -110,12 +110,12 @@ bool ofxZoomableCanvas::mousePressed(ofMouseEventArgs &args) {
     return false;
 }
 
-bool ofxZoomableCanvas::mouseReleased(ofMouseEventArgs &args) {
+bool ofxGuiZoomableBaseDraws::mouseReleased(ofMouseEventArgs &args) {
     dragging_dst = false;
     return false;
 }
 
-bool ofxZoomableCanvas::mouseScrolled(ofMouseEventArgs &args) {
+bool ofxGuiZoomableBaseDraws::mouseScrolled(ofMouseEventArgs &args) {
 
     if(b.inside(ofGetMouseX(), ofGetMouseY())) {
         setZoomFactor(args.y);
@@ -125,7 +125,7 @@ bool ofxZoomableCanvas::mouseScrolled(ofMouseEventArgs &args) {
     return false;
 }
 
-void ofxZoomableCanvas::setZoomFactor(int factor) {
+void ofxGuiZoomableBaseDraws::setZoomFactor(int factor) {
 
     int old_zoom_factor = zoom_factor;
 
@@ -153,16 +153,16 @@ void ofxZoomableCanvas::setZoomFactor(int factor) {
 
 }
 
-ofPoint ofxZoomableCanvas::addZoom(ofPoint p) {
+ofPoint ofxGuiZoomableBaseDraws::addZoom(ofPoint p) {
     return p*(1+zoom_factor*zoom_speed);
 }
 
-float ofxZoomableCanvas::addZoom(float p) {
+float ofxGuiZoomableBaseDraws::addZoom(float p) {
     return p*(1+zoom_factor*zoom_speed);
 }
 
 
-ofPoint ofxZoomableCanvas::removeZoom(ofPoint p) {
+ofPoint ofxGuiZoomableBaseDraws::removeZoom(ofPoint p) {
     return p/(1+zoom_factor*zoom_speed);
 }
 

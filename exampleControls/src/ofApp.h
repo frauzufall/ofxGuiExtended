@@ -29,8 +29,8 @@ private:
     ofxGuiMatrix matrix;
 
     ofImage img;
-    ofxCanvas canvas;
-    ofxZoomableCanvas zcanvas;
+    ofxGuiBaseDraws canvas;
+    ofxGuiZoomableBaseDraws zcanvas;
 
     ofxFpsPlotter fps;
 
