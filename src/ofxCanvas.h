@@ -5,11 +5,11 @@
 class ofxCanvas: public ofxBaseGui {
 public:
     ofxCanvas();
-    ofxCanvas(string canvasName, ofTexture* tex = 0, float w = 0, float h = 0);
-    ofxCanvas(ofTexture* tex, float w = defaultWidth, float h = 0);
+    ofxCanvas(string canvasName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
+    ofxCanvas(ofBaseDraws *graphics, float w = defaultWidth, float h = 0);
     virtual ~ofxCanvas();
 
-    ofxCanvas * setup(string canvasName = "", ofTexture* tex = 0, float w = 0, float h = 0);
+    ofxCanvas * setup(string canvasName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
 
     // Abstract methods we must implement, but have no need for!
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}
@@ -30,7 +30,8 @@ protected:
     void generateDraw();
     ofPath bg;
     ofVboMesh textMesh;
-    ofTexture* texture;
+    ofBaseDraws* graphics;
     ofParameter<string> label;
+    bool _bLoaded;
 
 };

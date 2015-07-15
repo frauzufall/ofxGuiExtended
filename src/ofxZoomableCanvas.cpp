@@ -20,21 +20,22 @@ ofxZoomableCanvas* ofxZoomableCanvas::setup(string canvasName, ofTexture *tex, f
     zoom_factor = 0;
     zoom_speed = 0.1;
     dragging_dst = false;
-    setNeedsRedraw();
     return this;
 }
 
 void ofxZoomableCanvas::setSize(float w, float h){
     ofxCanvas::setSize(w,h);
     contentFbo.clear();
-    contentFbo.allocate(b.width, b.height, GL_RGBA);
+    if(_bLoaded) {
+        contentFbo.allocate(b.width, b.height, GL_RGBA);
+    }
+    setNeedsRedraw();
 }
 
 void ofxZoomableCanvas::generateDraw(){
     ofxCanvas::generateDraw();
 
-    if(texture) {
-        if(texture->isAllocated()) {
+    if(_bLoaded) {
 
             contentFbo.begin();
             ofClear(0,0,0,0);
@@ -52,12 +53,11 @@ void ofxZoomableCanvas::generateDraw(){
                 zoom_translation.y = -addZoom(b.getHeight())+b.getHeight();
             ofTranslate(zoom_translation);
 
-            texture->draw(b.getPosition(), addZoom(b.getWidth()), addZoom(b.getHeight()));
+            graphics->draw(b.getPosition(), addZoom(b.getWidth()), addZoom(b.getHeight()));
 
             ofPopMatrix();
 
             contentFbo.end();
-        }
     }
 
 }
@@ -66,10 +66,8 @@ void ofxZoomableCanvas::render() {
     ofColor c = ofGetStyle().color;
 
     bg.draw();
-    if(texture) {
-        if(texture->isAllocated()) {
-            contentFbo.draw(b);
-        }
+    if(_bLoaded) {
+        contentFbo.draw(b);
     }
 
 

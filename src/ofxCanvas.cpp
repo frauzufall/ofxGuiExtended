@@ -2,44 +2,51 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxCanvas::ofxCanvas() {}
-
-ofxCanvas::ofxCanvas(string canvasName, ofTexture *tex, float w, float h){
-    setup(canvasName,tex,w,h);
+ofxCanvas::ofxCanvas() {
+    _bLoaded = false;
 }
 
-ofxCanvas::ofxCanvas(ofTexture *tex, float w, float h){
-    setup("",tex,w,h);
+ofxCanvas::ofxCanvas(string canvasName, ofBaseDraws *graphics, float w, float h){
+    _bLoaded = false;
+    setup(canvasName,graphics,w,h);
+}
+
+ofxCanvas::ofxCanvas(ofBaseDraws* graphics, float w, float h){
+    setup("",graphics,w,h);
 }
 
 ofxCanvas::~ofxCanvas(){
 }
 
-ofxCanvas* ofxCanvas::setup(string canvasName, ofTexture *tex, float w, float h) {
-    setName(canvasName);
-    texture = tex;
-    setSize(w,h);
-    setNeedsRedraw();
+ofxCanvas* ofxCanvas::setup(string canvasName, ofBaseDraws *graphics, float w, float h) {
+    if(graphics->getHeight() != 0 && graphics->getWidth() != 0) {
+        _bLoaded = true;
+        setName(canvasName);
+        this->graphics = graphics;
+        setSize(w,h);
+    }
+    else {
+        ofLogError("ofxCanvas:setup()", "graphics cannot be loaded, width = 0 or height = 0");
+    }
+
     return this;
 }
 
 void ofxCanvas::setSize(float w, float h){
-    if(texture != 0) {
-        if(texture->isAllocated()) {
-            if(w == 0) {
-                if(h == 0) {
-                    w = texture->getWidth();
-                    h = texture->getHeight();
-                }
-                else {
-                    w = h * texture->getWidth()/texture->getHeight();
-                }
+    if(_bLoaded) {
+        if(w == 0) {
+            if(h == 0) {
+                w = graphics->getWidth();
+                h = graphics->getHeight();
             }
-            h = w*texture->getHeight()/texture->getWidth();
-            b.width = w;
-            b.height = h;
-            setNeedsRedraw();
+            else {
+                w = h * graphics->getWidth()/graphics->getHeight();
+            }
         }
+        h = w*graphics->getHeight()/graphics->getWidth();
+        b.width = w;
+        b.height = h;
+        setNeedsRedraw();
     }
 }
 
@@ -57,10 +64,8 @@ void ofxCanvas::render() {
     ofColor c = ofGetStyle().color;
 
     bg.draw();
-    if(texture) {
-        if(texture->isAllocated()) {
-            texture->draw(b);
-        }
+    if(_bLoaded) {
+        graphics->draw(b);
     }
 
 
