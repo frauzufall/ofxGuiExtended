@@ -27,8 +27,9 @@ private:
 
     ofxPanelExtended panel1, panel2;
 
-    ofParameter<float> m_slider1, m_slider2, m_slider3;
+    ofParameter<float> m_slider1, m_slider2;
     ofParameter<float> s_slider1, s_slider2, s_slider3;
+    ofParameter<bool> s_toggle;
 
 };
 

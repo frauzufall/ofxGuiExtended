@@ -7,10 +7,20 @@ struct MasterControl {
 
     MasterControl(ofxBaseGui* _control) {
         control = _control;
+        if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
+            min = slider->getMin();
+            max = slider->getMax();
+        }
+        if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+            min = slider->getMin();
+            max = slider->getMax();
+        }
     }
 
     ofxBaseGui* control = 0;
     bool isActive = false;
+    bool slider = false;
+    float min=1, max=1;
 };
 
 struct SlaveControl {
@@ -18,12 +28,22 @@ struct SlaveControl {
     ofxBaseGui* control = 0;
     bool isControlled = false;
     bool isListening = false;
+    bool slider = false;
+    float min=0, max=1;
     MasterControl* master = 0;
     ofColor defaultBackgroundColor;
 
     SlaveControl(ofxBaseGui* _control) {
         this->control = _control;
         defaultBackgroundColor = control->getBackgroundColor();
+        if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
+            min = slider->getMin();
+            max = slider->getMax();
+        }
+        if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+            min = slider->getMin();
+            max = slider->getMax();
+        }
     }
 
     void setControlledBy(MasterControl *master) {
@@ -40,12 +60,17 @@ struct SlaveControl {
         }
         if(setC) {
             if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
-                toggle->addListener(this, &SlaveControl::valueChangedBool);
+                toggle->addListener(this, &SlaveControl::valueChanged<bool>);
                 isControlled = true;
                 this->master = master;
             }
             if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
-                slider->addListener(this, &SlaveControl::valueChangedFloat);
+                slider->addListener(this, &SlaveControl::valueChanged<float>);
+                isControlled = true;
+                this->master = master;
+            }
+            if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
+                slider->addListener(this, &SlaveControl::valueChanged<int>);
                 isControlled = true;
                 this->master = master;
             }
@@ -58,10 +83,13 @@ struct SlaveControl {
     void removeControl() {
         if(master != 0) {
             if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
-                toggle->removeListener(this, &SlaveControl::valueChangedBool);
+                toggle->removeListener(this, &SlaveControl::valueChanged<bool>);
             }
             if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
-                slider->removeListener(this, &SlaveControl::valueChangedFloat);
+                slider->removeListener(this, &SlaveControl::valueChanged<float>);
+            }
+            if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
+                slider->removeListener(this, &SlaveControl::valueChanged<int>);
             }
             isControlled = false;
             master = 0;
@@ -69,14 +97,16 @@ struct SlaveControl {
         }
     }
 
-    void valueChangedFloat(float &value) {
+    template <class Tvalue>
+    void valueChanged(Tvalue &value) {
         if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
-            *slider = value;
+            *slider = ofMap(value, master->min, master->max,min,max);
         }
-    }
-    void valueChangedBool(bool &value) {
-        if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(control)) {
-            *toggle = value;
+        else if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+            *slider = ofMap(value, master->min, master->max,min,max);
+        }
+        else if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(control)) {
+            *toggle =  floor(ofMap(value, master->min, master->max,min,max)+0.5);
         }
     }
 

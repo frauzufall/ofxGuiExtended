@@ -52,8 +52,10 @@ bool ofxMasterSlaveControl::mouseMoved(ofMouseEventArgs & args) {
 
 bool ofxMasterSlaveControl::mousePressed(ofMouseEventArgs & args) {
 
+    bool onElement = false;
     for(unsigned int i = 0; i < slaves.size(); i++) {
         if(slaves.at(i)->control->getShape().inside(args.x, args.y)) {
+            onElement = true;
             if(activeMaster != 0) {
                 slaves.at(i)->setControlledBy(activeMaster);
             }
@@ -64,6 +66,7 @@ bool ofxMasterSlaveControl::mousePressed(ofMouseEventArgs & args) {
     }
     for(unsigned int i = 0; i < masters.size(); i++) {
         if(masters.at(i)->control->getShape().inside(args.x, args.y)) {
+            onElement = true;
             if(masters.at(i)->isActive) {
                 masters.at(i)->isActive = false;
                 activeMaster = 0;
@@ -76,6 +79,12 @@ bool ofxMasterSlaveControl::mousePressed(ofMouseEventArgs & args) {
                 activeMaster = masters.at(i);
             }
         }
+    }
+    if(!onElement) {
+        if(activeMaster != 0) {
+            activeMaster->isActive = false;
+        }
+        activeMaster = 0;
     }
     return false;
 }

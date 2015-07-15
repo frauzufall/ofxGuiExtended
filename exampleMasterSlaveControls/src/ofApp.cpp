@@ -6,7 +6,7 @@ void ofApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
 
     panel1.setup("control");
-    panel2.setup("slave", "", 250, 10);
+    panel2.setup("", "", 250, 10);
 
 
     panel1.ofxGuiGroup::add(m_slider1.set("sinus",0,-1,1));
@@ -17,11 +17,14 @@ void ofApp::setup(){
     panel1.getControl("cosine")->setFillColor(ofColor::aqua);
     ofxMasterSlaveControl::get().addMaster(panel1.getControl("cosine"));
 
-    panel2.ofxGuiGroup::add(s_slider1.set("slave1",0,-1,1));
+    panel2.ofxGuiGroup::add(s_slider1.set("slave1",0,0,1));
     ofxMasterSlaveControl::get().addSlave(panel2.getControl("slave1"));
 
-    panel2.ofxGuiGroup::add(s_slider2.set("slave2",0,-1,1));
+    panel2.ofxGuiGroup::add(s_slider2.set("slave2",0,10,20));
     ofxMasterSlaveControl::get().addSlave(panel2.getControl("slave2"));
+
+    panel2.ofxGuiGroup::add(s_toggle.set("slave3",false));
+    ofxMasterSlaveControl::get().addSlave(panel2.getControl("slave3"));
 
     panel2.ofxGuiGroup::add(s_slider3.set("regular slider",0,-1,1));
 
