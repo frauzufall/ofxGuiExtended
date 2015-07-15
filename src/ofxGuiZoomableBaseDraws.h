@@ -6,11 +6,11 @@
 class ofxGuiZoomableBaseDraws: public ofxGuiBaseDraws {
 public:
     ofxGuiZoomableBaseDraws();
-    ofxGuiZoomableBaseDraws(string canvasName, ofTexture* tex = 0, float w = 0, float h = 0);
-    ofxGuiZoomableBaseDraws(ofTexture* tex, float w = defaultWidth, float h = 0);
+    ofxGuiZoomableBaseDraws(string graphicsName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
+    ofxGuiZoomableBaseDraws(ofBaseDraws* tex, float w = defaultWidth, float h = 0);
     virtual ~ofxGuiZoomableBaseDraws();
 
-    ofxGuiZoomableBaseDraws * setup(string canvasName = "", ofTexture* tex = 0, float w = 0, float h = 0);
+    ofxGuiZoomableBaseDraws * setup(string graphicsName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
 
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}
     virtual bool mousePressed(ofMouseEventArgs & args);

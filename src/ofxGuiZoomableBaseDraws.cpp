@@ -4,19 +4,19 @@ using namespace std;
 
 ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws() {}
 
-ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(string canvasName, ofTexture *tex, float w, float h){
-    setup(canvasName,tex,w,h);
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(string graphicsName, ofBaseDraws *graphics, float w, float h){
+    setup(graphicsName,graphics,w,h);
 }
 
-ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(ofTexture *tex, float w, float h){
-    setup("",tex,w,h);
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(ofBaseDraws *graphics, float w, float h){
+    setup("",graphics,w,h);
 }
 
 ofxGuiZoomableBaseDraws::~ofxGuiZoomableBaseDraws(){
 }
 
-ofxGuiZoomableBaseDraws* ofxGuiZoomableBaseDraws::setup(string canvasName, ofTexture *tex, float w, float h) {
-    ofxGuiBaseDraws::setup(canvasName, tex, w, h);
+ofxGuiZoomableBaseDraws* ofxGuiZoomableBaseDraws::setup(string graphicsName, ofBaseDraws *graphics, float w, float h) {
+    ofxGuiBaseDraws::setup(graphicsName, graphics, w, h);
     zoom_factor = 0;
     zoom_speed = 0.1;
     dragging_dst = false;
