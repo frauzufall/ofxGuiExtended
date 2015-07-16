@@ -3,6 +3,7 @@
 #include "ofxGui.h"
 #include "ofxMinimalButton.h"
 #include "ofxMinimalToggle.h"
+#include "ofxMinimalLabel.h"
 #include "ofxGuiGroupExtended.h"
 #include "ofxPanelExtended.h"
 #include "ofxRotarySlider.h"
