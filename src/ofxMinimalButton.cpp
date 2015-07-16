@@ -61,4 +61,7 @@ bool ofxMinimalButton::mouseDragged(ofMouseEventArgs & args){
 
 void ofxMinimalButton::valueChanged(bool & value){
     ofxMinimalToggle::valueChanged(value);
+    if(!value){
+        ofNotifyEvent(triggerEvent, this);
+    }
 }
