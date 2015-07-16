@@ -45,8 +45,7 @@ void ofxGuiMatrix::add(ofxBaseGui *element){
         subgroup->scaleWidthElements(.98);
     }else{
         if(parent!=NULL){
-            element->setSize(b.width*.98,element->getHeight());
-            element->setPosition(b.x + b.width-element->getWidth(),element->getPosition().y);
+            scaleWidthElements(0.98);
         }
     }
 

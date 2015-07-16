@@ -1,5 +1,6 @@
 #include "ofxGuiGroupExtended.h"
 #include "ofGraphics.h"
+#include "ofxGui.h"
 using namespace std;
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(){
@@ -17,6 +18,7 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, st
 
 ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string filename, float x, float y){
     ofxGuiGroup::setup(collectionName,filename,x,y);
+    clear();
     return this;
 }
 
