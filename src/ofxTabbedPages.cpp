@@ -10,7 +10,7 @@ ofxTabbedPages::~ofxTabbedPages(){
     //
 }
 
-ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, float x, float y){
+ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, float x, float y) {
     ofxGuiPage::setup(collectionName,filename,x,y);
     tabs.setup();
     tabs.showHeader(false);
@@ -32,6 +32,13 @@ ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, f
 void ofxTabbedPages::add(ofxGuiPage *element) {
     collection.push_back(element);
 
+    parameters_tabs.push_back(ofParameter<bool>(element->getName(),false));
+    tabs.add(new ofxMinimalToggle(parameters_tabs.at(parameters_tabs.size()-1),tabWidth,tabHeight));
+    if(element->getBackgroundColor()!=thisBackgroundColor) {
+        tabs.getControl(tabs.getNumControls()-1)->setBackgroundColor(element->getBackgroundColor());
+        tabs.getControl(tabs.getNumControls()-1)->setBorderColor(element->getBackgroundColor());
+    }
+
     element->setPosition(pagesShape.getPosition());
     element->showHeader(false);
     element->setBorderColor(ofColor(0,0,0,0));
@@ -40,9 +47,6 @@ void ofxTabbedPages::add(ofxGuiPage *element) {
     element->setSize(pagesShape.width, pagesShape.height);
 
     element->unregisterMouseEvents();
-
-    parameters_tabs.push_back(ofParameter<bool>(element->getName(),false));
-    tabs.add(new ofxMinimalToggle(parameters_tabs.at(parameters_tabs.size()-1),0,tabHeight));
 
     parameters.add(element->getParameter());
 
@@ -78,8 +82,7 @@ void ofxTabbedPages::generateDraw(){
     border.setStrokeColor(thisBorderColor);
     border.setStrokeWidth(1);
     border.setFilled(false);
-    border.rectangle(pagesShape.x-1, pagesShape.y-1, pagesShape.width+2, pagesShape.height+2);
-
+    border.rectangle(pagesShape.x-1, pagesShape.y+1, pagesShape.width+2, pagesShape.height+2);
 
     if(_bUseHeader) {
         generateHeader();
@@ -88,14 +91,29 @@ void ofxTabbedPages::generateDraw(){
 
 void ofxTabbedPages::render(){
 
+    tabBorder.clear();
+    tabBorder.setStrokeWidth(2);
+    tabBorder.setFilled(false);
+    tabBorder.setStrokeColor(thisBackgroundColor);
+    tabBorder.moveTo(activeToggle->getShape().getBottomLeft()-ofPoint(-1,1));
+    tabBorder.lineTo(activeToggle->getShape().getBottomRight()-ofPoint(1,1));
+
+    for(int i = 1; i < (int)collection.size(); i++){
+        if(parameters_tabs.at(i-1).get()) {
+            activePage = collection[i];
+            activeToggle = tabs.getControl(i-1);
+        }
+    }
+
+    this->setBorderColor(activeToggle->getBorderColor());
+
+    bg.draw();
+    tabs.draw();
     border.draw();
+    tabBorder.draw();
     if(_bUseHeader) {
         headerBg.draw();
     }
-
-    tabs.draw();
-
-    bg.draw();
 
     ofBlendMode blendMode = ofGetStyle().blendingMode;
     if(blendMode!=OF_BLENDMODE_ALPHA){
@@ -107,11 +125,7 @@ void ofxTabbedPages::render(){
         renderHeader();
     }
 
-    for(int i = 1; i < (int)collection.size(); i++){
-        if(parameters_tabs.at(i-1).get()) {
-            collection[i]->draw();
-        }
-    }
+    activePage->draw();
 
     ofSetColor(c);
     if(blendMode!=OF_BLENDMODE_ALPHA){
@@ -239,6 +253,7 @@ void ofxTabbedPages::sizeChangedCB(){
 
 void ofxTabbedPages::setActiveTab(int index) {
     tabs.setActiveToggle(index);
+    activeToggle = tabs.getControl(index);
 }
 
 int ofxTabbedPages::getActiveTabIndex() {
@@ -247,4 +262,12 @@ int ofxTabbedPages::getActiveTabIndex() {
 
 ofxGuiPage* ofxTabbedPages::getActiveTab() {
     return (ofxGuiPage*)collection.at(tabs.getActiveToggleIndex()+1);
+}
+
+void ofxTabbedPages::setTabHeight(int h) {
+    tabHeight = h;
+}
+
+void ofxTabbedPages::setTabWidth(int w) {
+    tabWidth = w;
 }

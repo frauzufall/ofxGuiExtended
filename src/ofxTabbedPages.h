@@ -18,6 +18,9 @@ public:
     int getActiveTabIndex();
     ofxGuiPage* getActiveTab();
 
+    void setTabHeight(int h);
+    void setTabWidth(int w);
+
     bool mouseDragged(ofMouseEventArgs & args);
     bool mouseReleased(ofMouseEventArgs & args);
 
@@ -36,4 +39,7 @@ private:
     float tabHeight, tabWidth;
     ofRectangle pagesShape, tabShape;
     ofPath bg;
+    ofPath tabBorder;
+    ofxBaseGui* activePage;
+    ofxBaseGui* activeToggle;
 };
