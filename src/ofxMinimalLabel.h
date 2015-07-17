@@ -8,9 +8,6 @@
 #include "ofxLabel.h"
 
 class ofxMinimalLabel: public ofxLabel {
-public:
-    //ofxMinimalLabel * setup(std::string label, float width = defaultWidth, float height = defaultHeight);
-
 protected:
     void generateDraw();
 };
