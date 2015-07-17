@@ -19,15 +19,16 @@ public:
     virtual bool mouseScrolled(ofMouseEventArgs & args);
 
     virtual void setSize(float w, float h);
+    virtual void setShape(float x, float y, float w, float h);
+    virtual void setShape(ofRectangle r);
 
     virtual ofAbstractParameter & getParameter();
 
 protected:
 
     bool setValue(float mx, float my, bool bCheckBounds){return false;}
-    void update();
-    void render();
-    void generateDraw();
+    virtual void render();
+    virtual void generateDraw();
 
     void setZoomFactor(int factor);
     ofPoint addZoom(ofPoint p);

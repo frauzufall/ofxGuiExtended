@@ -25,9 +25,8 @@ public:
 protected:
 
     bool setValue(float mx, float my, bool bCheckBounds){return false;}
-    void update();
-    void render();
-    void generateDraw();
+    virtual void render();
+    virtual void generateDraw();
     ofPath bg;
     ofVboMesh textMesh;
     ofBaseDraws* graphics;

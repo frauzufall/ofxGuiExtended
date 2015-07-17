@@ -32,37 +32,52 @@ void ofxGuiZoomableBaseDraws::setSize(float w, float h){
     setNeedsRedraw();
 }
 
+void ofxGuiZoomableBaseDraws::setShape(float x, float y, float w, float h){
+    ofxGuiBaseDraws::setShape(x,y,w,h);
+    contentFbo.clear();
+    if(_bLoaded) {
+        contentFbo.allocate(b.width, b.height, GL_RGBA);
+    }
+    setNeedsRedraw();
+}
+
+void ofxGuiZoomableBaseDraws::setShape(ofRectangle r){
+    setShape(r.x,r.y,r.width,r.height);
+}
+
 void ofxGuiZoomableBaseDraws::generateDraw(){
     ofxGuiBaseDraws::generateDraw();
-
-    if(_bLoaded) {
-
-            contentFbo.begin();
-            ofClear(0,0,0,0);
-
-            ofPushMatrix();
-
-            ofTranslate(-b.getPosition());
-
-            zoom_translation = zoom_point-zoom_point_scaled+zoom_point_offset;
-            if(zoom_translation.x > 0) zoom_translation.x = 0;
-            if(zoom_translation.y > 0) zoom_translation.y = 0;
-            if(zoom_translation.x < -addZoom(b.getWidth())+b.getWidth())
-                zoom_translation.x = -addZoom(b.getWidth())+b.getWidth();
-            if(zoom_translation.y < -addZoom(b.getHeight())+b.getHeight())
-                zoom_translation.y = -addZoom(b.getHeight())+b.getHeight();
-            ofTranslate(zoom_translation);
-
-            graphics->draw(b.getPosition(), addZoom(b.getWidth()), addZoom(b.getHeight()));
-
-            ofPopMatrix();
-
-            contentFbo.end();
-    }
 
 }
 
 void ofxGuiZoomableBaseDraws::render() {
+
+    if(_bLoaded) {
+
+        contentFbo.begin();
+        ofClear(0,0,0,0);
+
+        ofPushMatrix();
+
+        ofTranslate(-b.getPosition());
+
+        zoom_translation = zoom_point-zoom_point_scaled+zoom_point_offset;
+        if(zoom_translation.x > 0) zoom_translation.x = 0;
+        if(zoom_translation.y > 0) zoom_translation.y = 0;
+        if(zoom_translation.x < -addZoom(b.getWidth())+b.getWidth())
+            zoom_translation.x = -addZoom(b.getWidth())+b.getWidth();
+        if(zoom_translation.y < -addZoom(b.getHeight())+b.getHeight())
+            zoom_translation.y = -addZoom(b.getHeight())+b.getHeight();
+        ofTranslate(zoom_translation);
+
+        graphics->draw(b.getPosition(), addZoom(b.getWidth()), addZoom(b.getHeight()));
+
+        ofPopMatrix();
+
+        contentFbo.end();
+
+    }
+
     ofColor c = ofGetStyle().color;
 
     bg.draw();
