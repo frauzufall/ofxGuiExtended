@@ -10,6 +10,8 @@ void ofApp::setup(){
     panel1.setup("extended gui");
     panel1.setBorderColor(ofColor::black);
 
+    panel1.add((new ofxLabelExtended())->setup("LabelName", "extended Label")->setShowLabelName(false));
+
     panel1.add(fps.setup(0,120));
 
     /*
