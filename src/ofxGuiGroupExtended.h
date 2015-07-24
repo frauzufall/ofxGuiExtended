@@ -59,6 +59,7 @@ protected:
 
     int active_toggle_index;
     bool processToggles(ofxToggle *toggle, ofMouseEventArgs a);
+    void setOneToggleActive();
     void deactivateAllOtherToggles(ofxToggle* toggle);
 
     float getContentHeight();

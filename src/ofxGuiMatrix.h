@@ -12,8 +12,6 @@ public:
 
     void add(ofxBaseGui * element);
 
-    void clear();
-
     void minimize();
     void maximize();
     void minimizeAll();

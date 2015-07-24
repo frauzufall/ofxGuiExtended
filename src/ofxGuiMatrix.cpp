@@ -68,16 +68,6 @@ void ofxGuiMatrix::scaleWidthElements(float factor){
 
 }
 
-void ofxGuiMatrix::clear(){
-    collection.clear();
-    parameters.clear();
-    b.height = spacing + spacingNextElement ;
-    if(_bUseHeader) {
-        b.height += header;
-    }
-    sizeChangedCB();
-}
-
 bool ofxGuiMatrix::mouseMoved(ofMouseEventArgs & args){
     return ofxGuiGroup::mouseMoved(args);
 }
@@ -190,11 +180,7 @@ void ofxGuiMatrix::sizeChangedCB(){
     updateElementWidth();
     float x,y;
     x = b.x;
-    y = b.y + spacing*2+spacingNextElement;
-
-    if(_bUseHeader) {
-        y += header;
-    }
+    y = b.getBottom()-getContentHeight();
 
     x += b.width - w_matrix;
 
@@ -239,7 +225,13 @@ int ofxGuiMatrix::getColNum() {
 }
 
 int ofxGuiMatrix::getRowNum() {
-    return (int)((collection.size()-1)/numCol+1);
+    if(collection.size() > 0) {
+        return (int)((collection.size()-1)/numCol+1);
+    }
+    else {
+        return 0;
+    }
+
 }
 
 void ofxGuiMatrix::setElementHeight(float h) {

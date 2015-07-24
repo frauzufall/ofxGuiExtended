@@ -40,7 +40,6 @@ void ofApp::setup(){
     matrix_params.push_back(ofParameter<bool>("be",false));
     matrix_params.push_back(ofParameter<bool>("active",false));
     matrix.setup("matrix",3);
-    matrix.clear();
     for(unsigned int i = 0; i < matrix_params.size(); i++) {
         matrix.add(new ofxMinimalToggle(matrix_params.at(i)));
     }

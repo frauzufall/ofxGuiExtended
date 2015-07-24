@@ -8,6 +8,7 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(){
     _bUseHeader = true;
     _bAllowMultiple = true;
 	parent = NULL;
+    active_toggle_index = -1;
 }
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, string filename, float x, float y)
@@ -16,6 +17,7 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, st
     _bUseHeader = true;
     _bAllowMultiple = true;
 	parent = NULL;
+    active_toggle_index = -1;
 }
 
 ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string filename, float x, float y){
@@ -73,6 +75,10 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
 
     parameters.add(element->getParameter());
 
+    if(!_bAllowMultiple) {
+        setOneToggleActive();
+    }
+
     setNeedsRedraw();
 }
 
@@ -120,6 +126,7 @@ void ofxGuiGroupExtended::clear(){
     parameters.clear();
     setContentHeight(0);
     sizeChangedCB();
+    active_toggle_index = -1;
 }
 
 bool ofxGuiGroupExtended::mouseMoved(ofMouseEventArgs & args){
@@ -366,6 +373,9 @@ void ofxGuiGroupExtended::setShowHeader(bool show) {
 
 void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
     _bAllowMultiple = allow;
+    if(!_bAllowMultiple) {
+        setOneToggleActive();
+    }
 }
 
 bool ofxGuiGroupExtended::setActiveToggle(ofxToggle* toggle) {
@@ -397,6 +407,17 @@ void ofxGuiGroupExtended::deactivateAllOtherToggles(ofxToggle *toggle) {
                 else {
                     active_toggle_index = j;
                 }
+            }
+        }
+    }
+}
+
+void ofxGuiGroupExtended::setOneToggleActive() {
+    if(active_toggle_index == -1) {
+        for(int i = 0; i < (int)collection.size(); i++){
+            if(dynamic_cast<ofxToggle*>(collection[i])) {
+                setActiveToggle(i);
+                return;
             }
         }
     }
