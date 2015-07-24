@@ -125,13 +125,16 @@ void ofxRotarySlider<Type>::arcStrip(ofPath& path, ofPoint center, float outer_r
 template<typename Type>
 bool ofxRotarySlider<Type>::mousePressed(ofMouseEventArgs & args) {
     ofHideCursor();
-    ofxSlider<Type>::mousePressed(args);
+    Type firstClickVal = ofMap(args.y, this->b.getBottom(), this->b.getTop(), 0, 1, true);
+    Type lastVal = ofMap(this->value, this->value.getMin(), this->value.getMax(), 0, 1, true);
+    _mouseOffset = (firstClickVal-lastVal)*this->b.height;
+    return ofxSlider<Type>::mousePressed(args);
 }
 
 template<typename Type>
 bool ofxRotarySlider<Type>::mouseReleased(ofMouseEventArgs & args) {
     ofShowCursor();
-    ofxSlider<Type>::mouseReleased(args);
+    return ofxSlider<Type>::mouseReleased(args);
 }
 
 template<typename Type>
@@ -148,8 +151,7 @@ bool ofxRotarySlider<Type>::setValue(float mx, float my, bool bCheck){
         }
     }
     if( this->bGuiActive ){
-
-        this->value = ofMap(my, this->b.getBottom(), this->b.getTop(), this->value.getMin(), this->value.getMax(), true);
+        this->value = ofMap(my, this->b.getBottom()-_mouseOffset, this->b.getTop()-_mouseOffset, this->value.getMin(), this->value.getMax(), true);
         return true;
     }
     return false;
