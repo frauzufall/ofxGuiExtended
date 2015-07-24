@@ -4,9 +4,6 @@ using namespace std;
 
 template<typename Type>
 ofxRotarySlider<Type>::ofxRotarySlider(){
-    this->bUpdateOnReleaseOnly = false;
-    this->bGuiActive = false;
-    this->mouseInside = false;
 }
 
 template<typename Type>
@@ -19,31 +16,22 @@ ofxRotarySlider<Type>::ofxRotarySlider(ofParameter<Type> _val, float width, floa
 }
 
 template<typename Type>
-ofxRotarySlider<Type>* ofxRotarySlider<Type>::setup(ofParameter<Type> _val, float width, float height){
-    ofxSlider<Type>::setup(_val,width,height);
-    return this;
-}
-
-template<typename Type>
-ofxRotarySlider<Type>* ofxRotarySlider<Type>::setup(string sliderName, Type _val, Type _min, Type _max, float width, float height){
-    ofxSlider<Type>::setup(sliderName,_val,_min,_max,width,height);
-    return this;
-}
-
-template<typename Type>
 void ofxRotarySlider<Type>::generateDraw(){
+
+    float inner_r = min(this->b.width, this->b.height)/6;
+    float outer_r = min(this->b.width, this->b.height)/2;
 
     this->bg.clear();
     this->bar.clear();
 
     this->bg.setFillColor(this->thisBackgroundColor);
     this->bg.setFilled(true);
-    arcStrip(this->bg,this->b.getCenter(),min(this->b.width, this->b.height)/2, min(this->b.width, this->b.height)/6, 1);
+    arcStrip(this->bg,this->b.getCenter(),outer_r, inner_r, 1);
 
     float val = ofMap(this->value, this->value.getMin(), this->value.getMax(), 0, 1);
     this->bar.setFillColor(this->thisFillColor);
     this->bar.setFilled(true);
-    arcStrip(this->bar,this->b.getCenter(),min(this->b.width, this->b.height)/2-1, min(this->b.width, this->b.height)/6+1, val);
+    arcStrip(this->bar,this->b.getCenter(),outer_r-1, inner_r+1, val);
 
     generateText();
 }
@@ -148,14 +136,7 @@ bool ofxRotarySlider<Type>::setValue(float mx, float my, bool bCheck){
     }
     if( this->bGuiActive ){
 
-        ofPoint mappedHitPoint = ofPoint(mx, my) - this->b.getCenter();
-
-        ofVec2f cVector = -ofPoint(0,this->b.height/2);
-        float val = ofMap(cVector.angle(mappedHitPoint), -180, 180, 0, 1.0, true);
-
-        val = MIN(1.0, MAX(0.0, val));
-
-        this->value = ofMap(val, 0, 1, this->value.getMin(), this->value.getMax(), true);
+        this->value = ofMap(my, this->b.getBottom(), this->b.getTop(), this->value.getMin(), this->value.getMax(), true);
         return true;
     }
     return false;

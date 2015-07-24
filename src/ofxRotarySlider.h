@@ -11,9 +11,6 @@ public:
     ofxRotarySlider();
     ~ofxRotarySlider();
     ofxRotarySlider(ofParameter<Type> _val, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
-    ofxRotarySlider* setup(ofParameter<Type> _val, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
-    ofxRotarySlider* setup(std::string sliderName, Type _val, Type _min, Type _max, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
-
 
     template<class ListenerClass, typename ListenerMethod>
     void addListener(ListenerClass * listener, ListenerMethod method){

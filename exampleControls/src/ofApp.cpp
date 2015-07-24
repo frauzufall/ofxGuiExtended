@@ -25,7 +25,7 @@ void ofApp::setup(){
      * rotary slider
      */
     rotary.setup("rotary");
-    rotary.setBorderColor(ofColor::blanchedAlmond);
+    rotary.setBorderColor(ofColor::blanchedAlmond - ofColor(50));
     rotary.add(new ofxFloatRotarySlider(slider_param.set("slider", 0.5, 0, 1), 66,66));
     rotary.getControl("slider")->setFillColor(ofColor::white);
     rotary.getControl("slider")->setBackgroundColor(ofColor::blanchedAlmond - ofColor(130));
