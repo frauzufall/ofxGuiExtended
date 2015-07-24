@@ -351,7 +351,7 @@ bool ofxGuiGroupExtended::isAlignedVertial() {
     return _bVertical;
 }
 
-void ofxGuiGroupExtended::showHeader(bool show) {
+void ofxGuiGroupExtended::setShowHeader(bool show) {
     if(show == false) {
         if(minimized)
             maximize();

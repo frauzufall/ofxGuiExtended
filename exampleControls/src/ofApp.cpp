@@ -40,6 +40,7 @@ void ofApp::setup(){
     matrix_params.push_back(ofParameter<bool>("be",false));
     matrix_params.push_back(ofParameter<bool>("active",false));
     matrix.setup("matrix",3);
+    matrix.clear();
     for(unsigned int i = 0; i < matrix_params.size(); i++) {
         matrix.add(new ofxMinimalToggle(matrix_params.at(i)));
     }
@@ -117,12 +118,12 @@ void ofApp::draw(){
 }
 
 void ofApp::toggleGroupHeader(bool &val) {
-    rotary.showHeader(val);
-    matrix.showHeader(val);
-    panel1.showHeader(val);
-    panel2.showHeader(val);
-    panel3.showHeader(val);
-    panel4.showHeader(val);
+    rotary.setShowHeader(val);
+    matrix.setShowHeader(val);
+    panel1.setShowHeader(val);
+    panel2.setShowHeader(val);
+    panel3.setShowHeader(val);
+    panel4.setShowHeader(val);
 }
 
 //--------------------------------------------------------------

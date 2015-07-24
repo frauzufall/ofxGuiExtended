@@ -40,7 +40,7 @@ public:
 
     bool isAlignedVertial();
 
-    void showHeader(bool show);
+    void setShowHeader(bool show);
 
     void allowMultipleActiveToggles(bool allow);
     bool setActiveToggle(int index);

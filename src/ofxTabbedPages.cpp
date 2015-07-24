@@ -13,7 +13,7 @@ ofxTabbedPages::~ofxTabbedPages(){
 ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, float x, float y) {
     ofxGuiPage::setup(collectionName,filename,x,y);
     tabs.setup();
-    tabs.showHeader(false);
+    tabs.setShowHeader(false);
     tabs.allowMultipleActiveToggles(false);
     tabs.setAlignHorizontal();
     tabs.setBorderColor(ofColor(0,0,0,0));
@@ -40,7 +40,7 @@ void ofxTabbedPages::add(ofxGuiPage *element) {
     }
 
     element->setPosition(pagesShape.getPosition());
-    element->showHeader(false);
+    element->setShowHeader(false);
     element->setBorderColor(ofColor(0,0,0,0));
     setSizeToElement(element);
 
