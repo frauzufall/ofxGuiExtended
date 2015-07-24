@@ -1,5 +1,6 @@
 #include "ofxRotarySlider.h"
 #include "ofGraphics.h"
+#include "ofAppRunner.h"
 using namespace std;
 
 template<typename Type>
@@ -119,6 +120,18 @@ void ofxRotarySlider<Type>::arcStrip(ofPath& path, ofPoint center, float outer_r
     }
 
     path.close();
+}
+
+template<typename Type>
+bool ofxRotarySlider<Type>::mousePressed(ofMouseEventArgs & args) {
+    ofHideCursor();
+    ofxSlider<Type>::mousePressed(args);
+}
+
+template<typename Type>
+bool ofxRotarySlider<Type>::mouseReleased(ofMouseEventArgs & args) {
+    ofShowCursor();
+    ofxSlider<Type>::mouseReleased(args);
 }
 
 template<typename Type>

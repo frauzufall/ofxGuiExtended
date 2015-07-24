@@ -12,6 +12,9 @@ public:
     ~ofxRotarySlider();
     ofxRotarySlider(ofParameter<Type> _val, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
 
+    virtual bool mousePressed(ofMouseEventArgs & args);
+    virtual bool mouseReleased(ofMouseEventArgs & args);
+
     template<class ListenerClass, typename ListenerMethod>
     void addListener(ListenerClass * listener, ListenerMethod method){
         this->value.addListener(listener,method);
