@@ -7,7 +7,6 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(){
     _bVertical = true;
     _bUseHeader = true;
     _bAllowMultiple = true;
-	parent = NULL;
     active_toggle_index = -1;
 }
 
@@ -16,7 +15,6 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, st
     _bVertical = true;
     _bUseHeader = true;
     _bAllowMultiple = true;
-	parent = NULL;
     active_toggle_index = -1;
 }
 
@@ -60,11 +58,11 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
     }
 
     element->unregisterMouseEvents();
+    element->setParent(this);
 
     ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(element);
     if(subgroup!=NULL){
         subgroup->filename = filename;
-        subgroup->parent = this;
         subgroup->scaleWidthElements(.98);
     }else{
         if(parent!=NULL){
@@ -356,7 +354,7 @@ void ofxGuiGroupExtended::setAlignVertical() {
     _bVertical = true;
 }
 
-bool ofxGuiGroupExtended::isAlignedVertial() {
+bool ofxGuiGroupExtended::isAlignedVertical() {
     return _bVertical;
 }
 

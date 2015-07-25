@@ -38,7 +38,7 @@ public:
     void setAlignHorizontal();
     void setAlignVertical();
 
-    bool isAlignedVertial();
+    bool isAlignedVertical();
 
     void setShowHeader(bool show);
 
@@ -66,7 +66,5 @@ protected:
     void setContentHeight(float h);
     float getContentWidth();
     void setContentWidth(float w);
-
-    ofxGuiGroupExtended * parent;
 
 };

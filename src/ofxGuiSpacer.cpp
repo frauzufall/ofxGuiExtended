@@ -39,16 +39,17 @@ void ofxGuiSpacer::sizeChangedCB(){
 
     if(parent) {
 
-        if(parent->isAlignedVertial()) {
-            b.width = parent->getWidth();
-            b.height = spacing_size;
+        if(ofxGuiGroupExtended* group = dynamic_cast<ofxGuiGroupExtended*>(parent)) {
+            if(group->isAlignedVertical()) {
+                b.width = group->getWidth();
+                b.height = spacing_size;
+            }
+            else {
+                b.height = group->getContentHeight();
+                b.width = spacing_size;
+            }
+            parent->sizeChangedCB();
         }
-        else {
-            b.height = parent->getContentHeight();
-            b.width = spacing_size;
-        }
-
-        parent->sizeChangedCB();
     }
     setNeedsRedraw();
 }
