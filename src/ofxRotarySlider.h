@@ -13,7 +13,6 @@ public:
     ofxRotarySlider(ofParameter<Type> _val, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
 
     virtual bool mousePressed(ofMouseEventArgs & args);
-    virtual bool mouseReleased(ofMouseEventArgs & args);
 
 protected:
     virtual void render();
