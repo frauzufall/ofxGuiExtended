@@ -59,6 +59,7 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
 
     element->unregisterMouseEvents();
     element->setParent(this);
+    element->sizeChangedCB();
 
     ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(element);
     if(subgroup!=NULL){
