@@ -15,3 +15,4 @@
 #include "ofxGuiZoomableBaseDraws.h"
 #include "ofxValuePlotter.h"
 #include "ofxFpsPlotter.h"
+#include "ofxVerticalSlider.h"

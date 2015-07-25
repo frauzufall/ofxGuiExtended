@@ -58,8 +58,8 @@ void ofApp::setup(){
     panel2.setBorderColor(ofColor::black);
     panel2.add(new ofxToggle(toggle1_param.set("toggle1", false), 100, 30));
     panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
-    panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
     panel2.add(new ofxGuiSpacer(30));
+    panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
     panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
 
     /*
@@ -73,6 +73,17 @@ void ofApp::setup(){
     panel4.setup("zoomable canvas", "", 500, 90);
     zcanvas.setup("same texture", &img.getTexture());
     panel4.add(&zcanvas);
+
+    panel5.setup("vertical sliders", "", 260, 280);
+    panel5.setAlignHorizontal();
+    panel5.add(new ofxFloatVerticalSlider(slider1_param.set("slider1", 1./7., 0, 1)));
+    panel5.add(new ofxFloatVerticalSlider(slider2_param.set("slider2", 5./7., 0, 1)));
+    panel5.add(new ofxFloatVerticalSlider(slider3_param.set("slider3", 4./7., 0, 1)));
+    panel5.add(new ofxFloatVerticalSlider(slider4_param.set("slider4", 6./7., 0, 1)));
+    panel5.getControl("slider1")->setSize(40, 130);
+    panel5.getControl("slider2")->setSize(50, 130);
+    panel5.getControl("slider3")->setSize(60, 130);
+    panel5.getControl("slider4")->setSize(70, 130);
 
 }
 
@@ -113,6 +124,7 @@ void ofApp::draw(){
     panel2.draw();
     panel3.draw();
     panel4.draw();
+    panel5.draw();
 
 }
 
@@ -123,6 +135,7 @@ void ofApp::toggleGroupHeader(bool &val) {
     panel2.setShowHeader(val);
     panel3.setShowHeader(val);
     panel4.setShowHeader(val);
+    panel5.setShowHeader(val);
 }
 
 //--------------------------------------------------------------
