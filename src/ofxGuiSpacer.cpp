@@ -1,10 +1,11 @@
 #include "ofxGuiSpacer.h"
+#include "ofxGuiGroupExtended.h"
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiSpacer::ofxGuiSpacer(string collectionName, float size, float x, float y){
+ofxGuiSpacer::ofxGuiSpacer(string name, float size, float x, float y){
     parent = NULL;
-    setup(collectionName, size, x, y);
+    setup(name, size, x, y);
 }
 
 ofxGuiSpacer::ofxGuiSpacer(float size, float x, float y){
@@ -16,9 +17,9 @@ ofxGuiSpacer * ofxGuiSpacer::setup(float size, float x, float y){
     return setup("", size, x, y);
 }
 
-ofxGuiSpacer * ofxGuiSpacer::setup(string collectionName, float size, float x, float y){
+ofxGuiSpacer * ofxGuiSpacer::setup(string name, float size, float x, float y){
     this->setBackgroundColor(ofColor(0,0,0,0));
-    this->setName(collectionName);
+    this->setName(name);
     this->setPosition(x,y);
     spacing_size = size;
     return this;
@@ -52,4 +53,8 @@ void ofxGuiSpacer::sizeChangedCB(){
         }
     }
     setNeedsRedraw();
+}
+
+ofAbstractParameter & ofxGuiSpacer::getParameter(){
+    return parameter;
 }
