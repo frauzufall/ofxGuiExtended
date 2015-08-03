@@ -10,8 +10,7 @@ void ofxLabelExtended::setShowLabelName(bool value){
 	showLabelName = value;
 }
 
-bool ofxLabelExtended::isLabelNameShown()
-{
+bool ofxLabelExtended::isLabelNameShown() const{
     return showLabelName;
 }
 

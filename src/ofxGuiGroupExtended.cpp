@@ -413,9 +413,9 @@ float ofxGuiGroupExtended::getContentHeight() {
     if(_bUseHeader) {
        h -= header;
     }
-    /*if(parent) {
+    if(inContainer) {
         h -= spacingNextElement;
-    }*/
+    }
     return h;
 }
 
@@ -423,25 +423,25 @@ void ofxGuiGroupExtended::setContentHeight(float h) {
     if(_bUseHeader) {
         h += header;
     }
-    /*if(parent) {
+    if(inContainer) {
         h += spacingNextElement;
-    }*/
+    }
     h += spacing;
     b.height = h;
 }
 
 float ofxGuiGroupExtended::getContentWidth() {
     float w = b.width - spacing;
-    /*if(parent) {
+    if(inContainer) {
         w -= spacingNextElement;
-    }*/
+    }
     return w;
 }
 
 void ofxGuiGroupExtended::setContentWidth(float w) {
-    /*if(parent) {
+    if(inContainer) {
         w += spacingNextElement;
-    }*/
+    }
     w += spacing;
     b.width = w;
 }
