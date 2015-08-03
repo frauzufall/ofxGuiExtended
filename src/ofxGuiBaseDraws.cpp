@@ -2,34 +2,19 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiBaseDraws::ofxGuiBaseDraws() {
-    _bLoaded = false;
-}
-
-ofxGuiBaseDraws::ofxGuiBaseDraws(string canvasName, ofBaseDraws *graphics, float w, float h){
-    _bLoaded = false;
-    setup(canvasName,graphics,w,h);
-}
-
-ofxGuiBaseDraws::ofxGuiBaseDraws(ofBaseDraws* graphics, float w, float h){
-    setup("",graphics,w,h);
-}
-
 ofxGuiBaseDraws::~ofxGuiBaseDraws(){
 }
 
-ofxGuiBaseDraws* ofxGuiBaseDraws::setup(string canvasName, ofBaseDraws *graphics, float w, float h) {
-    if(graphics->getHeight() != 0 && graphics->getWidth() != 0) {
+ofxGuiBaseDraws::ofxGuiBaseDraws(const Config & config){
+	graphics = config.graphics;
+    if(graphics && graphics->getHeight() != 0 && graphics->getWidth() != 0) {
         _bLoaded = true;
-        setName(canvasName);
+        setName(config.canvasName);
         this->graphics = graphics;
-        setSize(w,h);
-    }
-    else {
+        setSize(config.shape.width,config.shape.height);
+    }  else {
         ofLogError("ofxCanvas:setup()", "graphics cannot be loaded, width = 0 or height = 0");
     }
-
-    return this;
 }
 
 void ofxGuiBaseDraws::setSize(float w, float h){

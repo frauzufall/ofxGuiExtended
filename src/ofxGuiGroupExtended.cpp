@@ -4,7 +4,6 @@
 using namespace std;
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(){
-    _bVertical = true;
     _bUseHeader = true;
     _bAllowMultiple = true;
     active_toggle_index = -1;
@@ -12,29 +11,28 @@ ofxGuiGroupExtended::ofxGuiGroupExtended(){
 
 ofxGuiGroupExtended::ofxGuiGroupExtended(const ofParameterGroup & parameters, string filename, float x, float y)
     :ofxGuiGroup(parameters, filename, x, y){
-    _bVertical = true;
     _bUseHeader = true;
     _bAllowMultiple = true;
     active_toggle_index = -1;
 }
 
-ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string filename, float x, float y){
+ofxGuiGroupExtended & ofxGuiGroupExtended::setup(string collectionName, string filename, float x, float y){
     ofxGuiGroup::setup(collectionName,filename,x,y);
     clear();
-    return this;
+    return *this;
 }
 
-ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _parameters, string filename, float x, float y){
+ofxGuiGroupExtended & ofxGuiGroupExtended::setup(const ofParameterGroup & _parameters, string filename, float x, float y){
     ofxGuiGroup::setup(_parameters,filename,x,y);
-    return this;
+    return *this;
 }
 
 void ofxGuiGroupExtended::add(ofxBaseGui * element){
     collection.push_back( element );
 
-    if(_bVertical || collection.size() == 1) {
+    if(layout == ofxBaseGui::Vertical || collection.size() == 1) {
 
-        if(_bVertical) {
+        if(layout == ofxBaseGui::Vertical) {
             if(b.width-1 < element->getWidth()) {
                 element->setSize(b.width-1, element->getHeight());
             }
@@ -58,19 +56,7 @@ void ofxGuiGroupExtended::add(ofxBaseGui * element){
     }
 
     element->unregisterMouseEvents();
-    element->setParent(this);
-    element->sizeChangedCB();
-
-    ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(element);
-    if(subgroup!=NULL){
-        subgroup->filename = filename;
-        subgroup->scaleWidthElements(.98);
-    }else{
-        if(parent!=NULL){
-            element->setSize(b.width*.98,element->getHeight());
-            element->setPosition(b.x + b.width-element->getWidth(),element->getPosition().y);
-        }
-    }
+	ofAddListener(element->sizeChangedE,this,&ofxGuiGroupExtended::sizeChangedCB);
 
     parameters.add(element->getParameter());
 
@@ -91,7 +77,7 @@ void ofxGuiGroupExtended::scaleWidthElements(float factor){
 
     float w = b.getWidth()*factor;
 
-    if(_bVertical) {
+    if(layout == Vertical) {
         for(int i=0;i<(int)collection.size();i++){
             collection[i]->setSize(w,collection[i]->getHeight());
             collection[i]->setPosition(b.x + b.width-w,collection[i]->getPosition().y);
@@ -274,13 +260,13 @@ bool ofxGuiGroupExtended::setValue(float mx, float my, bool bCheck){
 void ofxGuiGroupExtended::minimize(){
     minimized=true;
     setContentHeight(0);
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 
 void ofxGuiGroupExtended::maximize(){
     minimized=false;
-    if(_bVertical) {
+    if(layout == Vertical) {
         float h = 0;
         for(int i=0;i<(int)collection.size();i++){
             h += collection[i]->getHeight() + spacing;
@@ -296,7 +282,7 @@ void ofxGuiGroupExtended::maximize(){
         }
         setContentHeight(max_h);
     }
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 
@@ -320,7 +306,7 @@ void ofxGuiGroupExtended::sizeChangedCB(){
     float _x = x;
     float _y = y;
 
-    if(_bVertical) {
+    if(layout == Vertical) {
         for(int i=0;i<(int)collection.size();i++){
             collection[i]->setPosition(collection[i]->getPosition().x,y + spacing);
             y += collection[i]->getHeight()+spacing;
@@ -343,20 +329,16 @@ void ofxGuiGroupExtended::sizeChangedCB(){
         setContentHeight(y - _y);
     }
 
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 
-void ofxGuiGroupExtended::setAlignHorizontal() {
-    _bVertical = false;
+void ofxGuiGroupExtended::setLayout(ofxBaseGui::Layout layout){
+	this->layout = layout;
 }
 
-void ofxGuiGroupExtended::setAlignVertical() {
-    _bVertical = true;
-}
-
-bool ofxGuiGroupExtended::isAlignedVertical() {
-    return _bVertical;
+ofxBaseGui::Layout ofxGuiGroupExtended::getLayout() const{
+	return layout;
 }
 
 void ofxGuiGroupExtended::setShowHeader(bool show) {
@@ -378,8 +360,8 @@ void ofxGuiGroupExtended::allowMultipleActiveToggles(bool allow) {
 }
 
 bool ofxGuiGroupExtended::setActiveToggle(ofxToggle* toggle) {
-    if(!toggle->getParameter().cast<bool>().get()) {
-        (ofxToggle)*toggle = true;
+    if(!(*toggle)) {
+        *toggle = true;
         deactivateAllOtherToggles(toggle);
         return true;
     }
@@ -401,7 +383,7 @@ void ofxGuiGroupExtended::deactivateAllOtherToggles(ofxToggle *toggle) {
         for(int j = 0; j < (int)collection.size(); j++){
             if(ofxToggle* t = dynamic_cast<ofxToggle*>(collection[j])) {
                 if(t != toggle) {
-                   (ofxToggle)*t = false;
+                   *t = false;
                 }
                 else {
                     active_toggle_index = j;
@@ -431,9 +413,9 @@ float ofxGuiGroupExtended::getContentHeight() {
     if(_bUseHeader) {
        h -= header;
     }
-    if(parent) {
+    /*if(parent) {
         h -= spacingNextElement;
-    }
+    }*/
     return h;
 }
 
@@ -441,25 +423,25 @@ void ofxGuiGroupExtended::setContentHeight(float h) {
     if(_bUseHeader) {
         h += header;
     }
-    if(parent) {
+    /*if(parent) {
         h += spacingNextElement;
-    }
+    }*/
     h += spacing;
     b.height = h;
 }
 
 float ofxGuiGroupExtended::getContentWidth() {
     float w = b.width - spacing;
-    if(parent) {
+    /*if(parent) {
         w -= spacingNextElement;
-    }
+    }*/
     return w;
 }
 
 void ofxGuiGroupExtended::setContentWidth(float w) {
-    if(parent) {
+    /*if(parent) {
         w += spacingNextElement;
-    }
+    }*/
     w += spacing;
     b.width = w;
 }

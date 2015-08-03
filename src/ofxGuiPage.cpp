@@ -5,9 +5,9 @@ using namespace std;
 ofxGuiPage::ofxGuiPage():ofxPanelExtended(){
 }
 
-ofxGuiPage * ofxGuiPage::setup(string pageName, string filename, float x, float y){
+ofxGuiPage & ofxGuiPage::setup(string pageName, string filename, float x, float y){
     ofxPanelExtended::setup(pageName,filename,x,y);
-    return this;
+    return *this;
 }
 
 void ofxGuiPage::add(ofxBaseGui * element){
@@ -73,6 +73,6 @@ void ofxGuiPage::clear(){
 }
 
 void ofxGuiPage::sizeChangedCB(){
-    if(parent) parent->sizeChangedCB();
+	ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }

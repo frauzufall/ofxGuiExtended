@@ -4,11 +4,16 @@
 
 class ofxGuiSpacer : public ofxBaseGui {
 public:
-    ofxGuiSpacer(std::string name, float size = 10, float x = 10, float y = 10);
-    ofxGuiSpacer(float size = 10, float x = 10, float y = 10);
+	struct Config: public ofxBaseGui::Config{
+		Config(){}
+		Config(float size=10)
+		:size(size){
+
+		}
+		float size = 10;
+	};
+    ofxGuiSpacer(const Config & config);
     virtual ~ofxGuiSpacer() {}
-    virtual ofxGuiSpacer * setup(float size, float x, float y);
-    virtual ofxGuiSpacer * setup(string name, float size, float x, float y);
 
     virtual ofAbstractParameter & getParameter();
 
@@ -22,8 +27,6 @@ protected:
     virtual void render();
     virtual bool setValue(float mx, float my, bool bCheckBounds){return false;}
     virtual void generateDraw();
-
-    void sizeChangedCB();
 
     ofPath bg;
     float spacing_size;

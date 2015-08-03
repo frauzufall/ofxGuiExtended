@@ -4,13 +4,19 @@
 
 class ofxValuePlotter: public ofxBaseGui {
 public:
-    ofxValuePlotter();
-    ofxValuePlotter(string label, float minValue=0, float maxValue=0, int plotSize=100, float width = defaultWidth, float height = defaultHeight);
+	struct Config: ofxBaseGui::Config{
+		Config(){}
+		Config(const ofxBaseGui::Config & c)
+		:ofxBaseGui::Config(c){}
+
+		float minValue=0;
+		float maxValue=0;
+		int plotSize=100;
+	    int decimalPlace=3;
+	};
+    ofxValuePlotter(ofParameter<float> value, const Config & config);
     virtual ~ofxValuePlotter();
 
-    ofxValuePlotter * setup(string label="", float minValue=0, float maxValue=0, int plotSize=100, float width = defaultWidth, float height = defaultHeight);
-
-    void update(float value);
     void setDecimalPlace(int place);
 
     // Abstract methods we must implement, but have no need for!
@@ -27,15 +33,15 @@ protected:
     bool setValue(float mx, float my, bool bCheckBounds){return false;}
     void render();
     void generateDraw();
+    void update(float & value);
     ofPath bg;
     ofVboMesh textMesh;
-    vector<float> buffer;
+    std::vector<float> buffer;
     int plotSize;
     ofPath plot;
-    float lastVal;
     float minVal, maxVal;
     bool autoscale;
-    int decimalPlace=3;
-    ofParameter<string> label;
+    int decimalPlace;
+    ofParameter<float> value;
 
 };

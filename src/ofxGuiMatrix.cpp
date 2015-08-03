@@ -6,51 +6,29 @@ ofxGuiMatrix::ofxGuiMatrix(){
 }
 
 ofxGuiMatrix::ofxGuiMatrix(string collectionName, int cols, string filename, float x, float y)
-    :ofxGuiGroupExtended(){
+:ofxGuiGroupExtended(){
     setup(collectionName, cols, filename, x, y);
 }
 
 ofxGuiMatrix::ofxGuiMatrix(const ofParameterGroup & parameters, int cols, string filename, float x, float y)
-    :ofxGuiGroupExtended(parameters, filename, x, y){
+:ofxGuiGroupExtended(parameters, filename, x, y){
     setColNum(cols);
     sizeChangedCB();
     setNeedsRedraw();
 }
 
-ofxGuiMatrix * ofxGuiMatrix::setup(string collectionName, int cols, string filename, float x, float y){
+ofxGuiMatrix & ofxGuiMatrix::setup(string collectionName, int cols, string filename, float x, float y){
     setColNum(cols);
     ofxGuiGroupExtended::setup(collectionName,filename,x,y);
     w_matrix = b.width;
-    return this;
+    return *this;
 }
 
-ofxGuiMatrix * ofxGuiMatrix::setup(const ofParameterGroup & _parameters, int cols, string filename, float x, float y){
+ofxGuiMatrix & ofxGuiMatrix::setup(const ofParameterGroup & _parameters, int cols, string filename, float x, float y){
     setColNum(cols);
     ofxGuiGroupExtended::setup(_parameters,filename,x,y);
     w_matrix = b.width;
-    return this;
-}
-
-void ofxGuiMatrix::add(ofxBaseGui *element){
-    collection.push_back( element );
-
-    sizeChangedCB();
-
-    element->unregisterMouseEvents();
-
-    ofxGuiGroupExtended * subgroup = dynamic_cast<ofxGuiGroupExtended*>(element);
-    if(subgroup!=NULL){
-        subgroup->filename = filename;
-        subgroup->parent = this;
-        subgroup->scaleWidthElements(.98);
-    }else{
-        if(parent!=NULL){
-            scaleWidthElements(0.98);
-        }
-    }
-
-    parameters.add(element->getParameter());
-    setNeedsRedraw();
+    return *this;
 }
 
 void ofxGuiMatrix::setWidthElements(float w){
@@ -149,16 +127,14 @@ void ofxGuiMatrix::minimize(){
     if(_bUseHeader) {
         b.height += header;
     }
-    if(parent) {
-        parent->sizeChangedCB();
-    }
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 
 void ofxGuiMatrix::maximize(){
     minimized=false;
     b.height += (h_element+spacing)*getRowNum();
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 
@@ -193,8 +169,9 @@ void ofxGuiMatrix::sizeChangedCB(){
         if(numCol > 0) {
             y_e = (int)(i / numCol);
         }
-
+        collection[i]->sizeChangedE.disable();
         collection[i]->setSize(w_element, h_element);
+        collection[i]->sizeChangedE.enable();
 
         if(i == 0) {
             collection[i]->setPosition(x, y);
@@ -208,7 +185,7 @@ void ofxGuiMatrix::sizeChangedCB(){
 
     b.height = y + (h_element+spacing)*getRowNum()+spacing - b.y;
 
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 

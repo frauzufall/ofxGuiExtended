@@ -5,13 +5,8 @@
 
 class ofxGuiZoomableBaseDraws: public ofxGuiBaseDraws {
 public:
-    ofxGuiZoomableBaseDraws();
-    ofxGuiZoomableBaseDraws(string graphicsName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
-    ofxGuiZoomableBaseDraws(ofBaseDraws* tex, float w = defaultWidth, float h = 0);
+    ofxGuiZoomableBaseDraws(const ofxGuiBaseDraws::Config & config);
     virtual ~ofxGuiZoomableBaseDraws();
-
-    ofxGuiZoomableBaseDraws * setup(string graphicsName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
-
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}
     virtual bool mousePressed(ofMouseEventArgs & args);
     virtual bool mouseDragged(ofMouseEventArgs & args);

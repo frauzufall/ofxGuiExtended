@@ -14,8 +14,8 @@ public:
     ofxPanelExtended(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
     ~ofxPanelExtended();
 
-    ofxPanelExtended * setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
-    ofxPanelExtended * setup(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
+    ofxPanelExtended & setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
+    ofxPanelExtended & setup(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
 
     bool mouseReleased(ofMouseEventArgs & args);
 

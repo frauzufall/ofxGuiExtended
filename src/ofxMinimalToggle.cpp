@@ -2,58 +2,12 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxMinimalToggle::ofxMinimalToggle(){
+ofxMinimalToggle::ofxMinimalToggle(ofParameter<bool> val, const Config & config)
+:ofxToggle(val,config){
     thisBorderColor = thisFillColor;
-}
-
-ofxMinimalToggle::ofxMinimalToggle(ofParameter<bool> _bVal, float width, float height):ofxToggle(){
-    setup(_bVal, width, height);
-    thisBorderColor = thisFillColor;
-}
-
-ofxMinimalToggle::~ofxMinimalToggle(){
-    value.removeListener(this,&ofxMinimalToggle::valueChanged);
-}
-
-ofxMinimalToggle * ofxMinimalToggle::setup(ofParameter<bool> _bVal, float width, float height){
-    if(width == 0) {
-        width = getTextWidth(_bVal.getName(), height);
+    if(b.width == 0) {
+    	b. width = getTextWidth(val.getName(), config.shape.height);
     }
-    b.x = 0;
-    b.y = 0;
-    b.width = width;
-    b.height = height;
-    bGuiActive = false;
-    value.makeReferenceTo(_bVal);
-
-    value.addListener(this,&ofxMinimalToggle::valueChanged);
-    registerMouseEvents();
-    setNeedsRedraw();
-
-    return this;
-
-}
-
-ofxMinimalToggle * ofxMinimalToggle::setup(string toggleName, bool _bVal, float width, float height){
-    value.set(toggleName,_bVal);
-    return setup(value,width,height);
-}
-
-
-bool ofxMinimalToggle::mouseMoved(ofMouseEventArgs & args){
-    return ofxToggle::mouseMoved(args);
-}
-
-bool ofxMinimalToggle::mousePressed(ofMouseEventArgs & args){
-    return ofxToggle::mousePressed(args);
-}
-
-bool ofxMinimalToggle::mouseDragged(ofMouseEventArgs & args){
-    return ofxToggle::mouseDragged(args);
-}
-
-bool ofxMinimalToggle::mouseReleased(ofMouseEventArgs & args){
-    return ofxToggle::mouseReleased(args);
 }
 
 
@@ -117,8 +71,4 @@ float ofxMinimalToggle::getTextWidth(string text, float _height) {
     }
     _width += textPadding*2;
     return _width;
-}
-
-void ofxMinimalToggle::valueChanged(bool & value){
-    ofxToggle::valueChanged(value);
 }

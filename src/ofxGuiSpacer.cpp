@@ -3,29 +3,19 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiSpacer::ofxGuiSpacer(string name, float size, float x, float y){
-    parent = NULL;
-    setup(name, size, x, y);
-}
-
-ofxGuiSpacer::ofxGuiSpacer(float size, float x, float y){
-    parent = NULL;
-    setup("", size, x, y);
-}
-
-ofxGuiSpacer * ofxGuiSpacer::setup(float size, float x, float y){
-    return setup("", size, x, y);
-}
-
-ofxGuiSpacer * ofxGuiSpacer::setup(string name, float size, float x, float y){
-    this->setBackgroundColor(ofColor(0,0,0,0));
-    this->setName(name);
-    this->setPosition(x,y);
-    spacing_size = size;
-    return this;
+ofxGuiSpacer::ofxGuiSpacer(const Config & config)
+:ofxBaseGui(config){
+    spacing_size = config.size;
+	if(layout==ofxBaseGui::Vertical) {
+		cout << "layout vertical " << b.width << endl;
+		b.height = spacing_size;
+	} else {
+		b.width = spacing_size;
+	}
 }
 
 void ofxGuiSpacer::generateDraw(){
+	cout << "gerating " << b.width << endl;
     bg.clear();
     bg.setFillColor(thisBackgroundColor);
     bg.setFilled(true);
@@ -34,25 +24,6 @@ void ofxGuiSpacer::generateDraw(){
 
 void ofxGuiSpacer::render(){
     bg.draw();
-}
-
-void ofxGuiSpacer::sizeChangedCB(){
-
-    if(parent) {
-
-        if(ofxGuiGroupExtended* group = dynamic_cast<ofxGuiGroupExtended*>(parent)) {
-            if(group->isAlignedVertical()) {
-                b.width = group->getWidth();
-                b.height = spacing_size;
-            }
-            else {
-                b.height = group->getContentHeight();
-                b.width = spacing_size;
-            }
-            parent->sizeChangedCB();
-        }
-    }
-    setNeedsRedraw();
 }
 
 ofAbstractParameter & ofxGuiSpacer::getParameter(){

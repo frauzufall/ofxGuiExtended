@@ -10,76 +10,80 @@ void ofApp::setup(){
     panel1.setup("extended gui");
     panel1.setBorderColor(ofColor::black);
 
-    panel1.add((new ofxLabelExtended())->setup("LabelName", "extended Label")->setShowLabelName(false));
+    ofxLabelExtended::Config labelConfig;
+    labelConfig.showName = false;
+    panel1.add<ofxLabelExtended>(ofParameter<std::string>("LabelName", "extended Label"), labelConfig);
 
-    panel1.add(fps.setup(0,120));
+    panel1.add<ofxFpsPlotter>();
 
     /*
      * minimal button and toggle
      */
-    panel1.add(new ofxMinimalToggle(toggle_param.set("show header", true), 0, 30));
+    ofxMinimalToggle::Config config;
+    config.shape.height = 30;
+    panel1.add<ofxMinimalToggle>(toggle_param.set("show header", true),config);
     toggle_param.addListener(this, &ofApp::toggleGroupHeader);
-    panel1.add(new ofxMinimalButton("button", 0, 30));
+    panel1.add<ofxMinimalButton>(config);
 
     /*
      * rotary slider
      */
     rotary.setup("rotary");
     rotary.setBorderColor(ofColor::blanchedAlmond - ofColor(50));
-    rotary.add(new ofxFloatRotarySlider(slider_param.set("slider", 0.5, 0, 1), 66,66));
+    ofxRotarySlider<float>::Config rotaryConfig;
+    rotaryConfig.shape.width = rotaryConfig.shape.height = 66;
+    rotary.add<ofxFloatRotarySlider>(slider_param.set("slider", 0.5, 0, 1), rotaryConfig);
     rotary.getControl("slider")->setFillColor(ofColor::white);
     rotary.getControl("slider")->setBackgroundColor(ofColor::blanchedAlmond - ofColor(130));
 
     /*
      * matrix with only one allowed active toggle
      */
-    matrix_params.push_back(ofParameter<bool>("only",false));
-    matrix_params.push_back(ofParameter<bool>("one",false));
-    matrix_params.push_back(ofParameter<bool>("toggle",false));
-    matrix_params.push_back(ofParameter<bool>("can",false));
-    matrix_params.push_back(ofParameter<bool>("be",false));
-    matrix_params.push_back(ofParameter<bool>("active",false));
     matrix.setup("matrix",3);
-    for(unsigned int i = 0; i < matrix_params.size(); i++) {
-        matrix.add(new ofxMinimalToggle(matrix_params.at(i)));
-    }
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("only",false));
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("one",false));
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("toggle",false));
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("can",false));
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("be",false));
+    matrix.add<ofxMinimalToggle>(ofParameter<bool>("active",false));
     matrix.setBorderColor(ofColor::aquamarine);
     matrix.setElementHeight(26);
     matrix.allowMultipleActiveToggles(false);
 
-    panel1.add(&rotary);
-    panel1.add(&matrix);
+    panel1.add(rotary);
+    panel1.add(matrix);
 
     /*
      * horizontal panel with spacer
      */
     panel2.setup("horizontal", "", 260, 10);
-    panel2.setAlignHorizontal();
+    panel2.setLayout(ofxBaseGui::Horizontal);
     panel2.setBorderColor(ofColor::black);
-    panel2.add(new ofxToggle(toggle1_param.set("toggle1", false), 100, 30));
-    panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
-    panel2.add(new ofxGuiSpacer(30));
-    panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
-    panel2.add(new ofxMinimalToggle(toggle4_param.set("toggle4", false), 0, 30));
+    ofxToggle::Config toggleConfig;
+    toggleConfig.shape.width = 100;
+    toggleConfig.shape.height = 30;
+    panel2.add(toggle1_param.set("toggle1", false), toggleConfig);
+    panel2.add<ofxMinimalToggle>(toggle2_param.set("toggle2", false), toggleConfig);
+    panel2.add<ofxGuiSpacer>(ofxGuiSpacer::Config(30));
+    panel2.add<ofxMinimalToggle>(toggle3_param.set("toggle3", false), toggleConfig);
+    panel2.add<ofxMinimalToggle>(toggle4_param.set("toggle4", false), toggleConfig);
 
     /*
      * panel with canvas
      */
     panel3.setup("canvas", "", 260, 90);
     img.load("images/ente.jpg");
-    canvas.setup("some texture", &img.getTexture());
-    panel3.add(&canvas);
+    panel3.add<ofxGuiBaseDraws>(ofxGuiBaseDraws::Config("some texture", &img.getTexture()));
 
     panel4.setup("zoomable canvas", "", 500, 90);
-    zcanvas.setup("same texture", &img.getTexture());
-    panel4.add(&zcanvas);
+    panel4.add<ofxGuiBaseDraws>(ofxGuiBaseDraws::Config("same texture", &img.getTexture()));
 
     panel5.setup("vertical sliders", "", 260, 280);
-    panel5.setAlignHorizontal();
-    panel5.add(new ofxFloatVerticalSlider(slider1_param.set("slider1", 1./7., 0, 1)));
-    panel5.add(new ofxFloatVerticalSlider(slider2_param.set("slider2", 5./7., 0, 1)));
-    panel5.add(new ofxFloatVerticalSlider(slider3_param.set("slider3", 4./7., 0, 1)));
-    panel5.add(new ofxFloatVerticalSlider(slider4_param.set("slider4", 6./7., 0, 1)));
+    panel5.setLayout(ofxBaseGui::Horizontal);
+    panel5.add<ofxFloatVerticalSlider>(slider1_param.set("slider1", 1./7., 0, 1));
+    panel5.add<ofxFloatVerticalSlider>(slider2_param.set("slider2", 5./7., 0, 1));
+    panel5.add<ofxFloatVerticalSlider>(slider3_param.set("slider3", 4./7., 0, 1));
+    panel5.add<ofxFloatVerticalSlider>(slider4_param.set("slider4", 6./7., 0, 1));
     panel5.getControl("slider1")->setSize(40, 130);
     panel5.getControl("slider2")->setSize(50, 130);
     panel5.getControl("slider3")->setSize(60, 130);
@@ -93,7 +97,7 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    fps.update();
+    //fps.update();
 }
 
 //--------------------------------------------------------------
@@ -107,12 +111,12 @@ void ofApp::draw(){
             ofSetColor(ofColor::azure);
         }
         else {
-            if(matrix_params.at(0).get()) {
+            /*if(matrix_params.at(0).get()) {
                 ofSetColor(ofColor::burlyWood);
             }
             else {
                 ofSetColor(ofColor::fromHex(0x2da1e3));
-            }
+            }*/
         }
     }
 

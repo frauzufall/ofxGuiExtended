@@ -4,12 +4,17 @@
 
 class ofxGuiBaseDraws: public ofxBaseGui {
 public:
-    ofxGuiBaseDraws();
-    ofxGuiBaseDraws(string canvasName, ofBaseDraws* graphics = 0, float w = 0, float h = 0);
-    ofxGuiBaseDraws(ofBaseDraws *graphics, float w = defaultWidth, float h = 0);
-    virtual ~ofxGuiBaseDraws();
+	struct Config: public ofxBaseGui::Config{
+		Config(const std::string & name, ofBaseDraws * graphics)
+		:canvasName(name)
+		,graphics(graphics){
 
-    ofxGuiBaseDraws * setup(string canvasName = "", ofBaseDraws* graphics = 0, float w = 0, float h = 0);
+		}
+		std::string canvasName;
+		ofBaseDraws* graphics=nullptr;
+	};
+    ofxGuiBaseDraws(const Config & config);
+    virtual ~ofxGuiBaseDraws();
 
     // Abstract methods we must implement, but have no need for!
     virtual bool mouseMoved(ofMouseEventArgs & args){return false;}
@@ -30,7 +35,7 @@ protected:
     ofPath bg;
     ofVboMesh textMesh;
     ofBaseDraws* graphics;
-    ofParameter<string> label;
+    ofParameter<std::string> label;
     bool _bLoaded;
 
 };

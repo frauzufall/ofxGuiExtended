@@ -8,9 +8,8 @@ public:
     ofxTabbedPages();
     ~ofxTabbedPages();
 
-    ofxTabbedPages * setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
-
-    void add(ofxGuiPage * element);
+    ofxTabbedPages & setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
+    using ofxGuiGroup::add;
 
     void clear();
 
@@ -31,11 +30,11 @@ protected:
     void updateContentShapes();
     void setSizeToElement(ofxBaseGui *element);
     virtual void sizeChangedCB();
-
+    void add(ofxGuiPage * element);
 private:
 
     ofxGuiGroupExtended tabs;
-    vector<ofParameter<bool>> parameters_tabs;
+    std::vector<ofParameter<bool>> parameters_tabs;
     float tabHeight, tabWidth;
     ofRectangle pagesShape, tabShape;
     ofPath bg;

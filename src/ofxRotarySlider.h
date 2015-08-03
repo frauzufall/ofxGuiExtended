@@ -5,13 +5,17 @@
 
 template<typename Type>
 class ofxRotarySlider : public ofxSlider<Type>{
-    friend class ofPanel;
-
 public:
-    ofxRotarySlider();
-    ~ofxRotarySlider();
-    ofxRotarySlider(ofParameter<Type> _val, float width = ofxBaseGui::defaultWidth, float height = ofxBaseGui::defaultHeight);
+	struct Config: public ofxSlider<Type>::Config{
+		Config(){}
+		Config(const typename ofxSlider<Type>::Config & config)
+		:ofxSlider<Type>::Config(config){}
+		Config(const ofxBaseGui::Config & config)
+		:ofxSlider<Type>::Config(config){}
 
+	};
+	ofxRotarySlider(ofParameter<Type> _val, const Config & config);
+    virtual ~ofxRotarySlider();
     virtual bool mousePressed(ofMouseEventArgs & args);
 
 protected:
