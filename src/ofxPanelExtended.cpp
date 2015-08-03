@@ -23,20 +23,20 @@ ofxPanelExtended::~ofxPanelExtended(){
     unregisterMouseEvents();
 }
 
-ofxPanelExtended * ofxPanelExtended::setup(string collectionName, string filename, float x, float y){
+ofxPanelExtended & ofxPanelExtended::setup(string collectionName, string filename, float x, float y){
     if(!loadIcon.isAllocated() || !saveIcon.isAllocated()){
         loadIcons();
     }
     registerMouseEvents();
-    return (ofxPanelExtended*)ofxGuiGroup::setup(collectionName,filename,x,y);
+    return (ofxPanelExtended&)ofxGuiGroup::setup(collectionName,filename,x,y);
 }
 
-ofxPanelExtended * ofxPanelExtended::setup(const ofParameterGroup & parameters, string filename, float x, float y){
+ofxPanelExtended & ofxPanelExtended::setup(const ofParameterGroup & parameters, string filename, float x, float y){
     if(!loadIcon.isAllocated() || !saveIcon.isAllocated()){
         loadIcons();
     }
     registerMouseEvents();
-    return (ofxPanelExtended*)ofxGuiGroup::setup(parameters,filename,x,y);
+    return (ofxPanelExtended&)ofxGuiGroup::setup(parameters,filename,x,y);
 }
 
 void ofxPanelExtended::loadIcons(){

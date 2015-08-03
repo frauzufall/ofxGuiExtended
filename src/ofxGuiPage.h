@@ -7,7 +7,7 @@ public:
 
     ofxGuiPage();
     virtual ~ofxGuiPage() {}
-    virtual ofxGuiPage * setup(std::string pageName="", std::string filename="settings.xml", float x = 10, float y = 10);
+    virtual ofxGuiPage & setup(std::string pageName="", std::string filename="settings.xml", float x = 10, float y = 10);
 
     void add(ofxBaseGui * element);
 

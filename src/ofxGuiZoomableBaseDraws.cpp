@@ -2,25 +2,14 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws() {}
-
-ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(string graphicsName, ofBaseDraws *graphics, float w, float h){
-    setup(graphicsName,graphics,w,h);
-}
-
-ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(ofBaseDraws *graphics, float w, float h){
-    setup("",graphics,w,h);
-}
-
-ofxGuiZoomableBaseDraws::~ofxGuiZoomableBaseDraws(){
-}
-
-ofxGuiZoomableBaseDraws* ofxGuiZoomableBaseDraws::setup(string graphicsName, ofBaseDraws *graphics, float w, float h) {
-    ofxGuiBaseDraws::setup(graphicsName, graphics, w, h);
+ofxGuiZoomableBaseDraws::ofxGuiZoomableBaseDraws(const ofxGuiBaseDraws::Config & config)
+:ofxGuiBaseDraws(config){
     zoom_factor = 0;
     zoom_speed = 0.1;
     dragging_dst = false;
-    return this;
+}
+
+ofxGuiZoomableBaseDraws::~ofxGuiZoomableBaseDraws(){
 }
 
 void ofxGuiZoomableBaseDraws::setSize(float w, float h){

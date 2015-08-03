@@ -4,16 +4,14 @@
 using namespace std;
 
 template<typename Type>
-ofxRotarySlider<Type>::ofxRotarySlider(){
+ofxRotarySlider<Type>::ofxRotarySlider(ofParameter<Type> _val, const Config & config)
+:ofxSlider<Type>(_val,config)
+ ,_mouseOffset(0){
+
 }
 
 template<typename Type>
 ofxRotarySlider<Type>::~ofxRotarySlider(){
-}
-
-template<typename Type>
-ofxRotarySlider<Type>::ofxRotarySlider(ofParameter<Type> _val, float width, float height){
-    ofxSlider<Type>::setup(_val,width,height);
 }
 
 template<typename Type>

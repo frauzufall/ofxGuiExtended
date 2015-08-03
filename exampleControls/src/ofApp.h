@@ -29,10 +29,6 @@ private:
     ofxGuiMatrix matrix;
 
     ofImage img;
-    ofxGuiBaseDraws canvas;
-    ofxGuiZoomableBaseDraws zcanvas;
-
-    ofxFpsPlotter fps;
 
     ofParameter<bool> toggle_param;
     ofParameter<float> slider_param;

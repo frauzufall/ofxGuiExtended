@@ -4,12 +4,17 @@
 
 template<typename Type>
 class ofxVerticalSlider : public ofxSlider<Type>{
-	friend class ofPanel;
-	
 public:	
-    ofxVerticalSlider();
-    ~ofxVerticalSlider();
-    ofxVerticalSlider(ofParameter<Type> _val, float width = ofxBaseGui::defaultHeight, float height = ofxBaseGui::defaultWidth);
+	struct Config: public ofxSlider<Type>::Config{
+		Config(){}
+		Config(const typename ofxSlider<Type>::Config & config)
+		:ofxSlider<Type>::Config(config){}
+		Config(const ofxBaseGui::Config & config)
+		:ofxSlider<Type>::Config(config){}
+
+	};
+    ofxVerticalSlider(ofParameter<Type> _val, const Config & config);
+    virtual ~ofxVerticalSlider();
 
 	template<class ListenerClass, typename ListenerMethod>
 	void addListener(ListenerClass * listener, ListenerMethod method){

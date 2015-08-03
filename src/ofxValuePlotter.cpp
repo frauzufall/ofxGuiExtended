@@ -2,30 +2,23 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxValuePlotter::ofxValuePlotter() {}
-
-ofxValuePlotter::ofxValuePlotter(string label, float minValue, float maxValue, int plotSize, float width, float height){
-    setup(label, minValue, maxValue, plotSize, width, height);
+ofxValuePlotter::ofxValuePlotter(ofParameter<float> value, const Config & config)
+:ofxBaseGui(config)
+,plotSize(config.plotSize)
+,minVal(config.minValue)
+,maxVal(config.maxValue)
+,decimalPlace(config.decimalPlace){
+    autoscale = minVal == maxVal;
+    buffer.clear();
+	this->value.makeReferenceTo(value);
+    this->value.addListener(this, &ofxValuePlotter::update);
+    setNeedsRedraw();
 }
 
 ofxValuePlotter::~ofxValuePlotter(){
 }
 
-ofxValuePlotter* ofxValuePlotter::setup(string label, float minValue, float maxValue, int plotSize, float width, float height) {
-    b.width  = width;
-    b.height = height;
-    minVal = minValue;
-    maxVal = maxValue;
-    autoscale = minVal == maxVal;
-    buffer.clear();
-    this->plotSize = plotSize;
-    setName(label);
-    setNeedsRedraw();
-    return this;
-}
-
-void ofxValuePlotter::update(float value) {
-    lastVal = value;
+void ofxValuePlotter::update(float & value) {
     if(plotSize > 0) {
         buffer.push_back(value);
 
@@ -53,8 +46,7 @@ void ofxValuePlotter::generateDraw(){
     bg.setFilled(true);
     bg.rectangle(b);
 
-    string name = ofToString(lastVal,decimalPlace) +  " " + this->getName();
-    label = name;
+    string name = ofToString(value,decimalPlace) +  " " + this->getName();
 
     textMesh = getTextMesh(name, b.x+textPadding, b.y + b.height / 2 + 4);
 
@@ -101,5 +93,5 @@ void ofxValuePlotter::render() {
 }
 
 ofAbstractParameter & ofxValuePlotter::getParameter(){
-    return label;
+    return value;
 }

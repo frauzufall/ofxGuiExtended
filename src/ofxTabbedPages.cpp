@@ -10,12 +10,12 @@ ofxTabbedPages::~ofxTabbedPages(){
     //
 }
 
-ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, float x, float y) {
+ofxTabbedPages & ofxTabbedPages::setup(string collectionName, string filename, float x, float y) {
     ofxGuiPage::setup(collectionName,filename,x,y);
     tabs.setup();
     tabs.setShowHeader(false);
     tabs.allowMultipleActiveToggles(false);
-    tabs.setAlignHorizontal();
+    tabs.setLayout(ofxBaseGui::Horizontal);
     tabs.setBorderColor(ofColor(0,0,0,0));
     tabs.setDefaultBackgroundColor(thisBorderColor);
     tabs.setDefaultBorderColor(thisBorderColor);
@@ -26,14 +26,14 @@ ofxTabbedPages * ofxTabbedPages::setup(string collectionName, string filename, f
     sizeChangedCB();
     collection.push_back(&tabs);
     parameters.add(tabs.getParameter());
-    return this;
+    return *this;
 }
 
 void ofxTabbedPages::add(ofxGuiPage *element) {
     collection.push_back(element);
 
     parameters_tabs.push_back(ofParameter<bool>(element->getName(),false));
-    tabs.add(new ofxMinimalToggle(parameters_tabs.at(parameters_tabs.size()-1),tabWidth,tabHeight));
+    tabs.add<ofxMinimalToggle>(parameters_tabs.at(parameters_tabs.size()-1));
     if(element->getBackgroundColor()!=thisBackgroundColor) {
         tabs.getControl(tabs.getNumControls()-1)->setBackgroundColor(element->getBackgroundColor());
         tabs.getControl(tabs.getNumControls()-1)->setBorderColor(element->getBackgroundColor());
@@ -247,7 +247,7 @@ void ofxTabbedPages::sizeChangedCB(){
     for(unsigned int i = 1; i < collection.size(); i++) {
         collection[i]->setShape(pagesShape);
     }
-    if(parent) parent->sizeChangedCB();
+    ofNotifyEvent(sizeChangedE,this);
     setNeedsRedraw();
 }
 

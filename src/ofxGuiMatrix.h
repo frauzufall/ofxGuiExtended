@@ -7,10 +7,8 @@ public:
     ofxGuiMatrix(std::string collectionName, int cols=0, std::string _filename="settings.xml", float x = 10, float y = 10);
     ofxGuiMatrix(const ofParameterGroup & parameters, int cols=0, std::string _filename="settings.xml", float x = 10, float y = 10);
     virtual ~ofxGuiMatrix() {}
-    virtual ofxGuiMatrix * setup(std::string collectionName="", int cols=0, std::string filename="settings.xml", float x = 10, float y = 10);
-    virtual ofxGuiMatrix * setup(const ofParameterGroup & parameters, int cols=0, std::string filename="settings.xml", float x = 10, float y = 10);
-
-    void add(ofxBaseGui * element);
+    virtual ofxGuiMatrix & setup(std::string collectionName="", int cols=0, std::string filename="settings.xml", float x = 10, float y = 10);
+    virtual ofxGuiMatrix & setup(const ofParameterGroup & parameters, int cols=0, std::string filename="settings.xml", float x = 10, float y = 10);
 
     void minimize();
     void maximize();

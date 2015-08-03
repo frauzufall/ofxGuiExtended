@@ -4,20 +4,15 @@
 
 class ofxGuiGroupExtended : public ofxGuiGroup {
 
-    friend class ofxGuiMatrix;
-    friend class ofxGuiSpacer;
-    friend class ofxGuiPage;
-    friend class ofxTabbedPages;
-
 public:
 
     ofxGuiGroupExtended();
     ofxGuiGroupExtended(const ofParameterGroup & parameters, std::string _filename="settings.xml", float x = 10, float y = 10);
     virtual ~ofxGuiGroupExtended() {}
-    virtual ofxGuiGroupExtended * setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
-    virtual ofxGuiGroupExtended * setup(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
+    virtual ofxGuiGroupExtended & setup(std::string collectionName="", std::string filename="settings.xml", float x = 10, float y = 10);
+    virtual ofxGuiGroupExtended & setup(const ofParameterGroup & parameters, std::string filename="settings.xml", float x = 10, float y = 10);
 
-    void add(ofxBaseGui * element);
+    using ofxGuiGroup::add;
 
     void clear();
 
@@ -35,10 +30,8 @@ public:
     virtual void setWidthElements(float w);
     virtual void scaleWidthElements(float factor);
 
-    void setAlignHorizontal();
-    void setAlignVertical();
-
-    bool isAlignedVertical();
+    void setLayout(ofxBaseGui::Layout layout);
+    ofxBaseGui::Layout getLayout() const;
 
     void setShowHeader(bool show);
 
@@ -48,10 +41,10 @@ public:
     int getActiveToggleIndex();
 
 protected:
+    virtual void add(ofxBaseGui * element);
     virtual void sizeChangedCB();
     virtual void render();
     virtual void generateDraw();
-    bool _bVertical;
     bool _bUseHeader;
     bool _bAllowMultiple;
 

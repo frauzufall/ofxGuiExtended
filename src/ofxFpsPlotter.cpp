@@ -1,28 +1,23 @@
 #include "ofxFpsPlotter.h"
 #include "ofAppRunner.h"
 
-ofxFpsPlotter::ofxFpsPlotter() {}
-
-ofxFpsPlotter::ofxFpsPlotter(float minValue, float maxValue, int plotSize, float width, float height){
-    setup(minValue, maxValue, plotSize, width, height);
+ofxFpsPlotter::ofxFpsPlotter(const ofxValuePlotter::Config & c)
+:ofxValuePlotter(ofParameter<float>("fps",0),c){
+    if(minVal == maxVal) {
+        if(ofGetTargetFrameRate() > 0) {
+        	minVal = 0;
+        	maxVal = ofGetTargetFrameRate();
+        }
+    }
+    setDecimalPlace(0);
+    ofAddListener(ofEvents().update,this,&ofxFpsPlotter::update);
 }
 
 ofxFpsPlotter::~ofxFpsPlotter(){
+	ofRemoveListener(ofEvents().update,this,&ofxFpsPlotter::update);
 }
 
-ofxFpsPlotter* ofxFpsPlotter::setup(float minValue, float maxValue, int plotSize, float width, float height) {
-    if(minValue == maxValue) {
-        if(ofGetTargetFrameRate() > 0) {
-            minValue = 0;
-            maxValue = ofGetTargetFrameRate();
-        }
-    }
-    ofxValuePlotter::setup("FPS", minValue, maxValue, plotSize, width, height);
-    setDecimalPlace(0);
-    return this;
-}
-
-void ofxFpsPlotter::update() {
-    ofxValuePlotter::update(ofGetFrameRate());
+void ofxFpsPlotter::update(ofEventArgs &) {
+    value = ofGetFrameRate();
 }
 

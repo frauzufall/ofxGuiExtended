@@ -3,16 +3,13 @@
 using namespace std;
 
 template<typename Type>
-ofxVerticalSlider<Type>::ofxVerticalSlider(){
+ofxVerticalSlider<Type>::ofxVerticalSlider(ofParameter<Type> val, const Config & config)
+:ofxSlider<Type>(val,config){
+
 }
 
 template<typename Type>
 ofxVerticalSlider<Type>::~ofxVerticalSlider(){
-}
-
-template<typename Type>
-ofxVerticalSlider<Type>::ofxVerticalSlider(ofParameter<Type> _val, float width, float height){
-    ofxSlider<Type>::setup(_val,width,height);
 }
 
 template<typename Type>
