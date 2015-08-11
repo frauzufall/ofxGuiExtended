@@ -24,24 +24,12 @@ public:
 
 private:
 
-    ofxPanelExtended panel1, panel2, panel3, panel4, panel5;
-    ofxGuiGroupExtended rotary;
-    ofxGuiMatrix matrix;
+    ofxPanel panel1, panel2;
 
     ofImage img;
-    ofxGuiBaseDraws canvas;
-    ofxGuiZoomableBaseDraws zcanvas;
+    ofxGuiGraphics graphics;
+    ofxGuiZoomableGraphics zgraphics;
 
-    ofxFpsPlotter fps;
-
-    ofParameter<bool> toggle_param;
-    ofParameter<float> slider_param;
-    ofParameter<bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;
-    ofParameter<float> slider1_param, slider2_param, slider3_param, slider4_param;
-    vector<ofParameter<bool>> matrix_params;
-    ofParameterGroup g;
-
-    void toggleGroupHeader(bool &val);
 
 };
 
