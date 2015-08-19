@@ -1,6 +1,11 @@
 # ofxGuiExtended ALPHA
 
 ##Features
+- **ofxGraphics**: shows any ofBaseDraws reference
+- **ofxZoomableGraphics**: ofBaseDraws reference can be zoomed with scroll wheel and dragged with mouse button when in zoom
+- **ofxMasterSlaveControl**: set controls like toggles and sliders to be master or slave controls. You can assign a master to control the slaves value. http://frauzufall.de/files/out.gif
+
+##Features that were part of ofxGuiExtended but are now part of ofxGui
 - **ofxGuiGroupExtended**, **ofxPanelExtended**: 
   - horizontal alignment 
   - header can be hidden
@@ -9,10 +14,8 @@
 - **ofxRotarySlider**: rotary slider
 - **ofxGuiSpacer**: spacing element
 - **ofxGuiMatrix**: matrix of gui elements, column count and element height adjustable
-- **ofxCanvas**: shows texture reference
-- **ofxZoomableCanvas**: texture can be zoomed with scroll wheel and dragged with mouse button when in zoom
 - **ofxValuePlotter**: plots a value and displays the current value. option to set decimal place and value name
 - **ofxFpsPlotter**: plots FPS
 
-
-see example for usage. running only with the current github OF version (0.9.0) on linux64bit and possibly also on other systems. needs testing.
+##!!!Important notes!!!
+This branch is only working with this OF branch: https://github.com/frauzufall/openFrameworks/tree/refactor-gui-extended The masterSlaveControls are not yet ported to this branch so they are not yet working.
