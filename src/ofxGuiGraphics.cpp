@@ -14,13 +14,17 @@ ofxGuiGraphics::ofxGuiGraphics(const Config & config){
  }
 
 ofxGuiGraphics & ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, float h){
-	if(graphics->getHeight() != 0 && graphics->getWidth() != 0){
-		_bLoaded = true;
-		setName(canvasName);
-		this->graphics = graphics;
-		setSize(w, h);
+	if(graphics){
+		if(graphics->getHeight() != 0 && graphics->getWidth() != 0){
+			_bLoaded = true;
+			setName(canvasName);
+			this->graphics = graphics;
+			setSize(w, h);
+		}else{
+			ofLogError("ofxGuiGraphics:setup()", "graphics cannot be loaded, width = 0 or height = 0");
+		}
 	}else{
-        ofLogError("ofxGuiGraphics:setup()", "graphics cannot be loaded, width = 0 or height = 0");
+		ofLogError("ofxGuiGraphics:setup()", "graphics is nullptr");
 	}
 
     return *this;
