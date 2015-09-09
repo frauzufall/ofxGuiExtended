@@ -43,6 +43,8 @@ class ofxGuiGraphics : public ofxBaseGui {
         virtual void setShape(float x, float y, float w, float h);
         virtual void setShape(ofRectangle r);
 
+		virtual void setGraphics(ofBaseDraws* graphics);
+
 		virtual ofAbstractParameter & getParameter();
 
 	protected:
