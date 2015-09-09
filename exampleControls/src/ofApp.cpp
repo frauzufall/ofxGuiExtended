@@ -85,6 +85,18 @@ void ofApp::setup(){
     panel5.getControl("slider3")->setSize(60, 130);
     panel5.getControl("slider4")->setSize(70, 130);
 
+    cameraMatrixParameters.add(cam0.set("cam0",false));
+    cameraMatrixParameters.add(cam1.set("cam1",false));
+    cameraMatrixParameters.add(cam2.set("cam2",false));
+    cameraMatrixParameters.add(cam3.set("cam3",false));
+
+    panel6.setup("ofParameterGroup", "", 260, 480);
+    matrixCam.setup(cameraMatrixParameters);
+    matrixCam.setShowHeader(false);
+    matrixCam.setAlignHorizontal();
+    matrixCam.allowMultipleActiveToggles(false);
+    panel6.add(&matrixCam);
+
 }
 
 //--------------------------------------------------------------
@@ -125,6 +137,7 @@ void ofApp::draw(){
     panel3.draw();
     panel4.draw();
     panel5.draw();
+    panel6.draw();
 
 }
 
@@ -136,6 +149,7 @@ void ofApp::toggleGroupHeader(bool &val) {
     panel3.setShowHeader(val);
     panel4.setShowHeader(val);
     panel5.setShowHeader(val);
+    panel6.setShowHeader(val);
 }
 
 //--------------------------------------------------------------

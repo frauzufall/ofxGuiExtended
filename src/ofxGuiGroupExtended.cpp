@@ -26,6 +26,9 @@ ofxGuiGroupExtended * ofxGuiGroupExtended::setup(string collectionName, string f
 
 ofxGuiGroupExtended * ofxGuiGroupExtended::setup(const ofParameterGroup & _parameters, string filename, float x, float y){
     ofxGuiGroup::setup(_parameters,filename,x,y);
+	for(int i=0;i<(int)collection.size();i++){
+		collection[i]->setSize(this->getWidth()/collection.size()-spacingNextElement, collection[i]->getHeight());
+	}
     return this;
 }
 

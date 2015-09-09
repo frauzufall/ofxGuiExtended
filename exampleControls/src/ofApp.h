@@ -24,7 +24,7 @@ public:
 
 private:
 
-    ofxPanelExtended panel1, panel2, panel3, panel4, panel5;
+    ofxPanelExtended panel1, panel2, panel3, panel4, panel5, panel6;
     ofxGuiGroupExtended rotary;
     ofxGuiMatrix matrix;
 
@@ -40,6 +40,13 @@ private:
     ofParameter<float> slider1_param, slider2_param, slider3_param, slider4_param;
     vector<ofParameter<bool>> matrix_params;
     ofParameterGroup g;
+
+    ofParameterGroup cameraMatrixParameters;
+        ofParameter<bool> cam0;
+        ofParameter<bool> cam2;
+        ofParameter<bool> cam3;
+        ofParameter<bool> cam1;
+        ofxGuiGroupExtended matrixCam;
 
     void toggleGroupHeader(bool &val);
 
