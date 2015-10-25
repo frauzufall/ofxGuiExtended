@@ -27,10 +27,10 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 			_bLoaded = true;
 			this->graphics = graphics;
 		}else{
-			ofLogError("ofxGuiGraphics:setGraphics()", "graphics cannot be loaded, width = 0 or height = 0");
+			ofLogWarning("ofxGuiGraphics:setGraphics()", "graphics cannot be loaded, width = 0 or height = 0");
 		}
 	}else{
-		ofLogError("ofxGuiGraphics:setGraphics()", "graphics is nullptr");
+		ofLogWarning("ofxGuiGraphics:setGraphics()", "graphics is nullptr");
 	}
 }
 

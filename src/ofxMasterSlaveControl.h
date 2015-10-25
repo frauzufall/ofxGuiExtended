@@ -3,7 +3,9 @@
 #include "ofMain.h"
 #include "ofxGuiExtended.h"
 
-struct MasterControl {
+class MasterControl {
+
+public:
 
     MasterControl(ofxBaseGui* _control) {
         control = _control;
@@ -17,13 +19,17 @@ struct MasterControl {
         }
     }
 
+    ~MasterControl(){}
+
     ofxBaseGui* control = 0;
     bool isActive = false;
     bool slider = false;
     float min=1, max=1;
 };
 
-struct SlaveControl {
+class SlaveControl {
+
+public:
 
     ofxBaseGui* control = 0;
     bool isControlled = false;
@@ -44,6 +50,11 @@ struct SlaveControl {
             min = slider->getMin();
             max = slider->getMax();
         }
+    }
+
+    ~SlaveControl() {
+        cout << "slavecontrol destructor" << endl;
+        removeControl();
     }
 
     void setControlledBy(MasterControl *master) {
@@ -115,7 +126,9 @@ struct SlaveControl {
 class ofxMasterSlaveControl {
 
     public:
-        static ofxMasterSlaveControl&	get();
+
+        ofxMasterSlaveControl();
+        ~ofxMasterSlaveControl();
 
         void draw();
 
@@ -132,10 +145,6 @@ class ofxMasterSlaveControl {
         virtual bool mouseScrolled(ofMouseEventArgs & args);
         virtual bool mouseEntered(ofMouseEventArgs & args){return false;}
         virtual bool mouseExited(ofMouseEventArgs & args){return false;}
-
-    protected:
-        ofxMasterSlaveControl();
-        ~ofxMasterSlaveControl();
 
     private:
 

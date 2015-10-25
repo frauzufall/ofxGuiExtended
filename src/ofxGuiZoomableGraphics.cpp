@@ -5,19 +5,19 @@ using namespace std;
 ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(){
 }
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string graphicsName, const Config & config){
-    setup(graphicsName, config.graphics, config.shape.width, config.shape.height);
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(const Config & config){
+	setup(config.canvasName, config.graphics, config.shape.width, config.shape.height);
 }
 
 ofxGuiZoomableGraphics::~ofxGuiZoomableGraphics(){
 }
 
-ofxGuiZoomableGraphics * ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
+ofxGuiZoomableGraphics & ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
     ofxGuiGraphics::setup(graphicsName, graphics, w, h);
 	zoom_factor = 0;
 	zoom_speed = 0.1;
 	dragging_dst = false;
-	return this;
+	return *this;
 }
 
 void ofxGuiZoomableGraphics::setSize(float w, float h){

@@ -5,7 +5,7 @@
 class ofxGuiGraphics : public ofxBaseGui {
 	public:
 
-    struct Config: public ofxBaseGui::Config{
+	struct Config: public ofxBaseGui::Config{
             Config(){}
             Config(const std::string & name, ofBaseDraws * graphics)
             :canvasName(name)

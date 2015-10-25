@@ -1,10 +1,5 @@
 #include "ofxMasterSlaveControl.h"
 
-ofxMasterSlaveControl& ofxMasterSlaveControl::get() {
-    static ofxMasterSlaveControl instance;
-    return instance;
-}
-
 ofxMasterSlaveControl::ofxMasterSlaveControl() {
 
     slaves.clear();
@@ -15,15 +10,15 @@ ofxMasterSlaveControl::ofxMasterSlaveControl() {
 
 }
 ofxMasterSlaveControl::~ofxMasterSlaveControl() {
-    ofUnregisterMouseEvents(this);
+    ofUnregisterMouseEvents(this, -1);
 }
 
 void ofxMasterSlaveControl::draw() {
 
     if(activeMaster != 0) {
-        ofSetColor(activeMaster->control->getFillColor());
-        ofNoFill();
-        ofSetLineWidth(3);
+        ofSetColor(activeMaster->control->getFillColor(), 133);
+        ofFill();
+        //ofSetLineWidth(3);
         for(unsigned int i = 0; i < slaves.size(); i++) {
             ofDrawRectangle(slaves.at(i)->control->getShape());
         }

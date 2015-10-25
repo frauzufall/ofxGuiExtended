@@ -5,11 +5,18 @@
 
 class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 	public:
+
+		struct Config: public ofxGuiGraphics::Config{
+			Config():ofxGuiGraphics::Config(){}
+
+		};
+
+
         ofxGuiZoomableGraphics();
-        ofxGuiZoomableGraphics(string graphicsName, const Config & config);
+		ofxGuiZoomableGraphics(const Config & config);
         virtual ~ofxGuiZoomableGraphics();
 
-        ofxGuiZoomableGraphics * setup(string graphicsName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
+		ofxGuiZoomableGraphics & setup(string graphicsName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
 
 		virtual bool mouseMoved(ofMouseEventArgs & args){
 			return false;
