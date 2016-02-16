@@ -64,7 +64,7 @@ void ofApp::setupPage1() {
 void ofApp::setupPage2() {
     panel2.setup("horizontal", "", 260, 10);
     panel2.setAlignHorizontal();
-    panel2.showHeader(false);
+    panel2.setShowHeader(false);
     ofParameter<bool> toggle2_param, toggle3_param, toggle4_param;
     panel2.add(new ofxMinimalToggle(toggle2_param.set("toggle2", false), 0, 30));
     panel2.add(new ofxMinimalToggle(toggle3_param.set("toggle3", false), 0, 30));
