@@ -2,48 +2,60 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(){
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, const ofJson& config)
+	:ofxGuiGraphics(){
+	_bLoaded = false;
+	setName(canvasName);
+	_setConfig(config);
 }
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(const Config & config){
-	setup(config.canvasName, config.graphics, config.shape.width, config.shape.height);
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
+	:ofxGuiGraphics(){
+	_bLoaded = false;
+	setup(canvasName, graphics);
+	_setConfig(config);
+}
+
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h){
+	_bLoaded = false;
+	setup(canvasName,graphics,w,h);
 }
 
 ofxGuiZoomableGraphics::~ofxGuiZoomableGraphics(){
+
 }
 
-ofxGuiZoomableGraphics & ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
-    ofxGuiGraphics::setup(graphicsName, graphics, w, h);
+void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
+	ofxGuiGraphics::setup(graphicsName, graphics, w, h);
 	zoom_factor = 0;
 	zoom_speed = 0.1;
 	dragging_dst = false;
-	return *this;
 }
 
 void ofxGuiZoomableGraphics::setSize(float w, float h){
-    ofxGuiGraphics::setSize(w, h);
+	ofxGuiGraphics::setSize(w, h);
 	contentFbo.clear();
 	if(_bLoaded){
-		contentFbo.allocate(b.width, b.height, GL_RGBA);
+		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
 	}
 	setNeedsRedraw();
 }
 
 void ofxGuiZoomableGraphics::setShape(float x, float y, float w, float h){
-    ofxGuiGraphics::setShape(x, y, w, h);
+	ofxGuiGraphics::setShape(x, y, w, h);
 	contentFbo.clear();
 	if(_bLoaded){
-		contentFbo.allocate(b.width, b.height, GL_RGBA);
+		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
 	}
 	setNeedsRedraw();
 }
 
-void ofxGuiZoomableGraphics::setShape(ofRectangle r){
-    setShape(r.x, r.y, r.width, r.height);
+void ofxGuiZoomableGraphics::setShape(const ofRectangle &r){
+	setShape(r.x, r.y, r.width, r.height);
 }
 
 void ofxGuiZoomableGraphics::generateDraw(){
-    ofxGuiGraphics::generateDraw();
+	ofxGuiGraphics::generateDraw();
 
 }
 
@@ -56,7 +68,7 @@ void ofxGuiZoomableGraphics::render(){
 
 		ofPushMatrix();
 
-		ofTranslate(-b.getPosition());
+//		ofTranslate(-b.getPosition());
 
 		zoom_translation = zoom_point - zoom_point_scaled + zoom_point_offset;
 		if(zoom_translation.x > 0){
@@ -65,15 +77,15 @@ void ofxGuiZoomableGraphics::render(){
 		if(zoom_translation.y > 0){
 			zoom_translation.y = 0;
 		}
-		if(zoom_translation.x < -addZoom(b.getWidth()) + b.getWidth()){
-			zoom_translation.x = -addZoom(b.getWidth()) + b.getWidth();
+		if(zoom_translation.x < -addZoom(getWidth()) + getWidth()){
+			zoom_translation.x = -addZoom(getWidth()) + getWidth();
 		}
-		if(zoom_translation.y < -addZoom(b.getHeight()) + b.getHeight()){
-			zoom_translation.y = -addZoom(b.getHeight()) + b.getHeight();
+		if(zoom_translation.y < -addZoom(getHeight()) + getHeight()){
+			zoom_translation.y = -addZoom(getHeight()) + getHeight();
 		}
 		ofTranslate(zoom_translation);
 
-		graphics->draw(b.getPosition(), addZoom(b.getWidth()), addZoom(b.getHeight()));
+		graphics->draw(0, 0, addZoom(getWidth()), addZoom(getHeight()));
 
 		ofPopMatrix();
 
@@ -85,10 +97,10 @@ void ofxGuiZoomableGraphics::render(){
 
 	bg.draw();
 	if(_bLoaded){
-		contentFbo.draw(b);
+		contentFbo.draw(0, 0, getWidth(), getHeight());
 	}
 
-	if(bShowName){
+	if(showName){
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();
@@ -117,10 +129,10 @@ bool ofxGuiZoomableGraphics::mouseDragged(ofMouseEventArgs & args){
 }
 
 bool ofxGuiZoomableGraphics::mousePressed(ofMouseEventArgs & args){
-	ofPoint mouse(args.x, args.y);
-	if(b.inside(mouse)){
+
+	if(isMouseOver()){
 		dragging_dst = true;
-		last_mouse = mouse;
+		last_mouse = ofPoint(args.x, args.y);
 	}
 	return false;
 }
@@ -132,8 +144,8 @@ bool ofxGuiZoomableGraphics::mouseReleased(ofMouseEventArgs & args){
 
 bool ofxGuiZoomableGraphics::mouseScrolled(ofMouseEventArgs & args){
 
-	if(b.inside(ofGetMouseX(), ofGetMouseY())){
-		setZoomFactor(args.y);
+	if(isMouseOver()){
+		setZoomFactor(args.scrollY);
 		setNeedsRedraw();
 	}
 
@@ -152,8 +164,8 @@ void ofxGuiZoomableGraphics::setZoomFactor(int factor){
 	ofPoint zoom_point_old = zoom_point;
 
 	ofPoint tmp_zoom_point;
-	tmp_zoom_point.x = ofGetMouseX() - b.x - zoom_point_offset.x;
-	tmp_zoom_point.y = ofGetMouseY() - b.y - zoom_point_offset.y;
+	tmp_zoom_point.x = ofGetMouseX() - getPosition().x - zoom_point_offset.x;
+	tmp_zoom_point.y = ofGetMouseY() - getPosition().y - zoom_point_offset.y;
 
 	ofVec2f diff = tmp_zoom_point - zoom_point_old;
 

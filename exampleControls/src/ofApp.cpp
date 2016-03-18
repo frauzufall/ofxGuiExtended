@@ -3,19 +3,23 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 
-    /*
-     * panel with graphics
-     */
-    panel1.setup("canvas", "", 260, 90);
-    img.load("images/ente.jpg");
-    graphics.setup("some texture", &img.getTexture());
-    panel1.add(graphics);
+	ofSetFrameRate(120);
 
-    panel2.setup("zoomable canvas", "", 500, 90);
-    zgraphics.setup("same texture", &img.getTexture());
-    panel2.add(zgraphics);
+	img.load("images/ente.jpg");
+
+
+	panel1 = gui.addPanel("canvas");
+	panel1->setPosition(260, 90);
+
+
+	panel1->add<ofxGuiGraphics>("some texture", &img.getTexture());
+
+
+	panel2 = gui.addPanel("zoomable canvas");
+	panel2->setPosition(500, 90);
+	panel2->add<ofxGuiZoomableGraphics>("same texture", &img.getTexture());
 
 }
 
@@ -30,9 +34,6 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    panel1.draw();
-    panel2.draw();
-
 }
 
 //--------------------------------------------------------------
@@ -41,13 +42,13 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    switch(key) {
-    case 'f': {
-        ofToggleFullscreen();
-        break;
-    }
-    default: break;
-    }
+	switch(key) {
+	case 'f': {
+		ofToggleFullscreen();
+		break;
+	}
+	default: break;
+	}
 
 }
 

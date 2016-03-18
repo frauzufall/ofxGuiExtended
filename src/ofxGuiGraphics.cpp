@@ -2,23 +2,31 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiGraphics::ofxGuiGraphics(){
-	_bLoaded = false;
-}
-
 ofxGuiGraphics::~ofxGuiGraphics(){
 }
 
-ofxGuiGraphics::ofxGuiGraphics(const Config & config){
-    setup(config.canvasName,config.graphics,config.shape.width,config.shape.height);
- }
-
-ofxGuiGraphics & ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, float h){
+ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
+	:ofxBaseGui(config){
+	_bLoaded = false;
 	setName(canvasName);
-	setSize(w,h);
-	setGraphics(graphics);
+}
 
-    return *this;
+ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
+	:ofxBaseGui(){
+	_bLoaded = false;
+	setup(canvasName, graphics);
+	_setConfig(config);
+}
+
+ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h){
+	_bLoaded = false;
+	setup(canvasName,graphics,w,h);
+}
+
+void ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, float h){
+	setName(canvasName);
+	setGraphics(graphics);
+	setSize(w,h);
 }
 
 void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
@@ -35,54 +43,66 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 }
 
 void ofxGuiGraphics::setShape(float x, float y, float w, float h){
-    ofxBaseGui::setPosition(x,y);
-    setSize(w,h);
+	ofxBaseGui::setPosition(x,y);
+	setSize(w,h);
 }
 
-void ofxGuiGraphics::setShape(ofRectangle r){
-    ofxBaseGui::setPosition(r.x,r.y);
-    setSize(r.width,r.height);
+void ofxGuiGraphics::setShape(const ofRectangle &r){
+	ofxBaseGui::setPosition(r.x,r.y);
+	setSize(r.width,r.height);
+}
+
+void ofxGuiGraphics::setWidth(float w){
+	if(graphics){
+		float h = w * graphics->getHeight() / graphics->getWidth();
+		ofxBaseGui::setSize(w,h);
+	}else{
+		ofxBaseGui::setWidth(w);
+	}
+}
+
+void ofxGuiGraphics::setHeight(float h){
+	if(graphics){
+		float w = h * graphics->getWidth() / graphics->getHeight();
+		ofxBaseGui::setSize(w,h);
+	}else{
+		ofxBaseGui::setHeight(h);
+	}
 }
 
 void ofxGuiGraphics::setSize(float w, float h){
 	if(_bLoaded){
 		if(w == 0){
 			if(h == 0){
-				w = graphics->getWidth();
-				h = graphics->getHeight();
+				w = getWidth();
 			}else{
 				w = h * graphics->getWidth() / graphics->getHeight();
 			}
 		}
 		h = w * graphics->getHeight() / graphics->getWidth();
-		b.width = w;
-		b.height = h;
-        sizeChangedE.notify(this);
-		setNeedsRedraw();
+		ofxBaseGui::setSize(w,h);
 	}
 }
 
 void ofxGuiGraphics::generateDraw(){
-	bg.clear();
+	ofxBaseGui::generateDraw();
 
-	bg.setFillColor(thisBackgroundColor);
-	bg.setFilled(true);
-	bg.rectangle(b);
-
-	if(bShowName){
-		textMesh = getTextMesh(getName(), b.x + textPadding, b.y + b.height - textPadding);
+	if(showName){
+		textMesh = getTextMesh(getName(), textPadding, getHeight() - textPadding);
 	}
 }
 
 void ofxGuiGraphics::render(){
+
+	ofxBaseGui::render();
+
 	ofColor c = ofGetStyle().color;
 
-	bg.draw();
 	if(_bLoaded){
-		graphics->draw(b);
+		graphics->draw(0, 0, getWidth(), getHeight());
 	}
 
-	if(bShowName){
+	if(showName){
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();

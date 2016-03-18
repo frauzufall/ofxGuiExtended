@@ -6,34 +6,27 @@
 class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 	public:
 
-		struct Config: public ofxGuiGraphics::Config{
-			Config():ofxGuiGraphics::Config(){}
+		ofxGuiZoomableGraphics(string canvasName="", const ofJson& config = ofJson());
+		ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config = ofJson());
+		ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h = 0);
 
-		};
+		virtual ~ofxGuiZoomableGraphics();
 
+		void setup(string graphicsName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
 
-        ofxGuiZoomableGraphics();
-		ofxGuiZoomableGraphics(const Config & config);
-        virtual ~ofxGuiZoomableGraphics();
+		virtual bool mousePressed(ofMouseEventArgs & args) override;
+		virtual bool mouseDragged(ofMouseEventArgs & args) override;
+		virtual bool mouseReleased(ofMouseEventArgs & args) override;
+		virtual bool mouseScrolled(ofMouseEventArgs & args) override;
 
-		ofxGuiZoomableGraphics & setup(string graphicsName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
-
-		virtual bool mouseMoved(ofMouseEventArgs & args){
-			return false;
-		}
-		virtual bool mousePressed(ofMouseEventArgs & args);
-		virtual bool mouseDragged(ofMouseEventArgs & args);
-		virtual bool mouseReleased(ofMouseEventArgs & args);
-		virtual bool mouseScrolled(ofMouseEventArgs & args);
-
-        virtual void setSize(float w, float h);
-        virtual void setShape(float x, float y, float w, float h);
-        virtual void setShape(ofRectangle r);
+		virtual void setSize(float w, float h) override;
+		virtual void setShape(float x, float y, float w, float h) override;
+		virtual void setShape(const ofRectangle &r) override;
 
 	protected:
 
-		virtual void render();
-		virtual void generateDraw();
+		virtual void render() override;
+		virtual void generateDraw() override;
 
 		void setZoomFactor(int factor);
 		ofPoint addZoom(ofPoint p);
