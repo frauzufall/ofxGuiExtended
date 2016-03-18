@@ -3,30 +3,48 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetFrameRate(120);
 
-    panel1.setup("control");
-    panel2.setup("", "", 250, 10);
+	/*
+	 * create panels
+	 */
+
+	ofxPanel* panel1 = gui.addPanel("control");
+	ofxPanel* panel2 = gui.addPanel();
+	panel2->setPosition(250, 10);
 
 
-    panel1.ofxGuiGroup::add(m_slider1.set("sinus",0,-1,1));
-    panel1.getControl("sinus")->setFillColor(ofColor::tomato);
-    msc.addMaster(panel1.getControl("sinus"));
+	/*
+	 * add masters
+	 */
 
-    panel1.ofxGuiGroup::add(m_slider2.set("cosine",0,-1,1));
-    panel1.getControl("cosine")->setFillColor(ofColor::aqua);
-    msc.addMaster(panel1.getControl("cosine"));
+	ofxBaseGui* control = panel1->add(m_slider1.set("sinus",0,-1,1));
+	control->setFillColor(ofColor::tomato);
+	msc.addMaster(control);
 
-    panel2.ofxGuiGroup::add(s_slider1.set("slave1",0,0,1));
-    msc.addSlave(panel2.getControl("slave1"));
+	control = panel1->add(m_slider2.set("cosine",0,-1,1));
+	control->setFillColor(ofColor::aqua);
+	msc.addMaster(control);
 
-    panel2.ofxGuiGroup::add(s_slider2.set("slave2",0,10,20));
-    msc.addSlave(panel2.getControl("slave2"));
+	/*
+	 * add slaves
+	 */
 
-    panel2.ofxGuiGroup::add(s_toggle.set("slave3",false));
-    msc.addSlave(panel2.getControl("slave3"));
+	control = panel2->add(s_slider1.set("slave1",0,0,1));
+	msc.addSlave(control);
 
-    panel2.ofxGuiGroup::add(s_slider3.set("regular slider",0,-1,1));
+	control = panel2->add(s_slider2.set("slave2",0,10,20));
+	msc.addSlave(control);
+
+	control = panel2->add(s_toggle.set("slave3",false));
+	msc.addSlave(control);
+
+	/*
+	 * add regular slider
+	 */
+
+	panel2->add(s_slider3.set("regular slider",0,-1,1));
 
 }
 
@@ -36,19 +54,14 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    m_slider1 = sin(ofGetElapsedTimef());
-    m_slider2 = cos(ofGetElapsedTimef());
+	m_slider1 = sin(ofGetElapsedTimef());
+	m_slider2 = cos(ofGetElapsedTimef());
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    ofSetColor(255);
-
-    panel1.draw();
-    panel2.draw();
-
-    msc.draw();
+	ofSetColor(255);
 
 }
 
@@ -58,13 +71,13 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    switch(key) {
-    case 'f': {
-        ofToggleFullscreen();
-        break;
-    }
-    default: break;
-    }
+	switch(key) {
+	case 'f': {
+		ofToggleFullscreen();
+		break;
+	}
+	default: break;
+	}
 
 }
 

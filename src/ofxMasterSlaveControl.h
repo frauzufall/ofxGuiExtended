@@ -1,158 +1,179 @@
-//#pragma once
+#pragma once
 
-//#include "ofMain.h"
-//#include "ofxGuiExtended.h"
+#include "ofMain.h"
+#include "ofxGuiExtended.h"
 
-//class MasterControl {
+class MasterControl {
 
-//public:
+public:
 
-//    MasterControl(ofxBaseGui* _control) {
-//        control = _control;
-//        if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
-//            min = slider->getMin();
-//            max = slider->getMax();
-//        }
-//        if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
-//            min = slider->getMin();
-//            max = slider->getMax();
-//        }
-//    }
+	MasterControl(ofxBaseGui* _control) {
+		control = _control;
+		if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
+			min = slider->getMin();
+			max = slider->getMax();
+		}
+		if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+			min = slider->getMin();
+			max = slider->getMax();
+		}
+	}
 
-//    ~MasterControl(){}
+	~MasterControl(){}
 
-//    ofxBaseGui* control = 0;
-//    bool isActive = false;
-//    bool slider = false;
-//    float min=1, max=1;
-//};
+	ofxBaseGui* control = 0;
+	bool isActive = false;
+	bool slider = false;
+	float min=1, max=1;
+};
 
-//class SlaveControl {
+class SlaveControl {
 
-//public:
+public:
 
-//    ofxBaseGui* control = 0;
-//    bool isControlled = false;
-//    bool isListening = false;
-//    bool slider = false;
-//    float min=0, max=1;
-//    MasterControl* master = 0;
-//    ofColor defaultBackgroundColor;
+	ofxBaseGui* control = 0;
+	bool isControlled = false;
+	bool isListening = false;
+	bool slider = false;
+	float min=0, max=1;
+	MasterControl* master = 0;
+	ofColor defaultBackgroundColor;
+	ofColor defaultBorderColor;
+	float defaultBorderWidth;
 
-//    SlaveControl(ofxBaseGui* _control) {
-//        this->control = _control;
-//        defaultBackgroundColor = control->getBackgroundColor();
-//        if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
-//            min = slider->getMin();
-//            max = slider->getMax();
-//        }
-//        if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
-//            min = slider->getMin();
-//            max = slider->getMax();
-//        }
-//    }
+	SlaveControl(ofxBaseGui* _control) {
+		this->control = _control;
+		defaultBackgroundColor = control->getBackgroundColor();
+		if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
+			min = slider->getMin();
+			max = slider->getMax();
+		}
+		if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+			min = slider->getMin();
+			max = slider->getMax();
+		}
+	}
 
-//    ~SlaveControl() {
-//        cout << "slavecontrol destructor" << endl;
-//        removeControl();
-//    }
+	~SlaveControl() {
+		cout << "slavecontrol destructor" << endl;
+		removeControl();
+	}
 
-//    void setControlledBy(MasterControl *master) {
-//        bool setC = true,removeC = false;
-//        if(isControlled) {
-//            removeC = true;
-//        }
-//        if(this->master == master) {
-//            setC = false;
-//        }
+	void setListening(bool listening, MasterControl* master = nullptr) {
+		if(!isListening && listening){
+			defaultBorderColor = control->getBorderColor();
+			defaultBorderWidth = control->getBorderWidth();
+			control->setBorderColor(master->control->getFillColor());
+			control->setBorderWidth(5);
+		}
+		if(isListening && listening){
+			control->setBorderColor(master->control->getFillColor());
+			control->setBorderWidth(5);
+		}
+		if(isListening && !listening){
+			control->setBorderColor(defaultBorderColor);
+			control->setBorderWidth(defaultBorderWidth);
+		}
+		isListening = listening;
 
-//        if(removeC) {
-//            removeControl();
-//        }
-//        if(setC) {
-//            if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
-//                toggle->addListener(this, &SlaveControl::valueChanged<bool>);
-//                isControlled = true;
-//                this->master = master;
-//            }
-//            if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
-//                slider->addListener(this, &SlaveControl::valueChanged<float>);
-//                isControlled = true;
-//                this->master = master;
-//            }
-//            if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
-//                slider->addListener(this, &SlaveControl::valueChanged<int>);
-//                isControlled = true;
-//                this->master = master;
-//            }
-//            if(isControlled) {
-//                control->setBackgroundColor(master->control->getFillColor());
-//            }
-//        }
-//    }
+	}
 
-//    void removeControl() {
-//        if(master != 0) {
-//            if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
-//                toggle->removeListener(this, &SlaveControl::valueChanged<bool>);
-//            }
-//            if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
-//                slider->removeListener(this, &SlaveControl::valueChanged<float>);
-//            }
-//            if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
-//                slider->removeListener(this, &SlaveControl::valueChanged<int>);
-//            }
-//            isControlled = false;
-//            master = 0;
-//            control->setBackgroundColor(defaultBackgroundColor);
-//        }
-//    }
+	void setControlledBy(MasterControl *master) {
+		bool setC = true,removeC = false;
+		if(isControlled) {
+			removeC = true;
+		}
+		if(this->master == master) {
+			setC = false;
+		}
 
-//    template <class Tvalue>
-//    void valueChanged(Tvalue &value) {
-//        if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
-//            *slider = ofMap(value, master->min, master->max,min,max);
-//        }
-//        else if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
-//            *slider = ofMap(value, master->min, master->max,min,max);
-//        }
-//        else if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(control)) {
-//            *toggle =  floor(ofMap(value, master->min, master->max,min,max)+0.5);
-//        }
-//    }
+		if(removeC) {
+			removeControl();
+		}
+		if(setC) {
+			if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
+				toggle->addListener(this, &SlaveControl::valueChanged<bool>);
+				isControlled = true;
+				this->master = master;
+			}
+			if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
+				slider->addListener(this, &SlaveControl::valueChanged<float>);
+				isControlled = true;
+				this->master = master;
+			}
+			if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
+				slider->addListener(this, &SlaveControl::valueChanged<int>);
+				isControlled = true;
+				this->master = master;
+			}
+			if(isControlled) {
+				control->setBackgroundColor(master->control->getFillColor());
+			}
+		}
+	}
 
-//};
+	void removeControl() {
+		if(master != 0) {
+			if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(master->control)) {
+				toggle->removeListener(this, &SlaveControl::valueChanged<bool>);
+			}
+			if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(master->control)) {
+				slider->removeListener(this, &SlaveControl::valueChanged<float>);
+			}
+			if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(master->control)) {
+				slider->removeListener(this, &SlaveControl::valueChanged<int>);
+			}
+			isControlled = false;
+			master = 0;
+			control->setBackgroundColor(defaultBackgroundColor);
+		}
+	}
 
-//class ofxMasterSlaveControl {
+	template <class Tvalue>
+	void valueChanged(Tvalue &value) {
+		if(ofxSlider<float>* slider = dynamic_cast<ofxSlider<float>*>(control)) {
+			*slider = ofMap(value, master->min, master->max,min,max);
+		}
+		else if(ofxSlider<int>* slider = dynamic_cast<ofxSlider<int>*>(control)) {
+			*slider = ofMap(value, master->min, master->max,min,max);
+		}
+		else if(ofxToggle* toggle = dynamic_cast<ofxToggle*>(control)) {
+			*toggle =  floor(ofMap(value, master->min, master->max,min,max)+0.5);
+		}
+	}
 
-//    public:
+};
 
-//        ofxMasterSlaveControl();
-//        ~ofxMasterSlaveControl();
+class ofxMasterSlaveControl {
 
-//        void draw();
+	public:
 
-//        void addSlave(ofxBaseGui* control);
-//        void addMaster(ofxBaseGui* control);
+		ofxMasterSlaveControl();
+		~ofxMasterSlaveControl();
 
-//        ofColor getHighlightColor();
-//        void setHighlightColor(ofColor);
+		void draw();
 
-//        virtual bool mouseMoved(ofMouseEventArgs & args);
-//        virtual bool mousePressed(ofMouseEventArgs & args);
-//        virtual bool mouseDragged(ofMouseEventArgs & args);
-//        virtual bool mouseReleased(ofMouseEventArgs & args);
-//        virtual bool mouseScrolled(ofMouseEventArgs & args);
-//        virtual bool mouseEntered(ofMouseEventArgs & args){return false;}
-//        virtual bool mouseExited(ofMouseEventArgs & args){return false;}
+		void addSlave(ofxBaseGui* control);
+		void addMaster(ofxBaseGui* control);
 
-//    private:
+		ofColor getHighlightColor();
+		void setHighlightColor(ofColor);
 
-//        void setActiveMaster(int master_index, bool active);
+		virtual bool mouseMoved(ofMouseEventArgs & args);
+		virtual bool mousePressed(ofMouseEventArgs & args);
+		virtual bool mouseDragged(ofMouseEventArgs & args);
+		virtual bool mouseReleased(ofMouseEventArgs & args);
+		virtual bool mouseScrolled(ofMouseEventArgs & args);
+		virtual bool mouseEntered(ofMouseEventArgs & args){return false;}
+		virtual bool mouseExited(ofMouseEventArgs & args){return false;}
 
-//        vector<MasterControl*> masters;
-//        vector<SlaveControl*> slaves;
+	private:
 
-//        MasterControl* activeMaster;
+		void setActiveMaster(MasterControl *master);
 
-//};
+		vector<MasterControl*> masters;
+		vector<SlaveControl*> slaves;
+
+		MasterControl* activeMaster;
+
+};
