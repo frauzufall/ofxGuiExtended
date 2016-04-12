@@ -3,6 +3,7 @@
 using namespace std;
 
 ofxGuiGraphics::~ofxGuiGraphics(){
+	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
@@ -27,6 +28,7 @@ void ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, f
 	setName(canvasName);
 	setGraphics(graphics);
 	setSize(w,h);
+	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
@@ -42,46 +44,26 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 	}
 }
 
-void ofxGuiGraphics::setShape(float x, float y, float w, float h){
-	ofxBaseGui::setPosition(x,y);
-	setSize(w,h);
-}
-
-void ofxGuiGraphics::setShape(const ofRectangle &r){
-	ofxBaseGui::setPosition(r.x,r.y);
-	setSize(r.width,r.height);
-}
-
-void ofxGuiGraphics::setWidth(float w){
-	if(graphics){
-		float h = w * graphics->getHeight() / graphics->getWidth();
-		ofxBaseGui::setSize(w,h);
-	}else{
-		ofxBaseGui::setWidth(w);
-	}
-}
-
-void ofxGuiGraphics::setHeight(float h){
-	if(graphics){
-		float w = h * graphics->getWidth() / graphics->getHeight();
-		ofxBaseGui::setSize(w,h);
-	}else{
-		ofxBaseGui::setHeight(h);
-	}
-}
-
-void ofxGuiGraphics::setSize(float w, float h){
-	if(_bLoaded){
-		if(w == 0){
-			if(h == 0){
-				w = getWidth();
-			}else{
-				w = h * graphics->getWidth() / graphics->getHeight();
+void ofxGuiGraphics::onResize(ResizeEventArgs &args){
+	if(!resizing){
+		resizing = true;
+		float w = args.shape().width;
+		float h = args.shape().height;
+		if(_bLoaded){
+			if(w == 0){
+				if(h == 0){
+					w = getWidth();
+				}else{
+					w = h * graphics->getWidth() / graphics->getHeight();
+				}
 			}
+			h = w * graphics->getHeight() / graphics->getWidth();
+			ofxBaseGui::setSize(w,h);
 		}
-		h = w * graphics->getHeight() / graphics->getWidth();
-		ofxBaseGui::setSize(w,h);
+		resizing = false;
+		setNeedsRedraw();
 	}
+
 }
 
 void ofxGuiGraphics::generateDraw(){

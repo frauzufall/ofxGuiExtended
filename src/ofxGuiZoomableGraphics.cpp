@@ -22,7 +22,7 @@ ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * 
 }
 
 ofxGuiZoomableGraphics::~ofxGuiZoomableGraphics(){
-
+	ofRemoveListener(resize, this, &ofxGuiZoomableGraphics::onResize);
 }
 
 void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
@@ -30,28 +30,16 @@ void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, 
 	zoom_factor = 0;
 	zoom_speed = 0.1;
 	dragging_dst = false;
+	ofAddListener(resize, this, &ofxGuiZoomableGraphics::onResize);
 }
 
-void ofxGuiZoomableGraphics::setSize(float w, float h){
-	ofxGuiGraphics::setSize(w, h);
+void ofxGuiZoomableGraphics::onResize(ResizeEventArgs &args){
+	ofxGuiGraphics::onResize(args);
 	contentFbo.clear();
 	if(_bLoaded){
 		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
 	}
 	setNeedsRedraw();
-}
-
-void ofxGuiZoomableGraphics::setShape(float x, float y, float w, float h){
-	ofxGuiGraphics::setShape(x, y, w, h);
-	contentFbo.clear();
-	if(_bLoaded){
-		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
-	}
-	setNeedsRedraw();
-}
-
-void ofxGuiZoomableGraphics::setShape(const ofRectangle &r){
-	setShape(r.x, r.y, r.width, r.height);
 }
 
 void ofxGuiZoomableGraphics::generateDraw(){

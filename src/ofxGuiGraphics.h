@@ -12,11 +12,7 @@ class ofxGuiGraphics : public ofxBaseGui {
 
 		void setup(string canvasName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
 
-		virtual void setWidth(float w) override;
-		virtual void setHeight(float h) override;
-		virtual void setSize(float w, float h) override;
-		virtual void setShape(float x, float y, float w, float h) override;
-		virtual void setShape(const ofRectangle &r) override;
+		void onResize(ResizeEventArgs& args);
 
 		virtual void setGraphics(ofBaseDraws* graphics);
 
@@ -34,5 +30,6 @@ class ofxGuiGraphics : public ofxBaseGui {
 		ofBaseDraws * graphics;
 		ofParameter <std::string> label;
 		bool _bLoaded;
+		bool resizing = false;
 
 };

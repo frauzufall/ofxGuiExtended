@@ -19,9 +19,7 @@ class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 		virtual bool mouseReleased(ofMouseEventArgs & args) override;
 		virtual bool mouseScrolled(ofMouseEventArgs & args) override;
 
-		virtual void setSize(float w, float h) override;
-		virtual void setShape(float x, float y, float w, float h) override;
-		virtual void setShape(const ofRectangle &r) override;
+		void onResize(ResizeEventArgs& args);
 
 	protected:
 
