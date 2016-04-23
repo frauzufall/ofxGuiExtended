@@ -164,6 +164,8 @@ void ofxPanel::setup(){
 	header->setHeight(headerHeight);
 	header->setBackgroundColor(headerBackgroundColor);
 	header->setBorderWidth(0);
+	header->setConfig(ofJson({{"align-self", "flex-start"}, {"flex","none"},{"width", "100%"}}));
+	header->setHidden(true);
 	ofAddListener(header->move, this, &ofxPanel::onHeaderMove);
 	ofAddListener(((ofxPanelHeader*)header)->loadPressedE, this, &ofxPanel::onLoadPressed);
 	ofAddListener(((ofxPanelHeader*)header)->savePressedE, this, &ofxPanel::onSavePressed);

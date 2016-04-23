@@ -1,4 +1,5 @@
 #include "ofxGuiExtended.h"
+#include "FlexBoxLayout.h"
 
 ofxGui::ofxGui(){
 	setup_done = false;
@@ -10,7 +11,9 @@ ofxGui::~ofxGui(){
 void ofxGui::setup(){
 	setup_done = true;
 	document = std::make_unique<ofx::DOM::Document>();
-	document->createLayout<ofx::DOM::FloatingBoxLayout>(document.get(), ofx::DOM::Orientation::VERTICAL);
+//	document->setPercentalWidth(true, 1);
+//	document->setPercentalHeight(true, 1);
+	document->createLayout<ofx::DOM::FlexBoxLayout>(document.get(), ofx::DOM::Orientation::VERTICAL);
 }
 
 Document* ofxGui::getRoot(){

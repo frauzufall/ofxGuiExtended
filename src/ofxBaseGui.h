@@ -29,7 +29,7 @@ class ofxBaseGui : public ofx::DOM::Element {
 		ofxBaseGui(const ofxBaseGui &) = delete;
 		ofxBaseGui & operator=(const ofxBaseGui &) = delete;
 
-		void setConfig(const ofJson &config, bool recursive=true);
+		void setConfig(const ofJson &config, bool recursive = false);
 
 		void saveToFile(const std::string& filename);
 		void loadFromFile(const std::string& filename);

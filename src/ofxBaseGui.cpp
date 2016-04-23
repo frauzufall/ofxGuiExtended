@@ -1,4 +1,5 @@
 #include "ofxBaseGui.h"
+#include "ofxGuiGroup.h"
 #include "ofImage.h"
 #include "ofBitmapFont.h"
 #ifndef TARGET_EMSCRIPTEN
@@ -57,20 +58,20 @@ void ofxGuiSetDefaultMargin(float margin){
 
 ofColor
 ofxBaseGui::defaultHeaderBackgroundColor(64),
-ofxBaseGui::defaultBackgroundColor(0),
-ofxBaseGui::defaultBorderColor(120, 100),
+ofxBaseGui::defaultBackgroundColor(0,0,0,100),
+ofxBaseGui::defaultBorderColor(255),
 ofxBaseGui::defaultTextColor(255),
 ofxBaseGui::defaultFillColor(128);
 
-float ofxBaseGui::defaultBorderWidth = 0;
+float ofxBaseGui::defaultBorderWidth = 1;
 int ofxBaseGui::textPadding = 4;
 int ofxBaseGui::defaultWidth = 200;
 int ofxBaseGui::defaultHeight = 25;
 
-float ofxBaseGui::defaultMarginLeft = 2;
-float ofxBaseGui::defaultMarginRight = 2;
-float ofxBaseGui::defaultMarginBottom = 2;
-float ofxBaseGui::defaultMarginTop = 2;
+float ofxBaseGui::defaultMarginLeft = 5;
+float ofxBaseGui::defaultMarginRight = 5;
+float ofxBaseGui::defaultMarginBottom = 5;
+float ofxBaseGui::defaultMarginTop = 5;
 
 ofTrueTypeFont ofxBaseGui::font;
 bool ofxBaseGui::fontLoaded = false;
@@ -104,24 +105,28 @@ void ofxBaseGui::setup(){
 	borderColor.set("border-color", defaultBorderColor);
 	textColor.set("text-color", defaultTextColor);
 	fillColor.set("fill-color", defaultFillColor);
-	borderWidth.set("border-width", defaultBorderWidth);
-	textAlignment.set("text-align", TextAlignment::LEFT);
-	showName.set("show-name", true);
+	setLayoutPosition(LayoutPosition::STATIC);
+	setBorderWidth(defaultBorderWidth);
+	setTextAlignment("left");
+	setShowName(true);
+
+	setConfig(ofJson({
+				  {"margin-top", defaultMarginTop},
+				  {"margin-left", defaultMarginLeft},
+				  {"margin-right", defaultMarginRight},
+				  {"margin-bottom", defaultMarginBottom},
+			  }));
+
 
 	// parameter won't be saved to file
 	parameter.setSerializable(false);
-
-	setFloat(LayoutFloat::NONE);
-	setLayoutPosition(LayoutPosition::STATIC);
-
-	setMargin(defaultMarginTop, defaultMarginRight, defaultMarginBottom, defaultMarginLeft);
 
 	ofAddListener(resize, this, &ofxBaseGui::onResize);
 
 	registerMouseEvents();
 
 	setHeight(defaultHeight);
-	setPercentalWidth(true, 1);
+	setWidth(defaultWidth);
 
 }
 
@@ -155,66 +160,79 @@ void ofxBaseGui::setConfig(const ofJson &config, bool recursive){
 
 void ofxBaseGui::_setConfig(const ofJson &config){
 
-	//parse colors
-	JsonConfigParser::parse(config, backgroundColor);
-	JsonConfigParser::parse(config, borderColor);
-	JsonConfigParser::parse(config, textColor);
-	JsonConfigParser::parse(config, fillColor);
-	JsonConfigParser::parse(config, headerBackgroundColor);
-	JsonConfigParser::parse(config, showName);
+	if(!config.is_null() && config.size() > 0){
 
-	//parse size
-	JsonConfigParser::parse(config, this);
+		//parse colors
+		JsonConfigParser::parse(config, backgroundColor);
+		JsonConfigParser::parse(config, borderColor);
+		JsonConfigParser::parse(config, textColor);
+		JsonConfigParser::parse(config, fillColor);
+		JsonConfigParser::parse(config, headerBackgroundColor);
+		JsonConfigParser::parse(config, showName);
 
-	//parse position type
-	LayoutPosition _position = getAttribute<LayoutPosition>("position");
-	JsonConfigParser::parse(config, "position", _position);
-	if(_position != getLayoutPosition()){
-		setLayoutPosition(_position);
-		invalidateChildShape();
-	}
+		//parse size
+		JsonConfigParser::parse(config, this);
 
-	//parse floating
-	LayoutFloat _floating = getAttribute<LayoutFloat>("float");
-	JsonConfigParser::parse(config, "float", _floating);
-	if(_floating != getFloat()){
-		setFloat(_floating);
-		invalidateChildShape();
-	}
+		//parse position type
+		LayoutPosition _position = getAttribute<LayoutPosition>("position");
+		JsonConfigParser::parse(config, "position", _position);
+		if(_position != getLayoutPosition()){
+			setLayoutPosition(_position);
+			invalidateChildShape();
+		}
 
-	//parse margin
-	float _marginLeft = getAttribute<float>("margin-left");
-	JsonConfigParser::parse(config, "margin-left", _marginLeft);
-	if(_marginLeft != getMarginLeft()){
-		setMarginLeft(_marginLeft);
-		invalidateChildShape();
-	}
-	float _marginRight = getAttribute<float>("margin-right");
-	JsonConfigParser::parse(config, "margin-right", _marginRight);
-	if(_marginRight != getMarginRight()){
-		setMarginRight(_marginRight);
-		invalidateChildShape();
-	}
-	float _marginBottom = getAttribute<float>("margin-bottom");
-	JsonConfigParser::parse(config, "margin-bottom", _marginBottom);
-	if(_marginBottom != getMarginBottom()){
-		setMarginBottom(_marginBottom);
-		invalidateChildShape();
-	}
-	float _marginTop = getAttribute<float>("margin-top");
-	JsonConfigParser::parse(config, "margin-top", _marginTop);
-	if(_marginTop != getMarginTop()){
-		setMarginTop(_marginTop);
-		invalidateChildShape();
-	}
+		//parse margin
+		float _marginLeft = getMarginLeft();
+		JsonConfigParser::parse(config, "margin-left", _marginLeft);
+		if(_marginLeft != getMarginLeft()){
+			setMarginLeft(_marginLeft);
+			invalidateChildShape();
+		}
+		float _marginRight = getMarginRight();
+		JsonConfigParser::parse(config, "margin-right", _marginRight);
+		if(_marginRight != getMarginRight()){
+			setMarginRight(_marginRight);
+			invalidateChildShape();
+		}
+		float _marginBottom = getMarginBottom();
+		JsonConfigParser::parse(config, "margin-bottom", _marginBottom);
+		if(_marginBottom != getMarginBottom()){
+			setMarginBottom(_marginBottom);
+			invalidateChildShape();
+		}
+		float _marginTop = getMarginTop();
+		JsonConfigParser::parse(config, "margin-top", _marginTop);
+		if(_marginTop != getMarginTop()){
+			setMarginTop(_marginTop);
+			invalidateChildShape();
+		}
 
-	//parse text alignment
-	if (config.find(textAlignment.getName()) != config.end()) {
-		std::string val = config[textAlignment.getName()];
-		setTextAlignment(val);
-	}
+		//parse text alignment
+		if (config.find(textAlignment.getName()) != config.end()) {
+			std::string val = config[textAlignment.getName()];
+			setTextAlignment(val);
+		}
 
-	setNeedsRedraw();
+		//cout << config << endl;
+
+		//parse all config entries to attribute values of the element.
+		//WARNING this will crash if there are non string keys in the config
+		for (ofJson::const_iterator it = config.begin(); it != config.end(); ++it) {
+			std::string key = "_" + it.key();
+			if(it.value().is_string() || it.value().is_number() || it.value().is_boolean()){
+				std::string value;
+				if(it.value().is_string()){
+					value = it.value();
+				}else {
+					value = ofToString(it.value());
+				}
+				setAttribute(key, value);
+			}
+		}
+
+		invalidateChildShape();
+
+	}
 
 }
 
@@ -404,38 +422,51 @@ void ofxBaseGui::setMargin(float margin_topbottom, float margin_leftright){
 }
 
 void ofxBaseGui::setMargin(float margin_top, float margin_right, float margin_bottom, float margin_left){
-	setAttribute("margin-top", margin_top);
-	setAttribute("margin-right", margin_right);
-	setAttribute("margin-bottom", margin_bottom);
-	setAttribute("margin-left", margin_left);
-	invalidateChildShape();
+	if(margin_top != getMarginTop()
+			|| margin_right != getMarginRight()
+			|| margin_bottom != getMarginBottom()
+			|| margin_left != getMarginLeft()){
+		setAttribute("margin-top", margin_top);
+		setAttribute("margin-right", margin_right);
+		setAttribute("margin-bottom", margin_bottom);
+		setAttribute("margin-left", margin_left);
+		invalidateChildShape();
+	}
 }
 
 void ofxBaseGui::setMarginTop(float margin){
-	setAttribute("margin-top", margin);
-	invalidateChildShape();
+	if(getMarginTop() == margin){
+		setAttribute("margin-top", margin);
+		invalidateChildShape();
+	}
 }
 
 void ofxBaseGui::setMarginBottom(float margin){
-	setAttribute("margin-bottom", margin);
-	invalidateChildShape();
+	if(getMarginBottom() == margin){
+		setAttribute("margin-bottom", margin);
+		invalidateChildShape();
+	}
 }
 
 void ofxBaseGui::setMarginLeft(float margin){
-	setAttribute("margin-left", margin);
-	invalidateChildShape();
+	if(getMarginLeft() == margin){
+		setAttribute("margin-left", margin);
+		invalidateChildShape();
+	}
 }
 
 void ofxBaseGui::setMarginRight(float margin){
-	setAttribute("margin-right", margin);
-	invalidateChildShape();
+	if(getMarginRight() == margin){
+		setAttribute("margin-right", margin);
+		invalidateChildShape();
+	}
 }
 
 float ofxBaseGui::getMarginBottom(){
 	if(hasAttribute("margin-bottom")){
 		return getAttribute<float>("margin-bottom");
 	}else {
-		return 0;
+		return defaultMarginBottom;
 	}
 }
 
@@ -443,7 +474,7 @@ float ofxBaseGui::getMarginTop(){
 	if(hasAttribute("margin-top")){
 		return getAttribute<float>("margin-top");
 	}else {
-		return 0;
+		return defaultMarginTop;
 	}
 }
 
@@ -451,7 +482,7 @@ float ofxBaseGui::getMarginLeft(){
 	if(hasAttribute("margin-left")){
 		return getAttribute<float>("margin-left");
 	}else {
-		return 0;
+		return defaultMarginLeft;
 	}
 }
 
@@ -459,7 +490,7 @@ float ofxBaseGui::getMarginRight(){
 	if(hasAttribute("margin-right")){
 		return getAttribute<float>("margin-right");
 	}else {
-		return 0;
+		return defaultMarginRight;
 	}
 }
 
@@ -645,6 +676,7 @@ bool ofxBaseGui::mouseDragged(ofMouseEventArgs & args){
 bool ofxBaseGui::mousePressed(ofMouseEventArgs & args){
 	if(!isHidden()){
 		if(localToScreen(ofRectangle(0,0,getWidth(),getHeight())).inside(args.x, args.y)){
+			_isMouseOver = true;
 			if(_isDraggable){
 				_isDragging = true;
 				grabPoint = ofPoint(args.x, args.y) - getScreenPosition();
@@ -652,6 +684,7 @@ bool ofxBaseGui::mousePressed(ofMouseEventArgs & args){
 			}
 		}else {
 			_isDragging = false;
+			_isMouseOver = false;
 		}
 	}else {
 		_isDragging = false;

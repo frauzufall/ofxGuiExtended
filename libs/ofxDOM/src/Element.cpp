@@ -27,7 +27,7 @@
 #include "ofx/DOM/Document.h"
 #include "ofGraphics.h"
 #include <algorithm>
-
+#include "ofxBaseGui.h"
 
 namespace ofx {
 namespace DOM {
@@ -46,9 +46,12 @@ Element::Element(const std::string& id,
 				 float height):
 	_id(id),
 	_shape(x, y, width, height),
+	_sizeInLayout(width, height),
 	needsRedraw(true),
 	_percentalWidthAmount(1),
-	_usePercentalWidth(false)
+	_usePercentalWidth(false),
+	_percentalHeightAmount(1),
+	_usePercentalHeight(false)
 {
 	ofAddListener(this->move, this, &Element::_onMoved);
 	ofAddListener(this->resize, this, &Element::_onResized);
@@ -596,12 +599,26 @@ float Element::getScreenY() const
 
 void Element::setSize(float width, float height)
 {
-	if(_shape.getWidth()!= width || _shape.getHeight() != height)
+	if(_shape.getWidth()!= width || _shape.getHeight() != height || _sizeInLayout.x != width || _sizeInLayout.y != height)
 	{
 		_shape.setWidth(width);
 		_shape.setHeight(height);
 		_shape.standardize();
+		_sizeInLayout.x = _shape.width;
+		_sizeInLayout.y = _shape.height;
 		ResizeEventArgs e(_shape);
+		ofNotifyEvent(resize, e, this);
+	}
+}
+
+
+void Element::setSizeInLayout(float width, float height)
+{
+	if(_sizeInLayout.x!= width || _sizeInLayout.y != height)
+	{
+		_sizeInLayout.x = width;
+		_sizeInLayout.y = height;
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
 		ofNotifyEvent(resize, e, this);
 	}
 }
@@ -609,15 +626,17 @@ void Element::setSize(float width, float height)
 
 Size Element::getSize() const
 {
-	return Size(_shape.width, _shape.height);
+	return Size(_sizeInLayout.x, _sizeInLayout.y);
 }
 
 
 ///\todo use ofCompareFloat
 void Element::setWidth(float width)
 {
-	if(width != getWidth()){
+	if(width != _shape.width){
 		_shape.setWidth(width);
+		_sizeInLayout.x = width;
+		invalidateChildShape();
 		_shape.standardize();
 		ResizeEventArgs e(_shape);
 		ofNotifyEvent(resize, e, this);
@@ -625,20 +644,40 @@ void Element::setWidth(float width)
 }
 
 
+void Element::setWidthInLayout(float width)
+{
+	if(width != _sizeInLayout.x){
+		_sizeInLayout.x = width;
+		invalidateChildShape();
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
+		ofNotifyEvent(resize, e, this);
+	}
+}
+
+
 float Element::getWidth() const
 {
-	return _shape.getWidth();
+	return _sizeInLayout.x;
 }
+
+
+float Element::getMinWidth()
+{
+	return _shape.width;
+}
+
 
 float Element::getPercentalWidth() const
 {
 	return _percentalWidthAmount;
 }
 
+
 bool Element::usesPercentalWidth() const
 {
 	return _usePercentalWidth;
 }
+
 
 void Element::setPercentalWidth(bool usePercentalWidth, float percentalWidthAmount)
 {
@@ -660,8 +699,10 @@ void Element::setPercentalWidth(bool usePercentalWidth, float percentalWidthAmou
 ///\todo use ofCompareFloat
 void Element::setHeight(float height)
 {
-	if(height != getHeight()){
+	if(height != _shape.height){
 		_shape.setHeight(height);
+		_sizeInLayout.y = height;
+		invalidateChildShape();
 		_shape.standardize();
 		ResizeEventArgs e(_shape);
 		ofNotifyEvent(resize, e, this);
@@ -669,15 +710,62 @@ void Element::setHeight(float height)
 }
 
 
+
+void Element::setHeightInLayout(float height)
+{
+	if(height != _sizeInLayout.y){
+		_sizeInLayout.y = height;
+		invalidateChildShape();
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
+		ofNotifyEvent(resize, e, this);
+	}
+}
+
+
+float Element::getMinHeight()
+{
+	return _shape.height;
+}
+
+
 float Element::getHeight() const
 {
-	return _shape.getHeight();
+	return _sizeInLayout.y;
+}
+
+
+float Element::getPercentalHeight() const
+{
+	return _percentalHeightAmount;
+}
+
+
+bool Element::usesPercentalHeight() const
+{
+	return _usePercentalHeight;
+}
+
+
+void Element::setPercentalHeight(bool usePercentalHeight, float percentalHeightAmount)
+{
+	_usePercentalHeight = usePercentalHeight;
+	_percentalHeightAmount = percentalHeightAmount;
+	if(_usePercentalHeight && _percentalHeightAmount <= 1 && parent()){
+		float newheight = parent()->getHeight()*_percentalHeightAmount;
+		if(hasAttribute("margin-left")){
+			newheight -= getAttribute<float>("margin-left");
+		}
+		if(hasAttribute("margin-right")){
+			newheight -= getAttribute<float>("margin-right");
+		}
+		setHeight(newheight);
+	}
 }
 
 
 Shape Element::getShape() const
 {
-	return _shape;
+	return Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y);
 }
 
 
@@ -732,7 +820,7 @@ Shape Element::getChildShape() const
 
 Shape Element::getTotalShape() const
 {
-	Shape totalGeometry(_shape);
+	Shape totalGeometry(getShape());
 
 	if (!_children.empty())
 	{
@@ -910,10 +998,12 @@ bool Element::isHidden() const
 
 void Element::setHidden(bool hidden_)
 {
-	_hidden = hidden_;
-	invalidateChildShape();
-	EnablerEventArgs e(_hidden);
-	ofNotifyEvent(hidden, e, this);
+	if(hidden_ != _hidden){
+		_hidden = hidden_;
+		invalidateChildShape();
+		EnablerEventArgs e(_hidden);
+		ofNotifyEvent(hidden, e, this);
+	}
 }
 
 
@@ -959,6 +1049,7 @@ void Element::_onResized(ResizeEventArgs&)
 	// TODO performance optimization: check if mouse is dragged and update only on release
 	for(auto& e : children()){
 		e->setPercentalWidth(e->usesPercentalWidth(),e->getPercentalWidth());
+		e->setPercentalHeight(e->usesPercentalHeight(),e->getPercentalHeight());
 	}
 
 	invalidateChildShape();

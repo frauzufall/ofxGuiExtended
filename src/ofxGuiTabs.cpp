@@ -38,13 +38,17 @@ void ofxGuiTabs::setup(){
 	pages.clear();
 	activeToggle = nullptr;
 	activePage = nullptr;
-	clear();
 
 	setBackgroundColor(ofColor(0,0,0,0));
 	setShowHeader(false);
 	setBorderWidth(0);
 	tabWidth.set("tab width", 100);
-	tabHeight.set("tab height", defaultHeight);
+	tabHeight.set("tab height", 50);
+	setConfig(ofJson({
+					  {"flex-direction", "column"}
+					 }));
+
+	clear();
 
 	ofAddListener(childAdded, this, &ofxGuiTabs::onChildAdd);
 
@@ -58,26 +62,30 @@ void ofxGuiTabs::clear(){
 
 	ofxGuiGroup::clear();
 
-	tabs = add<ofxGuiGroup>("tabs");
+	tabs = addGroup("tabs", ofJson({
+											   {"height", tabHeight.get()},
+											   {"flex-direction", "row"},
+											   {"align-items", "flex-end"},
+											   {"align-self", "stretch"},
+											   {"justify-content", "flex-start"},
+											   {"position", "static"}
+										   }));
 	tabs->setShowHeader(false);
 	tabs->setExclusiveToggles(true);
 	tabs->setBorderWidth(0);
-	tabs->setPercentalWidth(true, 1);
 	tabs->setMargin(0, 0, -2, 0);
 	tabs->setBackgroundColor(ofColor(0,0,0,0));
 	tabs->getActiveToggleIndex().addListener(this, &ofxGuiTabs::setActiveTab);
 
 }
 
-void ofxGuiTabs::onResize(ResizeEventArgs &args){
-	ofxGuiGroup::onResize(args);
-	if(tabs){
-		tabs->setWidth(args.shape().width);
+void ofxGuiTabs::generateDraw(){
+	for(unsigned int i = 0; i < pages.size(); i++){
+		if(ofxBaseGui* page = dynamic_cast<ofxBaseGui*>(pages.at(i))){
+			tabs->getControl(i)->setName(page->getName());
+		}
 	}
-
-	for(auto &e : pages){
-		e->setWidth(args.shape().width);
-	}
+	ofxGuiGroup::generateDraw();
 }
 
 void ofxGuiTabs::onChildAdd(ElementEventArgs &args){
@@ -98,12 +106,15 @@ void ofxGuiTabs::onChildAdd(ElementEventArgs &args){
 		if(page){
 			name = page->getName();
 			page->setHidden(true);
-			page->setPercentalWidth(true, 1);
 			page->setMargin(0);
+			page->setConfig(ofJson({
+								   {"position", "static"},
+								   {"flex", "auto"},
+								   {"align-self", "stretch"}
+								   }));
 		}
 
 		ofJson toggleconfig = {
-			{"float", "left"},
 			{"width", tabWidth.get()},
 			{"height", tabHeight.get()},
 			{"type", "fullsize"}
@@ -114,25 +125,26 @@ void ofxGuiTabs::onChildAdd(ElementEventArgs &args){
 		tab->setMargin(0);
 		tab->setBackgroundColor(ofColor(page->getBackgroundColor(), 50));
 
-		if(pages.size() == 2){
+		if(pages.size() == 1){
 			int index = 0;
 			setActiveTab(index);
 		}
 
-		setNeedsRedraw();
+		invalidateChildShape();
 
 	}
 
 }
 
 void ofxGuiTabs::setActiveTab(int &index){
-	activeToggle = tabs->getControlType<ofxToggle>(index);
-	activeToggle->getParameter().cast<bool>().set(true);
+	tabs->setActiveToggle(index);
+	activeToggle = tabs->getControl(index);
 	for(auto &e : pages){
 		e->setHidden(true);
 	}
 	pages.at(index)->setHidden(false);
 	activePage = pages.at(index);
+	invalidateChildShape();
 }
 
 ofParameter<int>& ofxGuiTabs::getActiveTabIndex(){
@@ -145,9 +157,7 @@ Element *ofxGuiTabs::getActiveTab(){
 
 void ofxGuiTabs::setTabHeight(int h){
 	tabHeight = h;
-	for(auto & e: tabs->children()){
-		e->setHeight(h);
-	}
+	tabs->setHeight(h);
 }
 
 void ofxGuiTabs::setTabWidth(int w){
@@ -157,35 +167,13 @@ void ofxGuiTabs::setTabWidth(int w){
 	}
 }
 
-void ofxGuiTabs::minimize(){
-	minimized = true;
-
-	for(auto& child : children()){
-		if(child != header){
-			child->setHidden(true);
-		}
-	}
-
-	invalidateChildShape();
-	setNeedsRedraw();
-}
-
-void ofxGuiTabs::minimizeAll(){
-	for(auto & e: children()){
-		if(e != header){
-			ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>(e);
-			if(group){
-				group->minimize();
-			}
-		}
-	}
-}
-
 void ofxGuiTabs::maximize(){
-	minimized = false;
+	ofxGuiGroup::maximize();
+	for(auto &e : pages){
+		e->setHidden(true);
+	}
 	activePage->setHidden(false);
 	invalidateChildShape();
-	setNeedsRedraw();
 }
 
 void ofxGuiTabs::maximizeAll(){

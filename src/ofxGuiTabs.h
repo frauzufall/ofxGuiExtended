@@ -27,14 +27,13 @@ class ofxGuiTabs : public ofxGuiGroup {
 		void setTabHeight(int h);
 		void setTabWidth(int w);
 
-		virtual void minimize() override;
 		virtual void maximize() override;
-		virtual void minimizeAll() override;
 		virtual void maximizeAll() override;
 
 	protected:
 
-		void onResize(ResizeEventArgs &) override;
+		virtual void generateDraw() override;
+
 		void onChildAdd(ElementEventArgs& args);
 
 		ofParameter<float> tabWidth;

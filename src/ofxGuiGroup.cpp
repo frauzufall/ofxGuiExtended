@@ -5,6 +5,7 @@
 #include "ofxGuiTabs.h"
 #include "ofxFpsPlotter.h"
 #include "JsonConfigParser.h"
+#include "FlexBoxLayout.h"
 
 ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxBaseGui(config){
 	registerMouseEvents();
@@ -135,7 +136,7 @@ void ofxGuiGroup::setup(){
 	exclusiveToggles.set("exclusive toggles", false);
 	minimized.set("minimized", false);
 
-	createLayout<FloatingBoxLayout>(this, Orientation::VERTICAL);
+	createLayout<FlexBoxLayout>(this, Orientation::VERTICAL);
 	headerHeight.set("header-height", defaultHeight);
 	showHeader.set("show-header", true);
 
@@ -143,11 +144,14 @@ void ofxGuiGroup::setup(){
 	headerHeight.addListener(this, &ofxGuiGroup::onHeaderHeight);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
 
-	header = add<ofxGuiGroupHeader>();
+	header = add<ofxGuiGroupHeader>(ofJson({
+											   {"align-self", "flex-start"},
+											   {"height", headerHeight.get()}
+										   }));
 	header->setMargin(0);
-	header->setHeight(headerHeight);
 	header->setBackgroundColor(headerBackgroundColor);
 	header->setBorderWidth(0);
+	header->setHidden(true);
 
 	clear();
 
@@ -379,12 +383,14 @@ int ofxGuiGroup::getControlIndex(const std::string& name){
 
 void ofxGuiGroup::minimize(){
 	minimized = true;
+	widthMaximized = getWidth();
+	heightMaximized = getHeight();
 
 	for(auto& child : getControls()){
 		child->setHidden(true);
 	}
 
-	invalidateChildShape();
+	setSize(header->getWidth(), header->getHeight());
 	setNeedsRedraw();
 }
 
@@ -394,6 +400,7 @@ void ofxGuiGroup::maximize(){
 	for(auto& child : getControls()){
 		child->setHidden(false);
 	}
+	setSize(widthMaximized, heightMaximized);
 
 	invalidateChildShape();
 	setNeedsRedraw();
@@ -473,9 +480,9 @@ bool ofxGuiGroup::getTogglesExclusive() const {
 
 void ofxGuiGroup::setExclusiveToggles(bool exclusive) {
 	exclusiveToggles = exclusive;
-	if(exclusiveToggles) {
-		setOneToggleActive();
-	}
+//	if(exclusiveToggles) {
+//		setOneToggleActive();
+//	}
 }
 
 bool ofxGuiGroup::setActiveToggle(ofxToggle* toggle) {

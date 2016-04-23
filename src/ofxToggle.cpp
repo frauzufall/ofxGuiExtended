@@ -11,7 +11,8 @@ ofxToggle::ofxToggle():ofxBaseGui(){
 
 ofxToggle::ofxToggle(const string &toggleName):ofxToggle(){
 
-	value.setName(toggleName);
+
+	setName(toggleName);
 	value.set(false);
 
 }
@@ -78,6 +79,17 @@ void ofxToggle::_setConfig(const ofJson &config){
 void ofxToggle::setWidth(float width){
 	float _width = ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
 	Element::setWidth(max(_width,width));
+}
+
+float ofxToggle::getMinWidth(){
+	float _width = 0;
+	if(showName){
+		_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+	}
+	if(type != ofxToggleType::FULLSIZE){
+		_width += 30;
+	}
+	return max(Element::getMinWidth(), _width);
 }
 
 bool ofxToggle::mousePressed(ofMouseEventArgs & args){

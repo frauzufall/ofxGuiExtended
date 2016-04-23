@@ -37,41 +37,52 @@ bool JsonConfigParser::_parse(const ofJson &config, const string &name, std::str
 bool JsonConfigParser::_parse(const ofJson &config, const string &name, ofColor& val){
 
 	if (config.find(name) != config.end()) {
+
 		ofJson content = config[name];
-		std::string s_value = content;
 
-		//look for colors in hex format
-		vector<string> matches = JsonConfigParser::getMatchedStrings(s_value, "#(?:[\\da-f]{3}){1,2}");
-		if(matches.size() > 0){
-			int x;
-			ofStringReplace(matches[0],"#","");
-			std::stringstream ss;
-			ss << std::hex << matches[0];
-			ss >> x;
-			val.set(ofColor::fromHex(x,255));
-			return true;
+		if(content.is_string()){
+			std::string s_value = content;
 
-		}
+			//look for colors in hex format
+			vector<string> matches = JsonConfigParser::getMatchedStrings(s_value, "#(?:[\\da-f]{3}){1,2}");
+			if(matches.size() > 0){
+				int x;
+				ofStringReplace(matches[0],"#","");
+				std::stringstream ss;
+				ss << std::hex << matches[0];
+				ss >> x;
+				val.set(ofColor::fromHex(x,255));
+				return true;
 
-		//look for colors in rgba format
-		matches.clear();
-		matches = JsonConfigParser::getMatchedStrings(s_value, "rgba\\((?:\\d{1,3},\\s*){3}\\d*\\.?\\d+\\)");
-		if(matches.size() > 0){
-			vector<string> vals = ofSplitString(ofSplitString(ofSplitString(s_value, "rgba(")[1],")")[0],",");
-			ofColor res(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2]), ofToFloat(vals[3])*255);
-			val.set(res);
-			return true;
-		}
+			}
 
-		//loook for colors in rgb format
-		matches.clear();
-		matches = JsonConfigParser::getMatchedStrings(s_value, "rgb\\((?:\\d{1,3},\\s*){2}\\d{1,3}\\)");
-		if(matches.size() > 0){
-			vector<string> vals = ofSplitString(ofSplitString(ofSplitString(s_value, "rgb(")[1],")")[0],",");
-			ofColor res(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2]));
-			val.set(res);
-			return true;
-		}
+			//look for colors in rgba format
+			matches.clear();
+			matches = JsonConfigParser::getMatchedStrings(s_value, "rgba\\((?:\\d{1,3},\\s*){3}\\d*\\.?\\d+\\)");
+			if(matches.size() > 0){
+				vector<string> vals = ofSplitString(ofSplitString(ofSplitString(s_value, "rgba(")[1],")")[0],",");
+				ofColor res(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2]), ofToFloat(vals[3])*255);
+				val.set(res);
+				return true;
+			}
+
+			//loook for colors in rgb format
+			matches.clear();
+			matches = JsonConfigParser::getMatchedStrings(s_value, "rgb\\((?:\\d{1,3},\\s*){2}\\d{1,3}\\)");
+			if(matches.size() > 0){
+				vector<string> vals = ofSplitString(ofSplitString(ofSplitString(s_value, "rgb(")[1],")")[0],",");
+				ofColor res(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2]));
+				val.set(res);
+				return true;
+			}
+		}/*else {
+			// look for ofColor format
+			if(ofColor* color = dynamic_cast<ofColor>(&content)){
+				val.set(color);
+				return true;
+			}
+		}*/
+
 
 	}
 	return false;
@@ -189,7 +200,6 @@ bool JsonConfigParser::parse(const ofJson &config, Element* val){
 					if(_val.size() > 0){
 						float res = ofToFloat(_val[0])/100.;
 						val->setPercentalWidth(true, res);
-						return true;
 					}
 				}
 			}
@@ -198,11 +208,19 @@ bool JsonConfigParser::parse(const ofJson &config, Element* val){
 			ofJson height = config["height"];
 			if(height.is_number()){
 				val->setHeight(height);
-				return true;
+				val->setPercentalHeight(false);
+			}else {
+				if(ofSplitString(height, "%").size() > 0){
+					vector<std::string> _val = JsonConfigParser::getMatchedStrings(height, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+					if(_val.size() > 0){
+						float res = ofToFloat(_val[0])/100.;
+						val->setPercentalHeight(true, res);
+					}
+				}
 			}
 		}
 	}
-	return false;
+	return true;
 
 }
 

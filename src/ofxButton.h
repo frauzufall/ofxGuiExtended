@@ -19,6 +19,8 @@ public:
 
 	~ofxButton();
 
+	virtual ofAbstractParameter & getParameter() override;
+
 	virtual bool mouseReleased(ofMouseEventArgs & args) override;
 
 	template<class ListenerClass, typename ListenerMethod>

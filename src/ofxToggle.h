@@ -34,6 +34,7 @@ public:
 	ofxToggleType::Type getType();
 
 	virtual void setWidth(float width) override;
+	virtual float getMinWidth() override;
 
 	virtual bool mousePressed(ofMouseEventArgs & args) override;
 	virtual bool mouseReleased(ofMouseEventArgs & args) override;

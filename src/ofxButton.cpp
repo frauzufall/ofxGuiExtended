@@ -57,6 +57,14 @@ void ofxButton::setup(){
 
 }
 
+ofAbstractParameter& ofxButton::getParameter(){
+	if(useVoidValue){
+		return voidvalue;
+	}else {
+		return value;
+	}
+}
+
 bool ofxButton::setValue(float mx, float my, bool bCheck){
 
 	if(isHidden()){

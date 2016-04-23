@@ -36,6 +36,8 @@ public:
 	void setType(const Type &type);
 	Type getType();
 
+	float getMinWidth() override;
+
 	void setPrecision(int precision);
 
 	void setUpdateOnReleaseOnly(bool bUpdateOnReleaseOnly);

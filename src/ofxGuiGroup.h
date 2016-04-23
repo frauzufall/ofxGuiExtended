@@ -6,7 +6,6 @@
 #include "ofxLabel.h"
 #include "ofParameterGroup.h"
 #include "ofParameter.h"
-#include "FloatingBoxLayout.h"
 
 template<class VecType>
 class ofxVecSlider_;
@@ -57,9 +56,6 @@ class ofxGuiGroup : public ofxBaseGui {
 		void setup();
 
 		using Element::add;
-
-		template <typename GuiType, typename... Args>
-		GuiType* add(Args&&... args);
 
 		template<typename T>
 		typename std::enable_if<std::is_arithmetic<T>::value, ofxSlider<T>*>::type add(ofParameter<T> & p, const ofJson & config = ofJson());
@@ -162,6 +158,9 @@ class ofxGuiGroup : public ofxBaseGui {
 		virtual void onHeaderHeight(float& height);
 		virtual void onResize(ResizeEventArgs&);
 
+	private:
+		float widthMaximized, heightMaximized;
+
 };
 
 template <class ControlType>
@@ -197,19 +196,5 @@ ControlType* ofxGuiGroup::getControlType(const int& index){
 template<typename T>
 typename std::enable_if<std::is_arithmetic<T>::value, ofxSlider<T>*>::type ofxGuiGroup::add(ofParameter<T> & p, const ofJson & config){
 	return add<ofxSlider<T>>(p,config);
-}
-
-
-template <typename GuiType, typename... Args>
-GuiType* ofxGuiGroup::add(Args&&... args){
-
-	GuiType* e = Element::add(std::make_unique<GuiType>(std::forward<Args>(args)...));
-
-	if(exclusiveToggles) {
-		setOneToggleActive();
-	}
-
-	return e;
-
 }
 

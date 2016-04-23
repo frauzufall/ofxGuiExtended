@@ -3,7 +3,7 @@
 using namespace std;
 
 ofxGuiGraphics::~ofxGuiGraphics(){
-	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
+//	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
@@ -27,8 +27,18 @@ ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float 
 void ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, float h){
 	setName(canvasName);
 	setGraphics(graphics);
-	setSize(w,h);
-	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
+	if(_bLoaded){
+		if(w == 0){
+			if(h == 0){
+				w = getWidth();
+			}else{
+				w = h * graphics->getWidth() / graphics->getHeight();
+			}
+		}
+		h = w * graphics->getHeight() / graphics->getWidth();
+		ofxBaseGui::setSize(w,h);
+	}
+//	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
@@ -44,27 +54,27 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 	}
 }
 
-void ofxGuiGraphics::onResize(ResizeEventArgs &args){
-	if(!resizing){
-		resizing = true;
-		float w = args.shape().width;
-		float h = args.shape().height;
-		if(_bLoaded){
-			if(w == 0){
-				if(h == 0){
-					w = getWidth();
-				}else{
-					w = h * graphics->getWidth() / graphics->getHeight();
-				}
-			}
-			h = w * graphics->getHeight() / graphics->getWidth();
-			ofxBaseGui::setSize(w,h);
-		}
-		resizing = false;
-		setNeedsRedraw();
-	}
+//void ofxGuiGraphics::onResize(ResizeEventArgs &args){
+//	if(!resizing){
+//		resizing = true;
+//		float w = args.shape().width;
+//		float h = args.shape().height;
+//		if(_bLoaded){
+//			if(w == 0){
+//				if(h == 0){
+//					w = getWidth();
+//				}else{
+//					w = h * graphics->getWidth() / graphics->getHeight();
+//				}
+//			}
+//			h = w * graphics->getHeight() / graphics->getWidth();
+//			ofxBaseGui::setSize(w,h);
+//		}
+//		resizing = false;
+//		setNeedsRedraw();
+//	}
 
-}
+//}
 
 void ofxGuiGraphics::generateDraw(){
 	ofxBaseGui::generateDraw();

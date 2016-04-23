@@ -34,12 +34,12 @@ void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, 
 }
 
 void ofxGuiZoomableGraphics::onResize(ResizeEventArgs &args){
-	ofxGuiGraphics::onResize(args);
+//	ofxGuiGraphics::onResize(args);
 	contentFbo.clear();
 	if(_bLoaded){
 		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
 	}
-	setNeedsRedraw();
+//	setNeedsRedraw();
 }
 
 void ofxGuiZoomableGraphics::generateDraw(){

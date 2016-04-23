@@ -379,6 +379,11 @@ public:
 	/// \param height The new height of the Element.
 	virtual void setSize(float width, float height);
 
+	/// \brief Set the size of the Element in the current layout.
+	/// \param width The new width of the Element.
+	/// \param height The new height of the Element.
+	virtual void setSizeInLayout(float width, float height);
+
 	/// \brief Get the Size of the Element.
 	/// \returns the Size of the Element.
 	Size getSize() const;
@@ -387,9 +392,17 @@ public:
 	/// param width The new width of the Element.
 	virtual void setWidth(float width);
 
-	/// \brief Get the width of the Element.
+	/// \brief Set the width of the Element in the current layout.
+	/// param width The new width of the Element.
+	virtual void setWidthInLayout(float width);
+
+	/// \brief Get the width of the Element produced by the layout.
 	/// \returns The width of the Element.
 	float getWidth() const;
+
+	/// \brief Get the actual minimal width of the Element.
+	/// \returns The width of the Element.
+	virtual float getMinWidth();
 
 	/// \brief Get the percental width of the Element to the parent Element width.
 	/// \returns The percental width of the Element.
@@ -405,9 +418,27 @@ public:
 	/// param height The new height of the Element.
 	virtual void setHeight(float height);
 
-	/// \brief Get the height of the Element.
+	/// \brief Set the height of the Element in the current layout.
+	/// param height The new height of the Element.
+	virtual void setHeightInLayout(float height);
+
+	/// \brief Get the height of the Element produced by the layout.
 	/// \returns The height of the Element.
 	float getHeight() const;
+
+	/// \brief Get the actual minimal height of the Element.
+	/// \returns The height of the Element.
+	virtual float getMinHeight();
+
+	/// \brief Get the percental height of the Element to the parent Element height.
+	/// \returns The percental height of the Element.
+	float getPercentalHeight() const;
+
+	/// \brief Get the usage of percental height.
+	bool usesPercentalHeight() const;
+
+	/// \brief Get the usage of percental height.
+	void setPercentalHeight(bool usePercentalHeight, float percentalHeightAmount=1);
 
 	/// \brief Get the shape of the Element in its parent coordinates.
 	/// \returns the Shape of the Element in its parent coordinates.
@@ -580,12 +611,19 @@ private:
 
 	/// \brief The basic shape of this element.
 	Shape _shape;
+	Size _sizeInLayout;
 
 	/// \brief True if the element has a width percentally depending on the width of its parent.
 	bool _usePercentalWidth;
 
 	/// \brief The percental amount if the elements width to the width of its parent.
 	float _percentalWidthAmount;
+
+	/// \brief True if the element has a height percentally depending on the height of its parent.
+	bool _usePercentalHeight;
+
+	/// \brief The percental amount if the elements height to the height of its parent.
+	float _percentalHeightAmount;
 
 	/// \brief The union of all child shapes.
 	mutable Shape _childShape;
@@ -636,6 +674,7 @@ ElementType* Element::add(Args&&... args)
 template <typename ElementType>
 ElementType* Element::add(std::unique_ptr<ElementType> element)
 {
+
 	static_assert(std::is_base_of<Element, ElementType>(), "ElementType must be an Element or derived from Element.");
 
 	if (element)
@@ -651,6 +690,9 @@ ElementType* Element::add(std::unique_ptr<ElementType> element)
 
 		// Update the with of a child with percental width as soon as it has a parent
 		pNode->setPercentalWidth(pNode->usesPercentalWidth(), pNode->getPercentalWidth());
+
+		// Update the height of a child with percental height as soon as it has a parent
+		pNode->setPercentalHeight(pNode->usesPercentalHeight(), pNode->getPercentalHeight());
 
 		// Invalidate all cached child shape.
 		invalidateChildShape();

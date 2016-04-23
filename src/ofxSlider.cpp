@@ -238,6 +238,8 @@ void ofxSlider<DataType>::generateDraw(){
 
 	if(type == ofxSliderType::STRAIGHT){
 
+		horizontal = getWidth() > getHeight();
+
 		ofxBaseGui::generateDraw();
 
 		bar.clear();
@@ -414,6 +416,21 @@ ofAbstractParameter & ofxSlider<DataType>::getParameter(){
 template<typename DataType>
 void ofxSlider<DataType>::valueChanged(DataType & value){
 	setNeedsRedraw();
+}
+
+template<typename DataType>
+float ofxSlider<DataType>::getMinWidth(){
+	float _width = 0;
+	if(type == ofxSliderType::STRAIGHT){
+		horizontal = getWidth() > getHeight();
+		if(horizontal){
+			if(showName){
+				_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+			}
+			_width += ofxBaseGui::getTextWidth(ofToString(value.get(), precision), getHeight())+2*textAlignment;
+		}
+	}
+	return max(Element::getMinWidth(), _width);
 }
 
 /*

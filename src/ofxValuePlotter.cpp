@@ -59,6 +59,14 @@ void ofxValuePlotter::_setConfig(const ofJson & config){
 	// TODO
 }
 
+float ofxValuePlotter::getMinWidth(){
+	float _width = ofxBaseGui::getTextWidth(ofToString(value.get(), decimalPlace), getHeight());
+	if(showName){
+		_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+	}
+	return max(Element::getMinWidth(), _width);
+}
+
 void ofxValuePlotter::setDecimalPlace(int place){
 	decimalPlace = place;
 }

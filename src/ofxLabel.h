@@ -18,6 +18,8 @@ public:
 
 	void setup();
 
+	float getMinWidth() override;
+
 	virtual void saveTo(ofBaseSerializer& serializer){}
 	virtual void loadFrom(ofBaseSerializer& serializer){}
 

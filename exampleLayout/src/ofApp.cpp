@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "FlexBoxLayout.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -7,12 +8,70 @@ void ofApp::setup(){
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
+//	ofxGuiGroup* tabs = gui.addGroup("tabbedpages");
+
+//	tabs->setConfig(ofJson({
+//							   {"flex-direction", "column"}
+//						   }));
+
+
+//	tabs->setSize(800,600);
+
+//	ofxGuiGroup* group = tabs->addGroup("tabs", ofJson({
+//													   {"align-self", "stretch"},
+//													   {"height", 50},
+//													   {"flex-direction", "row"},
+//													   {"align-items", "flex-end"},
+//													   {"justify-content", "flex-start"}
+//												   }));
+
+
+
+//	for(int i = 0; i < 3; i++){
+
+//		ofxToggle* label = group->add<ofxToggle>(ofToString(i,2), ofJson({{"width", ofRandom(50,50)}, {"height", 20}, {"type", "fullsize"}}));
+//		label->setBackgroundColor(ofColor(ofRandom(0,255), ofRandom(0,255),ofRandom(0,255)));
+//	}
+
+//	tabs->addGroup("page1", ofJson({
+//								  {"flex", "auto"},
+//								  {"align-self", "stretch"}
+//							  }));
+
+
+
+//	ofxGuiGroup* tabs2 = gui.addGroup("tabbedpages2");
+//	tabs2->setPosition(tabs->getShape().getTopRight());
+//	tabs2->setSize(800,600);
+
+//	ofxGuiGroup* group2 = tabs2->addGroup("tabs2", ofJson({
+//													   {"align-self", "stretch"},
+//													   {"height", 50},
+//													   {"flex-direction", "row"},
+//													   {"align-items", "flex-end"},
+//													   {"justify-content", "flex-start"}
+//												   }));
+
+//	tabs2->setConfig(ofJson({
+//							   {"flex-direction", "column"}
+//						   }));
+
+//	for(int i = 0; i < 3; i++){
+
+//		ofxToggle* label = group2->add<ofxToggle>(ofToString(i,2), ofJson({{"width", ofRandom(50,50)}, {"height", 20}, {"type", "fullsize"}}));
+//		label->setBackgroundColor(ofColor(ofRandom(0,255), ofRandom(0,255),ofRandom(0,255)));
+//	}
+
+//	tabs2->addGroup("page2", ofJson({
+//									  {"flex", "auto"},
+//									  {"align-self", "stretch"}
+//								  }));
 
 	/*
 	 *  create tab container
 	 */
-	tabbed_pages = gui.addTabs("", ofJson({{"width", "70%"}}));
-	tabbed_pages->setPosition(40, 70);
+	tabbed_pages = gui.addTabs("tabbedpages");
+	tabbed_pages->setSize(800,600);
 
 	/*
 	 *  create pages and add them to tab layout
@@ -20,7 +79,6 @@ void ofApp::setup(){
 	page1 = tabbed_pages->addPanel("page1", ofJson({{"show-header", false}}));
 	page2 = tabbed_pages->addPanel("page2", ofJson({{"show-header", false}}));
 	page3 = tabbed_pages->addPanel("page3", ofJson({{"show-header", false}}));
-
 
 	/*
 	 *  fill page 1
