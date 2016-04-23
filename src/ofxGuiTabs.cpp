@@ -41,7 +41,7 @@ void ofxGuiTabs::setup(){
 
 	setBackgroundColor(ofColor(0,0,0,0));
 	setShowHeader(false);
-	setBorderWidth(0);
+//	setBorderWidth(0);
 	tabWidth.set("tab width", 100);
 	tabHeight.set("tab height", 50);
 	setConfig(ofJson({
@@ -63,18 +63,15 @@ void ofxGuiTabs::clear(){
 	ofxGuiGroup::clear();
 
 	tabs = addGroup("tabs", ofJson({
-											   {"height", tabHeight.get()},
-											   {"flex-direction", "row"},
-											   {"align-items", "flex-end"},
-											   {"align-self", "stretch"},
-											   {"justify-content", "flex-start"},
-											   {"position", "static"}
-										   }));
+									   {"height", tabHeight.get()},
+									   {"align-items", "flex-end"},
+									   {"justify-content", "flex-start"},
+									   {"margin", 0}
+								   }));
 	tabs->setShowHeader(false);
 	tabs->setExclusiveToggles(true);
-	tabs->setBorderWidth(0);
-	tabs->setMargin(0, 0, -2, 0);
-	tabs->setBackgroundColor(ofColor(0,0,0,0));
+//	tabs->setBorderWidth(0);
+//	tabs->setBackgroundColor(ofColor(0,0,0,0));
 	tabs->getActiveToggleIndex().addListener(this, &ofxGuiTabs::setActiveTab);
 
 }
@@ -106,7 +103,7 @@ void ofxGuiTabs::onChildAdd(ElementEventArgs &args){
 		if(page){
 			name = page->getName();
 			page->setHidden(true);
-			page->setMargin(0);
+//			page->setMargin(0);
 			page->setConfig(ofJson({
 								   {"position", "static"},
 								   {"flex", "auto"},
@@ -116,13 +113,12 @@ void ofxGuiTabs::onChildAdd(ElementEventArgs &args){
 
 		ofJson toggleconfig = {
 			{"width", tabWidth.get()},
-			{"height", tabHeight.get()},
-			{"type", "fullsize"}
+			{"type", "fullsize"},
+			{"margin", 0}
 		};
 		ofxBaseGui* tab = tabs->add<ofxToggle>(name, toggleconfig);
 		tab->setTextAlignment(TextAlignment::CENTERED);
 		tab->setFillColor(page->getBackgroundColor());
-		tab->setMargin(0);
 		tab->setBackgroundColor(ofColor(page->getBackgroundColor(), 50));
 
 		if(pages.size() == 1){

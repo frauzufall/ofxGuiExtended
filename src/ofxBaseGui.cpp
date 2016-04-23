@@ -160,64 +160,83 @@ void ofxBaseGui::setConfig(const ofJson &config, bool recursive){
 
 void ofxBaseGui::_setConfig(const ofJson &config){
 
-	if(!config.is_null() && config.size() > 0){
+	ofJson _config = config;
+
+	if(!_config.is_null() && _config.size() > 0){
 
 		//parse colors
-		JsonConfigParser::parse(config, backgroundColor);
-		JsonConfigParser::parse(config, borderColor);
-		JsonConfigParser::parse(config, textColor);
-		JsonConfigParser::parse(config, fillColor);
-		JsonConfigParser::parse(config, headerBackgroundColor);
-		JsonConfigParser::parse(config, showName);
+		JsonConfigParser::parse(_config, backgroundColor);
+		JsonConfigParser::parse(_config, borderColor);
+		JsonConfigParser::parse(_config, textColor);
+		JsonConfigParser::parse(_config, fillColor);
+		JsonConfigParser::parse(_config, headerBackgroundColor);
+		JsonConfigParser::parse(_config, showName);
 
 		//parse size
-		JsonConfigParser::parse(config, this);
+		JsonConfigParser::parse(_config, this);
 
 		//parse position type
 		LayoutPosition _position = getAttribute<LayoutPosition>("position");
-		JsonConfigParser::parse(config, "position", _position);
+		JsonConfigParser::parse(_config, "position", _position);
 		if(_position != getLayoutPosition()){
 			setLayoutPosition(_position);
 			invalidateChildShape();
 		}
 
 		//parse margin
-		float _marginLeft = getMarginLeft();
-		JsonConfigParser::parse(config, "margin-left", _marginLeft);
-		if(_marginLeft != getMarginLeft()){
-			setMarginLeft(_marginLeft);
-			invalidateChildShape();
-		}
-		float _marginRight = getMarginRight();
-		JsonConfigParser::parse(config, "margin-right", _marginRight);
-		if(_marginRight != getMarginRight()){
-			setMarginRight(_marginRight);
-			invalidateChildShape();
-		}
-		float _marginBottom = getMarginBottom();
-		JsonConfigParser::parse(config, "margin-bottom", _marginBottom);
-		if(_marginBottom != getMarginBottom()){
-			setMarginBottom(_marginBottom);
-			invalidateChildShape();
-		}
-		float _marginTop = getMarginTop();
-		JsonConfigParser::parse(config, "margin-top", _marginTop);
-		if(_marginTop != getMarginTop()){
-			setMarginTop(_marginTop);
-			invalidateChildShape();
+		if(_config.find("margin") != _config.end()){
+			std::string val = ofToString(_config["margin"]);
+			vector<std::string> margins = ofSplitString(val, " ");
+			std::string val_top, val_right, val_bottom, val_left;
+			if(margins.size() == 1){
+				val_top = val;
+				val_right = val;
+				val_bottom = val;
+				val_left = val;
+			}
+			if(margins.size() == 2){
+				val_top = margins[0];
+				val_right = margins[1];
+				val_bottom = margins[0];
+				val_left = margins[1];
+			}
+			if(margins.size() == 3){
+				val_top = margins[0];
+				val_right = margins[1];
+				val_bottom = margins[2];
+				val_left = margins[1];
+			}
+			if(margins.size() == 4){
+				val_top = margins[0];
+				val_right = margins[1];
+				val_bottom = margins[2];
+				val_left = margins[3];
+			}
+			if(_config.find("margin-top") == _config.end()){
+				_config["margin-top"] = val_top;
+			}
+			if(_config.find("margin-bottom") == _config.end()){
+				_config["margin-bottom"] = val_bottom;
+			}
+			if(_config.find("margin-left") == _config.end()){
+				_config["margin-left"] = val_left;
+			}
+			if(_config.find("margin-right") == _config.end()){
+				_config["margin-right"] = val_right;
+			}
 		}
 
 		//parse text alignment
-		if (config.find(textAlignment.getName()) != config.end()) {
-			std::string val = config[textAlignment.getName()];
+		if (_config.find(textAlignment.getName()) != _config.end()) {
+			std::string val = _config[textAlignment.getName()];
 			setTextAlignment(val);
 		}
 
-		//cout << config << endl;
+		//cout << _config << endl;
 
 		//parse all config entries to attribute values of the element.
 		//WARNING this will crash if there are non string keys in the config
-		for (ofJson::const_iterator it = config.begin(); it != config.end(); ++it) {
+		for (ofJson::const_iterator it = _config.begin(); it != _config.end(); ++it) {
 			std::string key = "_" + it.key();
 			if(it.value().is_string() || it.value().is_number() || it.value().is_boolean()){
 				std::string value;
@@ -411,87 +430,6 @@ void ofxBaseGui::setFillColor(const ofColor & color){
 void ofxBaseGui::setBorderWidth(float width){
 	setNeedsRedraw();
 	borderWidth = width;
-}
-
-void ofxBaseGui::setMargin(float margin){
-	setMargin(margin, margin, margin, margin);
-}
-
-void ofxBaseGui::setMargin(float margin_topbottom, float margin_leftright){
-	setMargin(margin_topbottom, margin_leftright, margin_topbottom, margin_leftright);
-}
-
-void ofxBaseGui::setMargin(float margin_top, float margin_right, float margin_bottom, float margin_left){
-	if(margin_top != getMarginTop()
-			|| margin_right != getMarginRight()
-			|| margin_bottom != getMarginBottom()
-			|| margin_left != getMarginLeft()){
-		setAttribute("margin-top", margin_top);
-		setAttribute("margin-right", margin_right);
-		setAttribute("margin-bottom", margin_bottom);
-		setAttribute("margin-left", margin_left);
-		invalidateChildShape();
-	}
-}
-
-void ofxBaseGui::setMarginTop(float margin){
-	if(getMarginTop() == margin){
-		setAttribute("margin-top", margin);
-		invalidateChildShape();
-	}
-}
-
-void ofxBaseGui::setMarginBottom(float margin){
-	if(getMarginBottom() == margin){
-		setAttribute("margin-bottom", margin);
-		invalidateChildShape();
-	}
-}
-
-void ofxBaseGui::setMarginLeft(float margin){
-	if(getMarginLeft() == margin){
-		setAttribute("margin-left", margin);
-		invalidateChildShape();
-	}
-}
-
-void ofxBaseGui::setMarginRight(float margin){
-	if(getMarginRight() == margin){
-		setAttribute("margin-right", margin);
-		invalidateChildShape();
-	}
-}
-
-float ofxBaseGui::getMarginBottom(){
-	if(hasAttribute("margin-bottom")){
-		return getAttribute<float>("margin-bottom");
-	}else {
-		return defaultMarginBottom;
-	}
-}
-
-float ofxBaseGui::getMarginTop(){
-	if(hasAttribute("margin-top")){
-		return getAttribute<float>("margin-top");
-	}else {
-		return defaultMarginTop;
-	}
-}
-
-float ofxBaseGui::getMarginLeft(){
-	if(hasAttribute("margin-left")){
-		return getAttribute<float>("margin-left");
-	}else {
-		return defaultMarginLeft;
-	}
-}
-
-float ofxBaseGui::getMarginRight(){
-	if(hasAttribute("margin-right")){
-		return getAttribute<float>("margin-right");
-	}else {
-		return defaultMarginRight;
-	}
 }
 
 void ofxBaseGui::setDefaultHeaderBackgroundColor(const ofColor & color){

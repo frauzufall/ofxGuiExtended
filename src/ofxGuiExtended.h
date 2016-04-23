@@ -44,12 +44,28 @@ class ofxGui {
 
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
 
+		template<typename T>
+		void add(ofParameter<T>& parameter){
+			if(!defaultPanel){
+				defaultPanel = addPanel();
+			}
+			defaultPanel->add(parameter);
+		}
+
+		template<typename T, typename... Args>
+		void add(ofParameter<T>& parameter, Args... args) {
+			add(parameter);
+			add(args...) ;
+		}
+
 	private:
 		std::unique_ptr<ofx::DOM::Document> document;
 
 		void setup();
-		bool setup_done ;
+		bool setup_done;
 
 		ofJson rootGroupConfig(const ofJson& config);
+
+		ofxGuiGroup* defaultPanel = nullptr;
 };
 

@@ -206,6 +206,7 @@ void FlexBoxLayout::align(FlexDirection direction){
 	if(newCrossAxisSize > crossAxisSize){
 		totalSpaceCrossAxis = 0;
 		if(horizontal){
+			// TODO verify if this is working or if it should be setHeightInLayout
 			_parent->setHeightInLayout(newCrossAxisSize);
 		}else {
 			_parent->setWidthInLayout(newCrossAxisSize);

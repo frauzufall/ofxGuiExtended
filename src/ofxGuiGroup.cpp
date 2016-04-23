@@ -146,9 +146,9 @@ void ofxGuiGroup::setup(){
 
 	header = add<ofxGuiGroupHeader>(ofJson({
 											   {"align-self", "flex-start"},
-											   {"height", headerHeight.get()}
+											   {"height", headerHeight.get()},
+											   {"margin", 0}
 										   }));
-	header->setMargin(0);
 	header->setBackgroundColor(headerBackgroundColor);
 	header->setBorderWidth(0);
 	header->setHidden(true);
