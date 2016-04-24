@@ -76,20 +76,23 @@ void ofxToggle::_setConfig(const ofJson &config){
 
 }
 
-void ofxToggle::setWidth(float width){
-	float _width = ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
-	Element::setWidth(max(_width,width));
-}
-
 float ofxToggle::getMinWidth(){
 	float _width = 0;
 	if(showName){
-		_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+		_width += ofxBaseGui::getTextWidth(getName()) + 2*textPadding;
 	}
 	if(type != ofxToggleType::FULLSIZE){
 		_width += 30;
 	}
-	return max(Element::getMinWidth(), _width);
+	return _width;
+}
+
+float ofxToggle::getMinHeight(){
+	float _height = 0;
+	if(showName){
+		_height += ofxBaseGui::getTextHeight(getName()) + 2*textPadding;
+	}
+	return _height;
 }
 
 bool ofxToggle::mousePressed(ofMouseEventArgs & args){
@@ -176,7 +179,7 @@ void ofxToggle::generateDraw(){
 
 			// create label
 			if(showName){
-				float textWidth = ofxBaseGui::getTextWidth(getName(), getShape().height);
+				float textWidth = ofxBaseGui::getTextWidth(getName());
 				switch(textAlignment){
 					default:
 					case TextAlignment::CENTERED:

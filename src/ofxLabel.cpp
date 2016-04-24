@@ -72,11 +72,27 @@ void ofxValueLabel<Type>::setup(){
 
 template<typename Type>
 float ofxValueLabel<Type>::getMinWidth(){
-	float _width = ofxBaseGui::getTextWidth(label.toString(), getHeight())+2*textAlignment;
+	string text = "";
 	if(showName){
-		_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+		if(!getName().empty()){
+			text = getName() + ": ";
+		}
 	}
-	return max(Element::getMinWidth(), _width);
+	text += label.toString();
+
+	return ofxBaseGui::getTextWidth(text)+2*textPadding;
+}
+
+template<typename Type>
+float ofxValueLabel<Type>::getMinHeight(){
+	string text = "";
+	if(showName){
+		if(!getName().empty()){
+			text = getName() + ": ";
+		}
+	}
+	text += label.toString();
+	return ofxBaseGui::getTextHeight(text)+2*textPadding;
 }
 
 template<typename Type>

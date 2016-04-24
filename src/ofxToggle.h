@@ -33,8 +33,8 @@ public:
 	void setType(const ofxToggleType::Type &type);
 	ofxToggleType::Type getType();
 
-	virtual void setWidth(float width) override;
 	virtual float getMinWidth() override;
+	virtual float getMinHeight() override;
 
 	virtual bool mousePressed(ofMouseEventArgs & args) override;
 	virtual bool mouseReleased(ofMouseEventArgs & args) override;

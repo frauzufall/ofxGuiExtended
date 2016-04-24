@@ -12,7 +12,8 @@ class ofxGuiGraphics : public ofxBaseGui {
 
 		void setup(string canvasName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
 
-//		void onResize(ResizeEventArgs& args);
+		virtual float getMinWidth() override;
+		virtual float getMinHeight() override;
 
 		virtual void setGraphics(ofBaseDraws* graphics);
 

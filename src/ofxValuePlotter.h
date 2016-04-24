@@ -15,6 +15,7 @@ class ofxValuePlotter : public ofxBaseGui {
 		void setup();
 
 		virtual float getMinWidth() override;
+		virtual float getMinHeight() override;
 
 		void setDecimalPlace(int place);
 

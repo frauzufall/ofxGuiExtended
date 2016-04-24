@@ -130,4 +130,14 @@ bool Document::getAutoFillScreen() const
 }
 
 
+float Document::getMinWidth(){
+	return ofGetWindowWidth();
+}
+
+
+float Document::getMinHeight(){
+	return ofGetWindowHeight();
+}
+
+
 } } // namespace ofx::DOM

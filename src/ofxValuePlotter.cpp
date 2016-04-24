@@ -60,11 +60,15 @@ void ofxValuePlotter::_setConfig(const ofJson & config){
 }
 
 float ofxValuePlotter::getMinWidth(){
-	float _width = ofxBaseGui::getTextWidth(ofToString(value.get(), decimalPlace), getHeight());
+	float _width = ofxBaseGui::getTextWidth(ofToString(value.get(), decimalPlace));
 	if(showName){
-		_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
+		_width += ofxBaseGui::getTextWidth(getName())+2*textPadding;
 	}
-	return max(Element::getMinWidth(), _width);
+	return _width;
+}
+
+float ofxValuePlotter::getMinHeight(){
+	return ofxBaseGui::getTextHeight(ofToString(value.get(), decimalPlace));
 }
 
 void ofxValuePlotter::setDecimalPlace(int place){

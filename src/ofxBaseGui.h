@@ -46,9 +46,6 @@ class ofxBaseGui : public ofx::DOM::Element {
 		virtual void setTextAlignment(const std::string& textLayout);
 		TextAlignment getTextAlignment() const;
 
-		virtual void setFloat(LayoutFloat type);
-		virtual LayoutFloat getFloat();
-
 		virtual void setLayoutPosition(LayoutPosition type);
 		virtual LayoutPosition getLayoutPosition();
 
@@ -59,6 +56,7 @@ class ofxBaseGui : public ofx::DOM::Element {
 		ofColor getFillColor() const;
 		bool getShowName() const;
 		float getBorderWidth() const;
+		float getFontSize() const;
 
 		virtual void setHeaderBackgroundColor(const ofColor & color);
 		virtual void setBackgroundColor(const ofColor & color);
@@ -66,12 +64,15 @@ class ofxBaseGui : public ofx::DOM::Element {
 		virtual void setTextColor(const ofColor & color);
 		virtual void setFillColor(const ofColor & color);
 		virtual void setBorderWidth(float width);
+		virtual void setFontSize(float size);
 
 		static void setDefaultHeaderBackgroundColor(const ofColor & color);
 		static void setDefaultBackgroundColor(const ofColor & color);
 		static void setDefaultBorderColor(const ofColor & color);
 		static void setDefaultTextColor(const ofColor & color);
 		static void setDefaultFillColor(const ofColor & color);
+		static void setDefaultBorderWidth(float width);
+		static void setDefaultFontSize(float size);
 
 		static void setDefaultTextPadding(int padding);
 		static void setDefaultWidth(int width);
@@ -131,8 +132,9 @@ class ofxBaseGui : public ofx::DOM::Element {
 		void unbindFontTexture();
 		ofMesh getTextMesh(const std::string & text, ofPoint p);
 		ofMesh getTextMesh(const std::string & text, float x, float y);
-		ofRectangle getTextBoundingBox(const std::string & text, float x, float y);
-		float getTextWidth(const std::string & text, float height);
+		ofRectangle getTextBoundingBox(const std::string & text, float x=0, float y=0);
+		float getTextWidth(const std::string & text);
+		float getTextHeight(const std::string & text);
 
 		static ofTrueTypeFont font;
 		static bool fontLoaded;
@@ -140,24 +142,22 @@ class ofxBaseGui : public ofx::DOM::Element {
 		static ofBitmapFont bitmapFont;
 		std::shared_ptr <ofBaseFileSerializer> serializer;
 
-		// TODO should be in different class -->
 		static ofColor defaultHeaderBackgroundColor;
 		static ofColor defaultBackgroundColor;
 		static ofColor defaultBorderColor;
 		static ofColor defaultTextColor;
 		static ofColor defaultFillColor;
 		static float defaultBorderWidth;
+		static float defaultFontSize;
 		static float defaultMarginLeft;
 		static float defaultMarginRight;
 		static float defaultMarginTop;
 		static float defaultMarginBottom;
 
-		// TODO make textPadding ofxGuiAttribute
 		static int textPadding;
 
 		static int defaultWidth;
 		static int defaultHeight;
-		// TODO should be in different class <--
 
 		static std::string saveStencilToHex(const ofImage & img);
 		static void loadStencilFromHex(ofImage & img, unsigned char * data);
@@ -184,6 +184,7 @@ class ofxBaseGui : public ofx::DOM::Element {
 		ofParameter<float> borderWidth;
 		ofParameter<TextAlignment> textAlignment;
 		ofParameter<bool> showName;
+		ofParameter<float> fontSize;
 
 		bool bRegisteredForMouseEvents;
 

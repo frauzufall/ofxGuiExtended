@@ -83,6 +83,9 @@ public:
 	/// \returns true if the Document size will always match the screen size.
 	bool getAutoFillScreen() const;
 
+	virtual float getMinWidth() override;
+	virtual float getMinHeight() override;
+
 protected:
 
 	/// \brief True if the Document size should always match the screen size.

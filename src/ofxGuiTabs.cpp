@@ -79,7 +79,10 @@ void ofxGuiTabs::clear(){
 void ofxGuiTabs::generateDraw(){
 	for(unsigned int i = 0; i < pages.size(); i++){
 		if(ofxBaseGui* page = dynamic_cast<ofxBaseGui*>(pages.at(i))){
-			tabs->getControl(i)->setName(page->getName());
+			if(tabs->getControl(i)->getName() != page->getName()){
+				tabs->getControl(i)->setName(page->getName());
+				tabs->setConfig({{"align--items", "stretch"}});
+			}
 		}
 	}
 	ofxGuiGroup::generateDraw();

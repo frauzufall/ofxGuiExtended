@@ -54,27 +54,21 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 	}
 }
 
-//void ofxGuiGraphics::onResize(ResizeEventArgs &args){
-//	if(!resizing){
-//		resizing = true;
-//		float w = args.shape().width;
-//		float h = args.shape().height;
-//		if(_bLoaded){
-//			if(w == 0){
-//				if(h == 0){
-//					w = getWidth();
-//				}else{
-//					w = h * graphics->getWidth() / graphics->getHeight();
-//				}
-//			}
-//			h = w * graphics->getHeight() / graphics->getWidth();
-//			ofxBaseGui::setSize(w,h);
-//		}
-//		resizing = false;
-//		setNeedsRedraw();
-//	}
+float ofxGuiGraphics::getMinWidth(){
+	if(_bLoaded){
+		//return getHeight() * graphics->getWidth() / graphics->getHeight();
+		return 10;
+	}
+	return 0;
+}
 
-//}
+float ofxGuiGraphics::getMinHeight(){
+	if(_bLoaded){
+//		return getWidth() * graphics->getHeight() / graphics->getWidth();
+		return 10;
+	}
+	return 0;
+}
 
 void ofxGuiGraphics::generateDraw(){
 	ofxBaseGui::generateDraw();

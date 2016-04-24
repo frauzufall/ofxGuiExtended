@@ -11,9 +11,7 @@ ofxGui::~ofxGui(){
 void ofxGui::setup(){
 	setup_done = true;
 	document = std::make_unique<ofx::DOM::Document>();
-//	document->setPercentalWidth(true, 1);
-//	document->setPercentalHeight(true, 1);
-	document->createLayout<ofx::DOM::FlexBoxLayout>(document.get(), ofx::DOM::Orientation::VERTICAL);
+	document->createLayout<ofx::DOM::FlexBoxLayout>(document.get());
 }
 
 Document* ofxGui::getRoot(){

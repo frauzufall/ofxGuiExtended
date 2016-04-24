@@ -56,6 +56,10 @@ void ofxGuiSetDefaultMargin(float margin){
 	ofxBaseGui::setDefaultMargin(margin);
 }
 
+void ofxGuiSetDefaultBorderWidth(float width){
+	ofxBaseGui::setDefaultBorderWidth(width);
+}
+
 ofColor
 ofxBaseGui::defaultHeaderBackgroundColor(64),
 ofxBaseGui::defaultBackgroundColor(0,0,0,100),
@@ -63,10 +67,11 @@ ofxBaseGui::defaultBorderColor(255),
 ofxBaseGui::defaultTextColor(255),
 ofxBaseGui::defaultFillColor(128);
 
-float ofxBaseGui::defaultBorderWidth = 1;
+float ofxBaseGui::defaultBorderWidth = 0;
 int ofxBaseGui::textPadding = 4;
 int ofxBaseGui::defaultWidth = 200;
 int ofxBaseGui::defaultHeight = 25;
+float ofxBaseGui::defaultFontSize = 5;
 
 float ofxBaseGui::defaultMarginLeft = 5;
 float ofxBaseGui::defaultMarginRight = 5;
@@ -105,10 +110,12 @@ void ofxBaseGui::setup(){
 	borderColor.set("border-color", defaultBorderColor);
 	textColor.set("text-color", defaultTextColor);
 	fillColor.set("fill-color", defaultFillColor);
+	fontSize.set("font-size", defaultFontSize);
+	showName.set("show-name", true);
 	setLayoutPosition(LayoutPosition::STATIC);
 	setBorderWidth(defaultBorderWidth);
 	setTextAlignment("left");
-	setShowName(true);
+	setShowName(showName);
 
 	setConfig(ofJson({
 				  {"margin-top", defaultMarginTop},
@@ -125,8 +132,8 @@ void ofxBaseGui::setup(){
 
 	registerMouseEvents();
 
-	setHeight(defaultHeight);
-	setWidth(defaultWidth);
+//	setHeight(defaultHeight);
+//	setWidth(defaultWidth);
 
 }
 
@@ -170,7 +177,9 @@ void ofxBaseGui::_setConfig(const ofJson &config){
 		JsonConfigParser::parse(_config, textColor);
 		JsonConfigParser::parse(_config, fillColor);
 		JsonConfigParser::parse(_config, headerBackgroundColor);
+
 		JsonConfigParser::parse(_config, showName);
+		JsonConfigParser::parse(_config, fontSize);
 
 		//parse size
 		JsonConfigParser::parse(_config, this);
@@ -267,7 +276,7 @@ void ofxBaseGui::loadFont(const std::string& filename, int fontsize, bool _bAnti
 
 void ofxBaseGui::setUseTTF(bool bUseTTF){
 	if(bUseTTF && !fontLoaded){
-		loadFont(OF_TTF_MONO, 10, true, true);
+		loadFont(OF_TTF_MONO, defaultFontSize, true, true);
 	}
 	useTTF = bUseTTF;
 }
@@ -432,6 +441,12 @@ void ofxBaseGui::setBorderWidth(float width){
 	borderWidth = width;
 }
 
+void ofxBaseGui::setFontSize(float size){
+	fontSize = size;
+	invalidateChildShape();
+	setNeedsRedraw();
+}
+
 void ofxBaseGui::setDefaultHeaderBackgroundColor(const ofColor & color){
 	defaultHeaderBackgroundColor = color;
 }
@@ -471,15 +486,12 @@ void ofxBaseGui::setDefaultMargin(float margin){
 	defaultMarginTop = margin;
 }
 
-void ofxBaseGui::setFloat(LayoutFloat type){
-	setAttribute("float", type);
+void ofxBaseGui::setDefaultBorderWidth(float width){
+	defaultBorderWidth = width;
 }
 
-LayoutFloat ofxBaseGui::getFloat() {
-	if(!hasAttribute("float")){
-		setAttribute("float", LayoutFloat::NONE);
-	}
-	return getAttribute<LayoutFloat>("float");
+void ofxBaseGui::setDefaultFontSize(float size){
+	defaultFontSize = size;
 }
 
 void ofxBaseGui::setLayoutPosition(LayoutPosition type){
@@ -562,16 +574,30 @@ void ofxBaseGui::loadStencilFromHex(ofImage & img, unsigned char * data){
 	img.update();
 }
 
-float ofxBaseGui::getTextWidth(const std::string & text, float _height){
-	float _width = 0;
-	ofVboMesh mesh = getTextMesh(text, 0, _height / 2 + 4);
-	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
-		if(mesh.getVertex(i).x > _width){
-			_width = mesh.getVertex(i).x;
-		}
-	}
-	_width += textPadding * 2;
-	return _width;
+float ofxBaseGui::getTextWidth(const std::string & text){
+	return getTextBoundingBox(text).width;
+//	float _width = 0;
+//	ofVboMesh mesh = getTextMesh(text, 0, 0);
+//	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
+//		if(mesh.getVertex(i).x > _width){
+//			_width = mesh.getVertex(i).x;
+//		}
+//	}
+//	_width += textPadding * 2;
+//	return _width;
+}
+
+float ofxBaseGui::getTextHeight(const std::string & text){
+	return getTextBoundingBox(text).height;
+//	float _height = 0;
+//	ofVboMesh mesh = getTextMesh(text, 0, 0);
+//	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
+//		if(mesh.getVertex(i).y > _height){
+//			_height = mesh.getVertex(i).y;
+//		}
+//	}
+//	_height += textPadding * 2;
+//	return _height;
 }
 
 bool ofxBaseGui::isMouseOver() const{

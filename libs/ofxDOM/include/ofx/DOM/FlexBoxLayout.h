@@ -95,10 +95,10 @@ protected:
 	AlignContent getAlignContent(Element* e, AlignContent defaultVal = AlignContent::STRETCH);
 	AlignSelf getAlignSelf(Element* e, AlignSelf defaultVal = AlignSelf::AUTO);
 
-	float getWidth(Element* e);
-	float getHeight(Element* e);
-	float getMinWidth(Element* e);
-	float getMinHeight(Element* e);
+	float getCurrentWidth(Element* e);
+	float getCurrentHeight(Element* e);
+	float getDesiredWidth(Element* e);
+	float getDesiredHeight(Element* e);
 	void setWidthInLayout(Element* e, float width);
 	void setHeightInLayout(Element* e, float height);
 

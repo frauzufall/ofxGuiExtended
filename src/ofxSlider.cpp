@@ -422,15 +422,23 @@ template<typename DataType>
 float ofxSlider<DataType>::getMinWidth(){
 	float _width = 0;
 	if(type == ofxSliderType::STRAIGHT){
-		horizontal = getWidth() > getHeight();
-		if(horizontal){
-			if(showName){
-				_width += ofxBaseGui::getTextWidth(getName(), getHeight())+2*textAlignment;
-			}
-			_width += ofxBaseGui::getTextWidth(ofToString(value.get(), precision), getHeight())+2*textAlignment;
+		if(showName){
+			_width += ofxBaseGui::getTextWidth(getName())+2*textPadding;
+		}
+		_width += ofxBaseGui::getTextWidth(ofToString(value.get(), precision))+2*textPadding;
+	}
+	return _width;
+}
+
+template<typename DataType>
+float ofxSlider<DataType>::getMinHeight(){
+	float _height = 0;
+	if(type == ofxSliderType::STRAIGHT){
+		if(showName){
+			_height += ofxBaseGui::getTextHeight(getName())+2*textPadding;
 		}
 	}
-	return max(Element::getMinWidth(), _width);
+	return _height;
 }
 
 /*

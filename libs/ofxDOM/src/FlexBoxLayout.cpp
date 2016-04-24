@@ -1,5 +1,6 @@
 #include "FlexBoxLayout.h"
 #include "ofxBaseGui.h"
+#include "JsonConfigParser.h"
 
 namespace ofx {
 namespace DOM {
@@ -22,13 +23,26 @@ FlexBoxLayout::~FlexBoxLayout(){
 
 void FlexBoxLayout::doLayout(){
 
-	if (_parent && !_isDoingLayout && children().size() > 0){
+	if(!_isDoingLayout){
+
 		// Prevent recursive calls to doLayout.
 		_isDoingLayout = true;
 
-		align(getFlexDirection(_parent));
+		if(_parent){
+			if(_parent->parent() == nullptr){
+				_parent->setWidth(getDesiredWidth(_parent));
+				_parent->setHeight(getDesiredHeight(_parent));
+			}
+		}
+
+		if (_parent && children().size() > 0){
+
+			align(getFlexDirection(_parent));
+
+		}
 
 		_isDoingLayout = false;
+
 	}
 
 }
@@ -66,7 +80,8 @@ void FlexBoxLayout::align(FlexDirection direction){
 	for(unsigned int i = 0; i < children().size(); i++){
 
 		Element* element = children().at(i);
-		float elementMainSize = horizontal ? getMinWidth(element) : getMinHeight(element);
+		float elementMainSize = horizontal ? getDesiredWidth(element) : getDesiredHeight(element);
+		float elementCrossSize = horizontal ? getDesiredHeight(element) : getDesiredWidth(element);
 
 		if(element){
 			if(elementFlexing(element)){
@@ -107,15 +122,21 @@ void FlexBoxLayout::align(FlexDirection direction){
 				}
 				// not flexing on main axis, set to minimal size on main axis
 				if(horizontal){
-					element->setWidthInLayout(element->getMinWidth());
+					setWidthInLayout(element, elementMainSize);
 				}else {
-					element->setHeightInLayout(element->getMinHeight());
+					setHeightInLayout(element, elementMainSize);
 				}
 				lines.at(linecount).push_back(element);
 				totalSpaceMainAxis.at(linecount) -= elementMainSize;
 			}else {
+				//set an absolute positioned element to its desired independent size
 				if(elementAbsolutePositioned(element)){
-					element->setSizeInLayout(element->getMinWidth(), element->getMinHeight());
+					if(horizontal){
+						element->setSizeInLayout(elementMainSize, elementCrossSize);
+					}else {
+						element->setSizeInLayout(elementCrossSize, elementMainSize);
+					}
+
 				}
 			}
 		}
@@ -154,7 +175,7 @@ void FlexBoxLayout::align(FlexDirection direction){
 
 		float lineSize = 0;
 		for(auto e : lines.at(i)){
-			float elementCrossSize = horizontal ? getMinHeight(e) : getMinWidth(e);
+			float elementCrossSize = horizontal ? getDesiredHeight(e) : getDesiredWidth(e);
 			AlignSelf alignSelf = getAlignSelf(e);
 			if(((alignSelf != AlignSelf::AUTO) && (alignSelf != AlignSelf::STRETCH)) ||
 			  ((alignSelf == AlignSelf::AUTO) && (alignItems != AlignItems::STRETCH))){
@@ -167,7 +188,7 @@ void FlexBoxLayout::align(FlexDirection direction){
 		lineSizes.push_back(lineSize);
 	}
 
-	// count how many lines do not have a fixed height
+	// count how many lines do not have a fixed size
 	int zerolines = 0;
 	for(int lineSize : lineSizes){
 		if(lineSize == 0){
@@ -191,7 +212,7 @@ void FlexBoxLayout::align(FlexDirection direction){
 
 		float lineSize = lineSizes.at(i);
 		for(auto e : lines.at(i)){
-			float elementCrossSize = horizontal ? getMinHeight(e) : getMinWidth(e);
+			float elementCrossSize = horizontal ? getDesiredHeight(e) : getDesiredWidth(e);
 			if(elementCrossSize > lineSize){
 				lineSize = elementCrossSize;
 			}
@@ -206,7 +227,6 @@ void FlexBoxLayout::align(FlexDirection direction){
 	if(newCrossAxisSize > crossAxisSize){
 		totalSpaceCrossAxis = 0;
 		if(horizontal){
-			// TODO verify if this is working or if it should be setHeightInLayout
 			_parent->setHeightInLayout(newCrossAxisSize);
 		}else {
 			_parent->setWidthInLayout(newCrossAxisSize);
@@ -288,9 +308,9 @@ void FlexBoxLayout::align(FlexDirection direction){
 				}
 			}else {
 				if(horizontal){
-					element->setHeightInLayout(element->getMinHeight());
+					setHeightInLayout(element, getDesiredHeight(element));
 				}else{
-					element->setWidthInLayout(element->getMinWidth());
+					setWidthInLayout(element, getDesiredWidth(element));
 				}
 			}
 
@@ -298,8 +318,8 @@ void FlexBoxLayout::align(FlexDirection direction){
 
 			float elementMainPos = currentMainPos;
 			float elementCrossPos = currentCrossPos;
-			float elementMainSize = horizontal ? getWidth(element) : getHeight(element);
-			float elementCrossSize = horizontal ? getHeight(element) : getWidth(element);
+			float elementMainSize = horizontal ? getCurrentWidth(element) : getCurrentHeight(element);
+			float elementCrossSize = horizontal ? getCurrentHeight(element) : getCurrentWidth(element);
 
 			//align item on cross axis
 
@@ -374,7 +394,7 @@ bool FlexBoxLayout::elementAbsolutePositioned(Element* e){
 
 
 
-float FlexBoxLayout::getWidth(Element* e){
+float FlexBoxLayout::getCurrentWidth(Element* e){
 	float res = e->getWidth();
 	if(e->hasAttribute("_margin-left")){
 		res += ofToFloat(e->getAttribute<std::string>("_margin-left"));
@@ -385,8 +405,26 @@ float FlexBoxLayout::getWidth(Element* e){
 	return res;
 }
 
-float FlexBoxLayout::getMinWidth(Element* e){
+float FlexBoxLayout::getDesiredWidth(Element* e){
 	float res = e->getMinWidth();
+
+	if(e->hasAttribute("_width")){
+		std::string widthstr = e->getAttribute<std::string>("_width");
+		if(ofIsStringInString(widthstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(widthstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				if(e->parent()){
+					return e->parent()->getWidth()*amount;
+				}else {
+					return ofGetWindowWidth()*amount;
+				}
+			}
+		}else {
+			return ofToFloat(widthstr);
+		}
+	}
+
 	if(e->hasAttribute("_margin-left")){
 		res += ofToFloat(e->getAttribute<std::string>("_margin-left"));
 	}
@@ -403,10 +441,10 @@ void FlexBoxLayout::setWidthInLayout(Element* e, float width){
 	if(e->hasAttribute("_margin-right")){
 		width -= ofToFloat(e->getAttribute<std::string>("_margin-right"));
 	}
-	e->setWidthInLayout(max(e->getMinWidth(), width));
+	e->setWidthInLayout(width);
 }
 
-float FlexBoxLayout::getHeight(Element* e){
+float FlexBoxLayout::getCurrentHeight(Element* e){
 	float res = e->getHeight();
 	if(e->hasAttribute("_margin-top")){
 		res += ofToFloat(e->getAttribute<std::string>("_margin-top"));
@@ -417,8 +455,26 @@ float FlexBoxLayout::getHeight(Element* e){
 	return res;
 }
 
-float FlexBoxLayout::getMinHeight(Element* e){
+float FlexBoxLayout::getDesiredHeight(Element* e){
 	float res = e->getMinHeight();
+
+	if(e->hasAttribute("_height")){
+		std::string heightstr = e->getAttribute<std::string>("_height");
+		if(ofIsStringInString(heightstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(heightstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				if(e->parent()){
+					return e->parent()->getHeight()*amount;
+				}else {
+					return ofGetWindowHeight()*amount;
+				}
+			}
+		}else {
+			return ofToFloat(heightstr);
+		}
+	}
+
 	if(e->hasAttribute("_margin-top")){
 		res += ofToFloat(e->getAttribute<std::string>("_margin-top"));
 	}
@@ -435,7 +491,7 @@ void FlexBoxLayout::setHeightInLayout(Element* e, float height){
 	if(e->hasAttribute("_margin-bottom")){
 		height -= ofToFloat(e->getAttribute<std::string>("_margin-bottom"));
 	}
-	e->setHeightInLayout(max(e->getMinHeight(), height));
+	e->setHeightInLayout(height);
 }
 
 void FlexBoxLayout::setPosition(Element* e, ofPoint p){

@@ -47,11 +47,7 @@ Element::Element(const std::string& id,
 	_id(id),
 	_shape(x, y, width, height),
 	_sizeInLayout(width, height),
-	needsRedraw(true),
-	_percentalWidthAmount(1),
-	_usePercentalWidth(false),
-	_percentalHeightAmount(1),
-	_usePercentalHeight(false)
+	needsRedraw(true)
 {
 	ofAddListener(this->move, this, &Element::_onMoved);
 	ofAddListener(this->resize, this, &Element::_onResized);
@@ -633,14 +629,7 @@ Size Element::getSize() const
 ///\todo use ofCompareFloat
 void Element::setWidth(float width)
 {
-	if(width != _shape.width){
-		_shape.setWidth(width);
-		_sizeInLayout.x = width;
-		invalidateChildShape();
-		_shape.standardize();
-		ResizeEventArgs e(_shape);
-		ofNotifyEvent(resize, e, this);
-	}
+	setAttribute("_width", ofToString(width));
 }
 
 
@@ -663,50 +652,14 @@ float Element::getWidth() const
 
 float Element::getMinWidth()
 {
-	return _shape.width;
-}
-
-
-float Element::getPercentalWidth() const
-{
-	return _percentalWidthAmount;
-}
-
-
-bool Element::usesPercentalWidth() const
-{
-	return _usePercentalWidth;
-}
-
-
-void Element::setPercentalWidth(bool usePercentalWidth, float percentalWidthAmount)
-{
-	_usePercentalWidth = usePercentalWidth;
-	_percentalWidthAmount = percentalWidthAmount;
-	if(_usePercentalWidth && _percentalWidthAmount <= 1 && parent()){
-		float newwidth = parent()->getWidth()*_percentalWidthAmount;
-		if(hasAttribute("margin-left")){
-			newwidth -= getAttribute<float>("margin-left");
-		}
-		if(hasAttribute("margin-right")){
-			newwidth -= getAttribute<float>("margin-right");
-		}
-		setWidth(newwidth);
-	}
+	return 0;
 }
 
 
 ///\todo use ofCompareFloat
 void Element::setHeight(float height)
 {
-	if(height != _shape.height){
-		_shape.setHeight(height);
-		_sizeInLayout.y = height;
-		invalidateChildShape();
-		_shape.standardize();
-		ResizeEventArgs e(_shape);
-		ofNotifyEvent(resize, e, this);
-	}
+	setAttribute("_height", ofToString(height));
 }
 
 
@@ -724,7 +677,7 @@ void Element::setHeightInLayout(float height)
 
 float Element::getMinHeight()
 {
-	return _shape.height;
+	return 0;
 }
 
 
@@ -732,36 +685,6 @@ float Element::getHeight() const
 {
 	return _sizeInLayout.y;
 }
-
-
-float Element::getPercentalHeight() const
-{
-	return _percentalHeightAmount;
-}
-
-
-bool Element::usesPercentalHeight() const
-{
-	return _usePercentalHeight;
-}
-
-
-void Element::setPercentalHeight(bool usePercentalHeight, float percentalHeightAmount)
-{
-	_usePercentalHeight = usePercentalHeight;
-	_percentalHeightAmount = percentalHeightAmount;
-	if(_usePercentalHeight && _percentalHeightAmount <= 1 && parent()){
-		float newheight = parent()->getHeight()*_percentalHeightAmount;
-		if(hasAttribute("margin-left")){
-			newheight -= getAttribute<float>("margin-left");
-		}
-		if(hasAttribute("margin-right")){
-			newheight -= getAttribute<float>("margin-right");
-		}
-		setHeight(newheight);
-	}
-}
-
 
 Shape Element::getShape() const
 {
@@ -775,10 +698,12 @@ void Element::setShape(const Shape& shape)
 	setSize(shape.width, shape.height);
 }
 
+
 void Element::setShape(float x, float y, float width, float height)
 {
 	setShape(ofRectangle(x, y, width, height));
 }
+
 
 Shape Element::getChildShape() const
 {
@@ -1046,12 +971,6 @@ void Element::_onMoved(MoveEventArgs&)
 
 void Element::_onResized(ResizeEventArgs&)
 {
-	// TODO performance optimization: check if mouse is dragged and update only on release
-	for(auto& e : children()){
-		e->setPercentalWidth(e->usesPercentalWidth(),e->getPercentalWidth());
-		e->setPercentalHeight(e->usesPercentalHeight(),e->getPercentalHeight());
-	}
-
 	invalidateChildShape();
 	setNeedsRedraw();
 }

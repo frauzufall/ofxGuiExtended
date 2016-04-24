@@ -36,7 +36,8 @@ public:
 	void setType(const Type &type);
 	Type getType();
 
-	float getMinWidth() override;
+	virtual float getMinWidth() override;
+	virtual float getMinHeight() override;
 
 	void setPrecision(int precision);
 
