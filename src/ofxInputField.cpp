@@ -1,5 +1,4 @@
 #include "ofxInputField.h"
-
 #include "ofGraphics.h"
 
 template<typename Type>
@@ -10,7 +9,8 @@ ofxInputField<Type>::ofxInputField(){
 }
 
 template<typename Type>
-ofxInputField<Type>::ofxInputField(const ofJson &config){
+ofxInputField<Type>::ofxInputField(const ofJson &config)
+	:ofxInputField(){
 
 	_setConfig(config);
 
@@ -63,6 +63,7 @@ void ofxInputField<Type>::setup(){
 	pressCounter = 0;
 	inputWidth = 0;
 	selectionWidth = 0;
+	setTheme();
 	registerMouseEvents();
 	registerKeyEvents();
 
@@ -472,6 +473,18 @@ void ofxInputField<Type>::leaveFocus(){
 	inputWidth = getTextBoundingBox(input,0,0).width;
 	hasFocus = false;
 	setNeedsRedraw();
+}
+
+template<typename Type>
+std::string ofxInputField<Type>::getClassType(){
+	return "input";
+}
+
+template<typename Type>
+vector<std::string> ofxInputField<Type>::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }
 
 template class ofxInputField<int8_t>;

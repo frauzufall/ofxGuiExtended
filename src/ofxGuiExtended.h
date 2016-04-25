@@ -15,6 +15,8 @@
 #include "ofxGuiZoomableGraphics.h"
 #include "ofxMasterSlaveControl.h"
 
+#include "ofxGuiDefaultConfig.h"
+
 #include "ofxDOM.h"
 
 void ofxGuiSetFont(const string & fontPath,int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, int dpi=0);

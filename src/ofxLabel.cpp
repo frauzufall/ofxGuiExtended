@@ -66,6 +66,7 @@ ofxValueLabel<Type>::~ofxValueLabel(){
 template<typename Type>
 void ofxValueLabel<Type>::setup(){
 
+	setTheme();
 	label.addListener(this,&ofxValueLabel::valueChanged);
 
 }
@@ -141,6 +142,18 @@ ofAbstractParameter & ofxValueLabel<Type>::getParameter(){
 template<typename Type>
 void ofxValueLabel<Type>::valueChanged(Type & value){
 	setNeedsRedraw();
+}
+
+template<typename Type>
+std::string ofxValueLabel<Type>::getClassType(){
+	return "label";
+}
+
+template<typename Type>
+vector<std::string> ofxValueLabel<Type>::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }
 
 template class ofxValueLabel<std::string>;

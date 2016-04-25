@@ -19,7 +19,11 @@ class ofxGuiGraphics : public ofxBaseGui {
 
 		virtual ofAbstractParameter & getParameter();
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
 
 		bool setValue(float mx, float my, bool bCheckBounds){
 			return false;

@@ -54,6 +54,7 @@ void ofxButton::setup(){
 	value.setSerializable(false);
 	voidvalue.setSerializable(false);
 	registerMouseEvents();
+	setTheme();
 
 }
 
@@ -102,4 +103,14 @@ bool ofxButton::mouseReleased(ofMouseEventArgs & args){
 	hasFocus = false;
 	return attended;
 
+}
+
+std::string ofxButton::getClassType(){
+	return "button";
+}
+
+vector<std::string> ofxButton::getClassTypes(){
+	vector<std::string> types = ofxToggle::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }

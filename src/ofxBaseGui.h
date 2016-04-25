@@ -30,6 +30,9 @@ class ofxBaseGui : public ofx::DOM::Element {
 		ofxBaseGui & operator=(const ofxBaseGui &) = delete;
 
 		void setConfig(const ofJson &config, bool recursive = false);
+		void setTheme(const ofJson &config = defaultTheme);
+		void loadConfig(const std::string &filename, bool recursive = false);
+		void loadTheme(const std::string &filename);
 
 		void saveToFile(const std::string& filename);
 		void loadFromFile(const std::string& filename);
@@ -77,7 +80,9 @@ class ofxBaseGui : public ofx::DOM::Element {
 		static void setDefaultTextPadding(int padding);
 		static void setDefaultWidth(int width);
 		static void setDefaultHeight(int height);
-		static void setDefaultMargin(float margin);
+
+		static void setDefaultTheme(const ofJson& theme);
+		static void loadDefaultTheme(const std::string &filename);
 
 		void setShowName(bool show);
 
@@ -114,12 +119,20 @@ class ofxBaseGui : public ofx::DOM::Element {
 		virtual void mouseEntered(ofMouseEventArgs & args){}
 		virtual void mouseExited(ofMouseEventArgs & args){}
 
+		ofJson getThisConfigTheme();
+		ofJson getGlobalConfigTheme();
+
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes();
 
 		virtual void generateDraw();
 		virtual void render();
 
 		virtual void _setConfig(const ofJson & config);
+		void _setConfigUsingClassifiers(const ofJson &config, bool recursive = false);
 
 		void onResize(ResizeEventArgs& args);
 
@@ -149,15 +162,13 @@ class ofxBaseGui : public ofx::DOM::Element {
 		static ofColor defaultFillColor;
 		static float defaultBorderWidth;
 		static float defaultFontSize;
-		static float defaultMarginLeft;
-		static float defaultMarginRight;
-		static float defaultMarginTop;
-		static float defaultMarginBottom;
 
 		static int textPadding;
 
 		static int defaultWidth;
 		static int defaultHeight;
+
+		static ofJson defaultTheme;
 
 		static std::string saveStencilToHex(const ofImage & img);
 		static void loadStencilFromHex(ofImage & img, unsigned char * data);
@@ -174,7 +185,7 @@ class ofxBaseGui : public ofx::DOM::Element {
 		/// \brief Point where element is grabbed for dragging in screen coordinates
 		ofPoint grabPoint;
 
-		ofPath bg;
+		ofPath bg, border;
 
 		ofParameter<ofColor> headerBackgroundColor;
 		ofParameter<ofColor> backgroundColor;
@@ -187,6 +198,8 @@ class ofxBaseGui : public ofx::DOM::Element {
 		ofParameter<float> fontSize;
 
 		bool bRegisteredForMouseEvents;
+
+		ofJson theme;
 
 		ofParameter<void> parameter;
 

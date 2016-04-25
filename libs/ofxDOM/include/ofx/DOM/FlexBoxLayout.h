@@ -95,12 +95,28 @@ protected:
 	AlignContent getAlignContent(Element* e, AlignContent defaultVal = AlignContent::STRETCH);
 	AlignSelf getAlignSelf(Element* e, AlignSelf defaultVal = AlignSelf::AUTO);
 
-	float getCurrentWidth(Element* e);
-	float getCurrentHeight(Element* e);
+	float getWidthAndMargin(Element* e);
+	float getHeightAndMargin(Element* e);
 	float getDesiredWidth(Element* e);
 	float getDesiredHeight(Element* e);
+
 	void setWidthInLayout(Element* e, float width);
 	void setHeightInLayout(Element* e, float height);
+
+	float getMarginHorizontal(Element* e);
+	float getMarginVertical(Element* e);
+	float getMarginLeft(Element* e);
+	float getMarginRight(Element* e);
+	float getMarginTop(Element* e);
+	float getMarginBottom(Element* e);
+
+	float getPaddingHorizontal(Element* e);
+	float getPaddingVertical(Element* e);
+	float getPaddingLeft(Element* e);
+	float getPaddingRight(Element* e);
+	float getPaddingTop(Element* e);
+	float getPaddingBottom(Element* e);
+
 
 	void setPosition(Element* e, ofPoint p);
 

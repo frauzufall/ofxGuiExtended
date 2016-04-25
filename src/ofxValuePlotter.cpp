@@ -43,6 +43,8 @@ ofxValuePlotter::~ofxValuePlotter(){
 
 void ofxValuePlotter::setup(){
 
+	setTheme();
+
 	decimalPlace.set("precision", 3);
 	minVal.set("min", 0);
 	maxVal.set("max", 0);
@@ -151,4 +153,14 @@ void ofxValuePlotter::valueChanged(float & value){
 		}
 	}
 	setNeedsRedraw();
+}
+
+std::string ofxValuePlotter::getClassType(){
+	return "plotter";
+}
+
+vector<std::string> ofxValuePlotter::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }

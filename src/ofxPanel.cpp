@@ -19,6 +19,7 @@ ofxPanelHeader::ofxPanelHeader():ofxGuiGroupHeader(){
 	}
 	registerMouseEvents();
 	this->setDraggable(true);
+	setTheme();
 }
 
 ofxPanelHeader::ofxPanelHeader(const ofJson& config):ofxPanelHeader(){
@@ -102,6 +103,16 @@ bool ofxPanelHeader::mousePressed(ofMouseEventArgs & args){
 
 }
 
+std::string ofxPanelHeader::getClassType(){
+	return "panel-header";
+}
+
+vector<std::string> ofxPanelHeader::getClassTypes(){
+	vector<std::string> types = ofxGuiGroupHeader::getClassTypes();
+	types.push_back(getClassType());
+	return types;
+}
+
 
 /*
  * Panel
@@ -156,19 +167,15 @@ ofxPanel::~ofxPanel(){
 }
 
 void ofxPanel::setup(){
+
+	setTheme();
+
 	if(header){
 		removeChild(header);
 	}
-	header = add<ofxPanelHeader>(ofJson({
-											{"align-self", "flex-start"},
-											{"flex","none"},
-											{"width", "100%"},
-											{"margin", "0"}
-										}));
+	header = add<ofxPanelHeader>();
 	header->setHeight(headerHeight);
 	header->setBackgroundColor(headerBackgroundColor);
-	header->setBorderWidth(0);
-	header->setHidden(true);
 	ofAddListener(header->move, this, &ofxPanel::onHeaderMove);
 	ofAddListener(((ofxPanelHeader*)header)->loadPressedE, this, &ofxPanel::onLoadPressed);
 	ofAddListener(((ofxPanelHeader*)header)->savePressedE, this, &ofxPanel::onSavePressed);
@@ -205,4 +212,14 @@ void ofxPanel::onLoadPressed(){
 
 void ofxPanel::onSavePressed(){
 	saveToFile(filename);
+}
+
+std::string ofxPanel::getClassType(){
+	return "panel";
+}
+
+vector<std::string> ofxPanel::getClassTypes(){
+	vector<std::string> types = ofxGuiGroup::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }

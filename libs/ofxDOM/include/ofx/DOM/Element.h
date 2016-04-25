@@ -281,6 +281,10 @@ public:
 	/// \returns a pointer to the associated Layout or nullptr if there is none.
 	Layout* layout();
 
+	/// \brief Updates the current layout.
+	///
+	virtual void updateLayout();
+
 	/// \brief Perform a hit test on the Element.
 	///
 	/// For a normal Element, the hit test will test the rectangular geometry
@@ -562,7 +566,7 @@ protected:
 	std::vector<std::unique_ptr<Element>>::iterator findChild(Element* element);
 
 	/// \brief Called internally to invalidate the child shape tree.
-	virtual void invalidateChildShape() const;
+	virtual void invalidateChildShape();
 
 	/// \brief A vector to Elements.
 	std::vector<std::unique_ptr<Element>> _children;

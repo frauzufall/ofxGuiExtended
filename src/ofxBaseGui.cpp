@@ -2,6 +2,7 @@
 #include "ofxGuiGroup.h"
 #include "ofImage.h"
 #include "ofBitmapFont.h"
+#include "ofxGuiDefaultConfig.h"
 #ifndef TARGET_EMSCRIPTEN
 #include "ofXml.h"
 #endif
@@ -9,6 +10,40 @@
 #include "JsonConfigParser.h"
 
 using namespace std;
+
+
+//copied from PR https://github.com/openframeworks/openFrameworks/pull/4988
+ofJson loadJson(const std::string & filename){
+	ofJson json;
+	ofFile jsonFile(filename);
+	if(jsonFile.exists()){
+		try{
+			jsonFile >> json;
+		}catch(std::exception & e){
+			ofLogError("ofLoadJson") << "error loading json from " + filename + ": " + e.what();
+		}catch(...){
+			ofLogError("ofLoadJson") << "error loading json from " + filename;
+		}
+	}else{
+		ofLogError("ofLoadJson") << "error loading json from " + filename + ": file doesn't exist";
+	}
+	return json;
+}
+
+bool saveJson(const std::string & filename, ofJson & json){
+	ofFile jsonFile(filename, ofFile::WriteOnly);
+	try{
+		jsonFile << json;
+	}catch(std::exception & e){
+		ofLogError("ofLoadJson") << "error saving json to " + filename + ": " + e.what();
+		return false;
+	}catch(...){
+		ofLogError("ofLoadJson") << "error saving json to " + filename;
+		return false;
+	}
+	return true;
+}
+
 
 
 void ofxGuiSetFont(const string & fontPath, int fontsize, bool _bAntiAliased, bool _bFullCharacterSet, int dpi){
@@ -52,12 +87,16 @@ void ofxGuiSetDefaultHeight(int height){
 	ofxBaseGui::setDefaultHeight(height);
 }
 
-void ofxGuiSetDefaultMargin(float margin){
-	ofxBaseGui::setDefaultMargin(margin);
-}
-
 void ofxGuiSetDefaultBorderWidth(float width){
 	ofxBaseGui::setDefaultBorderWidth(width);
+}
+
+void ofxGuiSetDefaultTheme(const ofJson& theme){
+	ofxBaseGui::setDefaultTheme(theme);
+}
+
+void ofxGuiLoadDefaultTheme(const std::string& filename){
+	ofxBaseGui::loadDefaultTheme(filename);
 }
 
 ofColor
@@ -73,10 +112,7 @@ int ofxBaseGui::defaultWidth = 200;
 int ofxBaseGui::defaultHeight = 25;
 float ofxBaseGui::defaultFontSize = 5;
 
-float ofxBaseGui::defaultMarginLeft = 5;
-float ofxBaseGui::defaultMarginRight = 5;
-float ofxBaseGui::defaultMarginBottom = 5;
-float ofxBaseGui::defaultMarginTop = 5;
+ofJson ofxBaseGui::defaultTheme = ofxGuiDefaultConfig::get();
 
 ofTrueTypeFont ofxBaseGui::font;
 bool ofxBaseGui::fontLoaded = false;
@@ -97,6 +133,12 @@ ofxBaseGui::ofxBaseGui(const ofJson &config)
 
 }
 
+ofxBaseGui::~ofxBaseGui(){
+
+	unregisterMouseEvents();
+
+}
+
 void ofxBaseGui::setup(){
 
 #ifndef TARGET_EMSCRIPTEN
@@ -112,23 +154,16 @@ void ofxBaseGui::setup(){
 	fillColor.set("fill-color", defaultFillColor);
 	fontSize.set("font-size", defaultFontSize);
 	showName.set("show-name", true);
+	borderWidth.set("border-width", defaultBorderWidth);
 	setLayoutPosition(LayoutPosition::STATIC);
-	setBorderWidth(defaultBorderWidth);
 	setTextAlignment("left");
 	setShowName(showName);
 
-	setConfig(ofJson({
-				  {"margin-top", defaultMarginTop},
-				  {"margin-left", defaultMarginLeft},
-				  {"margin-right", defaultMarginRight},
-				  {"margin-bottom", defaultMarginBottom},
-			  }));
+	setTheme(defaultTheme);
 
 
 	// parameter won't be saved to file
 	parameter.setSerializable(false);
-
-	ofAddListener(resize, this, &ofxBaseGui::onResize);
 
 	registerMouseEvents();
 
@@ -165,6 +200,43 @@ void ofxBaseGui::setConfig(const ofJson &config, bool recursive){
 	}
 }
 
+void ofxBaseGui::setTheme(const ofJson &config){
+	theme = config;
+	_setConfigUsingClassifiers(config, true);
+}
+
+void ofxBaseGui::loadConfig(const string &filename, bool recursive){
+	setConfig(loadJson(filename), recursive);
+}
+
+void ofxBaseGui::loadTheme(const string &filename){
+	setTheme(loadJson(filename));
+}
+
+void ofxBaseGui::_setConfigUsingClassifiers(const ofJson &config, bool recursive){
+
+
+	for(std::string classifier : this->getClassTypes()){
+		ofJson::const_iterator it = config.find(classifier);
+		if(it != config.end()){
+			if(classifier == "tabs"){
+//				cout << classifier << ": " << *it << endl;
+			}
+			setConfig(*it, false);
+		}
+	}
+
+	if(recursive){
+		for(auto& e: children()){
+			ofxBaseGui* _e = dynamic_cast<ofxBaseGui*>(e);
+			if(_e){
+				_e->_setConfigUsingClassifiers(config, recursive);
+			}
+		}
+	}
+
+}
+
 void ofxBaseGui::_setConfig(const ofJson &config){
 
 	ofJson _config = config;
@@ -180,6 +252,7 @@ void ofxBaseGui::_setConfig(const ofJson &config){
 
 		JsonConfigParser::parse(_config, showName);
 		JsonConfigParser::parse(_config, fontSize);
+		JsonConfigParser::parse(_config, borderWidth);
 
 		//parse size
 		JsonConfigParser::parse(_config, this);
@@ -235,13 +308,54 @@ void ofxBaseGui::_setConfig(const ofJson &config){
 			}
 		}
 
+		//parse padding
+		if(_config.find("padding") != _config.end()){
+			std::string val = ofToString(_config["padding"]);
+			vector<std::string> paddings = ofSplitString(val, " ");
+			std::string val_top, val_right, val_bottom, val_left;
+			if(paddings.size() == 1){
+				val_top = val;
+				val_right = val;
+				val_bottom = val;
+				val_left = val;
+			}
+			if(paddings.size() == 2){
+				val_top = paddings[0];
+				val_right = paddings[1];
+				val_bottom = paddings[0];
+				val_left = paddings[1];
+			}
+			if(paddings.size() == 3){
+				val_top = paddings[0];
+				val_right = paddings[1];
+				val_bottom = paddings[2];
+				val_left = paddings[1];
+			}
+			if(paddings.size() == 4){
+				val_top = paddings[0];
+				val_right = paddings[1];
+				val_bottom = paddings[2];
+				val_left = paddings[3];
+			}
+			if(_config.find("padding-top") == _config.end()){
+				_config["padding-top"] = val_top;
+			}
+			if(_config.find("padding-bottom") == _config.end()){
+				_config["padding-bottom"] = val_bottom;
+			}
+			if(_config.find("padding-left") == _config.end()){
+				_config["padding-left"] = val_left;
+			}
+			if(_config.find("padding-right") == _config.end()){
+				_config["padding-right"] = val_right;
+			}
+		}
+
 		//parse text alignment
 		if (_config.find(textAlignment.getName()) != _config.end()) {
 			std::string val = _config[textAlignment.getName()];
 			setTextAlignment(val);
 		}
-
-		//cout << _config << endl;
 
 		//parse all config entries to attribute values of the element.
 		//WARNING this will crash if there are non string keys in the config
@@ -279,11 +393,6 @@ void ofxBaseGui::setUseTTF(bool bUseTTF){
 		loadFont(OF_TTF_MONO, defaultFontSize, true, true);
 	}
 	useTTF = bUseTTF;
-}
-
-ofxBaseGui::~ofxBaseGui(){
-	unregisterMouseEvents();
-	ofRemoveListener(resize, this, &ofxBaseGui::onResize);
 }
 
 void ofxBaseGui::bindFontTexture(){
@@ -444,7 +553,6 @@ void ofxBaseGui::setBorderWidth(float width){
 void ofxBaseGui::setFontSize(float size){
 	fontSize = size;
 	invalidateChildShape();
-	setNeedsRedraw();
 }
 
 void ofxBaseGui::setDefaultHeaderBackgroundColor(const ofColor & color){
@@ -479,19 +587,20 @@ void ofxBaseGui::setDefaultHeight(int height){
 	defaultHeight = height;
 }
 
-void ofxBaseGui::setDefaultMargin(float margin){
-	defaultMarginBottom = margin;
-	defaultMarginLeft = margin;
-	defaultMarginRight = margin;
-	defaultMarginTop = margin;
-}
-
 void ofxBaseGui::setDefaultBorderWidth(float width){
 	defaultBorderWidth = width;
 }
 
 void ofxBaseGui::setDefaultFontSize(float size){
 	defaultFontSize = size;
+}
+
+void ofxBaseGui::setDefaultTheme(const ofJson &theme){
+	defaultTheme = theme;
+}
+
+void ofxBaseGui::loadDefaultTheme(const string &filename){
+	defaultTheme = loadJson(filename);
 }
 
 void ofxBaseGui::setLayoutPosition(LayoutPosition type){
@@ -516,15 +625,22 @@ void ofxBaseGui::generateDraw(){
 
 	bg.setFillColor(backgroundColor);
 	bg.setFilled(true);
-	bg.setStrokeColor(borderColor);
-	bg.setStrokeWidth(borderWidth);
-	bg.rectangle(0,0,getWidth(),getHeight());
+	bg.setStrokeWidth(0);
+	bg.rectangle((int)borderWidth,(int)borderWidth,(int)(getWidth()-borderWidth*2),(int)(getHeight()-borderWidth*2));
+
+	border.clear();
+	border.setFilled(true);
+	border.setStrokeWidth(0);
+	border.setFillColor(borderColor);
+	border.rectangle(0,0,(int)getWidth(),(int)getHeight());
+	border.rectangle((int)borderWidth,(int)borderWidth,(int)(getWidth()-borderWidth*2),(int)(getHeight()-borderWidth*2));
 
 }
 
 void ofxBaseGui::render(){
 
 	bg.draw();
+	border.draw();
 
 }
 
@@ -683,6 +799,20 @@ bool ofxBaseGui::mouseReleased(ofMouseEventArgs & args){
 	return false;
 }
 
-void ofxBaseGui::onResize(ResizeEventArgs &args){
+ofJson ofxBaseGui::getThisConfigTheme(){
+	return theme;
+}
 
+ofJson ofxBaseGui::getGlobalConfigTheme(){
+	return defaultTheme;
+}
+
+std::string ofxBaseGui::getClassType(){
+	return "base";
+}
+
+vector<std::string> ofxBaseGui::getClassTypes(){
+	vector<std::string> types;
+	types.push_back(getClassType());
+	return types;
 }

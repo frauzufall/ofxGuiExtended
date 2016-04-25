@@ -7,9 +7,10 @@ ofxGuiGraphics::~ofxGuiGraphics(){
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
-	:ofxBaseGui(config){
+	:ofxBaseGui(){
 	_bLoaded = false;
-	setName(canvasName);
+	setup(canvasName, nullptr);
+	_setConfig(config);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
@@ -38,6 +39,7 @@ void ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, f
 		h = w * graphics->getHeight() / graphics->getWidth();
 		ofxBaseGui::setSize(w,h);
 	}
+	setTheme();
 //	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
@@ -108,4 +110,14 @@ void ofxGuiGraphics::render(){
 
 ofAbstractParameter & ofxGuiGraphics::getParameter(){
 	return label;
+}
+
+std::string ofxGuiGraphics::getClassType(){
+	return "graphics";
+}
+
+vector<std::string> ofxGuiGraphics::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }

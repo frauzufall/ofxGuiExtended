@@ -33,7 +33,12 @@ class ofxGuiGroupHeader : public ofxBaseGui {
 
 		virtual bool mousePressed(ofMouseEventArgs & args) override;
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
+
 		virtual void generateDraw();
 		virtual void render();
 		ofVboMesh textMesh;
@@ -134,7 +139,11 @@ class ofxGuiGroup : public ofxBaseGui {
 		ofParameter<int>& getActiveToggleIndex();
 		void deactivateAllOtherToggles(ofxToggle* toggle);
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
 
 		ofParameterGroup parameters;
 

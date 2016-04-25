@@ -48,7 +48,12 @@ public:
 
 	ofAbstractParameter & getParameter();
 
+	static std::string getClassType();
+
 protected:
+
+	virtual vector<std::string> getClassTypes() override;
+
 	virtual void render();
 	ofParameter<Type> value;
 	bool bMousePressed;

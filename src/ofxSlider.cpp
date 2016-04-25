@@ -5,6 +5,7 @@ using namespace std;
 using namespace ofx;
 using namespace ofx::DOM;
 
+
 template<typename DataType>
 ofxSlider<DataType>::ofxSlider()
 	:ofxBaseGui(){
@@ -63,6 +64,8 @@ ofxSlider<DataType>::~ofxSlider(){
 
 template<typename DataType>
 void ofxSlider<DataType>::setup(){
+
+	setTheme();
 
 	hasFocus = false;
 	updateOnReleaseOnly.set("update-on-release-only", false);
@@ -483,6 +486,18 @@ void ofxSlider <DataType>::arcStrip(ofPath & path, ofPoint center, float outer_r
 	}
 
 	path.close();
+}
+
+template<typename DataType>
+std::string ofxSlider<DataType>::getClassType(){
+	return "slider";
+}
+
+template<typename DataType>
+vector<std::string> ofxSlider<DataType>::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }
 
 template class ofxSlider<int8_t>;

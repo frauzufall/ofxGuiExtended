@@ -33,7 +33,11 @@ public:
 		voidvalue.removeListener(listener,method);
 	}
 
+	static std::string getClassType();
+
 protected:
+
+	virtual vector<std::string> getClassTypes() override;
 
 	virtual void generateDraw();
 	bool setValue(float mx, float my, bool bCheck);

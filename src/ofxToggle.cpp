@@ -11,7 +11,6 @@ ofxToggle::ofxToggle():ofxBaseGui(){
 
 ofxToggle::ofxToggle(const string &toggleName):ofxToggle(){
 
-
 	setName(toggleName);
 	value.set(false);
 
@@ -58,7 +57,9 @@ void ofxToggle::setup(){
 	hasFocus = false;
 
 	type.set("type", ofxToggleType::CHECKBOX);
-	setType(type.get());
+
+	setTheme();
+
 	value.addListener(this,&ofxToggle::valueChanged);
 
 	registerMouseEvents();
@@ -122,63 +123,76 @@ void ofxToggle::generateDraw(){
 		}
 	}
 
-//	bg.clear();
-//	bg.setFillColor(backgroundColor);
-//	bg.setStrokeWidth(borderWidth);
-//	bg.setStrokeColor(borderColor);
-//	bg.rectangle(0,0,getWidth(),getHeight());
-
-	fg.clear();
-	fg.setFilled(true);
-	fg.setStrokeColor(borderColor);
-	fg.setStrokeWidth(borderWidth);
+	bg.clear();
+	bg.setFilled(true);
+	border.clear();
+	border.setFillColor(borderColor);
+	border.setFilled(true);
 	if(value){
-		fg.setFillColor(fillColor);
+		bg.setFillColor(fillColor);
 	}else{
-		fg.setFillColor(backgroundColor);
+		bg.setFillColor(backgroundColor);
 	}
 	switch(type){
 		default:
 		case ofxToggleType::RADIO:{
-			fg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3, checkboxRect.getHeight()/3, 0, 360);
+			border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3, checkboxRect.getHeight()/3, 0, 360);
+			if(value){
+				bg.append(border);
+			}else{
+				bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
+				border.append(bg);
+			}
 			break;
 		}
 		case ofxToggleType::CHECKBOX: {
-			fg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6,checkboxRect.height/6),
+			border.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6,checkboxRect.height/6),
 						 checkboxRect.width/3*2,checkboxRect.height/3*2);
-			break;
-		}
-		case ofxToggleType::FULLSIZE: {
-			fg.rectangle(checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
-			break;
-		}
-	}
-
-	switch(type){
-		default:
-		case ofxToggleType::RADIO:
-		case ofxToggleType::CHECKBOX: {
-
-//			//create cross
-//			cross.clear();
-//			cross.setStrokeColor(textColor);
-//			cross.setStrokeWidth(1);
-//			cross.setFilled(false);
-//			cross.moveTo(checkboxRect.getTopLeft());
-//			cross.lineTo(checkboxRect.getBottomRight());
-//			cross.moveTo(checkboxRect.getTopRight());
-//			cross.lineTo(checkboxRect.getBottomLeft());
-
-			// create label
-			if(showName){
-				textMesh = getTextMesh(getName(), textPadding + checkboxRect.width, getShape().getHeight() / 2 + 4);
+			if(value){
+				bg.append(border);
+			}else{
+				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+							 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
+				border.append(bg);
 			}
 			break;
 		}
 		case ofxToggleType::FULLSIZE: {
+			border.rectangle(checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
+			if(value){
+				bg.append(border);
+			}else{
+				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth);
+				border.append(bg);
+			}
+			break;
+		}
+	}
 
-			// create label
-			if(showName){
+	if(showName){
+		switch(type){
+			default:
+			case ofxToggleType::RADIO:
+			case ofxToggleType::CHECKBOX: {
+
+	//			//create cross
+	//			cross.clear();
+	//			cross.setStrokeColor(textColor);
+	//			cross.setStrokeWidth(1);
+	//			cross.setFilled(false);
+	//			cross.moveTo(checkboxRect.getTopLeft());
+	//			cross.lineTo(checkboxRect.getBottomRight());
+	//			cross.moveTo(checkboxRect.getTopRight());
+	//			cross.lineTo(checkboxRect.getBottomLeft());
+
+				// create label
+
+				textMesh = getTextMesh(getName(), textPadding + checkboxRect.width, getShape().getHeight() / 2 + 4);
+				break;
+			}
+			case ofxToggleType::FULLSIZE: {
+
+				// create label
 				float textWidth = ofxBaseGui::getTextWidth(getName());
 				switch(textAlignment){
 					default:
@@ -195,8 +209,8 @@ void ofxToggle::generateDraw(){
 						break;
 
 				}
+				break;
 			}
-			break;
 		}
 	}
 
@@ -204,8 +218,9 @@ void ofxToggle::generateDraw(){
 }
 
 void ofxToggle::render(){
+
+	border.draw();
 	bg.draw();
-	fg.draw();
 
 //	if(value && (type == ofxToggle::Type::CHECKBOX
 //			|| type == ofxToggle::Type::RADIO)){
@@ -310,4 +325,14 @@ void ofxToggle::setType(const ofxToggleType::Type &type){
 
 ofxToggleType::Type ofxToggle::getType(){
 	return type;
+}
+
+std::string ofxToggle::getClassType(){
+	return "toggle";
+}
+
+vector<std::string> ofxToggle::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }

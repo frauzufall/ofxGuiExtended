@@ -41,7 +41,12 @@ public:
 
 	ofAbstractParameter & getParameter();
 
+	static std::string getClassType();
+
 protected:
+
+	virtual vector<std::string> getClassTypes() override;
+
 	virtual void render() override;
 	ofParameter<Type> label;
 	virtual void generateDraw() override;

@@ -30,7 +30,11 @@ class ofxGuiTabs : public ofxGuiGroup {
 		virtual void maximize() override;
 		virtual void maximizeAll() override;
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 

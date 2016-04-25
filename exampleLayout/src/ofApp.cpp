@@ -93,9 +93,7 @@ void ofApp::setup(){
 		ofRandomize(choices);
 
 		ofxLabel* label = page1->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setPercentalWidth(false);
 		label->setSize((int)ofRandom(100,200), (int)ofRandom(60, 80));
-		label->setMargin(1);
 	}
 
 	/*
@@ -112,9 +110,7 @@ void ofApp::setup(){
 		ofRandomize(choices);
 
 		ofxLabel* label = page2->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setPercentalWidth(false);
 		label->setSize((int)ofRandom(70,50), (int)ofRandom(30, 50));
-		label->setMargin(1);
 	}
 
 	/*
@@ -125,9 +121,7 @@ void ofApp::setup(){
 		ofRandomize(choices);
 
 		ofxLabel* label = page3->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setPercentalWidth(false);
 		label->setSize((int)ofRandom(130,150), (int)ofRandom(30, 50));
-		label->setMargin(1);
 	}
 
 

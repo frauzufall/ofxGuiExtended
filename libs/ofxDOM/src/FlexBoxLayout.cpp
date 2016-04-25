@@ -62,8 +62,14 @@ void FlexBoxLayout::align(FlexDirection direction){
 	vector<vector<Element*>> flexItems;
 	vector<vector<int>> flexItemsBasis;
 	vector<float> totalSpaceMainAxis;
-	float mainAxisSize = horizontal ? _parent->getWidth() : _parent->getHeight();
-	float crossAxisSize = horizontal ? _parent->getHeight() : _parent->getWidth();
+	float mainAxisSize, crossAxisSize;
+	if(horizontal){
+		mainAxisSize = _parent->getWidth() - getPaddingHorizontal(_parent);
+		crossAxisSize = _parent->getHeight() - getPaddingVertical(_parent);
+	}else{
+		mainAxisSize = _parent->getHeight() - getPaddingVertical(_parent);
+		crossAxisSize = _parent->getWidth() - getPaddingHorizontal(_parent);
+	}
 	int linecount = 0;
 
 	if(children().size() > 0){
@@ -264,24 +270,28 @@ void FlexBoxLayout::align(FlexDirection direction){
 		}
 	}
 
+	float parentPaddingLeft = getPaddingLeft(_parent);
+	float parentPaddingTop = getPaddingTop(_parent);
+
 	float currentMainPos = 0;
 	float currentCrossPos = spacingCrossAxisStart;
+	currentCrossPos += horizontal ? parentPaddingTop : parentPaddingLeft;
 
 	for(unsigned int i = 0; i < lines.size(); i++){
 
 		//take care of empty space on main axis
-		int spacingMainAxisStart = 0;
+		int spacingMainAxisStart = horizontal ? parentPaddingLeft : parentPaddingTop;
 		int spacingMainAxisBetween = 0;
 		if(totalSpaceMainAxis.at(i) > 0){
 			switch(getJustifyContent(_parent)){
 				case JustifyContent::CENTER:
-					spacingMainAxisStart = totalSpaceMainAxis.at(i)/2;
+					spacingMainAxisStart += totalSpaceMainAxis.at(i)/2;
 					break;
 				case JustifyContent::FLEX_END:
-					spacingMainAxisStart = totalSpaceMainAxis.at(i);
+					spacingMainAxisStart += totalSpaceMainAxis.at(i);
 					break;
 				case JustifyContent::SPACE_AROUND:
-					spacingMainAxisStart = totalSpaceMainAxis.at(i)/(lines.at(i).size()+1);
+					spacingMainAxisStart += totalSpaceMainAxis.at(i)/(lines.at(i).size()+1);
 					spacingMainAxisBetween = spacingMainAxisStart;
 					break;
 				case JustifyContent::SPACE_BETWEEN:
@@ -318,8 +328,8 @@ void FlexBoxLayout::align(FlexDirection direction){
 
 			float elementMainPos = currentMainPos;
 			float elementCrossPos = currentCrossPos;
-			float elementMainSize = horizontal ? getCurrentWidth(element) : getCurrentHeight(element);
-			float elementCrossSize = horizontal ? getCurrentHeight(element) : getCurrentWidth(element);
+			float elementMainSize = horizontal ? getWidthAndMargin(element) : getHeightAndMargin(element);
+			float elementCrossSize = horizontal ? getHeightAndMargin(element) : getWidthAndMargin(element);
 
 			//align item on cross axis
 
@@ -394,19 +404,12 @@ bool FlexBoxLayout::elementAbsolutePositioned(Element* e){
 
 
 
-float FlexBoxLayout::getCurrentWidth(Element* e){
-	float res = e->getWidth();
-	if(e->hasAttribute("_margin-left")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-left"));
-	}
-	if(e->hasAttribute("_margin-right")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-right"));
-	}
-	return res;
+float FlexBoxLayout::getWidthAndMargin(Element* e){
+	return e->getWidth() + getMarginHorizontal(e);
 }
 
 float FlexBoxLayout::getDesiredWidth(Element* e){
-	float res = e->getMinWidth();
+	float res = e->getMinWidth() + getPaddingHorizontal(e);
 
 	if(e->hasAttribute("_width")){
 		std::string widthstr = e->getAttribute<std::string>("_width");
@@ -415,7 +418,7 @@ float FlexBoxLayout::getDesiredWidth(Element* e){
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
 				if(e->parent()){
-					return e->parent()->getWidth()*amount;
+					return (e->parent()->getWidth()-getPaddingHorizontal(e->parent()))*amount;
 				}else {
 					return ofGetWindowWidth()*amount;
 				}
@@ -425,38 +428,23 @@ float FlexBoxLayout::getDesiredWidth(Element* e){
 		}
 	}
 
-	if(e->hasAttribute("_margin-left")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-left"));
-	}
-	if(e->hasAttribute("_margin-right")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-right"));
-	}
+	res += getMarginHorizontal(e);
+
 	return res;
 }
 
 void FlexBoxLayout::setWidthInLayout(Element* e, float width){
-	if(e->hasAttribute("_margin-left")){
-		width -= ofToFloat(e->getAttribute<std::string>("_margin-left"));
-	}
-	if(e->hasAttribute("_margin-right")){
-		width -= ofToFloat(e->getAttribute<std::string>("_margin-right"));
-	}
+	width -= getMarginHorizontal(e);
+//	width += getPaddingHorizontal(e);
 	e->setWidthInLayout(width);
 }
 
-float FlexBoxLayout::getCurrentHeight(Element* e){
-	float res = e->getHeight();
-	if(e->hasAttribute("_margin-top")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-top"));
-	}
-	if(e->hasAttribute("_margin-bottom")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-bottom"));
-	}
-	return res;
+float FlexBoxLayout::getHeightAndMargin(Element* e){
+	return e->getHeight() + getMarginVertical(e);
 }
 
 float FlexBoxLayout::getDesiredHeight(Element* e){
-	float res = e->getMinHeight();
+	float res = e->getMinHeight() + getPaddingVertical(e);
 
 	if(e->hasAttribute("_height")){
 		std::string heightstr = e->getAttribute<std::string>("_height");
@@ -465,7 +453,7 @@ float FlexBoxLayout::getDesiredHeight(Element* e){
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
 				if(e->parent()){
-					return e->parent()->getHeight()*amount;
+					return (e->parent()->getHeight() - getPaddingVertical(e->parent()))*amount;
 				}else {
 					return ofGetWindowHeight()*amount;
 				}
@@ -475,32 +463,92 @@ float FlexBoxLayout::getDesiredHeight(Element* e){
 		}
 	}
 
-	if(e->hasAttribute("_margin-top")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-top"));
-	}
-	if(e->hasAttribute("_margin-bottom")){
-		res += ofToFloat(e->getAttribute<std::string>("_margin-bottom"));
-	}
+	res += getMarginVertical(e);
+
 	return res;
 }
 
 void FlexBoxLayout::setHeightInLayout(Element* e, float height){
-	if(e->hasAttribute("_margin-top")){
-		height -= ofToFloat(e->getAttribute<std::string>("_margin-top"));
-	}
-	if(e->hasAttribute("_margin-bottom")){
-		height -= ofToFloat(e->getAttribute<std::string>("_margin-bottom"));
-	}
+	height -= getMarginVertical(e);
+//	height += getPaddingVertical(e);
 	e->setHeightInLayout(height);
 }
 
-void FlexBoxLayout::setPosition(Element* e, ofPoint p){
+float FlexBoxLayout::getMarginHorizontal(Element *e){
+	return getMarginLeft(e) + getMarginRight(e);
+}
+
+float FlexBoxLayout::getMarginVertical(Element *e){
+	return getMarginTop(e) + getMarginBottom(e);
+}
+
+float FlexBoxLayout::getMarginLeft(Element *e){
 	if(e->hasAttribute("_margin-left")){
-		p.x += ofToFloat(e->getAttribute<std::string>("_margin-left"));
+		return ofToFloat(e->getAttribute<std::string>("_margin-left"));
 	}
+	return 0;
+}
+
+float FlexBoxLayout::getMarginRight(Element *e){
+	if(e->hasAttribute("_margin-right")){
+		return ofToFloat(e->getAttribute<std::string>("_margin-right"));
+	}
+	return 0;
+}
+
+float FlexBoxLayout::getMarginTop(Element *e){
 	if(e->hasAttribute("_margin-top")){
-		p.y += ofToFloat(e->getAttribute<std::string>("_margin-top"));
+		return ofToFloat(e->getAttribute<std::string>("_margin-top"));
 	}
+	return 0;
+}
+
+float FlexBoxLayout::getMarginBottom(Element *e){
+	if(e->hasAttribute("_margin-bottom")){
+		return ofToFloat(e->getAttribute<std::string>("_margin-bottom"));
+	}
+	return 0;
+}
+
+float FlexBoxLayout::getPaddingHorizontal(Element *e){
+	return getPaddingLeft(e) + getPaddingRight(e);
+}
+
+float FlexBoxLayout::getPaddingVertical(Element *e){
+	return getPaddingTop(e) + getPaddingBottom(e);
+}
+
+float FlexBoxLayout::getPaddingLeft(Element *e){
+	if(e->hasAttribute("_padding-left")){
+		return ofToFloat(e->getAttribute<std::string>("_padding-left"));
+	}
+	return 0;
+}
+
+float FlexBoxLayout::getPaddingRight(Element *e){
+	if(e->hasAttribute("_padding-right")){
+		return ofToFloat(e->getAttribute<std::string>("_padding-right"));
+	}
+	return 0;
+}
+
+float FlexBoxLayout::getPaddingTop(Element *e){
+	if(e->hasAttribute("_padding-top")){
+		return ofToFloat(e->getAttribute<std::string>("_padding-top"));
+	}
+	return 0;
+}
+
+float FlexBoxLayout::getPaddingBottom(Element *e){
+	if(e->hasAttribute("_padding-bottom")){
+		return ofToFloat(e->getAttribute<std::string>("_padding-bottom"));
+	}
+	return 0;
+}
+
+void FlexBoxLayout::setPosition(Element* e, ofPoint p){
+	p.x += getMarginLeft(e);
+	p.y += getMarginTop(e);
 	e->setPosition(p);
 }
 

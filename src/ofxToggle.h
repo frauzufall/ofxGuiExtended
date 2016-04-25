@@ -54,7 +54,12 @@ public:
 
 	virtual ofAbstractParameter & getParameter();
 
+	static std::string getClassType();
+
 protected:
+
+	virtual vector<std::string> getClassTypes() override;
+
 	virtual void _setConfig(const ofJson & config) override;
 	virtual void render() override;
 	ofRectangle checkboxRect;
@@ -66,6 +71,6 @@ protected:
 	virtual bool setValue(float mx, float my, bool bCheck);
 	virtual void generateDraw();
 	void valueChanged(bool & value);
-	ofPath fg,cross;
+	ofPath cross;
 	ofVboMesh textMesh;
 };

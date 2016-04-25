@@ -19,7 +19,11 @@ class ofxPanelHeader : public ofxGuiGroupHeader {
 		ofEvent<void> loadPressedE;
 		ofEvent<void> savePressedE;
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 		virtual void render() override;
@@ -47,6 +51,11 @@ class ofxPanel : public ofxGuiGroup {
 		void onHeaderMove(MoveEventArgs& args);
 		void onLoadPressed();
 		void onSavePressed();
+
+		static std::string getClassType();
+
+	protected:
+		virtual vector<std::string> getClassTypes() override;
 
 	private:
 

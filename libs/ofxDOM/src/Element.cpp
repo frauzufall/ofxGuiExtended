@@ -476,6 +476,10 @@ Layout* Element::layout(){
 	return _layout.get();
 }
 
+void Element::updateLayout(){
+	invalidateChildShape();
+}
+
 bool Element::hitTest(const Position& parentPosition) const
 {
 	return getShape().inside(parentPosition);
@@ -597,13 +601,9 @@ void Element::setSize(float width, float height)
 {
 	if(_shape.getWidth()!= width || _shape.getHeight() != height || _sizeInLayout.x != width || _sizeInLayout.y != height)
 	{
-		_shape.setWidth(width);
-		_shape.setHeight(height);
-		_shape.standardize();
-		_sizeInLayout.x = _shape.width;
-		_sizeInLayout.y = _shape.height;
-		ResizeEventArgs e(_shape);
-		ofNotifyEvent(resize, e, this);
+		setAttribute("_width", ofToString(width));
+		setAttribute("_height", ofToString(height));
+		invalidateChildShape();
 	}
 }
 
@@ -629,7 +629,11 @@ Size Element::getSize() const
 ///\todo use ofCompareFloat
 void Element::setWidth(float width)
 {
-	setAttribute("_width", ofToString(width));
+	if(_shape.getWidth()!= width || _sizeInLayout.x != width)
+	{
+		setAttribute("_width", ofToString(width));
+		invalidateChildShape();
+	}
 }
 
 
@@ -659,7 +663,11 @@ float Element::getMinWidth()
 ///\todo use ofCompareFloat
 void Element::setHeight(float height)
 {
-	setAttribute("_height", ofToString(height));
+	if(_shape.getHeight() != height || _sizeInLayout.y != height)
+	{
+		setAttribute("_height", ofToString(height));
+		invalidateChildShape();
+	}
 }
 
 
@@ -946,7 +954,7 @@ void Element::setLocked(bool locked_)
 }
 
 
-void Element::invalidateChildShape() const
+void Element::invalidateChildShape()
 {
 	_childShapeInvalid = true;
 
@@ -959,20 +967,19 @@ void Element::invalidateChildShape() const
 	{
 		_layout->doLayout();
 	}
+	setNeedsRedraw();
 }
 
 
 void Element::_onMoved(MoveEventArgs&)
 {
 	invalidateChildShape();
-	setNeedsRedraw();
 }
 
 
 void Element::_onResized(ResizeEventArgs&)
 {
 	invalidateChildShape();
-	setNeedsRedraw();
 }
 
 

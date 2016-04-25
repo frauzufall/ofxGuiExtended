@@ -7,7 +7,9 @@
 #include "JsonConfigParser.h"
 #include "FlexBoxLayout.h"
 
-ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxBaseGui(config){
+ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxBaseGui(){
+	setTheme();
+	_setConfig(config);
 	registerMouseEvents();
 }
 
@@ -66,6 +68,18 @@ bool ofxGuiGroupHeader::mousePressed(ofMouseEventArgs & args){
 	return ofxBaseGui::mousePressed(args);
 
 }
+
+std::string ofxGuiGroupHeader::getClassType(){
+	return "group-header";
+}
+
+vector<std::string> ofxGuiGroupHeader::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
+}
+
+
 
 ofxGuiGroup::ofxGuiGroup()
 	:ofxBaseGui(){
@@ -126,8 +140,7 @@ ofxGuiGroup::~ofxGuiGroup(){
 
 void ofxGuiGroup::setup(){
 
-//	setPercentalWidth(false);
-//	setSize(defaultWidth, defaultHeight);
+	setTheme();
 
 	header = nullptr;
 
@@ -144,14 +157,9 @@ void ofxGuiGroup::setup(){
 	headerHeight.addListener(this, &ofxGuiGroup::onHeaderHeight);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
 
-	header = add<ofxGuiGroupHeader>(ofJson({
-											   {"align-self", "flex-start"},
-											   {"height", headerHeight.get()},
-											   {"margin", 0}
-										   }));
-	header->setBackgroundColor(headerBackgroundColor);
-	header->setBorderWidth(0);
-	header->setHidden(true);
+	header = add<ofxGuiGroupHeader>();
+	header->setHeight(headerHeight);
+//	header->setBackgroundColor(headerBackgroundColor);
 
 	clear();
 
@@ -403,7 +411,6 @@ void ofxGuiGroup::maximize(){
 	setSize(widthMaximized, heightMaximized);
 
 	invalidateChildShape();
-	setNeedsRedraw();
 }
 
 void ofxGuiGroup::minimizeAll(){
@@ -584,4 +591,14 @@ void ofxGuiGroup::setHeaderBackgroundColor(const ofColor & color){
 	if(header){
 		header->setBackgroundColor(color);
 	}
+}
+
+std::string ofxGuiGroup::getClassType(){
+	return "group";
+}
+
+vector<std::string> ofxGuiGroup::getClassTypes(){
+	vector<std::string> types = ofxBaseGui::getClassTypes();
+	types.push_back(getClassType());
+	return types;
 }
