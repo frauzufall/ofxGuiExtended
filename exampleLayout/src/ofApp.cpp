@@ -1,5 +1,5 @@
 #include "ofApp.h"
-#include "FlexBoxLayout.h"
+#include "ofxDOMFlexBoxLayout.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -70,8 +70,10 @@ void ofApp::setup(){
 	/*
 	 *  create tab container
 	 */
-	tabbed_pages = gui.addTabs("tabbedpages");
-	tabbed_pages->setSize(800,600);
+	tabbed_pages = gui.addTabs("tabbedpages", ofJson({
+								   {"width", "70%"},
+								   {"height", 600}
+							   }));
 
 	/*
 	 *  create pages and add them to tab layout
@@ -80,49 +82,49 @@ void ofApp::setup(){
 	page2 = tabbed_pages->addPanel("page2", ofJson({{"show-header", false}}));
 	page3 = tabbed_pages->addPanel("page3", ofJson({{"show-header", false}}));
 
-	/*
-	 *  fill page 1
-	 */
-	vector<ofJson> choices;
-	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
-	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
-	choices.push_back({{"float", "none"}, {"background-color", "rgba(255,0,0,0.7)"}});
+//	/*
+//	 *  fill page 1
+//	 */
+//	vector<ofJson> choices;
+//	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
+//	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
+//	choices.push_back({{"float", "none"}, {"background-color", "rgba(255,0,0,0.7)"}});
 
-	for(int i = 0; i < 10; i++){
+//	for(int i = 0; i < 10; i++){
 
-		ofRandomize(choices);
+//		ofRandomize(choices);
 
-		ofxLabel* label = page1->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setSize((int)ofRandom(100,200), (int)ofRandom(60, 80));
-	}
+//		ofxLabel* label = page1->add<ofxLabel>(ofToString(i,2), choices[0]);
+//		label->setSize((int)ofRandom(100,200), (int)ofRandom(60, 80));
+//	}
 
-	/*
-	 *  raise the chance to create left or right floating elements
-	 */
-	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
-	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
+//	/*
+//	 *  raise the chance to create left or right floating elements
+//	 */
+//	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
+//	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
 
-	/*
-	 *  fill page 2
-	 */
-	for(int i = 0; i < 20; i++){
+//	/*
+//	 *  fill page 2
+//	 */
+//	for(int i = 0; i < 20; i++){
 
-		ofRandomize(choices);
+//		ofRandomize(choices);
 
-		ofxLabel* label = page2->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setSize((int)ofRandom(70,50), (int)ofRandom(30, 50));
-	}
+//		ofxLabel* label = page2->add<ofxLabel>(ofToString(i,2), choices[0]);
+//		label->setSize((int)ofRandom(70,50), (int)ofRandom(30, 50));
+//	}
 
-	/*
-	 *  fill page 3
-	 */
-	for(int i = 0; i < 30; i++){
+//	/*
+//	 *  fill page 3
+//	 */
+//	for(int i = 0; i < 30; i++){
 
-		ofRandomize(choices);
+//		ofRandomize(choices);
 
-		ofxLabel* label = page3->add<ofxLabel>(ofToString(i,2), choices[0]);
-		label->setSize((int)ofRandom(130,150), (int)ofRandom(30, 50));
-	}
+//		ofxLabel* label = page3->add<ofxLabel>(ofToString(i,2), choices[0]);
+//		label->setSize((int)ofRandom(130,150), (int)ofRandom(30, 50));
+//	}
 
 
 }

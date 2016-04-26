@@ -1,5 +1,4 @@
 #include "ofxGuiExtended.h"
-#include "FlexBoxLayout.h"
 
 ofxGui::ofxGui(){
 	setup_done = false;
@@ -10,11 +9,11 @@ ofxGui::~ofxGui(){
 
 void ofxGui::setup(){
 	setup_done = true;
-	document = std::make_unique<ofx::DOM::Document>();
-	document->createLayout<ofx::DOM::FlexBoxLayout>(document.get());
+	document = std::make_unique<DOM::Document>();
+	document->createLayout<ofxDOMFlexBoxLayout>(document.get());
 }
 
-Document* ofxGui::getRoot(){
+DOM::Document* ofxGui::getRoot(){
 	if(!setup_done){
 		setup();
 	}
@@ -29,12 +28,12 @@ ofxGuiGroup* ofxGui::addGroup(const ofParameterGroup & parameters, const ofJson&
 	return getRoot()->add<ofxGuiGroup>(parameters, rootGroupConfig(config));
 }
 
-ofxPanel* ofxGui::addPanel(const std::string& name, const ofJson& config){
-	return getRoot()->add<ofxPanel>(name, rootGroupConfig(config));
+ofxGuiPanel* ofxGui::addPanel(const std::string& name, const ofJson& config){
+	return getRoot()->add<ofxGuiPanel>(name, rootGroupConfig(config));
 }
 
-ofxPanel* ofxGui::addPanel(const ofParameterGroup & parameters, const ofJson& config){
-	return getRoot()->add<ofxPanel>(parameters, rootGroupConfig(config));
+ofxGuiPanel* ofxGui::addPanel(const ofParameterGroup & parameters, const ofJson& config){
+	return getRoot()->add<ofxGuiPanel>(parameters, rootGroupConfig(config));
 }
 
 ofxGuiTabs* ofxGui::addTabs(const std::string& name, const ofJson& config){

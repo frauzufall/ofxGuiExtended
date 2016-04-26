@@ -1,22 +1,28 @@
 #pragma once
 
-#include "ofxToggle.h"
-#include "ofxSlider.h"
-#include "ofxSliderGroup.h"
-#include "ofxPanel.h"
-#include "ofxButton.h"
-#include "ofxLabel.h"
-#include "ofxGuiTabs.h"
-#include "ofxValuePlotter.h"
-#include "ofxFpsPlotter.h"
-#include "ofxFunctionPlotter.h"
-#include "ofxInputField.h"
-#include "ofxGuiGraphics.h"
-#include "ofxGuiZoomableGraphics.h"
+#include "ofxGuiElement.h"
+#include "containers/ofxGuiGroup.h"
+#include "containers/ofxGuiSliderGroup.h"
+#include "containers/ofxGuiPanel.h"
+#include "containers/ofxGuiTabs.h"
+#include "controls/ofxGuiToggle.h"
+#include "controls/ofxGuiSlider.h"
+#include "controls/ofxGuiButton.h"
+#include "controls/ofxGuiLabel.h"
+#include "controls/ofxGuiValuePlotter.h"
+#include "controls/ofxGuiFpsPlotter.h"
+#include "controls/ofxGuiFunctionPlotter.h"
+#include "controls/ofxGuiInputField.h"
+#include "controls/ofxGuiGraphics.h"
+#include "controls/ofxGuiZoomableGraphics.h"
 
-#include "ofxGuiDefaultConfig.h"
+#include "DOM/ofxDOM.h"
 
-#include "ofxDOM.h"
+#include "view/ofxGuiDefaultConfig.h"
+#include "view/ofxDOMFlexBoxLayout.h"
+#include "view/ofxDOMBoxLayout.h"
+#include "view/ofxDOMFloatingBoxLayout.h"
+#include "view/JsonConfigParser.h"
 
 void ofxGuiSetFont(const string & fontPath,int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, int dpi=0);
 void ofxGuiSetBitmapFont();
@@ -35,13 +41,13 @@ class ofxGui {
 	public:
 		ofxGui();
 		~ofxGui();
-		Document* getRoot();
+		DOM::Document* getRoot();
 
 		ofxGuiGroup* addGroup(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiGroup* addGroup(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 
-		ofxPanel* addPanel(const std::string& name="", const ofJson& config = ofJson());
-		ofxPanel* addPanel(const ofParameterGroup & parameters, const ofJson& config = ofJson());
+		ofxGuiPanel* addPanel(const std::string& name="", const ofJson& config = ofJson());
+		ofxGuiPanel* addPanel(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
 
@@ -60,7 +66,7 @@ class ofxGui {
 		}
 
 	private:
-		std::unique_ptr<ofx::DOM::Document> document;
+		std::unique_ptr<DOM::Document> document;
 
 		void setup();
 		bool setup_done;
