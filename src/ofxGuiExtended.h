@@ -13,7 +13,6 @@
 #include "ofxInputField.h"
 #include "ofxGuiGraphics.h"
 #include "ofxGuiZoomableGraphics.h"
-#include "ofxMasterSlaveControl.h"
 
 #include "ofxGuiDefaultConfig.h"
 
