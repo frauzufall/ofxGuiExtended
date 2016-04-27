@@ -27,7 +27,8 @@ class ofxGuiElement : public DOM::Element {
 		ofxGuiElement & operator=(const ofxGuiElement &) = delete;
 
 		void setConfig(const ofJson &config, bool recursive = false);
-		void setTheme(const ofJson &config = defaultTheme);
+		void setTheme();
+		void setTheme(const ofJson &config);
 		void loadConfig(const std::string &filename, bool recursive = false);
 		void loadTheme(const std::string &filename);
 
@@ -58,7 +59,6 @@ class ofxGuiElement : public DOM::Element {
 		float getBorderWidth() const;
 		float getFontSize() const;
 
-		virtual void setHeaderBackgroundColor(const ofColor & color);
 		virtual void setBackgroundColor(const ofColor & color);
 		virtual void setBorderColor(const ofColor & color);
 		virtual void setTextColor(const ofColor & color);
@@ -66,26 +66,11 @@ class ofxGuiElement : public DOM::Element {
 		virtual void setBorderWidth(float width);
 		virtual void setFontSize(float size);
 
-		static void setDefaultHeaderBackgroundColor(const ofColor & color);
-		static void setDefaultBackgroundColor(const ofColor & color);
-		static void setDefaultBorderColor(const ofColor & color);
-		static void setDefaultTextColor(const ofColor & color);
-		static void setDefaultFillColor(const ofColor & color);
-		static void setDefaultBorderWidth(float width);
-		static void setDefaultFontSize(float size);
-
-		static void setDefaultTextPadding(int padding);
-		static void setDefaultWidth(int width);
-		static void setDefaultHeight(int height);
-
-		static void setDefaultTheme(const ofJson& theme);
-		static void loadDefaultTheme(const std::string &filename);
-
 		void setShowName(bool show);
 
 		virtual ofAbstractParameter & getParameter();
-		static void loadFont(const std::string& filename, int fontsize, bool _bAntiAliased = true, bool _bFullCharacterSet = false, int dpi = 0);
-		static void setUseTTF(bool bUseTTF);
+		void loadFont(const std::string& filename, int fontsize, bool _bAntiAliased = true, bool _bFullCharacterSet = false, int dpi = 0);
+		void setUseTTF(bool bUseTTF);
 
 		/// \returns true if the mouse is over this element.
 		bool isMouseOver() const;
@@ -116,7 +101,7 @@ class ofxGuiElement : public DOM::Element {
 		virtual void mouseEntered(ofMouseEventArgs & args){}
 		virtual void mouseExited(ofMouseEventArgs & args){}
 
-		ofJson getThisConfigTheme();
+		ofJson getTheme();
 		ofJson getGlobalConfigTheme();
 
 		static std::string getClassType();
@@ -146,29 +131,14 @@ class ofxGuiElement : public DOM::Element {
 		float getTextWidth(const std::string & text);
 		float getTextHeight(const std::string & text);
 
-		static ofTrueTypeFont font;
-		static bool fontLoaded;
-		static bool useTTF;
-		static ofBitmapFont bitmapFont;
-		std::shared_ptr <ofBaseFileSerializer> serializer;
-
-		static ofColor defaultHeaderBackgroundColor;
-		static ofColor defaultBackgroundColor;
-		static ofColor defaultBorderColor;
-		static ofColor defaultTextColor;
-		static ofColor defaultFillColor;
-		static float defaultBorderWidth;
-		static float defaultFontSize;
-
-		static int textPadding;
-
-		static int defaultWidth;
-		static int defaultHeight;
-
-		static ofJson defaultTheme;
-
 		static std::string saveStencilToHex(const ofImage & img);
 		static void loadStencilFromHex(ofImage & img, unsigned char * data);
+
+		ofTrueTypeFont font;
+		bool fontLoaded;
+		bool useTTF;
+		ofBitmapFont bitmapFont;
+		std::shared_ptr <ofBaseFileSerializer> serializer;
 
 		/// \brief True if the Widget is configured to be dragged.
 		bool _isDraggable = false;
@@ -181,6 +151,8 @@ class ofxGuiElement : public DOM::Element {
 
 		/// \brief Point where element is grabbed for dragging in screen coordinates
 		ofPoint grabPoint;
+
+		int textPadding;
 
 		ofPath bg, border;
 

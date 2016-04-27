@@ -65,11 +65,12 @@ void ofxGuiTabs::clear(){
 									   {"height", tabHeight.get()},
 									   {"align-items", "stretch"},
 									   {"justify-content", "flex-start"},
-//									   {"margin-top", 10},
+									   {"margin", 0},
 									   {"show-header", false},
 									   {"border-width", 0},
 									   {"padding", "0 10"},
-									   {"flex-direction", "row"}
+									   {"flex-direction", "row"},
+									   {"background-color", "rgba(0,0,0,0)"}
 								   }));
 
 	tabs->setExclusiveToggles(true);
@@ -108,11 +109,14 @@ void ofxGuiTabs::generateDraw(){
 			bg.lineTo(tab->getShape().getLeft()+tabs->getPosition().x, topy);
 			bg.lineTo(tab->getShape().getTopLeft()+tabs->getPosition());
 			bg.lineTo(tab->getShape().getTopRight()+tabs->getPosition());
-			bg.lineTo(tab->getShape().getRight()+tabs->getPosition().x, topy);
-//			if(tab != activeToggle){
-//				border.moveTo(tab->getShape().getLeft(), activePage->getShape().getTop());
-//				border.lineTo(tab->getShape().getRight(), activePage->getShape().getTop());
-//			}
+			if(tab != activeToggle){
+				bg.lineTo(tab->getShape().getRight()+tabs->getPosition().x, topy - borderWidth);
+				bg.lineTo(tab->getShape().getLeft()+tabs->getPosition().x, topy - borderWidth);
+				bg.lineTo(tab->getShape().getLeft()+tabs->getPosition().x, topy);
+				bg.lineTo(tab->getShape().getRight()+tabs->getPosition().x, topy);
+			}else{
+				bg.lineTo(tab->getShape().getRight()+tabs->getPosition().x, topy);
+			}
 		}
 		border.lineTo(getWidth(), topy - borderWidth);
 		border.lineTo(getWidth(), getHeight());
@@ -179,10 +183,10 @@ void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){
 void ofxGuiTabs::setActiveTab(int &index){
 	tabs->setActiveToggle(index);
 	for(auto &e : tabs->getControls()){
-//		e->setConfig(ofJson({{"margin-bottom", "0"}}));
+		e->setConfig(ofJson({{"margin-bottom", "1"}}));
 	}
 	activeToggle = tabs->getControl(index);
-//	activeToggle->setConfig(ofJson({{"margin-bottom", "-2"}}));
+	activeToggle->setConfig(ofJson({{"margin-bottom", "-1"}}));
 	for(auto &e : pages){
 		e->setHidden(true);
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 
 template<typename Type>
 class ofxGuiInputField : public ofxGuiElement{
@@ -8,8 +8,7 @@ public:
 	ofxGuiInputField();
 	ofxGuiInputField(const ofJson &config);
 	ofxGuiInputField(ofParameter<Type> _val, const ofJson &config = ofJson());
-	ofxGuiInputField(ofParameter<Type> _val, float width, float height = defaultHeight);
-	ofxGuiInputField(const std::string& _name, Type _val, Type _min, Type _max, float width = defaultWidth, float height = defaultHeight);
+	ofxGuiInputField(const std::string& _name, Type _val, Type _min, Type _max, const ofJson &config = ofJson());
 	//TODO the setup non-ofParameter setup is a pain for the Type string (because of the forced min and max)
 
 	~ofxGuiInputField();

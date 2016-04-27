@@ -13,7 +13,7 @@ void ofxGui::setup(){
 	document->createLayout<ofxDOMFlexBoxLayout>(document.get());
 }
 
-DOM::Document* ofxGui::getRoot(){
+DOM::Document* ofxGui::getDocument(){
 	if(!setup_done){
 		setup();
 	}
@@ -21,23 +21,23 @@ DOM::Document* ofxGui::getRoot(){
 }
 
 ofxGuiGroup* ofxGui::addGroup(const std::string& name, const ofJson& config){
-	return getRoot()->add<ofxGuiGroup>(name, rootGroupConfig(config));
+	return getDocument()->add<ofxGuiGroup>(name, rootGroupConfig(config));
 }
 
 ofxGuiGroup* ofxGui::addGroup(const ofParameterGroup & parameters, const ofJson& config){
-	return getRoot()->add<ofxGuiGroup>(parameters, rootGroupConfig(config));
+	return getDocument()->add<ofxGuiGroup>(parameters, rootGroupConfig(config));
 }
 
 ofxGuiPanel* ofxGui::addPanel(const std::string& name, const ofJson& config){
-	return getRoot()->add<ofxGuiPanel>(name, rootGroupConfig(config));
+	return getDocument()->add<ofxGuiPanel>(name, rootGroupConfig(config));
 }
 
 ofxGuiPanel* ofxGui::addPanel(const ofParameterGroup & parameters, const ofJson& config){
-	return getRoot()->add<ofxGuiPanel>(parameters, rootGroupConfig(config));
+	return getDocument()->add<ofxGuiPanel>(parameters, rootGroupConfig(config));
 }
 
 ofxGuiTabs* ofxGui::addTabs(const std::string& name, const ofJson& config){
-	return getRoot()->add<ofxGuiTabs>(name, rootGroupConfig(config));
+	return getDocument()->add<ofxGuiTabs>(name, rootGroupConfig(config));
 }
 
 ofJson ofxGui::rootGroupConfig(const ofJson& config){

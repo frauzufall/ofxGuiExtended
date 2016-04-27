@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofParameter.h"
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 
 class ofxGuiToggleType{
 	public:
@@ -22,8 +22,7 @@ public:
 	ofxGuiToggle(const std::string& toggleName);
 	ofxGuiToggle(const std::string& toggleName, const ofJson & config);
 	ofxGuiToggle(ofParameter<bool>& _bVal, const ofJson & config = ofJson());
-	ofxGuiToggle(ofParameter<bool>& _bVal, float width, float height = defaultHeight);
-	ofxGuiToggle(const std::string& toggleName, bool _bVal, float width = defaultWidth, float height = defaultHeight);
+	ofxGuiToggle(const std::string& toggleName, bool _bVal, const ofJson & config = ofJson());
 
 	~ofxGuiToggle();
 

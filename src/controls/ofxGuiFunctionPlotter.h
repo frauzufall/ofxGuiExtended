@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 #include "ofImage.h"
 
 class ofxGuiFunctionPlotter : public ofxGuiElement {

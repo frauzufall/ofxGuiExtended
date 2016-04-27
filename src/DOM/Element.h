@@ -527,6 +527,10 @@ public:
 	/// \param locked The locked state to set. True to lock, false to unlock.
 	void setLocked(bool locked);
 
+	/// \brief Called internally to invalidate the child shape tree.
+	virtual void invalidateChildShape(float recursive = true);
+
+
 protected:
 	/// \brief Setup method called by parent Element.
 	/// \param e The event data.
@@ -564,8 +568,6 @@ protected:
 	/// \returns An iterator pointing to the matching Element or the end.
 	std::vector<std::unique_ptr<Element>>::iterator findChild(Element* element);
 
-	/// \brief Called internally to invalidate the child shape tree.
-	virtual void invalidateChildShape();
 
 	/// \brief A vector to Elements.
 	std::vector<std::unique_ptr<Element>> _children;

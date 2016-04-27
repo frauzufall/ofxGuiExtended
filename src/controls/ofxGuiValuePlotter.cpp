@@ -26,10 +26,9 @@ ofxGuiValuePlotter::ofxGuiValuePlotter(ofParameter<float> value, const ofJson & 
 	_setConfig(config);
 }
 
-ofxGuiValuePlotter::ofxGuiValuePlotter(string label, float minValue, float maxValue, int plotSize, float width, float height)
-	:ofxGuiValuePlotter(){
+ofxGuiValuePlotter::ofxGuiValuePlotter(string label, float minValue, float maxValue, int plotSize, const ofJson & config)
+	:ofxGuiValuePlotter(config){
 
-	setSize(width, height);
 	minVal = minValue;
 	maxVal = maxValue;
 	this->plotSize = plotSize;
@@ -120,7 +119,7 @@ void ofxGuiValuePlotter::render(){
 	if(blendMode != OF_BLENDMODE_ALPHA){
 		ofEnableAlphaBlending();
 	}
-	ofSetColor(defaultTextColor);
+	ofSetColor(textColor);
 
 	bindFontTexture();
 	textMesh.draw();

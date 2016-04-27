@@ -172,6 +172,8 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 						element->setSizeInLayout(elementCrossSize, elementMainSize);
 					}
 
+					element->invalidateChildShape(false);
+
 				}
 			}
 		}
@@ -620,6 +622,11 @@ float ofxDOMFlexBoxLayout::getPaddingBottom(DOM::Element *e){
 }
 
 void ofxDOMFlexBoxLayout::setPosition(DOM::Element* e, ofPoint p){
+	if(e->layout()){
+		if(e->layout()->isDoingLayout()){
+			return;
+		}
+	}
 	p.x += getMarginLeft(e);
 	p.y += getMarginTop(e);
 	e->setPosition(p);

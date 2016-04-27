@@ -31,18 +31,10 @@ ofxGuiToggle::ofxGuiToggle(ofParameter<bool> &_bVal, const ofJson & config)
 
 }
 
-ofxGuiToggle::ofxGuiToggle(ofParameter<bool> &_bVal, float width, float height)
-	:ofxGuiToggle(_bVal){
-
-	setSize(width, height);
-
-}
-
-ofxGuiToggle::ofxGuiToggle(const std::string& toggleName, bool _bVal, float width, float height)
-	:ofxGuiToggle(toggleName){
+ofxGuiToggle::ofxGuiToggle(const std::string& toggleName, bool _bVal, const ofJson &config)
+	:ofxGuiToggle(toggleName, config){
 
 	value.set(_bVal);
-	setSize(width, height);
 
 }
 

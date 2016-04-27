@@ -11,9 +11,6 @@ public:
 	ofxGuiButton(const std::string& buttonName, const ofJson & config);
 	ofxGuiButton(ofParameter<void>& _val, const ofJson & config = ofJson());
 	ofxGuiButton(ofParameter<bool>& _bVal, const ofJson & config = ofJson());
-	ofxGuiButton(ofParameter<void>& _val, float width, float height = defaultHeight);
-	ofxGuiButton(ofParameter<bool>& _bVal, float width, float height = defaultHeight);
-	ofxGuiButton(const std::string& buttonName, float width, float height = defaultHeight);
 
 	void setup();
 

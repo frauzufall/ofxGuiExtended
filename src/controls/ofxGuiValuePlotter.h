@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 
 class ofxGuiValuePlotter : public ofxGuiElement {
 	public:
@@ -8,7 +8,7 @@ class ofxGuiValuePlotter : public ofxGuiElement {
 		ofxGuiValuePlotter();
 		ofxGuiValuePlotter(const ofJson & config);
 		ofxGuiValuePlotter(ofParameter<float> value, const ofJson & config = ofJson());
-		ofxGuiValuePlotter(string label, float minValue, float maxValue, int plotSize = 100, float width = defaultWidth, float height = defaultHeight);
+		ofxGuiValuePlotter(string label, float minValue, float maxValue, int plotSize = 100, const ofJson & config = ofJson());
 
 		virtual ~ofxGuiValuePlotter();
 

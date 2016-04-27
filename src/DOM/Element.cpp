@@ -961,11 +961,11 @@ void Element::setLocked(bool locked_)
 }
 
 
-void Element::invalidateChildShape()
+void Element::invalidateChildShape(float recursive)
 {
 	_childShapeInvalid = true;
 
-	if (_parent)
+	if (_parent && recursive)
 	{
 		_parent->invalidateChildShape();
 	}
@@ -981,26 +981,28 @@ void Element::invalidateChildShape()
 
 void Element::_onMoved(MoveEventArgs&)
 {
-	invalidateChildShape();
+//	invalidateChildShape();
 }
 
 
 void Element::_onResized(ResizeEventArgs&)
 {
-	invalidateChildShape();
+//	if(parent()){
+//		parent()->invalidateChildShape(false);
+//	}
 }
 
 
 void Element::_onChildMoved(MoveEventArgs &args)
 {
-	invalidateChildShape();
+	invalidateChildShape(false);
 	ofNotifyEvent(childMoved, args, this);
 }
 
 
 void Element::_onChildResized(ResizeEventArgs&)
 {
-	invalidateChildShape();
+	invalidateChildShape(false);
 }
 
 

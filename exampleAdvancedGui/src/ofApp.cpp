@@ -20,11 +20,12 @@ void ofApp::setup(){
 	panel1->setBackgroundColor(ofColor(0,0,0,0));
 
 	/*
-	 * FPS plotter
+	 * FPS plotter, function plotter
 	 */
 	panel1->addFpsPlotter();
 	auto sinusfunction = [&] (float x) { return sin(x); };
-	ofxFunctionPlotter* sinusplotter = panel1->add<ofxFunctionPlotter>(sinus.set("sinus", ofPoint(0,0), ofPoint(0, -1), ofPoint(4*PI, 1)), sinusfunction);
+	sinus.set("sinus", ofPoint(0,0), ofPoint(0, -1), ofPoint(4*PI, 1));
+	ofxGuiFunctionPlotter* sinusplotter = panel1->add<ofxGuiFunctionPlotter>(sinus, sinusfunction);
 	sinusplotter->setFillColor(ofColor::blue, ofColor::red);
 	panel1->addSpacer(panel1->getWidth(), 20);
 
@@ -67,9 +68,9 @@ void ofApp::setup(){
 	 *  labels
 	 */
 	labels = panel1->addGroup("labels");
-	labels->add<ofxLabel>("blabla");
+	labels->add<ofxGuiLabel>("blabla");
 	labels->add(active_name);
-	labels->add<ofxIntLabel>(active_index);
+	labels->add<ofxGuiIntLabel>(active_index);
 
 	panel1->addSpacer(panel1->getWidth(), 20);
 
@@ -77,17 +78,17 @@ void ofApp::setup(){
 	 * buttons
 	 */
 	buttons = panel1->addGroup("buttons");
-	buttons->add<ofxButton>("fullsize button", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-	buttons->add<ofxButton>("checkbox button", ofJson({{"type", "checkbox"}}));
-	buttons->add<ofxButton>("radio button", ofJson({{"type", "radio"}}));
+	buttons->add<ofxGuiButton>("fullsize button", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+	buttons->add<ofxGuiButton>("checkbox button", ofJson({{"type", "checkbox"}}));
+	buttons->add<ofxGuiButton>("radio button", ofJson({{"type", "radio"}}));
 
 	panel1->addSpacer(panel1->getWidth(), 20);
 
 	/*
 	 *  input fields
 	 */
-	panel1->add<ofxFloatInputField>(floatfield_param.set("float input",3.5,0,500));
-	panel1->add<ofxTextField>(textfield_param.set("text input","type in here"));
+	panel1->add<ofxGuiFloatInputField>(floatfield_param.set("float input",3.5,0,500));
+	panel1->add<ofxGuiTextField>(textfield_param.set("text input","type in here"));
 
 
 	/*
@@ -170,14 +171,14 @@ void ofApp::setHeaderColors(int& index){
 
 	}
 
-	labels->setHeaderBackgroundColor(c);
-	toggles->setHeaderBackgroundColor(c);
-	buttons->setHeaderBackgroundColor(c);
-	group1->setHeaderBackgroundColor(c);
-	sliders->setHeaderBackgroundColor(c);
-	group3->setHeaderBackgroundColor(c);
-	panel3->setHeaderBackgroundColor(c);
-	color_toggles->setHeaderBackgroundColor(c);
+	labels->getHeader()->setBackgroundColor(c);
+	toggles->getHeader()->setBackgroundColor(c);
+	buttons->getHeader()->setBackgroundColor(c);
+	group1->getHeader()->setBackgroundColor(c);
+	sliders->getHeader()->setBackgroundColor(c);
+	group3->getHeader()->setBackgroundColor(c);
+	panel3->getHeader()->setBackgroundColor(c);
+	color_toggles->getHeader()->setBackgroundColor(c);
 
 	color = c;
 }

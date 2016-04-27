@@ -30,21 +30,6 @@ ofxGuiButton::ofxGuiButton(ofParameter<bool> &_val, const ofJson & config)
 	_setConfig(config);
 }
 
-ofxGuiButton::ofxGuiButton(ofParameter<void>& _val, float width, float height)
-	:ofxGuiButton(_val){
-	setSize(width, height);
-}
-
-ofxGuiButton::ofxGuiButton(ofParameter<bool>& _val, float width, float height)
-	:ofxGuiButton(_val){
-	setSize(width, height);
-}
-
-ofxGuiButton::ofxGuiButton(const std::string& buttonName, float width, float height):
-	ofxGuiButton(buttonName){
-	setSize(width, height);
-}
-
 ofxGuiButton::~ofxGuiButton(){
 }
 
@@ -81,8 +66,10 @@ bool ofxGuiButton::setValue(float mx, float my, bool bCheck){
 		hasFocus = checkRect.inside(mx, my);
 	}
 	if(hasFocus){
+		if(!value){
+			voidvalue.trigger();
+		}
 		value = !value;
-		voidvalue.trigger();
 		return true;
 	}
 	return false;

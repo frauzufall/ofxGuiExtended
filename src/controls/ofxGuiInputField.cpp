@@ -30,16 +30,8 @@ ofxGuiInputField<Type>::ofxGuiInputField(ofParameter<Type> _val, const ofJson &c
 }
 
 template<typename Type>
-ofxGuiInputField<Type>::ofxGuiInputField(ofParameter<Type> _val, float width, float height)
-	:ofxGuiInputField(_val){
-
-	setSize(width, height);
-
-}
-
-template<typename Type>
-ofxGuiInputField<Type>::ofxGuiInputField(const std::string& _name, Type _val, Type _min, Type _max, float width, float height)
-	:ofxGuiInputField(value.set(_name,_val,_min,_max), width, height){
+ofxGuiInputField<Type>::ofxGuiInputField(const std::string& _name, Type _val, Type _min, Type _max, const ofJson &config)
+	:ofxGuiInputField(value.set(_name,_val,_min,_max), config){
 }
 
 template<typename Type>

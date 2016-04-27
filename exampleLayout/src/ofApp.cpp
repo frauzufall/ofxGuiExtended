@@ -78,9 +78,9 @@ void ofApp::setup(){
 	/*
 	 *  create pages and add them to tab layout
 	 */
-	page1 = tabbed_pages->addPanel("page1", ofJson({{"show-header", false}}));
-	page2 = tabbed_pages->addPanel("page2", ofJson({{"show-header", false}}));
-	page3 = tabbed_pages->addPanel("page3", ofJson({{"show-header", false}}));
+	page1 = tabbed_pages->addGroup("page1");
+	page2 = tabbed_pages->addPanel("page2");
+	page3 = tabbed_pages->addPanel("page3");
 
 //	/*
 //	 *  fill page 1

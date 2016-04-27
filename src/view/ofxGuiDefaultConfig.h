@@ -54,7 +54,7 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiGroup::getClassType(), {
 						{"border-color", "rgba(255,255,255,0.7)"},
-//						{"margin", 10}
+						{"background-color", "#424242"}
 					}
 				},
 
@@ -74,13 +74,14 @@ struct ofxGuiDefaultConfig{
 				/// settings for all panels
 				{
 					ofxGuiPanel::getClassType(), {
+						{"background-color", "#424242"}
 					}
 				},
 
 				/// settings for all panel headers
 				{
 					ofxGuiPanelHeader::getClassType(), {
-
+						{"background-color", "#ffffff"}
 					}
 
 				},

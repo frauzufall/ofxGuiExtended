@@ -16,8 +16,8 @@ ofxGuiFpsPlotter::ofxGuiFpsPlotter(const ofJson & config)
 
 }
 
-ofxGuiFpsPlotter::ofxGuiFpsPlotter(string label, float minValue, float maxValue, int plotSize, float width, float height)
-	:ofxGuiValuePlotter(label, minValue, maxValue, plotSize, width, height){
+ofxGuiFpsPlotter::ofxGuiFpsPlotter(string label, float minValue, float maxValue, int plotSize, const ofJson &config)
+	:ofxGuiValuePlotter(label, minValue, maxValue, plotSize, config){
 
 	setup();
 

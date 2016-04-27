@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 #include "ofParameter.h"
 
 class ofxGuiSliderType{
@@ -20,8 +20,7 @@ public:
 	ofxGuiSlider();
 	ofxGuiSlider(const ofJson & config);
 	ofxGuiSlider(ofParameter<DataType> _val, const ofJson & config = ofJson());
-	ofxGuiSlider(ofParameter<DataType> _val, float width, float height = defaultHeight);
-	ofxGuiSlider(const std::string& sliderName, DataType _val, DataType _min, DataType _max, float width = defaultWidth, float height = defaultHeight);
+	ofxGuiSlider(const std::string& sliderName, DataType _val, DataType _min, DataType _max, const ofJson & config = ofJson());
 
 	~ofxGuiSlider();
 

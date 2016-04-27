@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 
 class ofxGuiGraphics : public ofxGuiElement {
 	public:

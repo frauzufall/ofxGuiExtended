@@ -46,16 +46,8 @@ ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(ofParameter<VecType> &value, const o
 }
 
 template<class VecType>
-ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(ofParameter<VecType> &value, float width, float height)
-	:ofxGuiVecSlider_(value){
-
-	setSize(width, height);
-
-}
-
-template<class VecType>
-ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(const std::string& controlName, const VecType & v, const VecType & min, const VecType & max, float width, float height)
-	:ofxGuiVecSlider_(){
+ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(const std::string& controlName, const VecType & v, const VecType & min, const VecType & max, const ofJson & config)
+	:ofxGuiVecSlider_(config){
 
 	value.set(controlName,v,min,max);
 
@@ -73,8 +65,6 @@ ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(const std::string& controlName, cons
 		add(p);
 		p.addListener(this, & ofxGuiVecSlider_::changeSlider);
 	}
-
-	setSize(width, height);
 
 }
 
@@ -181,16 +171,8 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(ofParameter<ofColor_<ColorType
 }
 
 template<class ColorType>
-ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(ofParameter<ofColor_<ColorType> > &value, float width, float height)
-	:ofxGuiColorSlider_(value){
-
-	setSize(width, height);
-
-}
-
-template<class ColorType>
-ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName, const ofColor_<ColorType> & v, const ofColor_<ColorType> & min, const ofColor_<ColorType> & max, float width, float height)
-	:ofxGuiColorSlider_(){
+ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName, const ofColor_<ColorType> & v, const ofColor_<ColorType> & min, const ofColor_<ColorType> & max, const ofJson &config)
+	:ofxGuiColorSlider_(config){
 
 	value.set(controlName,v,min,max);
 
@@ -212,8 +194,6 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName
 	}
 
 	sliderChanging = false;
-
-	setSize(width, height);
 
 }
 

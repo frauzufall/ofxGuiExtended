@@ -17,9 +17,9 @@ ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxGuiElement(){
 void ofxGuiGroupHeader::generateDraw(){
 	ofxGuiElement::generateDraw();
 
+	textMesh.clear();
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
-		textMesh.clear();
 		if(_parent->getShowName()){
 			textMesh.append(getTextMesh(_parent->getName(), textPadding, getHeight()/ 2 + 4));
 		}
@@ -68,6 +68,32 @@ bool ofxGuiGroupHeader::mousePressed(ofMouseEventArgs & args){
 
 	return ofxGuiElement::mousePressed(args);
 
+}
+
+float ofxGuiGroupHeader::getMinWidth(){
+	generateDraw();
+	float _width = 0;
+	ofVboMesh mesh = textMesh;
+	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
+		if(mesh.getVertex(i).x > _width){
+			_width = mesh.getVertex(i).x;
+		}
+	}
+	_width += textPadding * 2;
+	return _width;
+}
+
+float ofxGuiGroupHeader::getMinHeight(){
+	generateDraw();
+	float _height = 0;
+	ofVboMesh mesh = textMesh;
+	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
+		if(mesh.getVertex(i).y > _height){
+			_height = mesh.getVertex(i).y;
+		}
+	}
+	_height += textPadding * 2;
+	return _height;
 }
 
 std::string ofxGuiGroupHeader::getClassType(){
@@ -133,15 +159,12 @@ ofxGuiGroup::ofxGuiGroup(const ofParameterGroup & _parameters, const std::string
 ofxGuiGroup::~ofxGuiGroup(){
 
 	showHeader.removeListener(this, &ofxGuiGroup::onHeaderVisibility);
-	headerHeight.removeListener(this, &ofxGuiGroup::onHeaderHeight);
 	ofRemoveListener(resize, this, &ofxGuiGroup::onResize);
 	unregisterMouseEvents();
 
 }
 
 void ofxGuiGroup::setup(){
-
-	setTheme();
 
 	header = nullptr;
 
@@ -151,16 +174,14 @@ void ofxGuiGroup::setup(){
 	minimized.set("minimized", false);
 
 	createLayout<ofxDOMFlexBoxLayout>(this, DOM::Orientation::VERTICAL);
-	headerHeight.set("header-height", defaultHeight);
 	showHeader.set("show-header", true);
 
 	showHeader.addListener(this, &ofxGuiGroup::onHeaderVisibility);
-	headerHeight.addListener(this, &ofxGuiGroup::onHeaderHeight);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
 
 	header = add<ofxGuiGroupHeader>();
-	header->setHeight(headerHeight);
-//	header->setBackgroundColor(headerBackgroundColor);
+
+	setTheme();
 
 	clear();
 
@@ -172,7 +193,6 @@ void ofxGuiGroup::_setConfig(const ofJson &config){
 
 	ofxGuiElement::_setConfig(config);
 
-	JsonConfigParser::parse(config, headerHeight);
 	JsonConfigParser::parse(config, showHeader);
 
 }
@@ -568,30 +588,23 @@ void ofxGuiGroup::setName(const std::string& _name){
 }
 
 ofxGuiElement* ofxGuiGroup::getHeader(){
-	return header;
+	return this->header;
 }
 
 void ofxGuiGroup::onHeaderVisibility(bool &showing){
-	if(header){
-		header->setHidden(!showing);
+	if(getHeader()){
+		getHeader()->setHidden(!showing);
 	}
 }
 
 void ofxGuiGroup::onHeaderHeight(float &height){
-	if(header){
-		header->setHeight(height);
+	if(getHeader()){
+		getHeader()->setHeight(height);
 	}
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){
 
-}
-
-void ofxGuiGroup::setHeaderBackgroundColor(const ofColor & color){
-	ofxGuiElement::setHeaderBackgroundColor(color);
-	if(header){
-		header->setBackgroundColor(color);
-	}
 }
 
 std::string ofxGuiGroup::getClassType(){

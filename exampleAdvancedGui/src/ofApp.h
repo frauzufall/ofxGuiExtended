@@ -26,7 +26,7 @@ class ofApp : public ofBaseApp {
 
 		ofxGui gui;
 
-		ofxPanel *panel1, *panel3, *sliders;
+		ofxGuiPanel *panel1, *panel3, *sliders;
 		ofxGuiGroup *rotary, *labels, *buttons, *toggles;
 		ofxGuiGroup* group3, *group1;
 		ofParameter<string> active_name;

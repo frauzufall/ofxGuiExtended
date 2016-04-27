@@ -1,5 +1,5 @@
 #pragma once
-#include "ofxGuiElement.h"
+#include "../ofxGuiElement.h"
 
 #include "ofxGuiSlider.h"
 #include "ofxGuiButton.h"
@@ -32,6 +32,9 @@ class ofxGuiGroupHeader : public ofxGuiElement {
 		~ofxGuiGroupHeader();
 
 		virtual bool mousePressed(ofMouseEventArgs & args) override;
+
+		virtual float getMinWidth() override;
+		virtual float getMinHeight() override;
 
 		static std::string getClassType();
 
@@ -78,16 +81,14 @@ class ofxGuiGroup : public ofxGuiElement {
 		void add(const ofParameterGroup& parameters);
 
 		ofxGuiElement* addSpacer(float width, float height);
-		ofxGuiElement* addSpacer(const ofJson & config);
-		ofxGuiFpsPlotter* addFpsPlotter(const ofJson & config="");
+		ofxGuiElement* addSpacer(const ofJson & config = ofJson());
+		ofxGuiFpsPlotter* addFpsPlotter(const ofJson & config = ofJson());
 
 		ofxGuiGroup* addGroup(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiGroup* addGroup(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 		ofxGuiPanel* addPanel(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiPanel* addPanel(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
-
-		virtual void setHeaderBackgroundColor(const ofColor & color) override;
 
 		virtual void minimize();
 		virtual void maximize();
@@ -159,7 +160,6 @@ class ofxGuiGroup : public ofxGuiElement {
 		ofParameter<bool> exclusiveToggles;
 		ofParameter<bool> minimized;
 
-		ofParameter<float> headerHeight;
 		ofParameter<bool> showHeader;
 		ofxGuiElement* header;
 

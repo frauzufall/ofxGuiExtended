@@ -24,24 +24,11 @@
 #include "view/ofxDOMFloatingBoxLayout.h"
 #include "view/JsonConfigParser.h"
 
-void ofxGuiSetFont(const string & fontPath,int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, int dpi=0);
-void ofxGuiSetBitmapFont();
-
-void ofxGuiSetHeaderColor(const ofColor & color);
-void ofxGuiSetBackgroundColor(const ofColor & color);
-void ofxGuiSetBorderColor(const ofColor & color);
-void ofxGuiSetTextColor(const ofColor & color);
-void ofxGuiSetFillColor(const ofColor & color);
-
-void ofxGuiSetTextPadding(int padding);
-void ofxGuiSetDefaultWidth(int width);
-void ofxGuiSetDefaultHeight(int height);
-
 class ofxGui {
 	public:
 		ofxGui();
 		~ofxGui();
-		DOM::Document* getRoot();
+		DOM::Document* getDocument();
 
 		ofxGuiGroup* addGroup(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiGroup* addGroup(const ofParameterGroup & parameters, const ofJson& config = ofJson());

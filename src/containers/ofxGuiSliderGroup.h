@@ -10,8 +10,7 @@ public:
 	ofxGuiVecSlider_();
 	ofxGuiVecSlider_(const ofJson & config);
 	ofxGuiVecSlider_(ofParameter<VecType> &value, const ofJson & config = ofJson());
-	ofxGuiVecSlider_(ofParameter<VecType> &value, float width, float height = defaultHeight);
-	ofxGuiVecSlider_(const std::string& controlName, const VecType & value, const VecType & min, const VecType & max, float width = defaultWidth, float height = defaultHeight);
+	ofxGuiVecSlider_(const std::string& controlName, const VecType & value, const VecType & min, const VecType & max, const ofJson & config = ofJson());
 
 	void setup();
 
@@ -36,8 +35,7 @@ public:
 	ofxGuiColorSlider_();
 	ofxGuiColorSlider_(const ofJson & config);
 	ofxGuiColorSlider_(ofParameter<ofColor_<ColorType>> &value, const ofJson & config = ofJson());
-	ofxGuiColorSlider_(ofParameter<ofColor_<ColorType>> &value, float width, float height = defaultHeight);
-	ofxGuiColorSlider_(const std::string& controlName, const ofColor_<ColorType> & value, const ofColor_<ColorType> & min, const ofColor_<ColorType> & max, float width = defaultWidth, float height = defaultHeight);
+	ofxGuiColorSlider_(const std::string& controlName, const ofColor_<ColorType> & value, const ofColor_<ColorType> & min, const ofColor_<ColorType> & max, const ofJson & config = ofJson());
 
 	void setup();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofxGuiGroup.h"
+#include "ofImage.h"
 
 class ofxGuiGroup;
 
@@ -19,6 +20,9 @@ class ofxGuiPanelHeader : public ofxGuiGroupHeader {
 		ofEvent<void> loadPressedE;
 		ofEvent<void> savePressedE;
 
+		virtual float getMinWidth() override;
+		virtual float getMinHeight() override;
+
 		static std::string getClassType();
 
 	protected:
@@ -30,7 +34,8 @@ class ofxGuiPanelHeader : public ofxGuiGroupHeader {
 		virtual void loadIcons();
 
 		ofRectangle loadBox, saveBox;
-		static ofImage loadIcon, saveIcon;
+		ofImage loadIcon;
+		ofImage saveIcon;
 
 };
 

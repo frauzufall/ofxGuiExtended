@@ -45,82 +45,8 @@ bool saveJson(const std::string & filename, ofJson & json){
 }
 
 
-
-void ofxGuiSetFont(const string & fontPath, int fontsize, bool _bAntiAliased, bool _bFullCharacterSet, int dpi){
-	ofxGuiElement::loadFont(fontPath, fontsize, _bAntiAliased, _bFullCharacterSet, dpi);
-}
-
-void ofxGuiSetBitmapFont(){
-	ofxGuiElement::setUseTTF(false);
-}
-
-void ofxGuiSetHeaderColor(const ofColor & color){
-	ofxGuiElement::setDefaultHeaderBackgroundColor(color);
-}
-
-void ofxGuiSetBackgroundColor(const ofColor & color){
-	ofxGuiElement::setDefaultBackgroundColor(color);
-}
-
-void ofxGuiSetBorderColor(const ofColor & color){
-	ofxGuiElement::setDefaultBorderColor(color);
-}
-
-void ofxGuiSetTextColor(const ofColor & color){
-	ofxGuiElement::setDefaultTextColor(color);
-}
-
-void ofxGuiSetFillColor(const ofColor & color){
-	ofxGuiElement::setDefaultFillColor(color);
-}
-
-void ofxGuiSetTextPadding(int padding){
-	ofxGuiElement::setDefaultTextPadding(padding);
-}
-
-void ofxGuiSetDefaultWidth(int width){
-	ofxGuiElement::setDefaultWidth(width);
-
-}
-
-void ofxGuiSetDefaultHeight(int height){
-	ofxGuiElement::setDefaultHeight(height);
-}
-
-void ofxGuiSetDefaultBorderWidth(float width){
-	ofxGuiElement::setDefaultBorderWidth(width);
-}
-
-void ofxGuiSetDefaultTheme(const ofJson& theme){
-	ofxGuiElement::setDefaultTheme(theme);
-}
-
-void ofxGuiLoadDefaultTheme(const std::string& filename){
-	ofxGuiElement::loadDefaultTheme(filename);
-}
-
-ofColor
-ofxGuiElement::defaultHeaderBackgroundColor(64),
-ofxGuiElement::defaultBackgroundColor(0,0,0,100),
-ofxGuiElement::defaultBorderColor(255),
-ofxGuiElement::defaultTextColor(255),
-ofxGuiElement::defaultFillColor(128);
-
-float ofxGuiElement::defaultBorderWidth = 0;
-int ofxGuiElement::textPadding = 4;
-int ofxGuiElement::defaultWidth = 200;
-int ofxGuiElement::defaultHeight = 25;
-float ofxGuiElement::defaultFontSize = 5;
-
-ofJson ofxGuiElement::defaultTheme = ofxGuiDefaultConfig::get();
-
-ofTrueTypeFont ofxGuiElement::font;
-bool ofxGuiElement::fontLoaded = false;
-bool ofxGuiElement::useTTF = false;
-ofBitmapFont ofxGuiElement::bitmapFont;
-
 ofxGuiElement::ofxGuiElement()
-	:DOM::Element("",0,0,defaultWidth, defaultHeight){
+	:DOM::Element("",0,0,0,0){
 
 	setup();
 
@@ -146,31 +72,31 @@ void ofxGuiElement::setup(){
 #endif
 
 	bRegisteredForMouseEvents = false;
+	fontLoaded = false;
+	useTTF = false;
+	textPadding = 4;
 
-	headerBackgroundColor.set("header-background-color", defaultHeaderBackgroundColor);
-	backgroundColor.set("background-color", defaultBackgroundColor);
-	borderColor.set("border-color", defaultBorderColor);
-	textColor.set("text-color", defaultTextColor);
-	fillColor.set("fill-color", defaultFillColor);
-	fontSize.set("font-size", defaultFontSize);
+	headerBackgroundColor.set("header-background-color", ofColor(255));
+	backgroundColor.set("background-color", ofColor(255));
+	borderColor.set("border-color", ofColor(0));
+	textColor.set("text-color", ofColor(0));
+	fillColor.set("fill-color", ofColor(100));
+	fontSize.set("font-size", 5);
 	showName.set("show-name", true);
-	borderWidth.set("border-width", defaultBorderWidth);
+	borderWidth.set("border-width", 1);
 	setLayoutPosition(DOM::LayoutPosition::STATIC);
 
 	textAlignment.setName("text-align");
 	setTextAlignment("left");
 	setShowName(showName);
 
-	setTheme(defaultTheme);
+	setTheme(ofxGuiDefaultConfig::get());
 
 
 	// parameter won't be saved to file
 	parameter.setSerializable(false);
 
 	registerMouseEvents();
-
-//	setHeight(defaultHeight);
-//	setWidth(defaultWidth);
 
 }
 
@@ -202,6 +128,10 @@ void ofxGuiElement::setConfig(const ofJson &config, bool recursive){
 	}
 }
 
+void ofxGuiElement::setTheme(){
+	setTheme(ofxGuiDefaultConfig::get());
+}
+
 void ofxGuiElement::setTheme(const ofJson &config){
 	theme = config;
 	_setConfigUsingClassifiers(config, true);
@@ -221,9 +151,6 @@ void ofxGuiElement::_setConfigUsingClassifiers(const ofJson &config, bool recurs
 	for(std::string classifier : this->getClassTypes()){
 		ofJson::const_iterator it = config.find(classifier);
 		if(it != config.end()){
-			if(classifier == "tabs"){
-//				cout << classifier << ": " << *it << endl;
-			}
 			setConfig(*it, false);
 		}
 	}
@@ -392,7 +319,7 @@ void ofxGuiElement::loadFont(const std::string& filename, int fontsize, bool _bA
 
 void ofxGuiElement::setUseTTF(bool bUseTTF){
 	if(bUseTTF && !fontLoaded){
-		loadFont(OF_TTF_MONO, defaultFontSize, true, true);
+		loadFont(OF_TTF_MONO, fontSize, true, true);
 	}
 	useTTF = bUseTTF;
 }
@@ -522,11 +449,6 @@ float ofxGuiElement::getBorderWidth() const {
 	return borderWidth;
 }
 
-void ofxGuiElement::setHeaderBackgroundColor(const ofColor & color){
-	setNeedsRedraw();
-	headerBackgroundColor = color;
-}
-
 void ofxGuiElement::setBackgroundColor(const ofColor & color){
 	setNeedsRedraw();
 	backgroundColor = color;
@@ -555,54 +477,6 @@ void ofxGuiElement::setBorderWidth(float width){
 void ofxGuiElement::setFontSize(float size){
 	fontSize = size;
 	invalidateChildShape();
-}
-
-void ofxGuiElement::setDefaultHeaderBackgroundColor(const ofColor & color){
-	defaultHeaderBackgroundColor = color;
-}
-
-void ofxGuiElement::setDefaultBackgroundColor(const ofColor & color){
-	defaultBackgroundColor = color;
-}
-
-void ofxGuiElement::setDefaultBorderColor(const ofColor & color){
-	defaultBorderColor = color;
-}
-
-void ofxGuiElement::setDefaultTextColor(const ofColor & color){
-	defaultTextColor = color;
-}
-
-void ofxGuiElement::setDefaultFillColor(const ofColor & color){
-	defaultFillColor = color;
-}
-
-void ofxGuiElement::setDefaultTextPadding(int padding){
-	textPadding = padding;
-}
-
-void ofxGuiElement::setDefaultWidth(int width){
-	defaultWidth = width;
-}
-
-void ofxGuiElement::setDefaultHeight(int height){
-	defaultHeight = height;
-}
-
-void ofxGuiElement::setDefaultBorderWidth(float width){
-	defaultBorderWidth = width;
-}
-
-void ofxGuiElement::setDefaultFontSize(float size){
-	defaultFontSize = size;
-}
-
-void ofxGuiElement::setDefaultTheme(const ofJson &theme){
-	defaultTheme = theme;
-}
-
-void ofxGuiElement::loadDefaultTheme(const string &filename){
-	defaultTheme = loadJson(filename);
 }
 
 void ofxGuiElement::setLayoutPosition(DOM::LayoutPosition type){
@@ -801,12 +675,8 @@ bool ofxGuiElement::mouseReleased(ofMouseEventArgs & args){
 	return false;
 }
 
-ofJson ofxGuiElement::getThisConfigTheme(){
+ofJson ofxGuiElement::getTheme(){
 	return theme;
-}
-
-ofJson ofxGuiElement::getGlobalConfigTheme(){
-	return defaultTheme;
 }
 
 std::string ofxGuiElement::getClassType(){

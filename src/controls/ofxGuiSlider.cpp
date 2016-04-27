@@ -32,23 +32,11 @@ ofxGuiSlider<DataType>::ofxGuiSlider(ofParameter<DataType> _val, const ofJson &c
 }
 
 template<typename DataType>
-ofxGuiSlider<DataType>::ofxGuiSlider(ofParameter<DataType> _val, float width, float height)
-	:ofxGuiElement(){
-
-	value.makeReferenceTo(_val);
-	setSize(width, height);
-	value.addListener(this,&ofxGuiSlider::valueChanged);
-	setup();
-
-}
-
-template<typename DataType>
-ofxGuiSlider<DataType>::ofxGuiSlider(const std::string& sliderName, DataType _val, DataType _min, DataType _max, float width, float height)
-	:ofxGuiSlider(){
+ofxGuiSlider<DataType>::ofxGuiSlider(const std::string& sliderName, DataType _val, DataType _min, DataType _max, const ofJson &config)
+	:ofxGuiSlider(config){
 
 	value.set(sliderName,_val,_min,_max);
 	value.addListener(this,&ofxGuiSlider::valueChanged);
-	setSize(width,height);
 
 }
 
@@ -63,13 +51,14 @@ ofxGuiSlider<DataType>::~ofxGuiSlider(){
 template<typename DataType>
 void ofxGuiSlider<DataType>::setup(){
 
-	setTheme();
-
 	hasFocus = false;
 	updateOnReleaseOnly.set("update-on-release-only", false);
 	precision.set("precision", 6);
 	type.set("type", ofxGuiSliderType::STRAIGHT);
 	horizontal = getWidth() > getHeight();
+
+	setTheme();
+
 	ofAddListener(resize, this, &ofxGuiSlider<DataType>::resized);
 	registerMouseEvents();
 
