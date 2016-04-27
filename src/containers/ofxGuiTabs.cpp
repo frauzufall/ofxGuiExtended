@@ -68,7 +68,8 @@ void ofxGuiTabs::clear(){
 //									   {"margin-top", 10},
 									   {"show-header", false},
 									   {"border-width", 0},
-									   {"padding", "0 10"}
+									   {"padding", "0 10"},
+									   {"flex-direction", "row"}
 								   }));
 
 	tabs->setExclusiveToggles(true);

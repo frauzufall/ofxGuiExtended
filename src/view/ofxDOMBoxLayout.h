@@ -27,8 +27,8 @@
 
 
 #include <vector>
-#include "DOM/Types.h"
-#include "DOM/Layout.h"
+#include "../DOM/Types.h"
+#include "../DOM/Layout.h"
 
 
 class ofxDOMBoxLayout: public DOM::Layout

@@ -12,6 +12,7 @@ void ofApp::setup(){
 	circleResolution.addListener(this, &ofApp::circleResolutionChanged);
 	ringButton.addListener(this,&ofApp::ringButtonPressed);
 
+	// setting the parameter names, initial values and min and max values
 	filled.set("bFill", true);
 	radius.set( "radius", 140, 10, 300 );
 	center.set("center",ofVec2f(ofGetWidth()*.5,ofGetHeight()*.5),ofVec2f(0,0),ofVec2f(ofGetWidth(),ofGetHeight()));
@@ -21,9 +22,8 @@ void ofApp::setup(){
 	ringButton.set("ring");
 	screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight()));
 
+	// adding the parameters to the gui
 	gui.add(filled, radius, center, color, circleResolution, twoCircles, ringButton, screenSize);
-
-	bHide = false;
 
 	ring.load("ring.wav");
 }
@@ -51,7 +51,7 @@ void ofApp::update(){
 void ofApp::draw(){
 	ofBackgroundGradient(ofColor::white, ofColor::gray);
 
-	if( filled ){
+	if(filled){
 		ofFill();
 	}else{
 		ofNoFill();

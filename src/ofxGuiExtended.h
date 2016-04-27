@@ -71,7 +71,7 @@ class ofxGui {
 		void setup();
 		bool setup_done;
 
-		ofJson rootGroupConfig(const ofJson& config);
+		ofJson rootGroupConfig(const ofJson& config = ofJson());
 
 		ofxGuiGroup* defaultPanel = nullptr;
 };

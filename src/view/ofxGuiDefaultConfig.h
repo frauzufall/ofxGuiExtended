@@ -1,6 +1,6 @@
 #pragma once
 #include "ofMain.h"
-#include "ofxGuiExtended.h"
+#include "../ofxGuiExtended.h"
 
 struct ofxGuiDefaultConfig{
 
@@ -12,8 +12,8 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiElement::getClassType(), {
 						{"background-color", "rgba(0,0,0,0)"},
-						{"fill-color", "rgba(255,255,255,0.5)"},
-						{"border-width", 5},
+						{"fill-color", "rgba(42,42,42,0.5)"},
+						{"border-width", 1},
 //						{"padding", 5},
 						{"border-color", "rgb(255,255,255)"},
 						{"margin", 5},
@@ -31,9 +31,7 @@ struct ofxGuiDefaultConfig{
 				/// settings for all buttons
 				{
 					ofxGuiButton::getClassType(), {
-						{"type", "fullsize"},
-						{"text-align", "center"},
-						{"border-color", "rgba(255,255,255,0.42)"},
+						{"type", "fullsize"}
 					}
 				},
 
@@ -47,15 +45,14 @@ struct ofxGuiDefaultConfig{
 				/// settings for all labels
 				{
 					ofxGuiLabel::getClassType(), {
-						{"border-width", 0}
+						{"border-width", 0},
+						{"background-color", "rgba(0,0,0,0)"}
 					}
 				},
 
 				/// settings for all groups
 				{
 					ofxGuiGroup::getClassType(), {
-						//{"background-color", "rgba(0,0,0,0.3)"},
-//						{"border-width", 6},
 						{"border-color", "rgba(255,255,255,0.7)"},
 //						{"margin", 10}
 					}
@@ -77,7 +74,6 @@ struct ofxGuiDefaultConfig{
 				/// settings for all panels
 				{
 					ofxGuiPanel::getClassType(), {
-
 					}
 				},
 

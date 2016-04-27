@@ -48,5 +48,14 @@ ofJson ofxGui::rootGroupConfig(const ofJson& config){
 	if(config.find("position") == config.end()){
 		res["position"] = "absolute";
 	}
+	if(config.find("left") == config.end()){
+		res["left"] = 10;
+	}
+	if(config.find("top") == config.end()){
+		res["top"] = 10;
+	}
+	if(config.find("flex-direction") == config.end()){
+		res["flex-direction"] = "column";
+	}
 	return res;
 }

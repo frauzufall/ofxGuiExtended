@@ -1,6 +1,7 @@
+#include "ofGraphics.h"
+
 #include "ofxGuiGroup.h"
 #include "ofxGuiPanel.h"
-#include "ofGraphics.h"
 #include "ofxGuiSliderGroup.h"
 #include "ofxGuiTabs.h"
 #include "ofxGuiFpsPlotter.h"
@@ -398,7 +399,7 @@ void ofxGuiGroup::minimize(){
 		child->setHidden(true);
 	}
 
-	setSize(header->getWidth(), header->getHeight());
+	setSizeInLayout(header->getWidth(), header->getHeight());
 	setNeedsRedraw();
 }
 
@@ -408,7 +409,7 @@ void ofxGuiGroup::maximize(){
 	for(auto& child : getControls()){
 		child->setHidden(false);
 	}
-	setSize(widthMaximized, heightMaximized);
+	setSizeInLayout(widthMaximized, heightMaximized);
 
 	invalidateChildShape();
 }

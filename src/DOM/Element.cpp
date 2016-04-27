@@ -28,6 +28,8 @@
 #include "ofGraphics.h"
 #include <algorithm>
 
+#include "../ofxGuiElement.h"
+
 namespace DOM {
 
 
@@ -672,6 +674,13 @@ void Element::setHeight(float height)
 
 void Element::setHeightInLayout(float height)
 {
+	ofxGuiElement* baseg= dynamic_cast<ofxGuiElement*>(this);
+	if(baseg){
+		if(baseg->getName() == "default"){
+			cout << "aligning elements in " << baseg->getName() << " of size " << baseg->getSize() << " minimal: " << baseg->getMinWidth() << " x " << baseg->getMinHeight() << endl;
+//			cout << _parent->getWidth() - getPaddingHorizontal(_parent) << " " << _parent->getHeight() - getPaddingVertical(_parent) << endl;
+		}
+	}
 	if(height != _sizeInLayout.y){
 		_sizeInLayout.y = height;
 		invalidateChildShape();
@@ -965,6 +974,7 @@ void Element::invalidateChildShape()
 	{
 		_layout->doLayout();
 	}
+
 	setNeedsRedraw();
 }
 

@@ -28,5 +28,5 @@
 
 #include "DOM/Document.h"
 #include "DOM/Element.h"
-#include "DOM/Types.h"
+#include "Types.h"
 

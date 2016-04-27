@@ -27,8 +27,6 @@ public:
 	void circleResolutionChanged(int & circleResolution);
 	void ringButtonPressed();
 
-	bool bHide;
-
 	ofParameter<float> radius;
 	ofParameter<ofColor> color;
 	ofParameter<ofVec2f> center;
