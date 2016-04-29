@@ -27,11 +27,11 @@
 
 
 #include <unordered_set>
-#include "DOM/Events.h"
-#include "DOM/EventTarget.h"
-#include "DOM/Exceptions.h"
-#include "DOM/Layout.h"
-#include "DOM/Types.h"
+#include "Events.h"
+#include "EventTarget.h"
+#include "Exceptions.h"
+#include "Layout.h"
+#include "Types.h"
 
 
 namespace DOM {
@@ -528,7 +528,7 @@ public:
 	void setLocked(bool locked);
 
 	/// \brief Called internally to invalidate the child shape tree.
-	virtual void invalidateChildShape(float recursive = true);
+	virtual void invalidateChildShape(bool recursive = true);
 
 
 protected:

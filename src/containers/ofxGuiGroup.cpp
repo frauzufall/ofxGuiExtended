@@ -4,9 +4,9 @@
 #include "ofxGuiPanel.h"
 #include "ofxGuiSliderGroup.h"
 #include "ofxGuiTabs.h"
-#include "ofxGuiFpsPlotter.h"
-#include "JsonConfigParser.h"
-#include "ofxDOMFlexBoxLayout.h"
+#include "../controls/ofxGuiFpsPlotter.h"
+#include "../view/JsonConfigParser.h"
+#include "../view/ofxDOMFlexBoxLayout.h"
 
 ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxGuiElement(){
 	setTheme();
@@ -107,6 +107,11 @@ vector<std::string> ofxGuiGroupHeader::getClassTypes(){
 }
 
 
+/*
+ *
+ * ofxGuiGroup
+ *
+ */
 
 ofxGuiGroup::ofxGuiGroup()
 	:ofxGuiElement(){
@@ -160,6 +165,7 @@ ofxGuiGroup::~ofxGuiGroup(){
 
 	showHeader.removeListener(this, &ofxGuiGroup::onHeaderVisibility);
 	ofRemoveListener(resize, this, &ofxGuiGroup::onResize);
+	ofRemoveListener(childAdded, this, &ofxGuiGroup::onChildAdded);
 	unregisterMouseEvents();
 
 }
@@ -178,6 +184,7 @@ void ofxGuiGroup::setup(){
 
 	showHeader.addListener(this, &ofxGuiGroup::onHeaderVisibility);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
+	ofAddListener(childAdded, this, &ofxGuiGroup::onChildAdded);
 
 	header = add<ofxGuiGroupHeader>();
 
@@ -193,7 +200,17 @@ void ofxGuiGroup::_setConfig(const ofJson &config){
 
 	ofxGuiElement::_setConfig(config);
 
-	JsonConfigParser::parse(config, showHeader);
+	// ugly hack to hide header of horizontally aligned flexbox containers (because the headers don't get aligned well)
+	ofJson _config = config;
+	if(_config.find("flex-direction") != _config.end()){
+		if(_config["flex-direction"] == "row"){
+			if(_config.find("show-header") != _config.end()){
+				_config["show-header"] = false;
+			}
+		}
+	}
+
+	JsonConfigParser::parse(_config, showHeader);
 
 }
 
@@ -251,6 +268,7 @@ void ofxGuiGroup::addParametersFrom(const ofParameterGroup & parameters){
 
 		}
 	}
+	this->parameters = parameters;
 }
 
 ofxGuiButton* ofxGuiGroup::add(ofParameter <void> & parameter, const ofJson & config){
@@ -334,6 +352,7 @@ ofxGuiTabs* ofxGuiGroup::addTabs(const string &name, const ofJson &config){
 }
 
 void ofxGuiGroup::clear(){
+	parameters.clear();
 	while(getControls().size() > 0) {
 		if(!removeChild(getControls().at(0))){
 			ofLogError("Element::clear") << "Could not remove child";
@@ -569,13 +588,13 @@ ofParameter<int>& ofxGuiGroup::getActiveToggleIndex() {
 }
 
 ofAbstractParameter & ofxGuiGroup::getParameter(){
-	parameters.clear();
-	for(auto child : getControls()){
-		ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(child);
-		if(e){
-			parameters.add(e->getParameter());
-		}
-	}
+//	parameters.clear();
+//	for(auto child : getControls()){
+//		ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(child);
+//		if(e){
+//			parameters.add(e->getParameter());
+//		}
+//	}
 	return parameters;
 }
 
@@ -600,6 +619,12 @@ void ofxGuiGroup::onHeaderVisibility(bool &showing){
 void ofxGuiGroup::onHeaderHeight(float &height){
 	if(getHeader()){
 		getHeader()->setHeight(height);
+	}
+}
+
+void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
+	if(ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(args.element())){
+		parameters.add(e->getParameter());
 	}
 }
 

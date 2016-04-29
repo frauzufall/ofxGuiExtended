@@ -27,7 +27,7 @@
 
 
 #include <vector>
-#include "DOM/Types.h"
+#include "Types.h"
 
 
 namespace DOM {

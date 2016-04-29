@@ -1,9 +1,9 @@
 #pragma once
 #include "../ofxGuiElement.h"
 
-#include "ofxGuiSlider.h"
-#include "ofxGuiButton.h"
-#include "ofxGuiLabel.h"
+#include "../controls/ofxGuiSlider.h"
+#include "../controls/ofxGuiButton.h"
+#include "../controls/ofxGuiLabel.h"
 #include "ofParameterGroup.h"
 #include "ofParameter.h"
 
@@ -163,6 +163,7 @@ class ofxGuiGroup : public ofxGuiElement {
 		ofParameter<bool> showHeader;
 		ofxGuiElement* header;
 
+		virtual void onChildAdded(DOM::ElementEventArgs&);
 		virtual void onHeaderVisibility(bool& showing);
 		virtual void onHeaderHeight(float& height);
 		virtual void onResize(DOM::ResizeEventArgs&);

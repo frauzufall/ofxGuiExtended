@@ -28,16 +28,16 @@ public:
 
 	bool bHide;
 
-	ofxFloatSlider* radius;
-	ofxColorSlider* color;
-	ofxVec2Slider* center;
-	ofxIntSlider* circleResolution;
-	ofxToggle* filled;
-	ofxButton* twoCircles;
-	ofxButton* ringButton;
-	ofxLabel* screenSize;
+	ofxGuiFloatSlider* radius;
+	ofxGuiColorSlider* color;
+	ofxGuiVec2Slider* center;
+	ofxGuiIntSlider* circleResolution;
+	ofxGuiToggle* filled;
+	ofxGuiButton* twoCircles;
+	ofxGuiButton* ringButton;
+	ofxGuiLabel* screenSize;
 
-	ofxPanel* panel;
+	ofxGuiPanel* panel;
 	ofxGui gui;
 
 	ofSoundPlayer ring;

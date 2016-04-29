@@ -31,8 +31,8 @@
 #include <utility>
 #include <ctime>
 #include "ofEvents.h"
-#include "DOM/Exceptions.h"
-#include "DOM/Types.h"
+#include "Exceptions.h"
+#include "Types.h"
 
 
 namespace DOM {

@@ -38,7 +38,7 @@ public:
 	ofParameter<void> ringButton;
 	ofParameter<string> screenSize;
 
-	ofxPanel* panel;
+	ofxGuiPanel* panel;
 	ofxGui gui;
 
 	ofSoundPlayer ring;

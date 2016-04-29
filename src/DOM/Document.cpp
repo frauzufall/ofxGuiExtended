@@ -23,7 +23,7 @@
 // =============================================================================
 
 
-#include "DOM/Document.h"
+#include "Document.h"
 #include "ofGraphics.h"
 #include "ofAppRunner.h"
 
@@ -130,12 +130,12 @@ bool Document::getAutoFillScreen() const
 
 
 float Document::getMinWidth(){
-	return ofGetWindowWidth();
+	return ofGetWidth();
 }
 
 
 float Document::getMinHeight(){
-	return ofGetWindowHeight();
+	return ofGetHeight();
 }
 
 

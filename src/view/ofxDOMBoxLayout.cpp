@@ -23,8 +23,8 @@
 // =============================================================================
 
 
-#include "view/ofxDOMBoxLayout.h"
-#include "DOM/Element.h"
+#include "ofxDOMBoxLayout.h"
+#include "../DOM/Element.h"
 #include <iostream>
 
 ofxDOMBoxLayout::ofxDOMBoxLayout(DOM::Element* parent, DOM::Orientation orientation):

@@ -14,12 +14,12 @@ void ofApp::setup(){
 	panel1->setPosition(260, 90);
 
 
-	panel1->add<ofxGuiGraphics>("some texture", &img.getTexture());
+	panel1->add<ofxGuiGraphics>("some texture", &img.getTexture(), ofJson({{"height", 200}}));
 
 
 	panel2 = gui.addPanel("zoomable canvas");
 	panel2->setPosition(500, 90);
-	panel2->add<ofxGuiZoomableGraphics>("same texture", &img.getTexture());
+	panel2->add<ofxGuiZoomableGraphics>("same texture", &img.getTexture(), ofJson({{"height", 200}}));
 
 }
 

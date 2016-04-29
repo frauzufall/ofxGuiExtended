@@ -26,7 +26,7 @@ class ofApp : public ofBaseApp{
 		void vSyncChanged(bool & vSync);
 
 		ofxGui gui;
-		ofxPanel* panel;
+		ofxGuiPanel* panel;
 		ofParameter<bool> vSync;
 		ofParameterGroup parameters;
 		ofXml settings;

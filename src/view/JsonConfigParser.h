@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "DOM/Types.h"
-#include "DOM/Element.h"
+#include "../DOM/Types.h"
+#include "../DOM/Element.h"
 
 class JsonConfigParser {
 	public:

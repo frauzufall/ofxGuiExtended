@@ -54,12 +54,12 @@ void ofApp::setup(){
 	matrix_params.push_back(ofParameter<bool>("be", false));
 	matrix_params.push_back(ofParameter<bool>("active", false));
 
-	group3 = toggles->addGroup();
+	group3 = toggles->addGroup("", ofJson({{"flex-direction", "row"}, {"flex-wrap", "wrap"}}));
 	group3->getActiveToggleIndex().addListener(this, &ofApp::updateMatrixIndex);
 	group3->setShowHeader(false);
 	group3->setExclusiveToggles(true);
 	for(unsigned int i = 0; i < matrix_params.size(); i++){
-		group3->add(matrix_params.at(i), ofJson({{"float", "left"},	{"width", "50%"}, {"type", "fullsize"}}));
+		group3->add(matrix_params.at(i), ofJson({{"width", "50%"}, {"type", "fullsize"}}));
 	}
 
 	panel1->addSpacer(panel1->getWidth(), 20);
@@ -94,7 +94,7 @@ void ofApp::setup(){
 	/*
 	 *  sliders
 	 */
-	sliders = gui.addPanel("vertical sliders");
+	sliders = gui.addPanel("vertical sliders", ofJson({{"flex-direction", "row"}}));
 	sliders->setPosition(260,20);
 	sliders->setWidth(260);
 

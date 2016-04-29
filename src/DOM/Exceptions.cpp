@@ -23,7 +23,7 @@
 // =============================================================================
 
 
-#include "DOM/Exceptions.h"
+#include "Exceptions.h"
 
 
 namespace DOM {

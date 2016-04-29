@@ -7,16 +7,16 @@ void ofApp::setup(){
 
 	ofSetVerticalSync(true);
 
-	panel = gui.getDocument()->add<ofxPanel>("panel","",10,10);
+	panel = gui.addPanel();
 
-	filled = panel->add<ofxToggle>("fill");
-	radius = panel->add<ofxFloatSlider>("radius", 140, 10, 300);
-	center = panel->add<ofxVec2Slider>("center", ofVec2f(ofGetWidth()*.5, ofGetHeight()*.5), ofVec2f(0, 0), ofVec2f(ofGetWidth(), ofGetHeight()));
-	color = panel->add<ofxColorSlider>("color", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255));
-	circleResolution = panel->add<ofxIntSlider>("circle res", 5, 3, 90);
-	twoCircles = panel->add<ofxButton>("two circles");
-	ringButton = panel->add<ofxButton>("ring");
-	screenSize = panel->add<ofxLabel>("screen size", ofToString(ofGetWidth())+"x"+ofToString(ofGetHeight()));
+	filled = panel->add<ofxGuiToggle>("fill");
+	radius = panel->add<ofxGuiFloatSlider>("radius", 140, 10, 300);
+	center = panel->add<ofxGuiVec2Slider>("center", ofVec2f(ofGetWidth()*.5, ofGetHeight()*.5), ofVec2f(0, 0), ofVec2f(ofGetWidth(), ofGetHeight()));
+	color = panel->add<ofxGuiColorSlider>("color", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255));
+	circleResolution = panel->add<ofxGuiIntSlider>("circle res", 5, 3, 90);
+	twoCircles = panel->add<ofxGuiButton>("two circles");
+	ringButton = panel->add<ofxGuiButton>("ring");
+	screenSize = panel->add<ofxGuiLabel>("screen size", ofToString(ofGetWidth())+"x"+ofToString(ofGetHeight()));
 
 	ringButton->addListener(this, &ofApp::ringButtonPressed);
 	//ugly fix to trigger initial value

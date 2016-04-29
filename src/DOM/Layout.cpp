@@ -23,8 +23,8 @@
 // =============================================================================
 
 
-#include "DOM/Layout.h"
-#include "DOM/Element.h"
+#include "Layout.h"
+#include "Element.h"
 #include <iostream>
 
 

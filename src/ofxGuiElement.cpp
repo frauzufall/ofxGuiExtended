@@ -1,8 +1,8 @@
 #include "ofxGuiElement.h"
-#include "ofxGuiGroup.h"
+#include "containers/ofxGuiGroup.h"
 #include "ofImage.h"
 #include "ofBitmapFont.h"
-#include "ofxGuiDefaultConfig.h"
+#include "view/ofxGuiDefaultConfig.h"
 #ifndef TARGET_EMSCRIPTEN
 #include "ofXml.h"
 #endif

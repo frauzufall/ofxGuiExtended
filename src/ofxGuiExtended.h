@@ -21,7 +21,6 @@
 #include "view/ofxGuiDefaultConfig.h"
 #include "view/ofxDOMFlexBoxLayout.h"
 #include "view/ofxDOMBoxLayout.h"
-#include "view/ofxDOMFloatingBoxLayout.h"
 #include "view/JsonConfigParser.h"
 
 class ofxGui {

@@ -26,7 +26,7 @@
 #pragma once
 
 
-#include "DOM/Document.h"
-#include "DOM/Element.h"
+#include "Document.h"
+#include "Element.h"
 #include "Types.h"
 

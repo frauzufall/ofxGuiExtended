@@ -23,8 +23,8 @@
 // =============================================================================
 
 
-#include "DOM/Element.h"
-#include "DOM/Document.h"
+#include "Element.h"
+#include "Document.h"
 #include "ofGraphics.h"
 #include <algorithm>
 
@@ -961,7 +961,7 @@ void Element::setLocked(bool locked_)
 }
 
 
-void Element::invalidateChildShape(float recursive)
+void Element::invalidateChildShape(bool recursive)
 {
 	_childShapeInvalid = true;
 

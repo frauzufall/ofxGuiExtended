@@ -28,7 +28,7 @@
 
 #include <string>
 #include <vector>
-#include "DOM/Events.h"
+#include "Events.h"
 
 
 namespace DOM {

@@ -20,7 +20,7 @@ void ofApp::setup(){
 	panel->add(center.set("center",ofVec2f(ofGetWidth()*.5,ofGetHeight()*.5),ofVec2f(0,0),ofVec2f(ofGetWidth(),ofGetHeight())));
 	panel->add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
 	panel->add(circleResolution.set("circleRes", 5, 3, 90));
-	panel->add<ofxButton>(twoCircles.set("twoCircles", false));
+	panel->add<ofxGuiButton>(twoCircles.set("twoCircles", false));
 	panel->add(ringButton.set("ring"));
 	panel->add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 

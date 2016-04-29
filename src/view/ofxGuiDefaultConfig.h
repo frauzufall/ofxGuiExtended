@@ -12,9 +12,9 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiElement::getClassType(), {
 						{"background-color", "rgba(0,0,0,0)"},
-						{"fill-color", "rgba(42,42,42,0.5)"},
+						{"fill-color", "rgba(255,255,255,0.5)"},
 						{"border-width", 1},
-//						{"padding", 5},
+						{"padding", 5},
 						{"border-color", "rgb(255,255,255)"},
 						{"margin", 5},
 						{"text-color", "#ffffff"}

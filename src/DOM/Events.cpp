@@ -23,8 +23,8 @@
 // =============================================================================
 
 
-#include "DOM/Events.h"
-#include "DOM/Element.h"
+#include "Events.h"
+#include "Element.h"
 
 
 namespace DOM {
