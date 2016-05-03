@@ -14,9 +14,9 @@ struct ofxGuiDefaultConfig{
 						{"background-color", "rgba(0,0,0,0)"},
 						{"fill-color", "rgba(255,255,255,0.5)"},
 						{"border-width", 1},
-						{"padding", 5},
+						{"padding", 2},
 						{"border-color", "rgb(255,255,255)"},
-						{"margin", 5},
+						{"margin", 2},
 						{"text-color", "#ffffff"}
 					}
 				},
@@ -54,7 +54,7 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiGroup::getClassType(), {
 						{"border-color", "rgba(255,255,255,0.7)"},
-						{"background-color", "#424242"}
+						{"background-color", "#424242"},
 					}
 				},
 
@@ -66,8 +66,9 @@ struct ofxGuiDefaultConfig{
 						{"width", "100%"},
 						{"margin", 0},
 						{"border-width", 0},
-						{"background-color", "#ffffff"},
-						{"text-color", "#000000"}
+						{"padding", 0},
+						{"background-color", "#424242"},
+						{"text-color", "#ffffff"}
 					}
 				},
 
