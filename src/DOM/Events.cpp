@@ -84,7 +84,7 @@ void EventArgs::stopImmediatePropagation()
 	if (_cancelable)
 	{
 		_canceled = true;
-		throw ofEventAttendedException();
+		//throw ofEventAttendedException();
 	}
 }
 
