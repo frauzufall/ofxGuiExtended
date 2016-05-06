@@ -152,8 +152,6 @@ class ofxGuiElement : public DOM::Element {
 		/// \brief Point where element is grabbed for dragging in screen coordinates
 		ofPoint grabPoint;
 
-		int textPadding;
-
 		ofPath bg, border;
 
 		ofParameter<ofColor> headerBackgroundColor;
@@ -165,6 +163,7 @@ class ofxGuiElement : public DOM::Element {
 		ofParameter<TextAlignment> textAlignment;
 		ofParameter<bool> showName;
 		ofParameter<float> fontSize;
+		ofParameter<float> textPadding;
 
 		bool bRegisteredForMouseEvents;
 

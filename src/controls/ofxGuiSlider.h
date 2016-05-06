@@ -19,7 +19,7 @@ public:
 
 	ofxGuiSlider();
 	ofxGuiSlider(const ofJson & config);
-	ofxGuiSlider(ofParameter<DataType> _val, const ofJson & config = ofJson());
+	ofxGuiSlider(ofParameter<DataType>& _val, const ofJson & config = ofJson());
 	ofxGuiSlider(const std::string& sliderName, DataType _val, DataType _min, DataType _max, const ofJson & config = ofJson());
 
 	~ofxGuiSlider();

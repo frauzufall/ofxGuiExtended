@@ -417,9 +417,9 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 	maxX += getPaddingRight(_parent);
 	maxY += getPaddingBottom(_parent);
 	if(horizontal){
-		_parent->setWidthInLayout(max(maxX,_parent->getWidth()));
+		_parent->setSizeInLayout(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
 	}else{
-		_parent->setHeightInLayout(max(maxY,_parent->getHeight()));
+		_parent->setSizeInLayout(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
 	}
 
 }

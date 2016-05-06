@@ -8,9 +8,9 @@ class ofxGuiValueLabel: public ofxGuiElement {
 public:
 
 	ofxGuiValueLabel();
-	ofxGuiValueLabel(ofParameter<Type> _label, const ofJson & config = ofJson());
+	ofxGuiValueLabel(ofParameter<Type>& _label, const ofJson & config = ofJson());
 	ofxGuiValueLabel(const std::string& labelName, const ofJson & config = ofJson());
-	ofxGuiValueLabel(ofParameter<Type> _label, float width, float height);
+	ofxGuiValueLabel(ofParameter<Type>& _label, float width, float height);
 	ofxGuiValueLabel(const std::string& labelName, const Type & label, const ofJson & config = ofJson());
 	ofxGuiValueLabel(const std::string& labelName, const Type & label, float width, float height);
 

@@ -38,6 +38,22 @@ void ofxGuiFunctionPlotter::_setConfig(const ofJson & config){
 	// TODO
 }
 
+float ofxGuiFunctionPlotter::getMinWidth(){
+	float _width = 0;
+	if(showName){
+		_width += ofxGuiElement::getTextWidth(getName())+2*textPadding;
+	}
+	return _width;
+}
+
+float ofxGuiFunctionPlotter::getMinHeight(){
+	float _height = 0;
+	if(showName){
+		_height += ofxGuiElement::getTextHeight(getName())+2*textPadding;
+	}
+	return _height;
+}
+
 void ofxGuiFunctionPlotter::setDecimalPlace(int place){
 	decimalPlace = place;
 }
@@ -58,12 +74,20 @@ void ofxGuiFunctionPlotter::generateDraw(){
 	plot.setStrokeWidth(plotterStrokeWidth);
 	plot.setStrokeColor(ofColor::white);
 	for(unsigned i = plotterStrokeWidth; i < getWidth()-plotterStrokeWidth; i++){
-		float y_norm = ofMap(function(ofMap(i, 0, getWidth(), value.getMin().x, value.getMax().x)), value.getMin().y, value.getMax().y, 0, 1);
+		float y_norm = ofMap(function(
+								 ofMap(i,
+									borderWidth, getWidth() - borderWidth*2,
+									value.getMin().x, value.getMax().x)
+							),
+							value.getMin().y, value.getMax().y, 0, 1);
 		if(i == plotterStrokeWidth){
-			plot.moveTo(i, ofMap(y_norm, 0, 1, plotterStrokeWidth/2, getHeight()-plotterStrokeWidth/2));
+			plot.moveTo(i, ofMap(
+							y_norm,
+							0, 1,
+							borderWidth + plotterStrokeWidth/2, getHeight() - borderWidth - plotterStrokeWidth/2));
 			continue;
 		}
-		plot.lineTo(i, ofMap(y_norm, 0, 1, plotterStrokeWidth/2, getHeight()-plotterStrokeWidth/2));
+		plot.lineTo(i, ofMap(y_norm, 0, 1, borderWidth + plotterStrokeWidth/2, getHeight() - borderWidth - plotterStrokeWidth/2));
 	}
 }
 
@@ -71,14 +95,20 @@ void ofxGuiFunctionPlotter::render(){
 
 	ofxGuiElement::render();
 
+//	glEnable(GL_BLEND);
 	plot.draw();
-	if(background_gradient.isAllocated()){
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBlendEquation(GL_MIN);
-		background_gradient.draw(0,0,getWidth(), getHeight());
-		ofEnableAlphaBlending();
-	}
+//	if(background_gradient.isAllocated()){
+////		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//		glBlendEquation(GL_MIN);
+//		background_gradient.draw(borderWidth,borderWidth,getWidth()-2*borderWidth, getHeight()-2*borderWidth);
+//		ofEnableAlphaBlending();
+//	}
+
+	ofSetColor(textColor);
+
+	bindFontTexture();
+	textMesh.draw();
+	unbindFontTexture();
 
 }
 

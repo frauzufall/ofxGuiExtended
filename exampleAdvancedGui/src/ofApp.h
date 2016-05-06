@@ -26,36 +26,41 @@ class ofApp : public ofBaseApp {
 
 		ofxGui gui;
 
-		ofxGuiPanel *panel1, *panel3, *sliders;
-		ofxGuiGroup *rotary, *labels, *buttons, *toggles;
-		ofxGuiGroup* group3, *group1;
-		ofParameter<string> active_name;
-		ofParameter<int> active_index;
-		ofParameter<float> floatfield_param;
-		ofParameter<string> textfield_param;
+		ofxGuiPanel *panel1;
+		ofxGuiGroup *labels, *buttons;
 
-		ofParameter <string> label_param;
-		ofParameter <bool> toggle_param;
-		ofParameter <float> slider_param;
-		ofParameter <bool> toggle1_param, toggle2_param, toggle3_param, toggle4_param;
-		ofParameter <float> slider1_param, slider2_param, slider3_param, slider4_param;
-		vector <ofParameter <bool> > matrix_params;
-		ofParameterGroup g;
+		//plotter
+		ofParameter<ofPoint> sinus;
+		ofParameter<float> randomVal;
+
+		//textfields
+		ofParameter<float> floatfieldVal;
+		ofParameter<string> textfieldVal;
+
+		ofParameter <bool> showHeaders;
+
+		//sliders
+		ofxGuiPanel* sliders;
+		ofParameter <float> slider1Val, slider2Val, slider3Val, slider4Val;
+		ofParameter <float> circularSliderVal;
+
+		//color panel
+		ofxGuiPanel* colorPanel;
+		ofxGuiGroup *colorToggles;
 
 		ofParameterGroup colorParameters;
 		ofParameter<bool> color0;
+		ofParameter<bool> color1;
 		ofParameter<bool> color2;
 		ofParameter<bool> color3;
-		ofParameter<bool> color1;
-		ofxGuiGroup *color_toggles;
 
-		ofParameter<ofPoint> sinus;
+		ofParameter<string> activeName;
+		ofParameter<int> activeIndex;
 
 		ofColor color;
 
 		void toggleGroupHeader(bool & val);
 		void setHeaderColors(int& index);
-		void updateMatrixIndex(int& index);
 
 };
 

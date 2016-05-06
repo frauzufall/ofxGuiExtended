@@ -11,7 +11,7 @@ ofxGuiValueLabel<Type>::ofxGuiValueLabel()
 }
 
 template<typename Type>
-ofxGuiValueLabel<Type>::ofxGuiValueLabel(ofParameter<Type> _label, const ofJson & config)
+ofxGuiValueLabel<Type>::ofxGuiValueLabel(ofParameter<Type>& _label, const ofJson & config)
 :ofxGuiElement(){
 
 	label.makeReferenceTo(_label);
@@ -31,7 +31,7 @@ ofxGuiValueLabel<std::string>::ofxGuiValueLabel(const string& labelName, const o
 
 
 template<typename Type>
-ofxGuiValueLabel<Type>::ofxGuiValueLabel(ofParameter<Type> _label, float width, float height)
+ofxGuiValueLabel<Type>::ofxGuiValueLabel(ofParameter<Type>& _label, float width, float height)
 	:ofxGuiValueLabel<Type>(_label){
 
 	setSize(width, height);

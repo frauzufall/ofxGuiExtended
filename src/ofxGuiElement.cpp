@@ -74,8 +74,8 @@ void ofxGuiElement::setup(){
 	bRegisteredForMouseEvents = false;
 	fontLoaded = false;
 	useTTF = false;
-	textPadding = 4;
 
+	textPadding.set("text-padding", 4);
 	headerBackgroundColor.set("header-background-color", ofColor(255));
 	backgroundColor.set("background-color", ofColor(255));
 	borderColor.set("border-color", ofColor(0));
@@ -182,6 +182,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		JsonConfigParser::parse(_config, showName);
 		JsonConfigParser::parse(_config, fontSize);
 		JsonConfigParser::parse(_config, borderWidth);
+		JsonConfigParser::parse(_config, textPadding);
 
 		//parse size
 		JsonConfigParser::parse(_config, this);

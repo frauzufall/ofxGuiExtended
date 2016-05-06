@@ -59,3 +59,11 @@ ofJson ofxGui::rootGroupConfig(const ofJson& config){
 	}
 	return res;
 }
+
+void ofxGui::setConfig(const ofJson &config){
+	for(auto* child : getDocument()->children()){
+		if(ofxGuiElement* el = dynamic_cast<ofxGuiElement*>(child)){
+			el->setConfig(config, true);
+		}
+	}
+}

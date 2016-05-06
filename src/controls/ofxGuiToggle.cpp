@@ -141,18 +141,48 @@ void ofxGuiToggle::generateDraw(){
 			border.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6,checkboxRect.height/6),
 						 checkboxRect.width/3*2,checkboxRect.height/3*2);
 			if(value){
-				bg.append(border);
+				if(borderWidth.get() > 0){
+					border.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
+					//create cross
+					float bla = sqrt(borderWidth*borderWidth*0.5);
+					ofRectangle checkbox = checkboxRect;
+					checkbox.setPosition(checkbox.getPosition() + ofPoint(checkbox.width/3, checkbox.width/3));
+					checkbox.setSize(checkbox.width/3, checkbox.width/3);
+					bg.setFillColor(borderColor);
+					bg.moveTo(checkbox.getTopLeft());
+					bg.lineTo(checkbox.getTopLeft() + ofPoint(borderWidth,0));
+					bg.lineTo(checkbox.getCenter() + ofPoint(0, -bla));
+					bg.lineTo(checkbox.getTopRight() + ofPoint(-borderWidth, 0));
+					bg.lineTo(checkbox.getTopRight());
+					bg.lineTo(checkbox.getTopRight() + ofPoint(0, borderWidth));
+					bg.lineTo(checkbox.getCenter() + ofPoint(bla, 0));
+					bg.lineTo(checkbox.getBottomRight() + ofPoint(0, -borderWidth));
+					bg.lineTo(checkbox.getBottomRight());
+					bg.lineTo(checkbox.getBottomRight() + ofPoint(-borderWidth, 0));
+					bg.lineTo(checkbox.getCenter() + ofPoint(0, bla));
+					bg.lineTo(checkbox.getBottomLeft() + ofPoint(borderWidth, 0));
+					bg.lineTo(checkbox.getBottomLeft());
+					bg.lineTo(checkbox.getBottomLeft() + ofPoint(0, -borderWidth));
+					bg.lineTo(checkbox.getCenter() + ofPoint(-bla, 0));
+					bg.lineTo(checkbox.getTopLeft() + ofPoint(0, borderWidth));
+					bg.close();
+				}else{
+					bg.append(border);
+				}
 			}else{
 				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
 							 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
 				border.append(bg);
 			}
+
 			break;
 		}
 		case ofxGuiToggleType::FULLSIZE: {
 			border.rectangle(checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
 			if(value){
 				bg.append(border);
+				border.rectangle(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth);
 			}else{
 				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth);
 				border.append(bg);
@@ -166,16 +196,6 @@ void ofxGuiToggle::generateDraw(){
 			default:
 			case ofxGuiToggleType::RADIO:
 			case ofxGuiToggleType::CHECKBOX: {
-
-	//			//create cross
-	//			cross.clear();
-	//			cross.setStrokeColor(textColor);
-	//			cross.setStrokeWidth(1);
-	//			cross.setFilled(false);
-	//			cross.moveTo(checkboxRect.getTopLeft());
-	//			cross.lineTo(checkboxRect.getBottomRight());
-	//			cross.moveTo(checkboxRect.getTopRight());
-	//			cross.lineTo(checkboxRect.getBottomLeft());
 
 				// create label
 
@@ -213,11 +233,6 @@ void ofxGuiToggle::render(){
 
 	border.draw();
 	bg.draw();
-
-//	if(value && (type == ofxToggle::Type::CHECKBOX
-//			|| type == ofxToggle::Type::RADIO)){
-//		cross.draw();
-//	}
 
 	if(showName){
 		ofColor c = ofGetStyle().color;

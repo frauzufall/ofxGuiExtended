@@ -21,7 +21,7 @@ ofxGuiSlider<DataType>::ofxGuiSlider(const ofJson &config)
 }
 
 template<typename DataType>
-ofxGuiSlider<DataType>::ofxGuiSlider(ofParameter<DataType> _val, const ofJson &config)
+ofxGuiSlider<DataType>::ofxGuiSlider(ofParameter<DataType>& _val, const ofJson &config)
 :ofxGuiElement(){
 
 	value.makeReferenceTo(_val);
@@ -251,8 +251,13 @@ void ofxGuiSlider<DataType>::generateDraw(){
 	}
 	if(type == ofxGuiSliderType::CIRCULAR){
 
-		float inner_r = min(getShape().width, getShape().height) / 6;
-		float outer_r = min(getShape().width, getShape().height) / 2-1;
+		ofPoint center = ofPoint(getWidth()/2, getHeight()/2);
+		if(showName){
+			center.y -= getTextHeight(getName());
+		}
+		float radius = min(center.x, center.y);
+		float inner_r = radius / 3;
+		float outer_r = radius-1;
 
 		bg.clear();
 		bar.clear();
@@ -261,12 +266,12 @@ void ofxGuiSlider<DataType>::generateDraw(){
 		bg.setStrokeWidth(1);
 		bg.setFillColor(backgroundColor);
 		bg.setFilled(true);
-		arcStrip(bg, ofPoint(getWidth()/2, getHeight()/2), outer_r-1, inner_r+1, 1);
+		arcStrip(bg, center, outer_r-1, inner_r+1, 1);
 
 		float val = ofMap(value, value.getMin(), value.getMax(), 0, 1);
 		bar.setFillColor(fillColor);
 		bar.setFilled(true);
-		arcStrip(bar, ofPoint(getWidth()/2, getHeight()/2), outer_r - 1, inner_r + 1, val);
+		arcStrip(bar, center, outer_r - 1, inner_r + 1, val);
 
 	}
 

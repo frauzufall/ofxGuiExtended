@@ -7,8 +7,8 @@ void ofApp::setup(){
 
 	ofSetFrameRate(120);
 
-	active_name.set("element name", "");
-	active_index.set("element index", -1);
+	activeName.set("element name", "");
+	activeIndex.set("element index", -1);
 
 
 	/*
@@ -20,59 +20,26 @@ void ofApp::setup(){
 	panel1->setBackgroundColor(ofColor(0,0,0,0));
 
 	/*
-	 * FPS plotter, function plotter
+	 * toggle to show or hide header
+	 */
+
+	showHeaders.set("show/hide header", true);
+	panel1->add(showHeaders, ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+
+	panel1->addSpacer(0, 20);
+
+	/*
+	 * Plotter
 	 */
 	panel1->addFpsPlotter();
 	auto sinusfunction = [&] (float x) { return sin(x); };
+
 	sinus.set("sinus", ofPoint(0,0), ofPoint(0, -1), ofPoint(4*PI, 1));
-	ofxGuiFunctionPlotter* sinusplotter = panel1->add<ofxGuiFunctionPlotter>(sinus, sinusfunction);
-	sinusplotter->setFillColor(ofColor::blue, ofColor::red);
-	panel1->addSpacer(panel1->getWidth(), 20);
+	panel1->add<ofxGuiFunctionPlotter>(sinus, sinusfunction);
 
-	/*
-	 * toggles
-	 */
-	toggles = panel1->addGroup("toggles");
-	toggles->setShowHeader(false);
+	panel1->add<ofxGuiValuePlotter>(randomVal.set("random value", 0, 0, 9), ofJson({{"precision", 2}}));
 
-	toggle_param.set("show/hide header", true);
-	toggles->add(toggle_param, ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-
-	group1 = toggles->addGroup();
-	group1->setShowHeader(false);
-	ofJson toggle_config = {{"width", "50%"}, {"float", "left"}};
-	group1->add(toggle1_param.set("multiple", false), toggle_config);
-	group1->add(toggle2_param.set("choice", false), toggle_config);
-
-	/*
-	 * matrix with only one allowed active toggle, listener to use labels above to show current index
-	 */
-	matrix_params.push_back(ofParameter<bool>("only", false));
-	matrix_params.push_back(ofParameter<bool>("one", false));
-	matrix_params.push_back(ofParameter<bool>("toggle", false));
-	matrix_params.push_back(ofParameter<bool>("can", false));
-	matrix_params.push_back(ofParameter<bool>("be", false));
-	matrix_params.push_back(ofParameter<bool>("active", false));
-
-	group3 = toggles->addGroup("", ofJson({{"flex-direction", "row"}, {"flex-wrap", "wrap"}}));
-	group3->getActiveToggleIndex().addListener(this, &ofApp::updateMatrixIndex);
-	group3->setShowHeader(false);
-	group3->setExclusiveToggles(true);
-	for(unsigned int i = 0; i < matrix_params.size(); i++){
-		group3->add(matrix_params.at(i), ofJson({{"width", "50%"}, {"type", "fullsize"}}));
-	}
-
-	panel1->addSpacer(panel1->getWidth(), 20);
-
-	/*
-	 *  labels
-	 */
-	labels = panel1->addGroup("labels");
-	labels->add<ofxGuiLabel>("blabla");
-	labels->add(active_name);
-	labels->add<ofxGuiIntLabel>(active_index);
-
-	panel1->addSpacer(panel1->getWidth(), 20);
+	panel1->addSpacer(0, 20);
 
 	/*
 	 * buttons
@@ -82,103 +49,102 @@ void ofApp::setup(){
 	buttons->add<ofxGuiButton>("checkbox button", ofJson({{"type", "checkbox"}}));
 	buttons->add<ofxGuiButton>("radio button", ofJson({{"type", "radio"}}));
 
-	panel1->addSpacer(panel1->getWidth(), 20);
+	panel1->addSpacer(0, 20);
 
 	/*
 	 *  input fields
 	 */
-	panel1->add<ofxGuiFloatInputField>(floatfield_param.set("float input",3.5,0,500));
-	panel1->add<ofxGuiTextField>(textfield_param.set("text input","type in here"));
+	panel1->add<ofxGuiFloatInputField>(floatfieldVal.set("float input",3.5,0,500));
+	panel1->add<ofxGuiTextField>(textfieldVal.set("text input","type in here"));
+
+	/*
+	 * ofParameterGroup example with radio toggles, listener to show current index and name
+	 */
+
+	colorParameters.setName("ofParameterGroup");
+	colorParameters.add(color0.set("mediumSlateBlue",false));
+	colorParameters.add(color1.set("tomato",false));
+	colorParameters.add(color2.set("mediumAquaMarine",false));
+	colorParameters.add(color3.set("steelBlue",false));
+
+	colorPanel = gui.addPanel("header color");
+	colorPanel->setPosition(panel1->getShape().getTopRight()+ofPoint(20,0));
+	colorPanel->setWidth(260);
+	colorToggles = colorPanel->addGroup(colorParameters);
+	colorToggles->setExclusiveToggles(true);
+	colorToggles->setConfig(ofJson({{"type", "radio"}}));
+
+	/*
+	 *  labels
+	 */
+	labels = colorPanel->addGroup("labels");
+	labels->add(activeName);
+	labels->add<ofxGuiIntLabel>(activeIndex);
+	labels->add<ofxGuiLabel>("text without parameter");
 
 
 	/*
 	 *  sliders
 	 */
-	sliders = gui.addPanel("vertical sliders", ofJson({{"flex-direction", "row"}}));
-	sliders->setPosition(260,20);
-	sliders->setWidth(260);
+	sliders = gui.addPanel("vertical sliders", ofJson({{"flex-direction", "row"}, {"flex-wrap", "wrap"}}));
+	sliders->setPosition(colorPanel->getShape().getTopRight()+ofPoint(20,0));
+	sliders->setWidth(340);
 
-	sliders->add(slider1_param.set("slider1", 1. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 40}, {"height", 130}}));
-	sliders->add(slider2_param.set("slider2", 5. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 50}, {"height", 130}}));
-	sliders->add(slider3_param.set("slider3", 4. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 60}, {"height", 130}}));
-	sliders->add(slider4_param.set("slider4", 6. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 70}, {"height", 130}}));
+	sliders->add(slider1Val.set("slider1", 1. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 40}, {"height", 130}}));
+	sliders->add(slider2Val.set("slider2", 5. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 50}, {"height", 130}}));
+	sliders->add(slider3Val.set("slider3", 4. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 60}, {"height", 130}}));
+	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 70}, {"height", 130}}));
 
-	sliders->addSpacer(sliders->getWidth(), 20);
+	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"flex","auto"}, {"precision", 2}}));
 
-	ofJson slider_config2 = {{"precision", 1}};
-	sliders->add(slider1_param, slider_config2);
-	sliders->add(slider2_param, slider_config2);
-	sliders->add(slider3_param, slider_config2);
-	sliders->add(slider4_param, slider_config2);
-
-	sliders->addSpacer(sliders->getWidth(), 20);
-
-	sliders->add(slider_param.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"height", 60}}));
-
-
-	/*
-	 * ofParameterGroup example with radio toggles
-	 */
-
-	colorParameters.setName("colors");
-	colorParameters.add(color0.set("rosyBrown",false));
-	colorParameters.add(color1.set("mediumVioletRed",false));
-	colorParameters.add(color2.set("mediumAquaMarine",false));
-	colorParameters.add(color3.set("steelBlue",false));
-
-	panel3 = gui.addPanel("ofParameterGroup");
-	panel3->setPosition(260, 460);
-	color_toggles = panel3->addGroup(colorParameters);
-	color_toggles->setExclusiveToggles(true);
-	color_toggles->setConfig(ofJson({{"type", "radio"}}));
 
 	/*
 	 * adding listeners
 	 */
 
-	toggle_param.addListener(this, &ofApp::toggleGroupHeader);
-	color_toggles->getActiveToggleIndex().addListener(this, &ofApp::setHeaderColors);
-	color_toggles->setActiveToggle(3);
+	showHeaders.addListener(this, &ofApp::toggleGroupHeader);
+	colorToggles->getActiveToggleIndex().addListener(this, &ofApp::setHeaderColors);
+	colorToggles->setActiveToggle(3);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::exit(){
-	toggle_param.removeListener(this, &ofApp::toggleGroupHeader);
-	group3->getActiveToggleIndex().removeListener(this, &ofApp::updateMatrixIndex);
-	color_toggles->getActiveToggleIndex().removeListener(this, &ofApp::setHeaderColors);
+	showHeaders.removeListener(this, &ofApp::toggleGroupHeader);
+	colorToggles->getActiveToggleIndex().removeListener(this, &ofApp::setHeaderColors);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	randomVal.set(ofRandom(randomVal.getMin(), randomVal.getMax()));
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofBackgroundGradient(ofColor::white, ofColor::gray);
+	ofBackgroundGradient(ofColor::gray, ofColor::black);
 
 }
 
 void ofApp::setHeaderColors(int& index){
 
+	activeIndex = index;
+	activeName = colorParameters.get(index).getName();
+
 	ofColor c;
 	switch(index){
-		case 0: c = ofColor::rosyBrown; break;
-		case 1: c = ofColor::mediumVioletRed; break;
+		case 0: c = ofColor::mediumSlateBlue; break;
+		case 1: c = ofColor::tomato; break;
 		case 2: c = ofColor::mediumAquaMarine; break;
 		default: case 3: c = ofColor::steelBlue; break;
 
 	}
 
 	labels->getHeader()->setBackgroundColor(c);
-	toggles->getHeader()->setBackgroundColor(c);
 	buttons->getHeader()->setBackgroundColor(c);
-	group1->getHeader()->setBackgroundColor(c);
 	sliders->getHeader()->setBackgroundColor(c);
-	group3->getHeader()->setBackgroundColor(c);
-	panel3->getHeader()->setBackgroundColor(c);
-	color_toggles->getHeader()->setBackgroundColor(c);
+	colorPanel->getHeader()->setBackgroundColor(c);
+	colorToggles->getHeader()->setBackgroundColor(c);
 
 	color = c;
 }
@@ -187,13 +153,8 @@ void ofApp::toggleGroupHeader(bool & val){
 	labels->setShowHeader(val);
 	sliders->setShowHeader(val);
 	buttons->setShowHeader(val);
-	panel3->setShowHeader(val);
-	color_toggles->setShowHeader(val);
-}
-
-void ofApp::updateMatrixIndex(int &index){
-	active_index = index;
-	active_name = matrix_params.at(index).getName();
+	colorPanel->setShowHeader(val);
+	colorToggles->setShowHeader(val);
 }
 
 //--------------------------------------------------------------

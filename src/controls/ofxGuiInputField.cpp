@@ -17,7 +17,7 @@ ofxGuiInputField<Type>::ofxGuiInputField(const ofJson &config)
 }
 
 template<typename Type>
-ofxGuiInputField<Type>::ofxGuiInputField(ofParameter<Type> _val, const ofJson &config)
+ofxGuiInputField<Type>::ofxGuiInputField(ofParameter<Type>& _val, const ofJson &config)
 	:ofxGuiInputField(){
 
 	value.makeReferenceTo(_val);
@@ -106,6 +106,29 @@ void ofxGuiInputField<Type>::calculateSelectionArea(int selectIdx1, int selectId
 	}
 }
 
+
+template<typename Type>
+float ofxGuiInputField<Type>::getMinWidth(){
+	string text = ofToString(value.get());
+	if(showName){
+		if(!getName().empty()){
+			text = getName() + ": ";
+		}
+	}
+
+	return ofxGuiElement::getTextWidth(text)+2*textPadding;
+}
+
+template<typename Type>
+float ofxGuiInputField<Type>::getMinHeight(){
+	string text = ofToString(value.get());
+	if(showName){
+		if(!getName().empty()){
+			text = getName() + ": ";
+		}
+	}
+	return ofxGuiElement::getTextHeight(text)+2*textPadding;
+}
 
 template<typename Type>
 bool ofxGuiInputField<Type>::mouseMoved(ofMouseEventArgs & args){

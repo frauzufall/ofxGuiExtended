@@ -1,5 +1,6 @@
 #include "ofxGuiValuePlotter.h"
 #include "ofGraphics.h"
+#include "../view/JsonConfigParser.h"
 using namespace std;
 
 ofxGuiValuePlotter::ofxGuiValuePlotter()
@@ -18,7 +19,7 @@ ofxGuiValuePlotter::ofxGuiValuePlotter(const ofJson & config)
 }
 
 
-ofxGuiValuePlotter::ofxGuiValuePlotter(ofParameter<float> value, const ofJson & config) :
+ofxGuiValuePlotter::ofxGuiValuePlotter(ofParameter<float> &value, const ofJson & config) :
 	ofxGuiElement(){
 
 	this->value.makeReferenceTo(value);
@@ -58,6 +59,7 @@ void ofxGuiValuePlotter::setup(){
 void ofxGuiValuePlotter::_setConfig(const ofJson & config){
 	ofxGuiElement::_setConfig(config);
 	// TODO
+	JsonConfigParser::parse(config, decimalPlace);
 }
 
 float ofxGuiValuePlotter::getMinWidth(){
@@ -69,7 +71,7 @@ float ofxGuiValuePlotter::getMinWidth(){
 }
 
 float ofxGuiValuePlotter::getMinHeight(){
-	return ofxGuiElement::getTextHeight(ofToString(value.get(), decimalPlace));
+	return ofxGuiElement::getTextHeight(ofToString(value.get(), decimalPlace))+2*textPadding;
 }
 
 void ofxGuiValuePlotter::setDecimalPlace(int place){

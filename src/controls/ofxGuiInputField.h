@@ -7,7 +7,7 @@ class ofxGuiInputField : public ofxGuiElement{
 public:
 	ofxGuiInputField();
 	ofxGuiInputField(const ofJson &config);
-	ofxGuiInputField(ofParameter<Type> _val, const ofJson &config = ofJson());
+	ofxGuiInputField(ofParameter<Type>& _val, const ofJson &config = ofJson());
 	ofxGuiInputField(const std::string& _name, Type _val, Type _min, Type _max, const ofJson &config = ofJson());
 	//TODO the setup non-ofParameter setup is a pain for the Type string (because of the forced min and max)
 
@@ -19,6 +19,9 @@ public:
 	Type getMin();
 	void setMax(Type max);
 	Type getMax();
+
+	virtual float getMinWidth() override;
+	virtual float getMinHeight() override;
 
 	virtual bool mouseMoved(ofMouseEventArgs & args) override;
 	virtual bool mousePressed(ofMouseEventArgs & args) override;

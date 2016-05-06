@@ -13,6 +13,9 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 
 		void setup();
 
+		virtual float getMinWidth() override;
+		virtual float getMinHeight() override;
+
 		void setPlotterStrokeWidth(float width);
 		void setFunction(std::function<float (float)> function);
 

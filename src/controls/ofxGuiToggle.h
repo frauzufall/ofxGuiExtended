@@ -70,6 +70,5 @@ protected:
 	virtual bool setValue(float mx, float my, bool bCheck);
 	virtual void generateDraw();
 	void valueChanged(bool & value);
-	ofPath cross;
 	ofVboMesh textMesh;
 };

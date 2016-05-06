@@ -12,7 +12,7 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiElement::getClassType(), {
 						{"background-color", "rgba(0,0,0,0)"},
-						{"fill-color", "rgba(255,255,255,0.5)"},
+						{"fill-color", "rgba(200,200,200,0.42)"},
 						{"border-width", 1},
 						{"padding", 2},
 						{"border-color", "rgb(255,255,255)"},
@@ -24,14 +24,12 @@ struct ofxGuiDefaultConfig{
 				/// settings for all toggles
 				{
 					ofxGuiToggle::getClassType(), {
-						{"border-color", "rgba(255,255,255,0.42)"},
 					}
 				},
 
 				/// settings for all buttons
 				{
 					ofxGuiButton::getClassType(), {
-						{"type", "fullsize"}
 					}
 				},
 
@@ -54,7 +52,9 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiGroup::getClassType(), {
 						{"border-color", "rgba(255,255,255,0.7)"},
-						{"background-color", "#424242"},
+//						{"background-color", "#424242"},
+						{"padding", 1},
+						{"border-width", 1}
 					}
 				},
 

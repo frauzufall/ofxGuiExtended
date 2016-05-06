@@ -37,6 +37,9 @@ class ofxGui {
 
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
 
+		/// \brief Sets a config recursively for all elements of the gui
+		void setConfig(const ofJson &config);
+
 		template<typename T>
 		void add(ofParameter<T>& parameter){
 			if(!defaultPanel){
