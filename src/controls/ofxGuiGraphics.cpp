@@ -9,25 +9,26 @@ ofxGuiGraphics::~ofxGuiGraphics(){
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
 	:ofxGuiElement(){
 	_bLoaded = false;
-	setup(canvasName, nullptr);
+	setup(canvasName);
 	_setConfig(config);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
 	:ofxGuiElement(){
 	_bLoaded = false;
-	setup(canvasName, graphics);
+	setGraphics(graphics);
+	setup(canvasName);
 	_setConfig(config);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h){
 	_bLoaded = false;
-	setup(canvasName,graphics,w,h);
+	setGraphics(graphics);
+	setup(canvasName,w,h);
 }
 
-void ofxGuiGraphics::setup(string canvasName, ofBaseDraws * graphics, float w, float h){
+void ofxGuiGraphics::setup(string canvasName, float w, float h){
 	setName(canvasName);
-	setGraphics(graphics);
 	if(_bLoaded){
 		if(w == 0){
 			if(h == 0){
@@ -58,7 +59,6 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 
 float ofxGuiGraphics::getMinWidth(){
 	if(_bLoaded){
-		//return getHeight() * graphics->getWidth() / graphics->getHeight();
 		return 10;
 	}
 	return 0;
@@ -66,10 +66,17 @@ float ofxGuiGraphics::getMinWidth(){
 
 float ofxGuiGraphics::getMinHeight(){
 	if(_bLoaded){
-//		return getWidth() * graphics->getHeight() / graphics->getWidth();
 		return 10;
 	}
 	return 0;
+}
+
+void ofxGuiGraphics::setAutoHeight(){
+	setHeight(getWidth() * graphics->getHeight() / graphics->getWidth());
+}
+
+void ofxGuiGraphics::setAutoWidth(){
+	setWidth(getHeight() * graphics->getWidth() / graphics->getHeight());
 }
 
 void ofxGuiGraphics::generateDraw(){

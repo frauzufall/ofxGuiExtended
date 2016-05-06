@@ -12,7 +12,7 @@ class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 
 		virtual ~ofxGuiZoomableGraphics();
 
-		void setup(string graphicsName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
+		void setup();
 
 		virtual bool mousePressed(ofMouseEventArgs & args) override;
 		virtual bool mouseDragged(ofMouseEventArgs & args) override;

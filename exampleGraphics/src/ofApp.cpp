@@ -7,19 +7,25 @@ void ofApp::setup(){
 
 	ofSetFrameRate(120);
 
+	// load image
 	img.load("images/ente.jpg");
 
-
-	panel1 = gui.addPanel("canvas");
+	// add panel 1
+	panel1 = gui.addPanel("graphics");
 	panel1->setPosition(260, 90);
 
-
+	// add image texture with fixed height
 	panel1->add<ofxGuiGraphics>("some texture", &img.getTexture(), ofJson({{"height", 200}}));
 
-
-	panel2 = gui.addPanel("zoomable canvas");
+	// add panel 2
+	panel2 = gui.addPanel("zoomable graphics");
 	panel2->setPosition(500, 90);
-	panel2->add<ofxGuiZoomableGraphics>("same texture", &img.getTexture(), ofJson({{"height", 200}}));
+
+	// add image texture and get the pointer to this graphics gui element
+	ofxGuiGraphics* graphics = panel2->add<ofxGuiZoomableGraphics>("same texture", &img.getTexture());
+
+	// set image heigth according to width and ratio if the image
+	graphics->setAutoHeight();
 
 }
 

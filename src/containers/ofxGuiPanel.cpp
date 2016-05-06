@@ -125,9 +125,8 @@ vector<std::string> ofxGuiPanelHeader::getClassTypes(){
 ofxGuiPanel::ofxGuiPanel(const string &collectionName)
 	:ofxGuiGroup(){
 
-	parameters.setName(collectionName);
 	setup();
-	clear();
+	setName(collectionName);
 
 }
 

@@ -75,14 +75,12 @@ struct ofxGuiDefaultConfig{
 				/// settings for all panels
 				{
 					ofxGuiPanel::getClassType(), {
-						{"background-color", "#424242"}
 					}
 				},
 
 				/// settings for all panel headers
 				{
 					ofxGuiPanelHeader::getClassType(), {
-						{"background-color", "#ffffff"}
 					}
 
 				},

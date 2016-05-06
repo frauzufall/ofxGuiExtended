@@ -10,10 +10,13 @@ class ofxGuiGraphics : public ofxGuiElement {
 		ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h = 0);
 		virtual ~ofxGuiGraphics();
 
-		void setup(string canvasName = "", ofBaseDraws * graphics = 0, float w = 0, float h = 0);
+		void setup(string canvasName = "", float w = 0, float h = 0);
 
 		virtual float getMinWidth() override;
 		virtual float getMinHeight() override;
+
+		void setAutoHeight();
+		void setAutoWidth();
 
 		virtual void setGraphics(ofBaseDraws* graphics);
 

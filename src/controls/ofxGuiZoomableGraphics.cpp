@@ -3,30 +3,27 @@
 using namespace std;
 
 ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, const ofJson& config)
-	:ofxGuiGraphics(){
-	_bLoaded = false;
-	setName(canvasName);
+	:ofxGuiGraphics(canvasName){
 	_setConfig(config);
+	setup();
 }
 
 ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
-	:ofxGuiGraphics(){
-	_bLoaded = false;
-	setup(canvasName, graphics);
+	:ofxGuiGraphics(canvasName, graphics){
 	_setConfig(config);
+	setup();
 }
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h){
-	_bLoaded = false;
-	setup(canvasName,graphics,w,h);
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h)
+	:ofxGuiGraphics(canvasName, graphics, w, h){
+	setup();
 }
 
 ofxGuiZoomableGraphics::~ofxGuiZoomableGraphics(){
 	ofRemoveListener(resize, this, &ofxGuiZoomableGraphics::onResize);
 }
 
-void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, float w, float h){
-	ofxGuiGraphics::setup(graphicsName, graphics, w, h);
+void ofxGuiZoomableGraphics::setup(){
 	zoom_factor = 0;
 	zoom_speed = 0.1;
 	dragging_dst = false;
@@ -36,7 +33,7 @@ void ofxGuiZoomableGraphics::setup(string graphicsName, ofBaseDraws * graphics, 
 void ofxGuiZoomableGraphics::onResize(DOM::ResizeEventArgs &args){
 //	ofxGuiGraphics::onResize(args);
 	contentFbo.clear();
-	if(_bLoaded){
+	if(_bLoaded && getWidth() > 0 && getHeight() > 0){
 		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);
 	}
 //	setNeedsRedraw();
@@ -55,8 +52,6 @@ void ofxGuiZoomableGraphics::render(){
 		ofClear(0, 0, 0, 0);
 
 		ofPushMatrix();
-
-//		ofTranslate(-b.getPosition());
 
 		zoom_translation = zoom_point - zoom_point_scaled + zoom_point_offset;
 		if(zoom_translation.x > 0){
@@ -152,8 +147,8 @@ void ofxGuiZoomableGraphics::setZoomFactor(int factor){
 	ofPoint zoom_point_old = zoom_point;
 
 	ofPoint tmp_zoom_point;
-	tmp_zoom_point.x = ofGetMouseX() - getPosition().x - zoom_point_offset.x;
-	tmp_zoom_point.y = ofGetMouseY() - getPosition().y - zoom_point_offset.y;
+	tmp_zoom_point.x = ofGetMouseX() - getScreenPosition().x - zoom_point_offset.x;
+	tmp_zoom_point.y = ofGetMouseY() - getScreenPosition().y - zoom_point_offset.y;
 
 	ofVec2f diff = tmp_zoom_point - zoom_point_old;
 
