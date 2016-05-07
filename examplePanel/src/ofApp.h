@@ -24,15 +24,23 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	ofParameter<bool> moving;
-	ofParameter<float> speed;
-	ofParameter<float> rotation;
+	void circleResolutionChanged(int & circleResolution);
+	void ringButtonPressed();
 
+	bool bHide;
+
+	ofParameter<float> radius;
+	ofParameter<ofColor> color;
+	ofParameter<ofVec2f> center;
+	ofParameter<int> circleResolution;
+	ofParameter<bool> filled;
+	ofParameter<bool> twoCircles;
+	ofParameter<void> ringButton;
+	ofParameter<string> screenSize;
+
+	ofxGuiPanel* panel;
 	ofxGui gui;
 
-
-
-	ofPoint position, direction;
-
+	ofSoundPlayer ring;
 };
 

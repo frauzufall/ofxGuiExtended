@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "ofxDOMFlexBoxLayout.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -8,123 +7,31 @@ void ofApp::setup(){
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
-//	ofxGuiGroup* tabs = gui.addGroup("tabbedpages");
+	ofxGuiGroup* all = gui.addGroup("", ofJson({{"position", "static"},
+												{"height", "100%"},
+												{"show-header", false},
+												{"background-color", "#000000"}}));
 
-//	tabs->setConfig(ofJson({
-//							   {"flex-direction", "column"}
-//						   }));
+	ofxGuiGroup* header = all->addGroup("header", ofJson({{"flex-direction", "row"},
+														  {"show-header", false},
+														  {"height", 50},
+														  {"background-color", "#F40056"}}));
+	header->addLabel("this is the header");
 
+	// create tab container
+	ofxGuiTabs* tabbed_pages = all->addTabs("tabbedpages", ofJson({{"flex", 1}}));
 
-//	tabs->setSize(800,600);
+	// create pages and add them to tab layout
+	tabbed_pages->addGroup("page1", ofJson({{"background-color", "#2377BA"}}));
+	tabbed_pages->addGroup("page2", ofJson({{"background-color", "#00CA98"}}));
+	tabbed_pages->addGroup("page3", ofJson({{"background-color", "#ffaa00"}}));
 
-//	ofxGuiGroup* group = tabs->addGroup("tabs", ofJson({
-//													   {"align-self", "stretch"},
-//													   {"height", 50},
-//													   {"flex-direction", "row"},
-//													   {"align-items", "flex-end"},
-//													   {"justify-content", "flex-start"}
-//												   }));
+	ofxGuiGroup* footer = all->addGroup("footer", ofJson({{"flex-direction", "row"},
+														  {"show-header", false},
+														  {"height", 50},
+														  {"background-color", "#F47E00"}}));
+	footer->addLabel("this is the footer");
 
-
-
-//	for(int i = 0; i < 3; i++){
-
-//		ofxToggle* label = group->add<ofxToggle>(ofToString(i,2), ofJson({{"width", ofRandom(50,50)}, {"height", 20}, {"type", "fullsize"}}));
-//		label->setBackgroundColor(ofColor(ofRandom(0,255), ofRandom(0,255),ofRandom(0,255)));
-//	}
-
-//	tabs->addGroup("page1", ofJson({
-//								  {"flex", "auto"},
-//								  {"align-self", "stretch"}
-//							  }));
-
-
-
-//	ofxGuiGroup* tabs2 = gui.addGroup("tabbedpages2");
-//	tabs2->setPosition(tabs->getShape().getTopRight());
-//	tabs2->setSize(800,600);
-
-//	ofxGuiGroup* group2 = tabs2->addGroup("tabs2", ofJson({
-//													   {"align-self", "stretch"},
-//													   {"height", 50},
-//													   {"flex-direction", "row"},
-//													   {"align-items", "flex-end"},
-//													   {"justify-content", "flex-start"}
-//												   }));
-
-//	tabs2->setConfig(ofJson({
-//							   {"flex-direction", "column"}
-//						   }));
-
-//	for(int i = 0; i < 3; i++){
-
-//		ofxToggle* label = group2->add<ofxToggle>(ofToString(i,2), ofJson({{"width", ofRandom(50,50)}, {"height", 20}, {"type", "fullsize"}}));
-//		label->setBackgroundColor(ofColor(ofRandom(0,255), ofRandom(0,255),ofRandom(0,255)));
-//	}
-
-//	tabs2->addGroup("page2", ofJson({
-//									  {"flex", "auto"},
-//									  {"align-self", "stretch"}
-//								  }));
-
-	/*
-	 *  create tab container
-	 */
-	tabbed_pages = gui.addTabs("tabbedpages", ofJson({
-								   {"width", "70%"},
-								   {"height", 600}
-							   }));
-
-	/*
-	 *  create pages and add them to tab layout
-	 */
-	page1 = tabbed_pages->addGroup("page1");
-	page2 = tabbed_pages->addPanel("page2");
-	page3 = tabbed_pages->addPanel("page3");
-
-//	/*
-//	 *  fill page 1
-//	 */
-//	vector<ofJson> choices;
-//	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
-//	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
-//	choices.push_back({{"float", "none"}, {"background-color", "rgba(255,0,0,0.7)"}});
-
-//	for(int i = 0; i < 10; i++){
-
-//		ofRandomize(choices);
-
-//		ofxLabel* label = page1->add<ofxLabel>(ofToString(i,2), choices[0]);
-//		label->setSize((int)ofRandom(100,200), (int)ofRandom(60, 80));
-//	}
-
-//	/*
-//	 *  raise the chance to create left or right floating elements
-//	 */
-//	choices.push_back({{"float", "left"}, {"background-color", "#2da1e3"}});
-//	choices.push_back({{"float", "right"}, {"background-color", "#0ff"}});
-
-//	/*
-//	 *  fill page 2
-//	 */
-//	for(int i = 0; i < 20; i++){
-
-//		ofRandomize(choices);
-
-//		ofxLabel* label = page2->add<ofxLabel>(ofToString(i,2), choices[0]);
-//		label->setSize((int)ofRandom(70,50), (int)ofRandom(30, 50));
-//	}
-
-//	/*
-//	 *  fill page 3
-//	 */
-//	for(int i = 0; i < 30; i++){
-
-//		ofRandomize(choices);
-
-//		ofxLabel* label = page3->add<ofxLabel>(ofToString(i,2), choices[0]);
-//		label->setSize((int)ofRandom(130,150), (int)ofRandom(30, 50));
-//	}
 
 
 }

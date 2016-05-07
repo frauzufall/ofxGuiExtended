@@ -87,7 +87,7 @@ void ofxGuiTabs::generateDraw(){
 					|| tab->getFillColor() != page->getBackgroundColor()){
 				tab->setName(page->getName());
 				tab->setFillColor(page->getBackgroundColor());
-				tab->setBackgroundColor(ofColor(page->getBackgroundColor(), 50));
+				tab->setBackgroundColor(ofColor(page->getBackgroundColor(), 120));
 				tabs->updateLayout();
 			}
 		}

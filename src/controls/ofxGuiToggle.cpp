@@ -106,11 +106,11 @@ void ofxGuiToggle::generateDraw(){
 		default:
 		case ofxGuiToggleType::RADIO:
 		case ofxGuiToggleType::CHECKBOX: {
-			checkboxRect.set(1, 1, getHeight() - 2, getHeight() - 2);
+			checkboxRect.set(0, 0, getHeight(), getHeight());
 			break;
 		}
 		case ofxGuiToggleType::FULLSIZE: {
-			checkboxRect.set(1, 1, getWidth() - 2, getHeight() - 2);
+			checkboxRect.set(0, 0, getWidth(), getHeight());
 			break;
 		}
 	}
@@ -120,7 +120,7 @@ void ofxGuiToggle::generateDraw(){
 	border.clear();
 	border.setFillColor(borderColor);
 	border.setFilled(true);
-	if(value){
+	if(value && borderWidth <= 0){
 		bg.setFillColor(fillColor);
 	}else{
 		bg.setFillColor(backgroundColor);
@@ -129,11 +129,10 @@ void ofxGuiToggle::generateDraw(){
 		default:
 		case ofxGuiToggleType::RADIO:{
 			border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3, checkboxRect.getHeight()/3, 0, 360);
+			bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
+			border.append(bg);
 			if(value){
-				bg.append(border);
-			}else{
-				bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
-				border.append(bg);
+				border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth-2, checkboxRect.getHeight()/3-borderWidth-2, 0, 360);
 			}
 			break;
 		}
@@ -149,24 +148,25 @@ void ofxGuiToggle::generateDraw(){
 					ofRectangle checkbox = checkboxRect;
 					checkbox.setPosition(checkbox.getPosition() + ofPoint(checkbox.width/3, checkbox.width/3));
 					checkbox.setSize(checkbox.width/3, checkbox.width/3);
-					bg.setFillColor(borderColor);
-					bg.moveTo(checkbox.getTopLeft());
-					bg.lineTo(checkbox.getTopLeft() + ofPoint(borderWidth,0));
-					bg.lineTo(checkbox.getCenter() + ofPoint(0, -bla));
-					bg.lineTo(checkbox.getTopRight() + ofPoint(-borderWidth, 0));
-					bg.lineTo(checkbox.getTopRight());
-					bg.lineTo(checkbox.getTopRight() + ofPoint(0, borderWidth));
-					bg.lineTo(checkbox.getCenter() + ofPoint(bla, 0));
-					bg.lineTo(checkbox.getBottomRight() + ofPoint(0, -borderWidth));
-					bg.lineTo(checkbox.getBottomRight());
-					bg.lineTo(checkbox.getBottomRight() + ofPoint(-borderWidth, 0));
-					bg.lineTo(checkbox.getCenter() + ofPoint(0, bla));
-					bg.lineTo(checkbox.getBottomLeft() + ofPoint(borderWidth, 0));
-					bg.lineTo(checkbox.getBottomLeft());
-					bg.lineTo(checkbox.getBottomLeft() + ofPoint(0, -borderWidth));
-					bg.lineTo(checkbox.getCenter() + ofPoint(-bla, 0));
-					bg.lineTo(checkbox.getTopLeft() + ofPoint(0, borderWidth));
-					bg.close();
+					border.moveTo(checkbox.getTopLeft());
+					border.lineTo(checkbox.getTopLeft() + ofPoint(borderWidth,0));
+					border.lineTo(checkbox.getCenter() + ofPoint(0, -bla));
+					border.lineTo(checkbox.getTopRight() + ofPoint(-borderWidth, 0));
+					border.lineTo(checkbox.getTopRight());
+					border.lineTo(checkbox.getTopRight() + ofPoint(0, borderWidth));
+					border.lineTo(checkbox.getCenter() + ofPoint(bla, 0));
+					border.lineTo(checkbox.getBottomRight() + ofPoint(0, -borderWidth));
+					border.lineTo(checkbox.getBottomRight());
+					border.lineTo(checkbox.getBottomRight() + ofPoint(-borderWidth, 0));
+					border.lineTo(checkbox.getCenter() + ofPoint(0, bla));
+					border.lineTo(checkbox.getBottomLeft() + ofPoint(borderWidth, 0));
+					border.lineTo(checkbox.getBottomLeft());
+					border.lineTo(checkbox.getBottomLeft() + ofPoint(0, -borderWidth));
+					border.lineTo(checkbox.getCenter() + ofPoint(-bla, 0));
+					border.lineTo(checkbox.getTopLeft() + ofPoint(0, borderWidth));
+					border.close();
+					bg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
 				}else{
 					bg.append(border);
 				}
@@ -231,8 +231,8 @@ void ofxGuiToggle::generateDraw(){
 
 void ofxGuiToggle::render(){
 
-	border.draw();
 	bg.draw();
+	border.draw();
 
 	if(showName){
 		ofColor c = ofGetStyle().color;

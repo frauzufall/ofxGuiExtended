@@ -6,7 +6,7 @@ void ofApp::setup(){
 	parameters.add(size.set("size",10,1,100));
 	parameters.add(number.set("number",10,1,100));
 	parameters.add(check.set("check",false));
-	parameters.add(color.set("color",ofColor(127),ofColor(0,0),ofColor(255)));
+	parameters.add(color.set("color",ofColor(98, 38, 255, 223),ofColor(0,0),ofColor(255)));
 	panel = gui.addPanel(parameters);
 	// by now needs to pass the gui parameter groups since the panel internally creates it's own group
 	sync.setup((ofParameterGroup&)panel->getParameter(),6667,"localhost",6666);

@@ -80,6 +80,7 @@ class ofxGuiGroup : public ofxGuiElement {
 
 		void add(const ofParameterGroup& parameters);
 
+		ofxGuiLabel* addLabel(const std::string& label, const ofJson& config = ofJson());
 		ofxGuiElement* addSpacer(float width, float height);
 		ofxGuiElement* addSpacer(const ofJson & config = ofJson());
 		ofxGuiFpsPlotter* addFpsPlotter(const ofJson & config = ofJson());

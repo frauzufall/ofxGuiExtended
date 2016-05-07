@@ -17,7 +17,6 @@ void ofApp::setup(){
 	panel1 = gui.addPanel();
 	panel1->setPosition(20,20);
 	panel1->setShowHeader(false);
-	panel1->setBackgroundColor(ofColor(0,0,0,0));
 
 	/*
 	 * toggle to show or hide header
@@ -122,7 +121,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofBackgroundGradient(ofColor::gray, ofColor::black);
+	ofBackgroundGradient(ofColor::white, ofColor::gray);
 
 }
 

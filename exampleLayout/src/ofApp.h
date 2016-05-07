@@ -26,9 +26,5 @@ class ofApp : public ofBaseApp {
 
 		ofxGui gui;
 
-		ofxGuiTabs *tabbed_pages;
-
-		ofxGuiGroup *page1, *page2, *page3;
-
 };
 

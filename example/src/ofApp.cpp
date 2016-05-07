@@ -4,85 +4,101 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+	ofBackgroundGradient(ofColor::white, ofColor::gray);
+
 	ofSetFrameRate(120);
 
 	ofSetVerticalSync(true);
 
-	// we add this listener before setting up so the initial circle resolution is correct
-	circleResolution.addListener(this, &ofApp::circleResolutionChanged);
-	ringButton.addListener(this,&ofApp::ringButtonPressed);
+	position = ofPoint(ofRandomWidth(), ofRandomHeight());
 
-	panel = gui.addPanel("panel");
-	panel->setPosition(10,10);
+	// initialize the parameters you want to work with, set minimal and maximal values
+	moving.set("moving", true);
+	speed.set("speed", 0.5, 0, 1);
+	rotation.set("rotate", ofRandom(0,2*PI), 0, 2*PI);
 
-	panel->add(filled.set("bFill", true));
-	panel->add(radius.set( "radius", 140, 10, 300 ));
-	panel->add(center.set("center",ofVec2f(ofGetWidth()*.5,ofGetHeight()*.5),ofVec2f(0,0),ofVec2f(ofGetWidth(),ofGetHeight())));
-	panel->add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-	panel->add(circleResolution.set("circleRes", 5, 3, 90));
-	panel->add<ofxGuiButton>(twoCircles.set("twoCircles", false));
-	panel->add(ringButton.set("ring"));
-	panel->add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	// add the parameters to the gui
+	gui.add(moving, speed, rotation);
 
-	bHide = false;
+	// that's all you have to do to setup, update and show the panel
+	// the rest of the example is just playing around with a fly
 
-	ring.load("ring.wav");
 }
 
 //--------------------------------------------------------------
 void ofApp::exit(){
-	ringButton.removeListener(this,&ofApp::ringButtonPressed);
-}
-
-//--------------------------------------------------------------
-void ofApp::circleResolutionChanged(int & circleResolution){
-	ofSetCircleResolution(circleResolution);
-}
-
-//--------------------------------------------------------------
-void ofApp::ringButtonPressed(){
-	ring.play();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+	// computing new position of the fly
+	if(moving){
+		position += direction;
+	}
+	direction = ofPoint(cos(rotation),sin(rotation))*speed.get();
+
+	// making sure the fly stays inside of the window
+	if(position.x < 0) position.x = 0;
+	if(position.x > ofGetWindowWidth()) position.x = ofGetWindowWidth();
+	if(position.y < 0) position.y = 0;
+	if(position.y > ofGetWindowHeight()) position.y = ofGetWindowHeight();
+
 }
 
 //--------------------------------------------------------------
+
 void ofApp::draw(){
-	ofBackgroundGradient(ofColor::white, ofColor::gray);
 
-	if( filled ){
+	ofVec2f wingsize(60,30);
+
+	// computing the wing animation
+	float waving = 0;
+	if(moving && speed > 0){
+		waving = sin(ofGetElapsedTimef()*speed*50)*40;
+	}
+	ofPoint wingpos(waving, -wingsize.x);
+	ofPoint wingpos_norm = wingpos.getNormalized();
+	ofPoint p1 = wingpos_norm*wingsize.x+wingpos_norm.getRotated(90, ofVec3f(0,0,1))*wingsize.y/2;
+	ofPoint p2 = wingpos_norm*wingsize.x-wingpos_norm.getRotated(90, ofVec3f(0,0,1))*wingsize.y/2;
+
+	if(speed > 0){
+		// draw direction arrow
+		ofPoint arrowStart = position + direction.getNormalized()*15;
+		ofPoint arrowEnd = arrowStart + direction*100;
+		ofSetColor(0,100,255);
+		ofDrawArrow(arrowStart, arrowEnd, 3);
+	}
+
+	ofPushMatrix();
+		ofTranslate(position);
+		ofRotateZ(ofRadToDeg(rotation));
+
+		// draw body
+		ofSetColor(0);
 		ofFill();
-	}else{
-		ofNoFill();
-	}
+		ofDrawCircle(ofPoint(0,0), 10);
 
-	ofSetColor(color);
-	if(twoCircles){
-		ofDrawCircle(center->x-radius*.5, center->y, radius );
-		ofDrawCircle(center->x+radius*.5, center->y, radius );
-	}else{
-		ofDrawCircle((ofVec2f)center, radius );
-	}
+		// draw wings
+		ofNoFill();
+		ofSetLineWidth(1);
+		ofBeginShape();
+		ofCurveVertex(0,0);
+		ofCurveVertex(0,0);
+		ofCurveVertex(p1.x, p1.y);
+		ofCurveVertex(p2.x, p2.y);
+		ofCurveVertex(0,0);
+		ofCurveVertex(p1.x, -p1.y);
+		ofCurveVertex(p2.x, -p2.y);
+		ofCurveVertex(0,0);
+		ofCurveVertex(0,0);
+		ofEndShape();
+	ofPopMatrix();
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if( key == 'h' ){
-		bHide = !bHide;
-		panel->setHidden(bHide);
-	}
-	if(key == 's') {
-		panel->saveToFile("settings.xml");
-	}
-	if(key == 'l') {
-		panel->loadFromFile("settings.xml");
-	}
-	if(key == ' '){
-		color = ofColor(255);
-	}
 }
 
 //--------------------------------------------------------------
@@ -121,7 +137,6 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	screenSize = ofToString(w) + "x" + ofToString(h);
 }
 
 //--------------------------------------------------------------

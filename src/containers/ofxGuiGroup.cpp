@@ -54,7 +54,7 @@ void ofxGuiGroupHeader::render() {
 bool ofxGuiGroupHeader::mousePressed(ofMouseEventArgs & args){
 
 	if(!isHidden()){
-		ofRectangle minButton(getWidth() - textPadding * 3, 0, textPadding * 3, getHeight());
+		ofRectangle minButton(getWidth() - textPadding * 2 - 10, 0, textPadding * 2 + 10, getHeight());
 		minButton.setPosition(localToScreen(minButton.getPosition()));
 		if(minButton.inside(args.x, args.y)){
 			ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
@@ -309,6 +309,10 @@ ofxGuiFloatColorSlider* ofxGuiGroup::add(ofParameter <ofFloatColor> & parameter,
 
 void ofxGuiGroup::add(const ofParameterGroup &parameters){
 	addParametersFrom(parameters);
+}
+
+ofxGuiLabel* ofxGuiGroup::addLabel(const std::string& label, const ofJson& config){
+	add<ofxGuiLabel>("", label, config);
 }
 
 ofxGuiElement* ofxGuiGroup::addSpacer(float width, float height){

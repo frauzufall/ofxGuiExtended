@@ -41,7 +41,10 @@ bool JsonConfigParser::_parse(const ofJson &config, const string &name, ofColor&
 			std::string s_value = content;
 
 			//look for colors in hex format
-			vector<string> matches = JsonConfigParser::getMatchedStrings(s_value, "#(?:[\\da-f]{3}){1,2}");
+
+			std::string hexval = s_value;
+			std::transform(hexval.begin(), hexval.end(), hexval.begin(), ::tolower);
+			vector<string> matches = JsonConfigParser::getMatchedStrings(hexval, "#(?:[\\da-f]{3}){1,2}");
 			if(matches.size() > 0){
 				int x;
 				ofStringReplace(matches[0],"#","");
