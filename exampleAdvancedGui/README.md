@@ -4,7 +4,7 @@
 
 ### Learning Objectives
 
-This example demonstrates advanced techniques using ofxGui.
+This example demonstrates advanced techniques using ofxGuiExtended.
 
 In the code, you will learn how to..
 * create different button and toggle types

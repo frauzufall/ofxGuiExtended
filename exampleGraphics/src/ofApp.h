@@ -25,9 +25,9 @@ public:
 private:
 
 	ofxGui gui;
-	ofxGuiPanel *panel1, *panel2;
 
 	ofImage img;
+	ofFbo fbo;
 
 
 };
