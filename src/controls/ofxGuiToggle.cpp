@@ -120,7 +120,7 @@ void ofxGuiToggle::generateDraw(){
 	border.clear();
 	border.setFillColor(borderColor);
 	border.setFilled(true);
-	if(value && borderWidth <= 0){
+	if(value && (borderWidth <= 0 || type == ofxGuiToggleType::FULLSIZE)){
 		bg.setFillColor(fillColor);
 	}else{
 		bg.setFillColor(backgroundColor);

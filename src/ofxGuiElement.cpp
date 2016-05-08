@@ -309,12 +309,25 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 }
 
 void ofxGuiElement::copyLayoutFromDocument(){
-	DOM::Document* doc = document();
-	if(doc){
-		if(doc->layout()){
-			doc->layout()->copyTo(this);
+
+	if(ofxGuiGroup* _this = dynamic_cast<ofxGuiGroup*>(this)){
+		if(!layout()){
+			DOM::Document* doc = document();
+			if(doc){
+				if(doc->layout()){
+					doc->layout()->copyTo(_this);
+					invalidateChildShape();
+				}
+			}
 		}
 	}
+
+	for(auto child : children()){
+		if(ofxGuiGroup* _child = dynamic_cast<ofxGuiGroup*>(child)){
+			_child->copyLayoutFromDocument();
+		}
+	}
+
 }
 
 ofAbstractParameter& ofxGuiElement::getParameter(){

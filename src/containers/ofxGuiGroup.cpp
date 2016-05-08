@@ -174,7 +174,7 @@ ofxGuiGroup::~ofxGuiGroup(){
 
 void ofxGuiGroup::setup(){
 
-	header = nullptr;
+	header = add<ofxGuiGroupHeader>();
 
 	filename.set("filename","settings.xml");
 
@@ -632,8 +632,6 @@ void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 
 void ofxGuiGroup::onParentAdded(DOM::ElementEventArgs& args){
 	copyLayoutFromDocument();
-	header = add<ofxGuiGroupHeader>();
-	getHeader()->setHidden(!showHeader.get());
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){

@@ -66,7 +66,7 @@ void ofApp::setup(){
 	colorParameters.add(color2.set("mediumAquaMarine",false));
 	colorParameters.add(color3.set("steelBlue",false));
 
-	colorPanel = gui.addPanel("header color");
+	colorPanel = gui.addPanel("header color", ofJson({{"width", 270}}));
 	colorPanel->setPosition(panel1->getShape().getTopRight()+ofPoint(20,0));
 	colorToggles = colorPanel->addGroup(colorParameters);
 	colorToggles->setExclusiveToggles(true);

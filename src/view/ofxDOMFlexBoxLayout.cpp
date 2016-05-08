@@ -41,9 +41,14 @@ void ofxDOMFlexBoxLayout::doLayout(){
 			}
 		}
 
-		if (_parent && children().size() > 0){
+		if (_parent){
 
-			align(getFlexDirection(_parent));
+			if(children().size() > 0){
+				align(getFlexDirection(_parent));
+			}/*else{
+				_parent->setSizeInLayout(DOMLH::getDesiredWidth(_parent) - DOMLH::getMarginHorizontal(_parent),
+										 DOMLH::getDesiredHeight(_parent) - DOMLH::getMarginVertical(_parent));
+			}*/
 
 		}
 

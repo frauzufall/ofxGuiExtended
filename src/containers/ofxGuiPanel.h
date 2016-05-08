@@ -53,7 +53,6 @@ class ofxGuiPanel : public ofxGuiGroup {
 
 		void setup();
 
-		virtual void onParentAdded(DOM::ElementEventArgs&);
 		void onHeaderMove(DOM::MoveEventArgs& args);
 		void onLoadPressed();
 		void onSavePressed();
