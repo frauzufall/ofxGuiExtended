@@ -220,7 +220,9 @@ void ofxGuiTabs::maximize(){
 	for(auto &e : pages){
 		e->setHidden(true);
 	}
-	activePage->setHidden(false);
+	if(activePage){
+		activePage->setHidden(false);
+	}
 	invalidateChildShape();
 }
 

@@ -183,6 +183,8 @@ void ofxGuiGroup::setup(){
 
 	showHeader.set("show-header", true);
 
+//	createLayout<ofxDOMFlexBoxLayout>(this);
+
 	showHeader.addListener(this, &ofxGuiGroup::onHeaderVisibility);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
 	ofAddListener(childAdded, this, &ofxGuiGroup::onChildAdded);
@@ -632,6 +634,11 @@ void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 
 void ofxGuiGroup::onParentAdded(DOM::ElementEventArgs& args){
 	copyLayoutFromDocument();
+
+	//no idea why this is needed but otherwise the headers are not correctly displayed
+	_sizeInLayout.x = 0;
+	_sizeInLayout.y = 0;
+	invalidateChildShape();
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){

@@ -572,7 +572,7 @@ protected:
 	/// \brief A vector to Elements.
 	std::vector<std::unique_ptr<Element>> _children;
 
-private:
+//private:
 	/// \brief Not construction-copyable.
 	Element(const Element& other) = delete; // non-construction-copyable
 
