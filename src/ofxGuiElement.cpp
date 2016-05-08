@@ -138,11 +138,21 @@ void ofxGuiElement::setTheme(const ofJson &config){
 }
 
 void ofxGuiElement::loadConfig(const string &filename, bool recursive){
-	setConfig(loadJson(filename), recursive);
+	ofJson config = loadJson(filename);
+	if(config.size() > 0){
+		setConfig(config.begin().value(), recursive);
+	}else{
+		ofLogError("ofxGuiElement::loadConfig") << "Could not load config from " << filename << ". File is empty or does not exist." << endl;
+	}
 }
 
 void ofxGuiElement::loadTheme(const string &filename){
-	setTheme(loadJson(filename));
+	ofJson config = loadJson(filename);
+	if(config.size() > 0){
+		setTheme(config.begin().value());
+	}else{
+		ofLogError("ofxGuiElement::loadTheme") << "Could not load config from " << filename << ". File is empty or does not exist." << endl;
+	}
 }
 
 void ofxGuiElement::_setConfigUsingClassifiers(const ofJson &config, bool recursive){

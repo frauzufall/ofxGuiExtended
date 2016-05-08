@@ -156,3 +156,13 @@ void ofxGuiFunctionPlotter::setFillColor(const ofColor &minColor, const ofColor 
 void ofxGuiFunctionPlotter::setPlotterStrokeWidth(float width){
 	plotterStrokeWidth.set(width);
 }
+
+vector<std::string> ofxGuiFunctionPlotter::getClassTypes(){
+	vector<std::string> types = ofxGuiElement::getClassTypes();
+	types.push_back(getClassType());
+	return types;
+}
+
+std::string ofxGuiFunctionPlotter::getClassType(){
+	return "function-plotter";
+}

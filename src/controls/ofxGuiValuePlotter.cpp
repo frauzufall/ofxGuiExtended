@@ -156,12 +156,13 @@ void ofxGuiValuePlotter::valueChanged(float & value){
 	setNeedsRedraw();
 }
 
-std::string ofxGuiValuePlotter::getClassType(){
-	return "plotter";
-}
-
 vector<std::string> ofxGuiValuePlotter::getClassTypes(){
 	vector<std::string> types = ofxGuiElement::getClassTypes();
 	types.push_back(getClassType());
 	return types;
 }
+
+std::string ofxGuiValuePlotter::getClassType(){
+	return "value-plotter";
+}
+

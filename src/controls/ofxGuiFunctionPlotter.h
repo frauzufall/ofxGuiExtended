@@ -26,7 +26,11 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 
 		virtual ofAbstractParameter & getParameter() override;
 
+		static std::string getClassType();
+
 	protected:
+
+		virtual vector<std::string> getClassTypes() override;
 
 		virtual void _setConfig(const ofJson & config) override;
 		virtual void render() override;

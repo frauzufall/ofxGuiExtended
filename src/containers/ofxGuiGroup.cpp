@@ -22,12 +22,12 @@ void ofxGuiGroupHeader::generateDraw(){
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
 		if(_parent->getShowName()){
-			textMesh.append(getTextMesh(_parent->getName(), textPadding, getHeight()/ 2 + 4));
+			textMesh.append(getTextMesh(_parent->getName(), textPadding * 2, getHeight()/ 2 + 4));
 		}
 		if(_parent->getMinimized()){
-			textMesh.append(getTextMesh("+", getWidth() - textPadding - 8, getHeight() / 2 + 4));
+			textMesh.append(getTextMesh("+", getWidth() - textPadding * 2 - 10, getHeight() / 2 + 4));
 		}else{
-			textMesh.append(getTextMesh("-", getWidth()- textPadding - 8, getHeight() / 2 + 4));
+			textMesh.append(getTextMesh("-", getWidth()- textPadding * 2 - 10, getHeight() / 2 + 4));
 		}
 	}
 }
