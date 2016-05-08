@@ -38,6 +38,7 @@ class ofxGuiTabs : public ofxGuiGroup {
 
 		virtual void generateDraw() override;
 
+		virtual void onParentAdded(DOM::ElementEventArgs&);
 		void onChildAdd(DOM::ElementEventArgs& args);
 
 		ofParameter<float> tabWidth;

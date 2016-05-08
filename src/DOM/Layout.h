@@ -28,12 +28,10 @@
 
 #include <vector>
 #include "Types.h"
+#include "Element.h"
 
 
 namespace DOM {
-
-
-class Element;
 
 
 /// \brief A base class for laying out Elements.
@@ -60,8 +58,10 @@ public:
 	/// \brief Get all of the children for this element.
 	std::vector<Element*> children();
 
-	/// \brief Do
+	/// \brief Do layout.
 	virtual void doLayout() = 0;
+
+	virtual void copyTo(Element* parent) const = 0 ;
 
 protected:
 	/// \brief The owning Widget class.
@@ -71,6 +71,21 @@ protected:
 	bool _isDoingLayout = false;
 
 	friend class Element;
+
+};
+
+
+template<typename T>
+class _Layout : public Layout {
+
+	public:
+
+		_Layout(Element* parent):Layout(parent){}
+		~_Layout(){}
+
+		virtual void copyTo(Element* parent) const {
+			parent->createLayout<T>(parent);
+		}
 
 };
 

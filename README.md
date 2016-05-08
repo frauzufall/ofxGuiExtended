@@ -353,11 +353,13 @@ In a theme you can define attributes for the different element class types.
 - //TODO
 
 ## Known issues
-- *Please report issues!*
-- FlexBoxLayout could absolutely be better computed
+- ** *Please report issues!* **
+- The headers of containers with horizontally aligned children (`flex-direction: row` in FlexBoxLayout and `direction: horizontal` in BoxLayout) don't get displayed correctly, hide them with `ofJson({{"show-header", false}})`. Until this is fixed, you can use a vertical container with showing header and add the horizontal container with hidden header.
+- FlexBoxLayout needs optimization.
 
 ## Wish list
 - Load attributes by class / element name from file
+- Disable controls
 
 ## Credits
 - @arturoc for his work on [ofxGui](https://github.com/openframeworks/openFrameworks/tree/master/addons/ofxGui/src)

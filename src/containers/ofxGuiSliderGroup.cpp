@@ -49,13 +49,13 @@ template<class VecType>
 ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(const std::string& controlName, const VecType & v, const VecType & min, const VecType & max, const ofJson & config)
 	:ofxGuiVecSlider_(config){
 
-	value.set(controlName,v,min,max);
-
 	names.clear();
 	names.push_back("x");
 	names.push_back("y");
 	names.push_back("z");
 	names.push_back("w");
+
+	value.set(controlName,v,min,max);
 
 	this->value.addListener(this, & ofxGuiVecSlider_::changeValue);
 

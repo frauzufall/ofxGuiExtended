@@ -308,6 +308,15 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 
 }
 
+void ofxGuiElement::copyLayoutFromDocument(){
+	DOM::Document* doc = document();
+	if(doc){
+		if(doc->layout()){
+			doc->layout()->copyTo(this);
+		}
+	}
+}
+
 ofAbstractParameter& ofxGuiElement::getParameter(){
 	return parameter;
 }

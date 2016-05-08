@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ofxDOMBoxLayout.h"
+#include "../DOM/Layout.h"
 #include "ofParameter.h"
 #include "Element.h"
 
-class ofxDOMFlexBoxLayout: public ofxDOMBoxLayout
+class ofxDOMFlexBoxLayout: public DOM::_Layout<ofxDOMFlexBoxLayout>
 {
 public:
 
@@ -83,7 +83,7 @@ public:
 
 	/// If the Orientation::DEFAULT is chosen, the default will be set to
 	/// Orientation::HORIZONTAL.
-	ofxDOMFlexBoxLayout(DOM::Element* parent, DOM::Orientation orientation = DOM::Orientation::VERTICAL);
+	ofxDOMFlexBoxLayout(DOM::Element* parent);
 
 	virtual ~ofxDOMFlexBoxLayout();
 
@@ -93,42 +93,22 @@ protected:
 
 	void align(FlexDirection direction);
 
-	bool elementFlexing(DOM::Element* e);
-	bool elementAbsolutePositioned(DOM::Element* e);
+	static bool elementFlexing(DOM::Element* e);
 
-	FlexDirection getFlexDirection(DOM::Element* e, FlexDirection defaultVal = FlexDirection::COLUMN);
-	FlexWrap getFlexWrap(DOM::Element* e, FlexWrap defaultVal = FlexWrap::NOWRAP);
-	JustifyContent getJustifyContent(DOM::Element* e, JustifyContent defaultVal = JustifyContent::FLEX_START);
-	AlignItems getAlignItems(DOM::Element* e, AlignItems defaultVal = AlignItems::STRETCH);
-	AlignContent getAlignContent(DOM::Element* e, AlignContent defaultVal = AlignContent::STRETCH);
-	AlignSelf getAlignSelf(DOM::Element* e, AlignSelf defaultVal = AlignSelf::AUTO);
+	static FlexDirection getFlexDirection(DOM::Element* e, FlexDirection defaultVal = FlexDirection::COLUMN);
+	static FlexWrap getFlexWrap(DOM::Element* e, FlexWrap defaultVal = FlexWrap::NOWRAP);
+	static JustifyContent getJustifyContent(DOM::Element* e, JustifyContent defaultVal = JustifyContent::FLEX_START);
+	static AlignItems getAlignItems(DOM::Element* e, AlignItems defaultVal = AlignItems::STRETCH);
+	static AlignContent getAlignContent(DOM::Element* e, AlignContent defaultVal = AlignContent::STRETCH);
+	static AlignSelf getAlignSelf(DOM::Element* e, AlignSelf defaultVal = AlignSelf::AUTO);
 
-	float getWidthPlusMargin(DOM::Element* e);
-	float getHeightPlusMargin(DOM::Element* e);
-	float getDesiredWidth(DOM::Element* e);
-	float getDesiredHeight(DOM::Element* e);
+	static float getWidthPlusMargin(DOM::Element* e);
+	static float getHeightPlusMargin(DOM::Element* e);
 
-	void setLayoutWidthMinusMargin(DOM::Element* e, float width);
-	void setLayoutHeightMinusMargin(DOM::Element* e, float height);
+	static void setLayoutWidthMinusMargin(DOM::Element* e, float width);
+	static void setLayoutHeightMinusMargin(DOM::Element* e, float height);
 
-	void setWidthInLayoutAddPadding(DOM::Element* e, float width);
-	void setHeightInLayoutAddPadding(DOM::Element* e, float height);
-
-	float getMarginHorizontal(DOM::Element* e);
-	float getMarginVertical(DOM::Element* e);
-	float getMarginLeft(DOM::Element* e);
-	float getMarginRight(DOM::Element* e);
-	float getMarginTop(DOM::Element* e);
-	float getMarginBottom(DOM::Element* e);
-
-	float getPaddingHorizontal(DOM::Element* e);
-	float getPaddingVertical(DOM::Element* e);
-	float getPaddingLeft(DOM::Element* e);
-	float getPaddingRight(DOM::Element* e);
-	float getPaddingTop(DOM::Element* e);
-	float getPaddingBottom(DOM::Element* e);
-
-
-	void setPosition(DOM::Element* e, ofPoint p);
+	static void setWidthInLayoutAddPadding(DOM::Element* e, float width);
+	static void setHeightInLayoutAddPadding(DOM::Element* e, float height);
 
 };

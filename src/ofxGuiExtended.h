@@ -27,19 +27,72 @@ class ofxGui {
 	public:
 		ofxGui();
 		~ofxGui();
+
+		/// \brief Setup function initializing the GUI using the flexbox layout defined by ofxDOMFlexBoxLayout.
+		/// This function has to be called before adding elements to the GUI.
+		void setupFlexBoxLayout();
+
+		/// \brief Template setup function initializing the GUI using the layout given by the template class.
+		/// The setup function doesn't need to be called from the application if one wants to use
+		/// the default ofxDOMBoxLayout, it will be executed automatically.
+		/// This function has to be called before adding elements to the GUI.
+		template<typename LayoutType = ofxDOMBoxLayout>
+		void setup(){
+			if(!setup_done){
+				setup_done = true;
+				document = std::make_unique<DOM::Document>();
+				document->createLayout<LayoutType>(document.get());
+			}else{
+				ofLogError("ofxGui::setup()") << "Setup already done. This function needs to be called before getting the document or adding any elements to it.";
+			}
+		}
+
+		/// \brief Get the root document of the GUI.
+		/// \returns The root DOM::Document.
 		DOM::Document* getDocument();
 
+		/// \brief Add a group to the document.
+		/// A group is a container of elements with a header to minimize the group.
+		/// \param name The group name.
+		/// \param config The group configuration.
+		/// \returns The GUI group element.
 		ofxGuiGroup* addGroup(const std::string& name="", const ofJson& config = ofJson());
+
+		/// \brief Add a group to the document.
+		/// A group is a container of elements with a header to minimize the group.
+		/// \param parameters A parameter group containing parameters that will be added to the group.
+		/// \param config The group configuration.
+		/// \returns The GUI group element.
 		ofxGuiGroup* addGroup(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 
+		/// \brief Add a panel to the document.
+		/// A panel is a container of elements with a header to save and load all child controls.
+		/// \param name The panel name.
+		/// \param config The panel configuration.
+		/// \returns The GUI panel element.
 		ofxGuiPanel* addPanel(const std::string& name="", const ofJson& config = ofJson());
+
+		/// \brief Add a panel to the document.
+		/// A panel is a container of elements with a header to save and load all child controls.
+		/// \param parameters A parameter group containing parameters that will be added to the panel.
+		/// \param config The panel configuration.
+		/// \returns The GUI panel element.
 		ofxGuiPanel* addPanel(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 
+		/// \brief Add a tabbed interface to the document.
+		/// A tabbed interface is a container of other containers. For each added container a tab will be created.
+		/// \param name The name of the tabbed interface (won't be displayed by default).
+		/// \param config The tabbed interface configuration.
+		/// \returns The tabbed interface element.
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
 
-		/// \brief Sets a config recursively for all elements of the gui
+		/// \brief Set a config recursively for all elements of the GUI.
+		/// \param config The configuration.
 		void setConfig(const ofJson &config);
 
+		/// \brief Add a parameter to the GUI without initializing a panel or group first.
+		/// Creates a default panel if not already done.
+		/// \param parameter The parameter that is going to be modifiable with the standard control type for the specific parameter type.
 		template<typename T>
 		void add(ofParameter<T>& parameter){
 			if(!defaultPanel){
@@ -48,6 +101,9 @@ class ofxGui {
 			defaultPanel->add(parameter);
 		}
 
+		/// \brief Add parameters to the GUI without initializing a panel or group first.
+		/// Creates a default panel if not already done.
+		/// \param parameters The parameters that are going to be modifiable with the standard control type for each parameter type.
 		template<typename T, typename... Args>
 		void add(ofParameter<T>& parameter, Args... args) {
 			add(parameter);
@@ -57,7 +113,6 @@ class ofxGui {
 	private:
 		std::unique_ptr<DOM::Document> document;
 
-		void setup();
 		bool setup_done;
 
 		ofJson rootGroupConfig(const ofJson& config = ofJson());

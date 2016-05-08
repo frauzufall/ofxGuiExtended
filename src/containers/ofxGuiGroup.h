@@ -165,6 +165,7 @@ class ofxGuiGroup : public ofxGuiElement {
 		ofxGuiElement* header;
 
 		virtual void onChildAdded(DOM::ElementEventArgs&);
+		virtual void onParentAdded(DOM::ElementEventArgs&);
 		virtual void onHeaderVisibility(bool& showing);
 		virtual void onHeaderHeight(float& height);
 		virtual void onResize(DOM::ResizeEventArgs&);

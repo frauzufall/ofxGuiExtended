@@ -29,6 +29,7 @@ ofxGuiTabs::~ofxGuiTabs(){
 	if(tabs){
 		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::setActiveTab);
 	}
+	ofRemoveListener(addedTo, this, &ofxGuiTabs::onParentAdded);
 	ofRemoveListener(childAdded, this, &ofxGuiTabs::onChildAdd);
 }
 
@@ -47,8 +48,7 @@ void ofxGuiTabs::setup(){
 					  {"flex-direction", "column"}
 					 }));
 
-	clear();
-
+	ofAddListener(addedTo, this, &ofxGuiTabs::onParentAdded);
 	ofAddListener(childAdded, this, &ofxGuiTabs::onChildAdd);
 
 }
@@ -130,6 +130,11 @@ void ofxGuiTabs::generateDraw(){
 	border.append(bg);
 
 
+}
+
+void ofxGuiTabs::onParentAdded(DOM::ElementEventArgs& args){
+	copyLayoutFromDocument();
+	clear();
 }
 
 void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){

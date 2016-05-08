@@ -26,6 +26,7 @@
 #include "Element.h"
 #include "Document.h"
 #include "ofGraphics.h"
+#include "Layout.h"
 #include <algorithm>
 
 #include "../ofxGuiElement.h"

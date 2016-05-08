@@ -68,7 +68,6 @@ void ofApp::setup(){
 
 	colorPanel = gui.addPanel("header color");
 	colorPanel->setPosition(panel1->getShape().getTopRight()+ofPoint(20,0));
-	colorPanel->setWidth(260);
 	colorToggles = colorPanel->addGroup(colorParameters);
 	colorToggles->setExclusiveToggles(true);
 	colorToggles->setConfig(ofJson({{"type", "radio"}}));
@@ -85,16 +84,15 @@ void ofApp::setup(){
 	/*
 	 *  sliders
 	 */
-	sliders = gui.addPanel("vertical sliders", ofJson({{"flex-direction", "row"}, {"flex-wrap", "wrap"}}));
+	sliders = gui.addPanel("vertical sliders", ofJson({{"direction", "horizontal"}, {"show-header", false}}));
 	sliders->setPosition(colorPanel->getShape().getTopRight()+ofPoint(20,0));
-	sliders->setWidth(340);
 
 	sliders->add(slider1Val.set("slider1", 1. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 40}, {"height", 130}}));
 	sliders->add(slider2Val.set("slider2", 5. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 50}, {"height", 130}}));
 	sliders->add(slider3Val.set("slider3", 4. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 60}, {"height", 130}}));
 	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 70}, {"height", 130}}));
 
-	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"flex","auto"}, {"precision", 2}}));
+	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"width", 130}, {"height", 130}, {"precision", 2}}));
 
 
 	/*
@@ -150,7 +148,6 @@ void ofApp::setHeaderColors(int& index){
 
 void ofApp::toggleGroupHeader(bool & val){
 	labels->setShowHeader(val);
-	sliders->setShowHeader(val);
 	buttons->setShowHeader(val);
 	colorPanel->setShowHeader(val);
 	colorToggles->setShowHeader(val);

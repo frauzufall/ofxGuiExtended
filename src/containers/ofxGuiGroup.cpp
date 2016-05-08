@@ -4,9 +4,10 @@
 #include "ofxGuiPanel.h"
 #include "ofxGuiSliderGroup.h"
 #include "ofxGuiTabs.h"
+#include "../DOM/Document.h"
+#include "../DOM/Layout.h"
 #include "../controls/ofxGuiFpsPlotter.h"
 #include "../view/JsonConfigParser.h"
-#include "../view/ofxDOMFlexBoxLayout.h"
 
 ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxGuiElement(){
 	setTheme();
@@ -124,7 +125,7 @@ ofxGuiGroup::ofxGuiGroup(const std::string& collectionName)
 	:ofxGuiElement(){
 
 	setup();
-	parameters.setName(collectionName);
+	setName(collectionName);
 
 }
 
@@ -166,6 +167,7 @@ ofxGuiGroup::~ofxGuiGroup(){
 	showHeader.removeListener(this, &ofxGuiGroup::onHeaderVisibility);
 	ofRemoveListener(resize, this, &ofxGuiGroup::onResize);
 	ofRemoveListener(childAdded, this, &ofxGuiGroup::onChildAdded);
+	ofRemoveListener(addedTo, this, &ofxGuiGroup::onParentAdded);
 	unregisterMouseEvents();
 
 }
@@ -179,18 +181,14 @@ void ofxGuiGroup::setup(){
 	exclusiveToggles.set("exclusive toggles", false);
 	minimized.set("minimized", false);
 
-	createLayout<ofxDOMFlexBoxLayout>(this, DOM::Orientation::VERTICAL);
 	showHeader.set("show-header", true);
 
 	showHeader.addListener(this, &ofxGuiGroup::onHeaderVisibility);
 	ofAddListener(resize, this, &ofxGuiGroup::onResize);
 	ofAddListener(childAdded, this, &ofxGuiGroup::onChildAdded);
-
-	header = add<ofxGuiGroupHeader>();
+	ofAddListener(addedTo, this, &ofxGuiGroup::onParentAdded);
 
 	setTheme();
-
-	clear();
 
 	registerMouseEvents();
 
@@ -312,7 +310,7 @@ void ofxGuiGroup::add(const ofParameterGroup &parameters){
 }
 
 ofxGuiLabel* ofxGuiGroup::addLabel(const std::string& label, const ofJson& config){
-	add<ofxGuiLabel>("", label, config);
+	return add<ofxGuiLabel>("", label, config);
 }
 
 ofxGuiElement* ofxGuiGroup::addSpacer(float width, float height){
@@ -603,11 +601,11 @@ ofAbstractParameter & ofxGuiGroup::getParameter(){
 }
 
 string ofxGuiGroup::getName(){
-	return parameters.getName();
+	return getParameter().getName();
 }
 
 void ofxGuiGroup::setName(const std::string& _name){
-	parameters.setName(_name);
+	getParameter().setName(_name);
 }
 
 ofxGuiElement* ofxGuiGroup::getHeader(){
@@ -630,6 +628,12 @@ void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 	if(ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(args.element())){
 		parameters.add(e->getParameter());
 	}
+}
+
+void ofxGuiGroup::onParentAdded(DOM::ElementEventArgs& args){
+	copyLayoutFromDocument();
+	header = add<ofxGuiGroupHeader>();
+	getHeader()->setHidden(!showHeader.get());
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){

@@ -116,7 +116,7 @@ class ofxGuiElement : public DOM::Element {
 		virtual void _setConfig(const ofJson & config);
 		void _setConfigUsingClassifiers(const ofJson &config, bool recursive = false);
 
-		void onResize(DOM::ResizeEventArgs& args);
+		void copyLayoutFromDocument();
 
 		/// \brief Sets the value of the element based on a position
 		/// \param mx The horizontal position

@@ -25,11 +25,15 @@
 
 #include "ofxDOMBoxLayout.h"
 #include "../DOM/Element.h"
+#include "../ofxGuiElement.h"
 #include <iostream>
+#include "ofxDOMLayoutHelper.h"
 
-ofxDOMBoxLayout::ofxDOMBoxLayout(DOM::Element* parent, DOM::Orientation orientation):
-	DOM::Layout(parent),
-	_orientation((orientation == DOM::Orientation::DEFAULT) ? DOM::Orientation::HORIZONTAL : orientation)
+typedef ofxDOMLayoutHelper DOMLH;
+
+
+ofxDOMBoxLayout::ofxDOMBoxLayout(DOM::Element* parent):
+	DOM::_Layout<ofxDOMBoxLayout>(parent)
 {
 }
 
@@ -48,40 +52,96 @@ void ofxDOMBoxLayout::doLayout()
 
 		float totalWidth = 0;
 		float totalHeight = 0;
-		float currentX = 0;
-		float currentY = 0;
+		float currentX = DOMLH::getPaddingLeft(_parent);
+		float currentY = DOMLH::getPaddingTop(_parent);
+		bool resizeParent = false;
+
 
 		for (DOM::Element* element : children())
 		{
 			if (element)
 			{
-				element->setPosition(currentX, currentY);
+				if(!element->isHidden()){
 
-				if (_orientation == DOM::Orientation::HORIZONTAL)
-				{
-					totalHeight = std::max(totalHeight, element->getHeight());
-					currentX += element->getWidth();
-					totalWidth = currentX;
-				}
-				else
-				{
-					totalWidth = std::max(totalWidth, element->getWidth());
-					currentY += element->getHeight();
-					totalHeight = currentY;
+					float w = max(element->getWidth(), DOMLH::getDesiredWidth(element)-DOMLH::getMarginHorizontal(element));
+					float h = max(element->getHeight(), DOMLH::getDesiredHeight(element)-DOMLH::getMarginVertical(element));
+
+					element->setSizeInLayout(w,h);
+
+					if(!DOMLH::elementAbsolutePositioned(element)){
+						element->setPosition(currentX+DOMLH::getMarginLeft(element), currentY+DOMLH::getMarginTop(element));
+
+						if (getDirection(_parent) == Direction::HORIZONTAL)
+						{
+							totalHeight = std::max(totalHeight, h+DOMLH::getMarginVertical(element));
+							currentX += w+DOMLH::getMarginHorizontal(element);
+							totalWidth = currentX;
+						}
+						else
+						{
+							totalWidth = std::max(totalWidth, w+DOMLH::getMarginHorizontal(element));
+							currentY += h+DOMLH::getMarginVertical(element);
+							totalHeight = currentY;
+						}
+					}else{
+//							element->setSizeInLayout(w-getMarginHorizontal(element), h-getMarginVertical(element));
+					}
+
 				}
 			}
 		}
 
-		totalWidth = std::max(totalWidth, _parent->getShape().getWidth());
-		totalHeight = std::max(totalHeight, _parent->getShape().getHeight());
-		_parent->setSize(totalWidth, totalHeight);
+		if (getDirection(_parent) == Direction::HORIZONTAL){
+			totalHeight += DOMLH::getPaddingVertical(_parent);
+			totalWidth += DOMLH::getPaddingRight(_parent);
+		}else{
+			totalWidth += DOMLH::getPaddingHorizontal(_parent);
+			totalHeight += DOMLH::getPaddingBottom(_parent);
+		}
+
+		totalWidth = std::max(totalWidth, DOMLH::getDesiredWidth(_parent)-DOMLH::getMarginHorizontal(_parent));
+		totalHeight = std::max(totalHeight, DOMLH::getDesiredHeight(_parent)-DOMLH::getMarginVertical(_parent));
+
+		for (DOM::Element* element : children())
+		{
+			if (element)
+			{
+				if(!element->isHidden()){
+
+					if(!DOMLH::elementAbsolutePositioned(element)){
+						if (getDirection(_parent) == Direction::HORIZONTAL){
+							element->setHeightInLayout(totalHeight-DOMLH::getPaddingVertical(_parent)-DOMLH::getMarginVertical(element));
+						}else{
+							element->setWidthInLayout(totalWidth-DOMLH::getPaddingHorizontal(_parent)-DOMLH::getMarginHorizontal(element));
+						}
+					}
+				}
+			}
+		}
+
+		if(totalWidth != _parent->getWidth() || totalHeight != _parent->getHeight()){
+			resizeParent = true;
+		}
+
+		if(totalWidth != _parent->getWidth() || totalHeight != _parent->getHeight()){
+			_parent->setSizeInLayout(totalWidth, totalHeight);
+			_parent->invalidateChildShape();
+		}
 
 		_isDoingLayout = false;
 	}
 }
 
-
-DOM::Orientation ofxDOMBoxLayout::orientation() const
-{
-	return _orientation;
+ofxDOMBoxLayout::Direction ofxDOMBoxLayout::getDirection(DOM::Element *e, Direction defaultVal){
+	if(e->hasAttribute("_direction")){
+		std::string val = e->getAttribute<std::string>("_direction");
+		if(val == "horizontal"){
+			return Direction::HORIZONTAL;
+		}
+		if(val == "vertical"){
+			return Direction::VERTICAL;
+		}
+	}
+	return defaultVal;
 }
+

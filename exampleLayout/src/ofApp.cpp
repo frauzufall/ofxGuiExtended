@@ -7,6 +7,8 @@ void ofApp::setup(){
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
+	gui.setupFlexBoxLayout();
+
 	ofxGuiGroup* all = gui.addGroup("", ofJson({{"position", "static"},
 												{"height", "100%"},
 												{"show-header", false},

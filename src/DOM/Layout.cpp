@@ -66,5 +66,4 @@ std::vector<Element*> Layout::children()
 	}
 }
 
-
 } // namespace DOM

@@ -25,27 +25,31 @@
 
 #pragma once
 
-
 #include <vector>
 #include "../DOM/Types.h"
 #include "../DOM/Layout.h"
 
-
-class ofxDOMBoxLayout: public DOM::Layout
+class ofxDOMBoxLayout: public DOM::_Layout<ofxDOMBoxLayout>
 {
 public:
-	/// If the Orientation::DEFAULT is chosen, the default will be set to
-	/// Orientation::HORIZONTAL.
-	ofxDOMBoxLayout(DOM::Element* parent, DOM::Orientation orientation = DOM::Orientation::VERTICAL);
+
+	/// \brief Direction options
+	enum class Direction {
+		/// \brief Align items horizontally from left to right (default)
+		HORIZONTAL,
+		/// \brief Align items vertically from top to bottom
+		VERTICAL
+	};
+
+	ofxDOMBoxLayout(DOM::Element* parent);
 
 	virtual ~ofxDOMBoxLayout();
 
 	virtual void doLayout() override;
 
-	DOM::Orientation orientation() const;
-
 protected:
-	DOM::Orientation _orientation = DOM::Orientation::HORIZONTAL;
+
+	static Direction getDirection(DOM::Element* e, Direction defaultVal = Direction::VERTICAL);
 
 };
 

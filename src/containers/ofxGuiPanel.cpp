@@ -164,6 +164,7 @@ ofxGuiPanel::ofxGuiPanel(const ofParameterGroup & parameters, const std::string&
 }
 
 ofxGuiPanel::~ofxGuiPanel(){
+	ofRemoveListener(addedTo, this, &ofxGuiPanel::onParentAdded);
 	ofRemoveListener(header->move, this, &ofxGuiPanel::onHeaderMove);
 	ofRemoveListener(((ofxGuiPanelHeader*)header)->loadPressedE, this, &ofxGuiPanel::onLoadPressed);
 	ofRemoveListener(((ofxGuiPanelHeader*)header)->savePressedE, this, &ofxGuiPanel::onSavePressed);
@@ -171,15 +172,21 @@ ofxGuiPanel::~ofxGuiPanel(){
 
 void ofxGuiPanel::setup(){
 
+	setTheme();
+	ofAddListener(addedTo, this, &ofxGuiPanel::onParentAdded);
+
+}
+
+void ofxGuiPanel::onParentAdded(DOM::ElementEventArgs& args){
+	copyLayoutFromDocument();
 	if(header){
 		removeChild(header);
 	}
 	header = add<ofxGuiPanelHeader>();
+	getHeader()->setHidden(!showHeader.get());
 	ofAddListener(header->move, this, &ofxGuiPanel::onHeaderMove);
 	ofAddListener(((ofxGuiPanelHeader*)header)->loadPressedE, this, &ofxGuiPanel::onLoadPressed);
 	ofAddListener(((ofxGuiPanelHeader*)header)->savePressedE, this, &ofxGuiPanel::onSavePressed);
-
-	setTheme();
 }
 
 void ofxGuiPanel::onHeaderMove(DOM::MoveEventArgs &args){

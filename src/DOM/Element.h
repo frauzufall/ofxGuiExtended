@@ -30,7 +30,6 @@
 #include "Events.h"
 #include "EventTarget.h"
 #include "Exceptions.h"
-#include "Layout.h"
 #include "Types.h"
 
 
@@ -39,6 +38,7 @@ namespace DOM {
 
 class Document;
 class AbstractLayout;
+class Layout;
 
 
 /// \brief A class representing a DOM Element.
@@ -623,7 +623,7 @@ private:
 	bool needsRedraw;
 
 	/// \brief The Layout associated with this
-	std::unique_ptr<Layout> _layout = nullptr;
+	std::unique_ptr<Layout> _layout;
 
 	/// \brief An optional pointer to a parent Node.
 	Element* _parent = nullptr;

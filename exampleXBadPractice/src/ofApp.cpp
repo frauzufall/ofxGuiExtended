@@ -7,7 +7,7 @@ void ofApp::setup(){
 
 	ofSetVerticalSync(true);
 
-	panel = gui.addPanel();
+	panel = gui.addPanel("panel");
 
 	filled = panel->add<ofxGuiToggle>("fill");
 	radius = panel->add<ofxGuiFloatSlider>("radius", 140, 10, 300);

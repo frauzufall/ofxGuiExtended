@@ -7,10 +7,8 @@ ofxGui::ofxGui(){
 ofxGui::~ofxGui(){
 }
 
-void ofxGui::setup(){
-	setup_done = true;
-	document = std::make_unique<DOM::Document>();
-	document->createLayout<ofxDOMFlexBoxLayout>(document.get());
+void ofxGui::setupFlexBoxLayout(){
+	setup<ofxDOMFlexBoxLayout>();
 }
 
 DOM::Document* ofxGui::getDocument(){
