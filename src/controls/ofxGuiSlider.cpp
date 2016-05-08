@@ -178,25 +178,6 @@ bool ofxGuiSlider<DataType>::mouseReleased(ofMouseEventArgs & args){
 }
 
 template<typename DataType>
-bool ofxGuiSlider<DataType>::mouseScrolled(ofMouseEventArgs & args){
-
-	ofxGuiElement::mouseScrolled(args);
-
-	if(isMouseOver()){
-		if(args.scrollY>0 || args.scrollY<0){
-			// TODO
-//			double range = getRange(value.getMin(),value.getMax(), getWidth());
-//			DataType newValue = value + ofMap(args.scrollY,-1,1,-range, range);
-//			newValue = ofClamp(newValue,value.getMin(),value.getMax());
-//			value = newValue;
-		}
-		return true;
-	}else{
-		return false;
-	}
-}
-
-template<typename DataType>
 typename std::enable_if<std::is_integral<DataType>::value, DataType>::type
 getRange(DataType min, DataType max, float width){
 	double range = max - min;
@@ -210,6 +191,24 @@ getRange(DataType min, DataType max, float width){
 	double range = max - min;
 	range /= width*4;
 	return range;
+}
+
+template<typename DataType>
+bool ofxGuiSlider<DataType>::mouseScrolled(ofMouseEventArgs & args){
+
+	ofxGuiElement::mouseScrolled(args);
+
+	if(isMouseOver()){
+		if(args.scrollY>0 || args.scrollY<0){
+			double range = getRange(value.getMin(),value.getMax(), getWidth());
+			DataType newValue = value + ofMap(args.scrollY,-1,1,-range, range);
+			newValue = ofClamp(newValue,value.getMin(),value.getMax());
+			value = newValue;
+		}
+		return true;
+	}else{
+		return false;
+	}
 }
 
 template<typename DataType>
