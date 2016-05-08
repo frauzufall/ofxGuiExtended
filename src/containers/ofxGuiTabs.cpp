@@ -39,8 +39,6 @@ void ofxGuiTabs::setup(){
 	activeToggle = nullptr;
 	activePage = nullptr;
 
-	clear();
-
 	setTheme();
 
 	tabWidth.set("tab width", 100);
@@ -48,6 +46,8 @@ void ofxGuiTabs::setup(){
 	setConfig(ofJson({
 					  {"flex-direction", "column"}
 					 }));
+
+	clear();
 
 	ofAddListener(childAdded, this, &ofxGuiTabs::onChildAdd);
 

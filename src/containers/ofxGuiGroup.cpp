@@ -174,14 +174,14 @@ ofxGuiGroup::~ofxGuiGroup(){
 
 void ofxGuiGroup::setup(){
 
-	header = add<ofxGuiGroupHeader>();
-
 	filename.set("filename","settings.xml");
 
 	exclusiveToggles.set("exclusive toggles", false);
 	minimized.set("minimized", false);
 
 	showHeader.set("show-header", true);
+
+	header = add<ofxGuiGroupHeader>();
 
 //	createLayout<ofxDOMFlexBoxLayout>(this);
 

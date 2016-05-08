@@ -323,10 +323,11 @@ void ofxGuiElement::copyLayoutFromDocument(){
 	}
 
 	for(auto child : children()){
-		if(ofxGuiGroup* _child = dynamic_cast<ofxGuiGroup*>(child)){
+		if(ofxGuiElement* _child = dynamic_cast<ofxGuiElement*>(child)){
 			_child->copyLayoutFromDocument();
 		}
 	}
+	invalidateChildShape();
 
 }
 
