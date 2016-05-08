@@ -19,7 +19,7 @@ class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 		virtual bool mouseReleased(ofMouseEventArgs & args) override;
 		virtual bool mouseScrolled(ofMouseEventArgs & args) override;
 
-		void onResize(DOM::ResizeEventArgs& args);
+		void onResize(DOM::ResizeEventArgs&);
 
 	protected:
 

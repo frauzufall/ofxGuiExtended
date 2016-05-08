@@ -47,6 +47,7 @@ void ofxDOMBoxLayout::doLayout()
 {
 	if (_parent && !_isDoingLayout)
 	{
+
 		// Prevent recursive calls to doLayout.
 		_isDoingLayout = true;
 

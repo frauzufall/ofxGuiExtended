@@ -44,8 +44,8 @@ void ofxGuiTabs::setup(){
 	tabWidth.set("tab width", 100);
 	tabHeight.set("tab height", 50);
 	setConfig(ofJson({
-					  {"flex-direction", "column"}
-					 }));
+		{"flex-direction", "column"}
+	 }));
 
 	clear();
 
@@ -62,16 +62,16 @@ void ofxGuiTabs::clear(){
 	ofxGuiGroup::clear();
 
 	tabs = addGroup("tabs", ofJson({
-									   {"height", tabHeight.get()},
-									   {"align-items", "stretch"},
-									   {"justify-content", "flex-start"},
-									   {"margin", 0},
-									   {"show-header", false},
-									   {"border-width", 0},
-									   {"padding", "0 10"},
-									   {"flex-direction", "row"},
-									   {"background-color", "rgba(0,0,0,0)"}
-								   }));
+		{"height", tabHeight.get()},
+		{"align-items", "stretch"},
+		{"justify-content", "flex-start"},
+		{"margin", 0},
+		{"show-header", false},
+		{"border-width", 0},
+		{"padding", "0 10"},
+		{"flex-direction", "row"},
+		{"background-color", "rgba(0,0,0,0)"}
+	}));
 
 	tabs->setExclusiveToggles(true);
 	tabs->getActiveToggleIndex().addListener(this, &ofxGuiTabs::setActiveTab);
@@ -151,13 +151,13 @@ void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){
 			name = page->getName();
 			page->setHidden(true);
 			page->setConfig(ofJson({
-								   {"position", "static"},
-								   {"flex", "auto"},
-								   {"align-self", "stretch"},
-								   {"margin", 0},
-								   {"show-header", false},
-								   {"border-width", 0}
-								   }));
+				{"position", "static"},
+				{"flex", "auto"},
+				{"align-self", "stretch"},
+				{"margin", 0},
+				{"show-header", false},
+				{"border-width", 0}
+			}));
 		}
 
 		ofJson toggleconfig = {
