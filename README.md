@@ -1,12 +1,17 @@
 # ofxGuiExtended
 This is a gui addon displaying `ofParameter` based data with a focus on simplicity and extensibility. It can be configured using JSON.
 
+## System requirements
+Since ofJson got just recently added to openFrameworks, you have to use the current master branch in order for it to work. I am using commit c9cd3e9 right now.
+
+This addon is tested on Ubuntu 15.10 64bit. Please tell me if it runs on other systems or if you have issues.
+
 ## Versions
 This addon was first built as an extension for the OF core ofxGui addon. You can download this version [here](https://github.com/frauzufall/ofxGuiExtended/releases/tag/v0.1).
 
 This is the standalone ofxGuiExtended version build from ofxGui. It also contains a minimized version of [ofxDOM](https://github.com/bakercp/ofxDOM). It does not depend on other addons.
 
-There is a branch that lets you download or clone a [minimal version of ofxGuiExtended](). It contains only the basic controls and containers and the simplest layout.
+There is a branch that lets you download or clone a [minimal version of ofxGuiExtended](https://github.com/frauzufall/ofxGuiExtended/tree/minimal). It contains only the basic controls and containers and the simplest layout.
 
 ## Extensions
 This addon is built with the best intentions to be as extensible as possible. There are addons working with ofxGuiExtended:
@@ -19,7 +24,7 @@ Please tell me if you wrote something compatible, I will add it to the list. Che
 ## Usage
 
 ### Basics
-Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example]() to see it in action.
+Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/example) to see it in action.
 ```c++
 //ofApp.h
 
@@ -49,13 +54,18 @@ void setup(){
 ```
 
 ### Using containers
-You can also create containers yourself. This is the equivalent to the above shortcut:
+You can also create containers yourself.
 ```c++
 ofxGuiPanel* panel = gui.addPanel();
-panel->add(moving);
-panel->add(speed);
-panel->add(rotation);
+panel->add(..);
 ```
+
+In the same way you can add other containers to existing containers:
+```c++
+ofxGuiGroup* group = panel->addGroup();
+group->add(..);
+```
+
 Some parameters automatically create containers if you add them to the gui:
 
 ```c++
@@ -67,8 +77,21 @@ gui.add(position, color);
 
 ```
 
+### Adding controls
+Controls get automatically created whenever you add a parameter to the GUI. 
+```c++
+panel->add(moving);    // creates a toggle
+panel->add(speed);     // creates a slider
+panel->add(rotation);  // creates a slider
+```
+You can also add a specific control (this is very useful if you implement your own control classes):
+```c++
+panel->add<ofxGuiLabel>("labeltext");
+panel->add<yourControlElementClass>(/* contructor parameters of control element class */);
+```
+
 ### Setting attributes
-There are attributes that you can set for each element. You will find these attributes in the description of the classes beneath the examples.
+There are attributes that you can set for each element. You will find these attributes in the description of the classes beneath the examples on this page.
 #### Styling individual items via ofJson
 When adding parameters or creating containers, you can append attributes with `ofJson`.
 ```c++
@@ -82,23 +105,70 @@ panel->add(rotation, itemConfig);
 ```
 
 #### Styling individual items via JSON file
-We can also set attributes in an external file to set style and layout without recompiling.
-
-//TODO
+The goal is to set attributes in an external file to set style and layout without recompiling. This is not yet implemented but most of the work is done, stay tuned.
 
 #### Styling items by type via Theme
-In a theme you can define attributes for the different element class types.
+In a theme you can define attributes for the different element class types. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/exampleThemes). Also read the class descriptions in the next chapters of this page for the class type names and the attributes that you can set for each class.
 
-//TODO
+This is how you load a theme:
+```c++
+panel = gui.addPanel();
+panel->loadTheme("theme_light.json");
+```
+
+A theme file could look like this:
+```json
+//theme_light.json
+{
+    "light": {
+        "base": {
+            "background-color": "rgba(255,255,255,0.2)",
+            "fill-color": "rgba(100,100,100,0.42)",
+            "border-width": 0,
+            "padding": 2,
+            "border-color": "rgb(0,0,0)",
+            "margin": 4,
+            "text-color": "#000000"
+        },
+
+        "group": {
+            "border-color": "rgba(0,0,0,0.7)",
+            "padding": 0,
+            "border-width": 0
+        },
+
+        "group-header": {
+            "align-self": "flex-start",
+            "flex":"none",
+            "width": "100%",
+            "margin": 0,
+            "border-width": 0,
+            "padding": 0,
+            "text-padding": 3,
+            "text-color": "#ffffff",
+            "background-color": "#2da1e3"
+        }
+    }
+}
+```
 
 ### Using layouts
-//TODO
+To be able to create more complex layouts, the ofxDOMFlexBoxLayout is implemented. If you want to use it, you have to set it up before adding elements to the GUI:
+```c++
+gui.setupFlexBoxLayout();
+```
+If you want to implement your own layout class, you can apply it to you GUI like this (assuming `ofxDOMLayoutCustom`` is your layout class):
+```c++
+gui.setup<ofxDOMLayoutCustom>();
+```
+See the chapter below about this layout class for details and have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/exampleLayout).
 
 ## Controls
 
 ### `ofxGuiElement`
   - Derived from `DOM::Element`.
   - Base class of all other gui elements.
+  - class type name for JSON theme: `base`
   <table>
     <col width="35%" />
     <col width="15%" />
@@ -140,6 +210,7 @@ In a theme you can define attributes for the different element class types.
 ### `ofxGuiToggle`
   - Derived from `ofxGuiElement`.
   - Default control type for `ofParameter<bool>`.
+  - class type name for JSON theme: `toggle`
   <table>
     <col width="30%" />
     <col width="15%" />
@@ -162,6 +233,7 @@ In a theme you can define attributes for the different element class types.
 ### `ofxGuiButton`
   - Derived from `ofxGuiToggle`.
   - Default control type for `ofParameter<void>`.
+  - class type name for JSON theme: `button`
 
 ### `ofxGuiSlider`
   - Derived from `ofxGuiElement`.
@@ -196,16 +268,17 @@ In a theme you can define attributes for the different element class types.
         <td>`false` (default)</td>
         <td>If true, the slider will trigger on release only.</td>
     </tr>
-
   </table>
 
 ### `ofxGuiLabel`
   - Derived from `ofxGuiElement`.
+  - class type name for JSON theme: `label`
   - //TODO
 
 ### `ofxGuiGraphics`
   - Derived from `ofxGuiElement`.
   - Displays any `ofBaseDraws` reference.
+  - class type name for JSON theme: `graphics`
   - //TODO
 
 ### `ofxGuiZoomableGraphics`
@@ -215,6 +288,7 @@ In a theme you can define attributes for the different element class types.
 
 ### `ofxGuiValuePlotter`
   - Derived from `ofxGuiElement`.
+  - class type name for JSON theme: `value-plotter`
   - //TODO
 
 ### `ofxGuiFpsPlotter`
@@ -223,6 +297,7 @@ In a theme you can define attributes for the different element class types.
 
 ### `ofxGuiFunctionPlotter`
   - Derived from `ofxGuiElement`.
+  - class type name for JSON theme: `function-plotter`
   - //TODO
 
 
@@ -231,6 +306,8 @@ In a theme you can define attributes for the different element class types.
 ### `ofxGuiGroup`
 - derived from `ofxGuiElement`.
 - Groups other elements according to the current layout
+- class type name for JSON theme: `group`
+- class type name of group header for JSON theme: `group-header`
 - Attributes:
   - `header-height`: float
 - //TODO
@@ -238,11 +315,14 @@ In a theme you can define attributes for the different element class types.
 ### `ofxGuiPanel`
   - derived from `ofxGuiGroup`.
   - Header can be used to drag group (only if panel is in absolute position mode).
+  - class type name for JSON theme: `panel`
+- class type name of group header for JSON theme: `panel-header`
   - //TODO
 
 ### `ofxGuiTabs`
   - derived from `ofxGuiGroup`.
   - Add groups to this container and they will be displayed as tabs.
+  - class type name for JSON theme: `tabs`
   - //TODO
 
 
@@ -335,10 +415,6 @@ In a theme you can define attributes for the different element class types.
       <td>Individual alignment options for a flex item along the cross axis.</td>
   </tr>
 </table>
-
-### `ofxDOMFloatingBoxLayout`
-- Derived from `ofxDOMBoxLayout`.
-- This layout was fine but when I started using the FlexBoxLayout this one got abandoned and it's probably not working anymore. If someone wants to use it, write me, I might fix it.
 
 ## Writing custom gui classes
 - //TODO
