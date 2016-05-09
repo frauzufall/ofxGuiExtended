@@ -209,6 +209,14 @@ void ofxGuiGroup::_setConfig(const ofJson &config){
 			}
 		}
 	}
+	// ugly hack to hide header of horizontally aligned box containers (because the headers don't get aligned well)
+	if(_config.find("direction") != _config.end()){
+		if(_config["direction"] == "horizontal"){
+			if(_config.find("show-header") != _config.end()){
+				_config["show-header"] = false;
+			}
+		}
+	}
 
 	JsonConfigParser::parse(_config, showHeader);
 
