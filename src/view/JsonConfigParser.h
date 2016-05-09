@@ -33,6 +33,8 @@ class JsonConfigParser {
 
 		static bool parse(const ofJson &config, DOM::Element* val);
 
+		static std::string colorToString(const ofColor& color);
+
 		///\brief regex helper function copied from https://github.com/openframeworks/openFrameworks/issues/1110
 		static vector <std::string> getMatchedStrings (std::string contents, string regex);
 

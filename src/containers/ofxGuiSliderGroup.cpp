@@ -1,4 +1,5 @@
 #include "ofxGuiSliderGroup.h"
+#include "../view/JsonConfigParser.h"
 using namespace std;
 
 template<class VecType>
@@ -161,7 +162,9 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(ofParameter<ofColor_<ColorType
 		ofParameter<ColorType> p(names[i], val[i], min[i], max[i]);
 		add<ofxGuiSlider<ColorType>>(p);
 		p.addListener(this, & ofxGuiColorSlider_::changeSlider);
-		getControl(names[i])->setFillColor(value.get());
+		getControl(names[i])->setConfig(ofJson({
+			{"fill-color", JsonConfigParser::colorToString(value.get())}
+		}));
 	}
 
 	sliderChanging = false;
@@ -190,7 +193,9 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName
 		ofParameter<ColorType> p(names[i], val[i], min[i], max[i]);
 		add<ofxGuiSlider<ColorType>>(p);
 		p.addListener(this, & ofxGuiColorSlider_::changeSlider);
-		getControl(names[i])->setFillColor(value.get());
+		getControl(names[i])->setConfig(ofJson({
+			{"fill-color", JsonConfigParser::colorToString(value.get())}
+		}));
 	}
 
 	sliderChanging = false;
