@@ -22,7 +22,7 @@ Please tell me if you wrote something compatible, I will add it to the list. Che
 ## Usage
 
 ### Basics
-Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/example) to see it in action.
+Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/example) to see it in action.
 ```c++
 //ofApp.h
 
@@ -106,7 +106,7 @@ panel->add(rotation, itemConfig);
 The goal is to set attributes in an external file to set style and layout without recompiling. This is not yet implemented but most of the work is done, stay tuned.
 
 #### Styling items by type via Theme
-In a theme you can define attributes for the different element class types. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/exampleThemes). Also read the class descriptions in the next chapters of this page for the class type names and the attributes that you can set for each class.
+In a theme you can define attributes for the different element class types. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/exampleThemes). Also read the class descriptions in the next chapters of this page for the class type names and the attributes that you can set for each class.
 
 This is how you load a theme:
 ```c++
@@ -159,7 +159,7 @@ If you want to implement your own layout class, you can apply it to you GUI like
 ```c++
 gui.setup<ofxDOMLayoutCustom>();
 ```
-See the chapter below about this layout class for details and have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/exampleLayout).
+See the chapter below about this layout class for details and have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/exampleLayout).
 
 ## Controls
 
