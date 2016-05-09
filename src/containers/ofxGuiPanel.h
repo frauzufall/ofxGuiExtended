@@ -20,9 +20,6 @@ class ofxGuiPanelHeader : public ofxGuiGroupHeader {
 		ofEvent<void> loadPressedE;
 		ofEvent<void> savePressedE;
 
-		virtual float getMinWidth() override;
-		virtual float getMinHeight() override;
-
 		static std::string getClassType();
 
 	protected:

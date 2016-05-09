@@ -81,7 +81,7 @@ float ofxGuiValueLabel<Type>::getMinWidth(){
 	}
 	text += label.toString();
 
-	return ofxGuiElement::getTextWidth(text)+2*textPadding;
+	return ofxGuiElement::getTextWidth(text);
 }
 
 template<typename Type>
@@ -93,7 +93,8 @@ float ofxGuiValueLabel<Type>::getMinHeight(){
 		}
 	}
 	text += label.toString();
-	return ofxGuiElement::getTextHeight(text)+2*textPadding;
+
+	return ofxGuiElement::getTextHeight(text);
 }
 
 template<typename Type>

@@ -65,13 +65,13 @@ void ofxGuiValuePlotter::_setConfig(const ofJson & config){
 float ofxGuiValuePlotter::getMinWidth(){
 	float _width = ofxGuiElement::getTextWidth(ofToString(value.get(), decimalPlace));
 	if(showName){
-		_width += ofxGuiElement::getTextWidth(getName())+2*textPadding;
+		_width += ofxGuiElement::getTextWidth(getName());
 	}
 	return _width;
 }
 
 float ofxGuiValuePlotter::getMinHeight(){
-	return ofxGuiElement::getTextHeight(ofToString(value.get(), decimalPlace))+2*textPadding;
+	return ofxGuiElement::getTextHeight(ofToString(value.get(), decimalPlace));
 }
 
 void ofxGuiValuePlotter::setDecimalPlace(int place){

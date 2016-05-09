@@ -157,11 +157,19 @@ void ofxGuiElement::loadTheme(const string &filename){
 
 void ofxGuiElement::_setConfigUsingClassifiers(const ofJson &config, bool recursive){
 
+	themeLoading = true;
 
 	for(std::string classifier : this->getClassTypes()){
 		ofJson::const_iterator it = config.find(classifier);
 		if(it != config.end()){
-			setConfig(*it, false);
+			//filter out all config entries that are already set individually for this item
+			ofJson configFiltered;
+			for (ofJson::const_iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
+				if(individualConfig.find(it2.key()) == individualConfig.end()){
+					configFiltered[it2.key()] = it2.value();
+				}
+			}
+			setConfig(configFiltered, false);
 		}
 	}
 
@@ -173,6 +181,8 @@ void ofxGuiElement::_setConfigUsingClassifiers(const ofJson &config, bool recurs
 			}
 		}
 	}
+
+	themeLoading = false;
 
 }
 
@@ -301,6 +311,9 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		//WARNING this will crash if there are non string keys in the config
 		for (ofJson::const_iterator it = _config.begin(); it != _config.end(); ++it) {
 			std::string key = "_" + it.key();
+			if(!themeLoading){
+				individualConfig[it.key()] = it.value();
+			}
 			if(it.value().is_string() || it.value().is_number() || it.value().is_boolean()){
 				std::string value;
 				if(it.value().is_string()){
@@ -601,7 +614,7 @@ void ofxGuiElement::loadStencilFromHex(ofImage & img, unsigned char * data){
 }
 
 float ofxGuiElement::getTextWidth(const std::string & text){
-	return getTextBoundingBox(text).width;
+	return getTextBoundingBox(text).width+2*textPadding;
 //	float _width = 0;
 //	ofVboMesh mesh = getTextMesh(text, 0, 0);
 //	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
@@ -614,7 +627,7 @@ float ofxGuiElement::getTextWidth(const std::string & text){
 }
 
 float ofxGuiElement::getTextHeight(const std::string & text){
-	return getTextBoundingBox(text).height;
+	return getTextBoundingBox(text).height/2+2*textPadding;
 //	float _height = 0;
 //	ofVboMesh mesh = getTextMesh(text, 0, 0);
 //	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){

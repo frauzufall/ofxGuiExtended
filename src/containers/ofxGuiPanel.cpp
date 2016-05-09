@@ -99,14 +99,6 @@ bool ofxGuiPanelHeader::mousePressed(ofMouseEventArgs & args){
 
 }
 
-float ofxGuiPanelHeader::getMinWidth(){
-	return max(ofxGuiGroupHeader::getMinWidth(), 40.f);
-}
-
-float ofxGuiPanelHeader::getMinHeight(){
-	return max(ofxGuiGroupHeader::getMinHeight(), 20.f);
-}
-
 std::string ofxGuiPanelHeader::getClassType(){
 	return "panel-header";
 }
@@ -176,7 +168,7 @@ void ofxGuiPanel::setup(){
 	if(header){
 		removeChild(header);
 	}
-	header = add<ofxGuiPanelHeader>();
+	header = add<ofxGuiPanelHeader>(ofJson({{"margin", 0}}));
 	getHeader()->setHidden(!showHeader.get());
 
 	setTheme();

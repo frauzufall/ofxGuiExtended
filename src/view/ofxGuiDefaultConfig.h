@@ -66,7 +66,6 @@ struct ofxGuiDefaultConfig{
 						{"margin", 0},
 						{"border-width", 0},
 						{"padding", 0},
-						{"text-padding", 3},
 						{"text-color", "#ffffff"}
 					}
 				},

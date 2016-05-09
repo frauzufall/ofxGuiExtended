@@ -116,7 +116,7 @@ float ofxGuiInputField<Type>::getMinWidth(){
 		}
 	}
 
-	return ofxGuiElement::getTextWidth(text)+2*textPadding;
+	return ofxGuiElement::getTextWidth(text);
 }
 
 template<typename Type>
@@ -127,7 +127,7 @@ float ofxGuiInputField<Type>::getMinHeight(){
 			text = getName() + ": ";
 		}
 	}
-	return ofxGuiElement::getTextHeight(text)+2*textPadding;
+	return ofxGuiElement::getTextHeight(text);
 }
 
 template<typename Type>

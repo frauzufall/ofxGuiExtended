@@ -55,13 +55,9 @@ void ofxDOMBoxLayout::doLayout()
 		float totalHeight = 0;
 		float currentX = DOMLH::getPaddingLeft(_parent);
 		float currentY = DOMLH::getPaddingTop(_parent);
-		bool resizeParent = false;
 
-
-		for (DOM::Element* element : children())
-		{
-			if (element)
-			{
+		for (DOM::Element* element : children()){
+			if (element){
 				if(!element->isHidden()){
 
 					float w = max(element->getWidth(), DOMLH::getDesiredWidth(element)-DOMLH::getMarginHorizontal(element));
@@ -75,18 +71,18 @@ void ofxDOMBoxLayout::doLayout()
 						if (getDirection(_parent) == Direction::HORIZONTAL)
 						{
 							totalHeight = std::max(totalHeight, h+DOMLH::getMarginVertical(element));
-							currentX += w+DOMLH::getMarginHorizontal(element);
+							currentX += w + DOMLH::getMarginHorizontal(element);
 							totalWidth = currentX;
 						}
 						else
 						{
 							totalWidth = std::max(totalWidth, w+DOMLH::getMarginHorizontal(element));
-							currentY += h+DOMLH::getMarginVertical(element);
+							currentY += h + DOMLH::getMarginVertical(element);
 							totalHeight = currentY;
 						}
-					}else{
-//							element->setSizeInLayout(w-getMarginHorizontal(element), h-getMarginVertical(element));
-					}
+					}/*else{
+							element->setSizeInLayout(w-DOMLH::getMarginHorizontal(element), h-DOMLH::getMarginVertical(element));
+					}*/
 
 				}
 			}
@@ -118,10 +114,6 @@ void ofxDOMBoxLayout::doLayout()
 					}
 				}
 			}
-		}
-
-		if(totalWidth != _parent->getWidth() || totalHeight != _parent->getHeight()){
-			resizeParent = true;
 		}
 
 		if(totalWidth != _parent->getWidth() || totalHeight != _parent->getHeight()){

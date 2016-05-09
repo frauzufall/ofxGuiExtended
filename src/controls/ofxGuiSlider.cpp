@@ -417,22 +417,19 @@ float ofxGuiSlider<DataType>::getMinWidth(){
 	float _width = 0;
 	if(type == ofxGuiSliderType::STRAIGHT){
 		if(showName){
-			_width += ofxGuiElement::getTextWidth(getName())+2*textPadding;
+			_width += ofxGuiElement::getTextWidth(getName());
 		}
-		_width += ofxGuiElement::getTextWidth(ofToString(value.get(), precision))+2*textPadding;
+		_width += ofxGuiElement::getTextWidth(ofToString(value.get(), precision));
 	}
 	return _width;
 }
 
 template<typename DataType>
 float ofxGuiSlider<DataType>::getMinHeight(){
-	float _height = 0;
-	if(type == ofxGuiSliderType::STRAIGHT){
-		if(showName){
-			_height += ofxGuiElement::getTextHeight(getName())+2*textPadding;
-		}
+	if((type == ofxGuiSliderType::STRAIGHT) && showName){
+		return ofxGuiElement::getTextHeight(getName());
 	}
-	return _height;
+	return 10;
 }
 
 /*

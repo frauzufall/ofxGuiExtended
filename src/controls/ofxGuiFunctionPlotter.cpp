@@ -41,17 +41,16 @@ void ofxGuiFunctionPlotter::_setConfig(const ofJson & config){
 float ofxGuiFunctionPlotter::getMinWidth(){
 	float _width = 0;
 	if(showName){
-		_width += ofxGuiElement::getTextWidth(getName())+2*textPadding;
+		_width += ofxGuiElement::getTextWidth(getName());
 	}
 	return _width;
 }
 
 float ofxGuiFunctionPlotter::getMinHeight(){
-	float _height = 0;
 	if(showName){
-		_height += ofxGuiElement::getTextHeight(getName())+2*textPadding;
+		return ofxGuiElement::getTextHeight(getName());
 	}
-	return _height;
+	return 0;
 }
 
 void ofxGuiFunctionPlotter::setDecimalPlace(int place){

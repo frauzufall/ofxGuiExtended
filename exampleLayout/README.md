@@ -12,6 +12,7 @@ In the code, you will learn how to..
 * set a percental with of an element
 * create groups with fixed and with flexible size
 * set different background colors for groups
+* use different flexbox attributes
 
 ### Expected Behavior
 

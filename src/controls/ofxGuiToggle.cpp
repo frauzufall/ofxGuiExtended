@@ -72,7 +72,7 @@ void ofxGuiToggle::_setConfig(const ofJson &config){
 float ofxGuiToggle::getMinWidth(){
 	float _width = 0;
 	if(showName){
-		_width += ofxGuiElement::getTextWidth(getName()) + 2*textPadding;
+		_width += ofxGuiElement::getTextWidth(getName());
 	}
 	if(type != ofxGuiToggleType::FULLSIZE){
 		_width += 30;
@@ -81,11 +81,10 @@ float ofxGuiToggle::getMinWidth(){
 }
 
 float ofxGuiToggle::getMinHeight(){
-	float _height = 0;
 	if(showName){
-		_height += ofxGuiElement::getTextHeight(getName()) + 2*textPadding;
+		return ofxGuiElement::getTextHeight(getName());
 	}
-	return _height;
+	return 10;
 }
 
 bool ofxGuiToggle::mousePressed(ofMouseEventArgs & args){

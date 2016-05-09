@@ -16,6 +16,7 @@ void ofApp::setup(){
 		{"background-color", "#000000"}
 	}));
 
+	// add header group
 	ofxGuiGroup* header = all->addGroup("header", ofJson({
 		{"flex-direction", "row"},
 		{"show-header", false},
@@ -27,11 +28,27 @@ void ofApp::setup(){
 	// create tab container
 	ofxGuiTabs* tabbed_pages = all->addTabs("tabbedpages", ofJson({{"flex", 1}}));
 
-	// create pages and add them to tab layout
-	tabbed_pages->addGroup("page1", ofJson({{"background-color", "#2377BA"}}));
+	// add a page to the tab container
+	ofxGuiGroup* page1 = tabbed_pages->addGroup("page1", ofJson({
+		{"background-color", "#2377BA"},
+		{"flex-direction", "row"},
+		{"padding", 10},
+		{"flex-wrap", "wrap"}
+	}));
+
+	// add labels with random width to the first page
+	for(int i = 0; i < 33; i++){
+		page1->addLabel(ofToString(i), ofJson({
+			{"border-width", 1},
+			{"width", ofRandom(30, 130)}
+		}));
+	}
+
+	// add two more pages without content
 	tabbed_pages->addGroup("page2", ofJson({{"background-color", "#00CA98"}}));
 	tabbed_pages->addGroup("page3", ofJson({{"background-color", "#ffaa00"}}));
 
+	//add footer group
 	ofxGuiGroup* footer = all->addGroup("footer", ofJson({
 		{"flex-direction", "row"},
 		{"show-header", false},

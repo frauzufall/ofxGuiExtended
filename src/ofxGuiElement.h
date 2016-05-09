@@ -167,8 +167,10 @@ class ofxGuiElement : public DOM::Element {
 
 		bool bRegisteredForMouseEvents;
 
-		ofJson theme;
+		ofJson theme, individualConfig;
 
 		ofParameter<void> parameter;
+
+		bool themeLoading = false;
 
 };

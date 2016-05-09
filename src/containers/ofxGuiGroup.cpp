@@ -22,12 +22,12 @@ void ofxGuiGroupHeader::generateDraw(){
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
 		if(_parent->getShowName()){
-			textMesh.append(getTextMesh(_parent->getName(), textPadding * 2, getHeight()/ 2 + 4));
+			textMesh.append(getTextMesh(_parent->getName(), textPadding, getHeight()/ 2 + 4));
 		}
 		if(_parent->getMinimized()){
-			textMesh.append(getTextMesh("+", getWidth() - textPadding * 2 - 10, getHeight() / 2 + 4));
+			textMesh.append(getTextMesh("+", getWidth() - textPadding - 10, getHeight() / 2 + 4));
 		}else{
-			textMesh.append(getTextMesh("-", getWidth()- textPadding * 2 - 10, getHeight() / 2 + 4));
+			textMesh.append(getTextMesh("-", getWidth()- textPadding - 10, getHeight() / 2 + 4));
 		}
 	}
 }
@@ -85,16 +85,7 @@ float ofxGuiGroupHeader::getMinWidth(){
 }
 
 float ofxGuiGroupHeader::getMinHeight(){
-	generateDraw();
-	float _height = 0;
-	ofVboMesh mesh = textMesh;
-	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
-		if(mesh.getVertex(i).y > _height){
-			_height = mesh.getVertex(i).y;
-		}
-	}
-	_height += textPadding * 2;
-	return _height;
+	return ofxGuiElement::getTextHeight("test")+5;
 }
 
 std::string ofxGuiGroupHeader::getClassType(){
@@ -181,7 +172,7 @@ void ofxGuiGroup::setup(){
 
 	showHeader.set("show-header", true);
 
-	header = add<ofxGuiGroupHeader>();
+	header = add<ofxGuiGroupHeader>(ofJson({{"margin", 0}}));
 
 //	createLayout<ofxDOMFlexBoxLayout>(this);
 
@@ -333,8 +324,10 @@ ofxGuiElement* ofxGuiGroup::addSpacer(float width, float height){
 
 ofxGuiElement *ofxGuiGroup::addSpacer(const ofJson& config){
 	ofxGuiElement* e = add<ofxGuiElement>();
-	e->setBorderWidth(0);
-	e->setBackgroundColor(ofColor(0,0,0,0));
+	e->setConfig(ofJson({
+		{"border-width", 0},
+		{"background-color", "rgba(0,0,0,0)"}
+	}));
 	e->setConfig(config);
 	return e;
 }
@@ -637,6 +630,7 @@ void ofxGuiGroup::onHeaderHeight(float &height){
 void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 	if(ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(args.element())){
 		parameters.add(e->getParameter());
+		e->setTheme(theme);
 	}
 }
 

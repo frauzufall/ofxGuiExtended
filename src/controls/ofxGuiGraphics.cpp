@@ -58,15 +58,16 @@ void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
 }
 
 float ofxGuiGraphics::getMinWidth(){
-	if(_bLoaded){
-		return 10;
+	float _width = 0;
+	if(showName){
+		_width += ofxGuiElement::getTextWidth(getName()) + 2*textPadding;
 	}
-	return 0;
+	return _width;
 }
 
 float ofxGuiGraphics::getMinHeight(){
-	if(_bLoaded){
-		return 10;
+	if(showName){
+		return ofxGuiElement::getTextHeight(getName());
 	}
 	return 0;
 }
