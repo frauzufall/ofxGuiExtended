@@ -78,7 +78,7 @@ gui.add(position, color);
 ```
 
 ### Adding controls
-Controls get automatically created whenever you add a parameter to the GUI. 
+Controls get automatically created whenever you add a parameter to the GUI.
 ```c++
 panel->add(moving);    // creates a toggle
 panel->add(speed);     // creates a slider
@@ -204,6 +204,30 @@ See the chapter below about this layout class for details and have a look at [th
         <td>`left`<br>`right`<br>`center`</td>
         <td>Sets the text alignment. *Currently only affecting fullsize toggles.*</td>
     </tr>
+    <tr>
+        <td>`margin`</td>
+        <td>`float`<br>`string`</td>
+        <td>`10`<br>`"10 20"`<br>`"10 20 30"`<br>`"10 20 30 40"`</td>
+        <td>Set the margin of the element. Analog to CSS margin.</td>
+    </tr>
+    <tr>
+        <td>`margin-top`<br>`margin-right`<br>`margin-bottom`<br>`margin-left`</td>
+        <td>`float`</td>
+        <td>`10`</td>
+        <td>Set the margin for the specified side of the element.</td>
+    </tr>
+    <tr>
+        <td>`padding`</td>
+        <td>`float`<br>`string`</td>
+        <td>`10`<br>`"10 20"`<br>`"10 20 30"`<br>`"10 20 30 40"`</td>
+        <td>Set the padding of the element. Analog to CSS padding. Padding currently only has an effect on containers, not on controls.</td>
+    </tr>
+    <tr>
+        <td>`padding-top`<br>`padding-right`<br>`padding-bottom`<br>`padding-left`</td>
+        <td>`float`</td>
+        <td>`10`</td>
+        <td>Set the padding for the specified side of the element.</td>
+    </tr>
 </table>
 
 
@@ -272,19 +296,17 @@ See the chapter below about this layout class for details and have a look at [th
 
 ### `ofxGuiLabel`
   - Derived from `ofxGuiElement`.
+  - Displays a text or a numerical value as a label.
   - class type name for JSON theme: `label`
-  - //TODO
 
 ### `ofxGuiGraphics`
   - Derived from `ofxGuiElement`.
   - Displays any `ofBaseDraws` reference.
   - class type name for JSON theme: `graphics`
-  - //TODO
 
 ### `ofxGuiZoomableGraphics`
   - Derived from `ofxGuiGraphics`.
   - `ofBaseDraws` reference can be zoomed with scroll wheel and dragged with mouse button.
-  - //TODO
 
 ### `ofxGuiValuePlotter`
   - Derived from `ofxGuiElement`.
@@ -308,16 +330,30 @@ See the chapter below about this layout class for details and have a look at [th
 - Groups other elements according to the current layout
 - class type name for JSON theme: `group`
 - class type name of group header for JSON theme: `group-header`
-- Attributes:
-  - `header-height`: float
-- //TODO
+<table>
+  <col width="30%" />
+  <col width="15%" />
+  <col width="30%" />
+  <col width="25%" />
+  <tr>
+      <td>**Attribute**</td>
+      <td>**Value**</td>
+      <td>**Example**</td>
+      <td>**Description**</td>
+  </tr>
+  <tr>
+      <td>`show-header`</td>
+      <td>`bool`</td>
+      <td>`true` (default)</td>
+      <td>Show or hide the header of the group.</td>
+  </tr>
+</table>
 
 ### `ofxGuiPanel`
   - derived from `ofxGuiGroup`.
   - Header can be used to drag group (only if panel is in absolute position mode).
   - class type name for JSON theme: `panel`
 - class type name of group header for JSON theme: `panel-header`
-  - //TODO
 
 ### `ofxGuiTabs`
   - derived from `ofxGuiGroup`.
@@ -330,11 +366,11 @@ See the chapter below about this layout class for details and have a look at [th
 
 ### `ofxDOMBoxLayout`
 - Derived from `DOM::Layout`.
-- Items simply get aligned next to each other vertically.
+- Simple layout that lets you align elements in a container horizontally or vertically. Vertically aligned items will always use the full width of the container, horizontally aligned items will always use the full height of the container.
   <table>
-    <col width="35%" />
+    <col width="30%" />
     <col width="15%" />
-    <col width="25%" />
+    <col width="30%" />
     <col width="25%" />
     <tr>
         <td>**Attribute**</td>
@@ -344,9 +380,15 @@ See the chapter below about this layout class for details and have a look at [th
     </tr>
     <tr>
         <td>`width`<br>`height`</td>
-        <td>`float`</td>
-        <td>`800`</td>
+        <td>`float`<br>`string`</td>
+        <td>`800`<br>`"70%"`</td>
         <td>Size of the element.</td>
+    </tr>
+    <tr>
+        <td>`direction`</td>
+        <td>`string`</td>
+        <td>`"vertical"` (default)<br>`"horizontal"`</td>
+        <td>The direction child elements get aligned.</td>
     </tr>
 </table>
 
