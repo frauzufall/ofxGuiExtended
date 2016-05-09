@@ -247,6 +247,6 @@ vector < string > JsonConfigParser::getMatchedStrings (string contents, string r
 
 std::string JsonConfigParser::colorToString(const ofColor& color){
 	std::stringstream strstr;
-	strstr << "rgba(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << 255./(float)color.a << ")";
+	strstr << "rgba(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << ((float)color.a)/255. << ")";
 	return strstr.str();
 }
