@@ -120,31 +120,27 @@ A theme file could look like this:
 {
     "light": {
         "base": {
-            "background-color": "rgba(255,255,255,0.2)",
-            "fill-color": "rgba(100,100,100,0.42)",
+            "background-color": "rgba(255,255,255,0.4)",
+            "fill-color": "rgba(255,255,255,1)",
             "border-width": 0,
-            "padding": 2,
+            "padding": 0,
             "border-color": "rgb(0,0,0)",
-            "margin": 4,
-            "text-color": "#000000"
+            "margin": 3,
+            "text-color": "#000000",
+            "text-padding": 3
         },
 
         "group": {
-            "border-color": "rgba(0,0,0,0.7)",
-            "padding": 0,
-            "border-width": 0
+            "background-color": "rgba(155,155,155,0.6)",
+            "border-color": "#ffffff",
+            "padding": 1,
+            "margin-left": 20,
+            "border-width": 1
         },
 
         "group-header": {
-            "align-self": "flex-start",
-            "flex":"none",
-            "width": "100%",
-            "margin": 0,
-            "border-width": 0,
-            "padding": 0,
-            "text-padding": 3,
-            "text-color": "#ffffff",
-            "background-color": "#2da1e3"
+            "background-color": "#2da1e3",
+            "text-color": "#ffffff"
         }
     }
 }
