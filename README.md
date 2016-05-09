@@ -6,12 +6,10 @@ Since ofJson got just recently added to openFrameworks, you have to use the curr
 
 This addon is tested on Ubuntu 15.10 64bit. Please tell me if it runs on other systems or if you have issues.
 
-## Versions
+## Versions and dependencies
 This addon was first built as an extension for the OF core ofxGui addon. You can download this version [here](https://github.com/frauzufall/ofxGuiExtended/releases/tag/v0.1).
 
 This is the standalone ofxGuiExtended version build from ofxGui. It also contains a minimized version of [ofxDOM](https://github.com/bakercp/ofxDOM). It does not depend on other addons.
-
-There is a branch that lets you download or clone a [minimal version of ofxGuiExtended](https://github.com/frauzufall/ofxGuiExtended/tree/minimal). It contains only the basic controls and containers and the simplest layout.
 
 ## Extensions
 This addon is built with the best intentions to be as extensible as possible. There are addons working with ofxGuiExtended:
