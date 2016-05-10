@@ -66,7 +66,9 @@ ofxGuiValueLabel<Type>::~ofxGuiValueLabel(){
 template<typename Type>
 void ofxGuiValueLabel<Type>::setup(){
 
+	label.setSerializable(false);
 	setTheme();
+
 	label.addListener(this,&ofxGuiValueLabel::valueChanged);
 
 }

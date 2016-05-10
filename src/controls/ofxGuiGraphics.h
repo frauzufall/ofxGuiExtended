@@ -20,7 +20,7 @@ class ofxGuiGraphics : public ofxGuiElement {
 
 		virtual void setGraphics(ofBaseDraws* graphics);
 
-		virtual ofAbstractParameter & getParameter();
+		virtual ofAbstractParameter & getParameter() override;
 
 		static std::string getClassType();
 
@@ -28,11 +28,11 @@ class ofxGuiGraphics : public ofxGuiElement {
 
 		virtual vector<std::string> getClassTypes() override;
 
-		bool setValue(float mx, float my, bool bCheckBounds){
+		bool setValue(float mx, float my, bool bCheckBounds) override {
 			return false;
 		}
-		virtual void render();
-		virtual void generateDraw();
+		virtual void render() override;
+		virtual void generateDraw() override;
 		ofPath bg;
 		ofVboMesh textMesh;
 		ofBaseDraws * graphics;

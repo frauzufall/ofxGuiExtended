@@ -51,7 +51,7 @@ public:
 	bool operator=(bool v);
 	operator const bool & ();
 
-	virtual ofAbstractParameter & getParameter();
+	virtual ofAbstractParameter & getParameter() override;
 
 	static std::string getClassType();
 
@@ -67,8 +67,8 @@ protected:
 	ofParameter<ofxGuiToggleType::Type> type;
 	bool hasFocus;
 
-	virtual bool setValue(float mx, float my, bool bCheck);
-	virtual void generateDraw();
+	virtual bool setValue(float mx, float my, bool bCheck) override;
+	virtual void generateDraw() override;
 	void valueChanged(bool & value);
 	ofVboMesh textMesh;
 };

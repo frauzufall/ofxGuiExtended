@@ -36,8 +36,8 @@ protected:
 
 	virtual vector<std::string> getClassTypes() override;
 
-	virtual void generateDraw();
-	bool setValue(float mx, float my, bool bCheck);
+	virtual void generateDraw() override;
+	virtual bool setValue(float mx, float my, bool bCheck) override;
 	ofParameter<void> voidvalue;
 	bool useVoidValue {false};
 

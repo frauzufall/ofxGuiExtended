@@ -42,8 +42,8 @@ class ofxGuiGroupHeader : public ofxGuiElement {
 
 		virtual vector<std::string> getClassTypes() override;
 
-		virtual void generateDraw();
-		virtual void render();
+		virtual void generateDraw() override;
+		virtual void render() override;
 		ofVboMesh textMesh;
 
 };
@@ -149,7 +149,7 @@ class ofxGuiGroup : public ofxGuiElement {
 
 		ofParameterGroup parameters;
 
-		virtual void _setConfig(const ofJson & config);
+		virtual void _setConfig(const ofJson & config) override;
 
 		void addParametersFrom(const ofParameterGroup & parameters);
 

@@ -60,7 +60,7 @@ public:
 	double operator=(DataType v);
 	operator const DataType & ();
 
-	ofAbstractParameter & getParameter();
+	ofAbstractParameter & getParameter() override;
 
 	static std::string getClassType();
 

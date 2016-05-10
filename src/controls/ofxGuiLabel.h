@@ -21,9 +21,6 @@ public:
 	virtual float getMinWidth() override;
 	virtual float getMinHeight() override;
 
-	virtual void saveTo(ofBaseSerializer& serializer){}
-	virtual void loadFrom(ofBaseSerializer& serializer){}
-
 
 	template<class ListenerClass, typename ListenerMethod>
 	void addListener(ListenerClass * listener, ListenerMethod method){
@@ -39,7 +36,7 @@ public:
 	Type operator=(Type v) { label = v; return v; }
 	operator const Type & () { return label; }
 
-	ofAbstractParameter & getParameter();
+	ofAbstractParameter & getParameter() override;
 
 	static std::string getClassType();
 

@@ -48,7 +48,7 @@ public:
 	Type operator=(Type v);
 	operator const Type & ();
 
-	ofAbstractParameter & getParameter();
+	ofAbstractParameter & getParameter() override;
 
 	static std::string getClassType();
 
@@ -56,13 +56,13 @@ protected:
 
 	virtual vector<std::string> getClassTypes() override;
 
-	virtual void render();
+	virtual void render() override;
 	ofParameter<Type> value;
 	bool bMousePressed;
 	bool mouseInside;
 	bool hasFocus;
-	bool setValue(float mx, float my, bool bCheck);
-	virtual void generateDraw();
+	bool setValue(float mx, float my, bool bCheck) override;
+	virtual void generateDraw() override;
 	virtual void generateText();
 	void valueChanged(Type & value);
 	ofVboMesh textMesh;
