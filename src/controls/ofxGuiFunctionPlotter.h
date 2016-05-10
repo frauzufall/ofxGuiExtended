@@ -11,8 +11,6 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 
 		virtual ~ofxGuiFunctionPlotter();
 
-		void setup();
-
 		virtual float getMinWidth() override;
 		virtual float getMinHeight() override;
 
@@ -29,6 +27,8 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 		static std::string getClassType();
 
 	protected:
+
+		void setup();
 
 		virtual vector<std::string> getClassTypes() override;
 

@@ -24,8 +24,6 @@ public:
 
 	~ofxGuiSlider();
 
-	void setup();
-
 	void setMin(DataType min);
 	DataType getMin();
 	void setMax(DataType max);
@@ -65,6 +63,8 @@ public:
 	static std::string getClassType();
 
 protected:
+
+	void setup();
 
 	virtual vector<std::string> getClassTypes() override;
 

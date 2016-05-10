@@ -13,8 +13,6 @@ public:
 
 	~ofxGuiInputField();
 
-	void setup();
-
 	void setMin(Type min);
 	Type getMin();
 	void setMax(Type max);
@@ -53,6 +51,8 @@ public:
 	static std::string getClassType();
 
 protected:
+
+	void setup();
 
 	virtual vector<std::string> getClassTypes() override;
 

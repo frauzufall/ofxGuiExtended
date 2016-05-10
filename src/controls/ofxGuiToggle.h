@@ -26,8 +26,6 @@ public:
 
 	~ofxGuiToggle();
 
-	void setup();
-
 	void setType(const std::string &type);
 	void setType(const ofxGuiToggleType::Type &type);
 	ofxGuiToggleType::Type getType();
@@ -56,6 +54,8 @@ public:
 	static std::string getClassType();
 
 protected:
+
+	void setup();
 
 	virtual vector<std::string> getClassTypes() override;
 

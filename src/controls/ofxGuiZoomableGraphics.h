@@ -12,8 +12,6 @@ class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 
 		virtual ~ofxGuiZoomableGraphics();
 
-		void setup();
-
 		virtual bool mousePressed(ofMouseEventArgs & args) override;
 		virtual bool mouseDragged(ofMouseEventArgs & args) override;
 		virtual bool mouseReleased(ofMouseEventArgs & args) override;
@@ -22,6 +20,8 @@ class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 		void onResize(DOM::ResizeEventArgs&);
 
 	protected:
+
+		void setup();
 
 		virtual void render() override;
 		virtual void generateDraw() override;

@@ -16,8 +16,6 @@ public:
 
 	virtual ~ofxGuiValueLabel();
 
-	void setup();
-
 	virtual float getMinWidth() override;
 	virtual float getMinHeight() override;
 
@@ -41,6 +39,8 @@ public:
 	static std::string getClassType();
 
 protected:
+
+	void setup();
 
 	virtual vector<std::string> getClassTypes() override;
 

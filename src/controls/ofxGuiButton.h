@@ -12,8 +12,6 @@ public:
 	ofxGuiButton(ofParameter<void>& _val, const ofJson & config = ofJson());
 	ofxGuiButton(ofParameter<bool>& _bVal, const ofJson & config = ofJson());
 
-	void setup();
-
 	~ofxGuiButton();
 
 	virtual ofAbstractParameter & getParameter() override;
@@ -33,6 +31,8 @@ public:
 	static std::string getClassType();
 
 protected:
+
+	void setup();
 
 	virtual vector<std::string> getClassTypes() override;
 

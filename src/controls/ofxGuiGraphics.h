@@ -10,8 +10,6 @@ class ofxGuiGraphics : public ofxGuiElement {
 		ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h = 0);
 		virtual ~ofxGuiGraphics();
 
-		void setup(string canvasName = "", float w = 0, float h = 0);
-
 		virtual float getMinWidth() override;
 		virtual float getMinHeight() override;
 
@@ -25,6 +23,8 @@ class ofxGuiGraphics : public ofxGuiElement {
 		static std::string getClassType();
 
 	protected:
+
+		void setup(string canvasName = "", float w = 0, float h = 0);
 
 		virtual vector<std::string> getClassTypes() override;
 

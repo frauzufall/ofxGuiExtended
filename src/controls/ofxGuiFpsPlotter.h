@@ -10,9 +10,10 @@ class ofxGuiFpsPlotter : public ofxGuiValuePlotter {
 
 		virtual ~ofxGuiFpsPlotter();
 
-		void setup();
 		void update(ofEventArgs &);
 
 	protected:
+
+		void setup();
 
 };
