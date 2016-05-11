@@ -319,6 +319,21 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 			setTextAlignment(val);
 		}
 
+		//parse font
+		if(_config.find("font-family") != _config.end()){
+
+			std::string family = _config["font-family"];
+			float size = fontSize;
+
+			if(_config.find("font-size") != _config.end()){
+				if(_config["font-size"].is_number()){
+					size = _config["font-size"];
+				}
+			}
+
+			loadFont(family, size);
+		}
+
 		//parse all config entries to attribute values of the element.
 		//WARNING this will crash if there are non string keys in the config
 		for (ofJson::const_iterator it = _config.begin(); it != _config.end(); ++it) {
