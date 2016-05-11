@@ -1,3 +1,4 @@
+#include "ofxGuiExtended.h"
 #include "ofxGuiSliderGroup.h"
 #include "../view/JsonConfigParser.h"
 using namespace std;
@@ -163,7 +164,7 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(ofParameter<ofColor_<ColorType
 		add<ofxGuiSlider<ColorType>>(p);
 		p.addListener(this, & ofxGuiColorSlider_::changeSlider);
 		getControl(names[i])->setConfig(ofJson({
-			{"fill-color", JsonConfigParser::colorToString(value.get())}
+			{"fill-color", ofxGui::colorToString(value.get())}
 		}));
 	}
 
@@ -194,7 +195,7 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName
 		add<ofxGuiSlider<ColorType>>(p);
 		p.addListener(this, & ofxGuiColorSlider_::changeSlider);
 		getControl(names[i])->setConfig(ofJson({
-			{"fill-color", JsonConfigParser::colorToString(value.get())}
+			{"fill-color", ofxGui::colorToString(value.get())}
 		}));
 	}
 

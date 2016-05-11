@@ -385,11 +385,20 @@ public:
 	/// \brief Set the size of the Element in the current layout.
 	/// \param width The new width of the Element.
 	/// \param height The new height of the Element.
-	virtual void setSizeInLayout(float width, float height);
+	virtual void setLayoutSize(float width, float height, bool tellParent = true);
+
+	/// \brief Set the size of the Element that the parent suggests by the current layout.
+	/// \param width The new width of the Element.
+	/// \param height The new height of the Element.
+	virtual void setSizeByParent(float width, float height);
 
 	/// \brief Get the Size of the Element.
 	/// \returns the Size of the Element.
 	Size getSize() const;
+
+	/// \brief Get the Size of the Element that the parent suggests by the current layout.
+	/// \returns the Size of the Element.
+	Size getSizeByParent() const;
 
 	/// \brief Set the width of the Element.
 	/// param width The new width of the Element.
@@ -397,7 +406,7 @@ public:
 
 	/// \brief Set the width of the Element in the current layout.
 	/// param width The new width of the Element.
-	virtual void setWidthInLayout(float width);
+	virtual void setLayoutWidth(float width, bool tellParent = true);
 
 	/// \brief Get the width of the Element produced by the layout.
 	/// \returns The width of the Element.
@@ -413,7 +422,7 @@ public:
 
 	/// \brief Set the height of the Element in the current layout.
 	/// param height The new height of the Element.
-	virtual void setHeightInLayout(float height);
+	virtual void setLayoutHeight(float height, bool tellParent = true);
 
 	/// \brief Get the height of the Element produced by the layout.
 	/// \returns The height of the Element.
@@ -527,8 +536,14 @@ public:
 	/// \param locked The locked state to set. True to lock, false to unlock.
 	void setLocked(bool locked);
 
+	/// \param If true prevent layout from being computed, if false release block
+	void blockLayout(bool block);
+
 	/// \brief Called internally to invalidate the child shape tree.
 	virtual void invalidateChildShape(bool recursive = true);
+
+	/// \brief Redo layout and children layouts.
+	virtual void redoLayout();
 
 
 protected:
@@ -596,7 +611,8 @@ protected:
 
 	/// \brief The basic shape of this element.
 	Shape _shape;
-	Size _sizeInLayout;
+	Size _layoutSize;
+	Size _sizeSetByParent;
 
 	/// \brief The union of all child shapes.
 	mutable Shape _childShape;

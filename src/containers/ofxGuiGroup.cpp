@@ -72,16 +72,17 @@ bool ofxGuiGroupHeader::mousePressed(ofMouseEventArgs & args){
 }
 
 float ofxGuiGroupHeader::getMinWidth(){
-	generateDraw();
-	float _width = 0;
-	ofVboMesh mesh = textMesh;
-	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
-		if(mesh.getVertex(i).x > _width){
-			_width = mesh.getVertex(i).x;
+	std::string text = "";
+
+	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
+	if(_parent){
+		if(_parent->getShowName()){
+			text += _parent->getName();
 		}
+		text += "+";
 	}
-	_width += textPadding * 2;
-	return _width;
+
+	return getTextWidth(text)+4*textPadding;
 }
 
 float ofxGuiGroupHeader::getMinHeight(){
@@ -443,7 +444,7 @@ void ofxGuiGroup::minimize(){
 		child->setHidden(true);
 	}
 
-	setSizeInLayout(header->getWidth(), header->getHeight());
+	setLayoutSize(header->getWidth(), header->getHeight());
 	setNeedsRedraw();
 }
 
@@ -453,7 +454,7 @@ void ofxGuiGroup::maximize(){
 	for(auto& child : getControls()){
 		child->setHidden(false);
 	}
-	setSizeInLayout(widthMaximized, heightMaximized);
+	setLayoutSize(widthMaximized, heightMaximized);
 
 	invalidateChildShape();
 }
@@ -593,13 +594,6 @@ ofParameter<int>& ofxGuiGroup::getActiveToggleIndex() {
 }
 
 ofAbstractParameter & ofxGuiGroup::getParameter(){
-//	parameters.clear();
-//	for(auto child : getControls()){
-//		ofxGuiElement* e = dynamic_cast<ofxGuiElement*>(child);
-//		if(e){
-//			parameters.add(e->getParameter());
-//		}
-//	}
 	return parameters;
 }
 
@@ -636,11 +630,6 @@ void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 
 void ofxGuiGroup::onParentAdded(DOM::ElementEventArgs& args){
 	copyLayoutFromDocument();
-
-	//no idea why this is needed but otherwise the headers are not correctly displayed
-	_sizeInLayout.x = 0;
-	_sizeInLayout.y = 0;
-	invalidateChildShape();
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){

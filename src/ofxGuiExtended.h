@@ -106,9 +106,17 @@ class ofxGui {
 		/// \param parameters The parameters that are going to be modifiable with the standard control type for each parameter type.
 		template<typename T, typename... Args>
 		void add(ofParameter<T>& parameter, Args... args) {
+			getDocument()->blockLayout(true);
 			add(parameter);
 			add(args...) ;
+			getDocument()->blockLayout(false);
 		}
+
+		/// \brief Converts ofColor data type to a CSS-like rgba string.
+		/// example: ofColor(255,0,0,127.5) -> "rgba(255,0,0,0.5)"
+		/// \param color The color to be converted
+		/// \returns The color in string rgba format.
+		static std::string colorToString(const ofColor& color);
 
 	private:
 		std::unique_ptr<DOM::Document> document;

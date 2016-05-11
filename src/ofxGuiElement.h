@@ -174,3 +174,4 @@ class ofxGuiElement : public DOM::Element {
 		bool themeLoading = false;
 
 };
+

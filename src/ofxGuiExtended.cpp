@@ -65,3 +65,9 @@ void ofxGui::setConfig(const ofJson &config){
 		}
 	}
 }
+
+std::string ofxGui::colorToString(const ofColor& color){
+	std::stringstream strstr;
+	strstr << "rgba(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << ((float)color.a)/255. << ")";
+	return strstr.str();
+}

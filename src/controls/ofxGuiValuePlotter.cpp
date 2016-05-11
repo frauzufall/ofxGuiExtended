@@ -75,6 +75,7 @@ float ofxGuiValuePlotter::getMinHeight(){
 }
 
 void ofxGuiValuePlotter::setDecimalPlace(int place){
+	individualConfig[decimalPlace.getName()] = place;
 	decimalPlace = place;
 }
 

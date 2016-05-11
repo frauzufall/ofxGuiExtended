@@ -129,6 +129,7 @@ void ofxGuiSlider<DataType>::resized(DOM::ResizeEventArgs &){
 
 template<typename DataType>
 void ofxGuiSlider<DataType>::setPrecision(int precision){
+	individualConfig[this->precision.getName()] = precision;
 	this->precision = precision;
 }
 
@@ -235,16 +236,16 @@ void ofxGuiSlider<DataType>::generateDraw(){
 
 		float valAsPct;
 		if(horizontal){
-			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getWidth(), true);
+			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getWidth()-borderWidth*2, true);
 		}else{
-			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getHeight(), true);
+			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getHeight()-borderWidth*2, true);
 		}
 		bar.setFillColor(fillColor);
 		bar.setFilled(true);
 		if(horizontal){
-			bar.rectangle(0,0, valAsPct, getHeight());
+			bar.rectangle(borderWidth,borderWidth, valAsPct, getHeight()-borderWidth*2);
 		}else{
-			bar.rectangle(0, getHeight() - valAsPct, getWidth(), valAsPct);
+			bar.rectangle(borderWidth, getHeight() - valAsPct-borderWidth, getWidth()-borderWidth*2, valAsPct);
 		}
 
 	}
@@ -254,7 +255,7 @@ void ofxGuiSlider<DataType>::generateDraw(){
 		if(showName){
 			center.y -= getTextHeight(getName());
 		}
-		float radius = min(center.x, center.y);
+		float radius = min(center.x, center.y)-borderWidth;
 		float inner_r = radius / 3;
 		float outer_r = radius-1;
 
@@ -413,23 +414,42 @@ void ofxGuiSlider<DataType>::valueChanged(DataType & value){
 }
 
 template<typename DataType>
-float ofxGuiSlider<DataType>::getMinWidth(){
-	float _width = 0;
+std::string ofxGuiSlider<DataType>::getText(){
+
+	string res = "";
 	if(type == ofxGuiSliderType::STRAIGHT){
 		if(showName){
-			_width += ofxGuiElement::getTextWidth(getName());
+			res += getName();
 		}
-		_width += ofxGuiElement::getTextWidth(ofToString(value.get(), precision));
+		res += ofToString(value.get(), precision);
 	}
-	return _width;
+
+	return res;
+
+}
+
+template<>
+std::string ofxGuiSlider<unsigned char>::getText(){
+
+	string res = "";
+	if(type == ofxGuiSliderType::STRAIGHT){
+		if(showName){
+			res += getName();
+		}
+		res += ofToString((int)value, precision);
+	}
+
+	return res;
+}
+
+template<typename DataType>
+float ofxGuiSlider<DataType>::getMinWidth(){
+	return ofxGuiElement::getTextWidth(getText());
 }
 
 template<typename DataType>
 float ofxGuiSlider<DataType>::getMinHeight(){
-	if((type == ofxGuiSliderType::STRAIGHT) && showName){
-		return ofxGuiElement::getTextHeight(getName());
-	}
-	return 10;
+	return ofxGuiElement::getTextHeight(getText());
 }
 
 /*

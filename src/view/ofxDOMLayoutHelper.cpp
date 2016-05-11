@@ -20,7 +20,16 @@ bool ofxDOMLayoutHelper::elementAbsolutePositioned(DOM::Element* e){
 }
 
 float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e){
-	float res = e->getMinWidth() + getPaddingHorizontal(e);
+	if(e->parent()){
+		return getDesiredWidth(e, e->parent()->getWidth()-getPaddingHorizontal(e->parent()));
+	}else{
+		return getDesiredWidth(e, ofGetWindowWidth());
+	}
+
+}
+
+float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e, float parentWidth){
+	float res = e->getMinWidth() + getPaddingHorizontal(e) + getMarginHorizontal(e);
 
 	if(e->hasAttribute("_width")){
 		std::string widthstr = e->getAttribute<std::string>("_width");
@@ -28,24 +37,26 @@ float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e){
 			vector<std::string> _val = JsonConfigParser::getMatchedStrings(widthstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
-				if(e->parent()){
-					return (e->parent()->getWidth()-getPaddingHorizontal(e->parent()))*amount;
-				}else {
-					return ofGetWindowWidth()*amount;
-				}
+				return parentWidth*amount;
 			}
 		}else {
-			return ofToFloat(widthstr);
+			return ofToFloat(widthstr)+getMarginHorizontal(e);
 		}
 	}
-
-	res += getMarginHorizontal(e);
 
 	return res;
 }
 
 float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e){
-	float res = e->getMinHeight() + getPaddingVertical(e);
+	if(e->parent()){
+		return getDesiredHeight(e, e->parent()->getHeight()-getPaddingVertical(e->parent()));
+	}else{
+		return getDesiredHeight(e, ofGetWindowHeight());
+	}
+}
+
+float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e, float parentHeight){
+	float res = e->getMinHeight() + getPaddingVertical(e) + getMarginVertical(e);
 
 	if(e->hasAttribute("_height")){
 		std::string heightstr = e->getAttribute<std::string>("_height");
@@ -53,18 +64,12 @@ float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e){
 			vector<std::string> _val = JsonConfigParser::getMatchedStrings(heightstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
-				if(e->parent()){
-					return (e->parent()->getHeight() - getPaddingVertical(e->parent()))*amount;
-				}else {
-					return ofGetWindowHeight()*amount;
-				}
+				return parentHeight*amount;
 			}
 		}else {
-			return ofToFloat(heightstr);
+			return ofToFloat(heightstr)+getMarginVertical(e);
 		}
 	}
-
-	res += getMarginVertical(e);
 
 	return res;
 }

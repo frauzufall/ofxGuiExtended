@@ -51,8 +51,20 @@ void ofxDOMBoxLayout::doLayout()
 		// Prevent recursive calls to doLayout.
 		_isDoingLayout = true;
 
-		float totalWidth = 0;
-		float totalHeight = 0;
+		float paddingHorizontal = DOMLH::getPaddingHorizontal(_parent);
+		float paddingVertical = DOMLH::getPaddingVertical(_parent);
+		float marginHorizontal = DOMLH::getMarginHorizontal(_parent);
+		float marginVertical = DOMLH::getMarginVertical(_parent);
+
+		float totalWidth = std::max(_parent->getSizeByParent().x, DOMLH::getDesiredWidth(_parent));
+		float totalHeight = std::max(_parent->getSizeByParent().y, DOMLH::getDesiredHeight(_parent));
+
+		totalWidth -= marginHorizontal;
+		totalHeight -= marginVertical;
+
+		totalWidth -= paddingHorizontal;
+		totalHeight -= paddingVertical;
+
 		float currentX = DOMLH::getPaddingLeft(_parent);
 		float currentY = DOMLH::getPaddingTop(_parent);
 
@@ -60,23 +72,25 @@ void ofxDOMBoxLayout::doLayout()
 			if (element){
 				if(!element->isHidden()){
 
-					float w = max(element->getWidth(), DOMLH::getDesiredWidth(element)-DOMLH::getMarginHorizontal(element));
-					float h = max(element->getHeight(), DOMLH::getDesiredHeight(element)-DOMLH::getMarginVertical(element));
-
-					element->setSizeInLayout(w,h);
+					float w = DOMLH::getDesiredWidth(element, totalWidth)-DOMLH::getMarginHorizontal(element);
+					float h = DOMLH::getDesiredHeight(element, totalHeight)-DOMLH::getMarginVertical(element);
 
 					if(!DOMLH::elementAbsolutePositioned(element)){
 						element->setPosition(currentX+DOMLH::getMarginLeft(element), currentY+DOMLH::getMarginTop(element));
 
 						if (getDirection(_parent) == Direction::HORIZONTAL)
 						{
-							totalHeight = std::max(totalHeight, h+DOMLH::getMarginVertical(element));
+							w = max(element->getWidth(), w);
+							element->setLayoutWidth(w, false);
+							totalHeight = std::max(totalHeight, h);
 							currentX += w + DOMLH::getMarginHorizontal(element);
 							totalWidth = currentX;
 						}
 						else
 						{
-							totalWidth = std::max(totalWidth, w+DOMLH::getMarginHorizontal(element));
+							h = max(element->getHeight(), h);
+							element->setLayoutHeight(h, false);
+							totalWidth = std::max(totalWidth, w);
 							currentY += h + DOMLH::getMarginVertical(element);
 							totalHeight = currentY;
 						}
@@ -89,16 +103,12 @@ void ofxDOMBoxLayout::doLayout()
 		}
 
 		if (getDirection(_parent) == Direction::HORIZONTAL){
-			totalHeight += DOMLH::getPaddingVertical(_parent);
 			totalWidth += DOMLH::getPaddingRight(_parent);
 		}else{
-			totalWidth += DOMLH::getPaddingHorizontal(_parent);
 			totalHeight += DOMLH::getPaddingBottom(_parent);
 		}
 
-		totalWidth = std::max(totalWidth, DOMLH::getDesiredWidth(_parent)-DOMLH::getMarginHorizontal(_parent));
-		totalHeight = std::max(totalHeight, DOMLH::getDesiredHeight(_parent)-DOMLH::getMarginVertical(_parent));
-
+		// set cross axis size of all children to maximum
 		for (DOM::Element* element : children())
 		{
 			if (element)
@@ -106,20 +116,29 @@ void ofxDOMBoxLayout::doLayout()
 				if(!element->isHidden()){
 
 					if(!DOMLH::elementAbsolutePositioned(element)){
+
 						if (getDirection(_parent) == Direction::HORIZONTAL){
-							element->setHeightInLayout(totalHeight-DOMLH::getPaddingVertical(_parent)-DOMLH::getMarginVertical(element));
+							float h = totalHeight-DOMLH::getMarginVertical(element);
+							element->setLayoutHeight(h, false);
+							element->setSizeByParent(0, totalHeight);
 						}else{
-							element->setWidthInLayout(totalWidth-DOMLH::getPaddingHorizontal(_parent)-DOMLH::getMarginHorizontal(element));
+							float w = totalWidth-DOMLH::getMarginHorizontal(element);
+							element->setLayoutWidth(w, false);
+							element->setSizeByParent(totalWidth, 0);
 						}
+
 					}
 				}
 			}
 		}
 
-		if(totalWidth != _parent->getWidth() || totalHeight != _parent->getHeight()){
-			_parent->setSizeInLayout(totalWidth, totalHeight);
-			_parent->invalidateChildShape();
+		if (getDirection(_parent) == Direction::HORIZONTAL){
+			totalHeight += paddingVertical;
+		}else{
+			totalWidth += paddingHorizontal;
 		}
+
+		_parent->setLayoutSize(totalWidth, totalHeight);
 
 		_isDoingLayout = false;
 	}

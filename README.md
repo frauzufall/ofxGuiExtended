@@ -1,28 +1,35 @@
 # ofxGuiExtended
 This is a gui addon displaying `ofParameter` based data with a focus on simplicity and extensibility. It can be configured using JSON.
 
+![exampleAdvancedGui](exampleAdvancedGui/advancedGuiExample.png)
+
+![exampleThemes](exampleThemes/exampleThemes.png)
+
+![exampleLayout](exampleLayout/layoutExample.png)
+
 ## System requirements
 Since ofJson got just recently added to openFrameworks, you have to use the current master branch in order for it to work. I am using commit c9cd3e9 right now.
 
 This addon is tested on Ubuntu 15.10 64bit. Please tell me if it runs on other systems or if you have issues.
 
 ## Versions and dependencies
-This addon was first built as an extension for the OF core ofxGui addon. You can download this version [here](https://github.com/frauzufall/ofxGuiExtended/releases/tag/v0.1).
+This addon was first built as an extension for the OF core ofxGui addon. You can download this version [here](releases/tag/v0.1).
 
 This is the standalone ofxGuiExtended version build from ofxGui. It also contains a minimized version of [ofxDOM](https://github.com/bakercp/ofxDOM). It does not depend on other addons.
 
 ## Extensions
 This addon is built with the best intentions to be as extensible as possible. There are addons working with ofxGuiExtended:
- - [ofxSortableList](https://github.com/frauzufall/ofxSortableList) *compatible version is not online yet*
- - [ofx2DMapping](https://github.com/frauzufall/ofx2DMapping) *compatible version is not online yet*
+ - [ofxSortableList](https://github.com/frauzufall/ofxSortableList)
  - [ofxMasterSlaveControl](https://github.com/frauzufall/ofxMasterSlaveControl)
+ - [ofx2DMapping](https://github.com/frauzufall/ofx2DMapping) *compatible version is not online yet*
+
 
 Please tell me if you wrote something compatible, I will add it to the list. Check out the bottom of this page for contribution and implementation notes.
 
 ## Usage
 
 ### Basics
-Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/example) to see it in action.
+Just initialize some parameters and pass them on to the addon. It will create a panel showing the parameters. Have a look at [this example](example) to see it in action.
 ```c++
 //ofApp.h
 
@@ -67,12 +74,10 @@ group->add(..);
 Some parameters automatically create containers if you add them to the gui:
 
 ```c++
-
 ofParameter<ofPoint> position;
 ofParameter<ofColor> color;
 
 gui.add(position, color);
-
 ```
 
 ### Adding controls
@@ -106,7 +111,7 @@ panel->add(rotation, itemConfig);
 The goal is to set attributes in an external file to set style and layout without recompiling. This is not yet implemented but most of the work is done, stay tuned.
 
 #### Styling items by type via Theme
-In a theme you can define attributes for the different element class types. Have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/exampleThemes). Also read the class descriptions in the next chapters of this page for the class type names and the attributes that you can set for each class.
+In a theme you can define attributes for the different element class types. Have a look at [this example](exampleThemes). Also read the class descriptions in the next chapters of this page for the class type names and the attributes that you can set for each class.
 
 This is how you load a theme:
 ```c++
@@ -147,15 +152,16 @@ A theme file could look like this:
 ```
 
 ### Using layouts
-To be able to create more complex layouts, the ofxDOMFlexBoxLayout is implemented. If you want to use it, you have to set it up before adding elements to the GUI:
+The default layout lets you align elements in containers horizontally and vertically. The layout can be changed. ofxDOMFlexBoxLayout was implemented for more complex layout scenarios. If you want to use it, you have to set it up before adding elements to the GUI:
 ```c++
 gui.setupFlexBoxLayout();
 ```
-If you want to implement your own layout class, you can apply it to you GUI like this (assuming `ofxDOMLayoutCustom`` is your layout class):
+Have a look at the layout attribute descriptions later in this file for details and check out [this flexbox layout example](exampleLayout).
+
+If you want to implement your own layout class, you can use it by adding it to your GUI like this (assuming `ofxDOMLayoutCustom` is your layout class):
 ```c++
 gui.setup<ofxDOMLayoutCustom>();
 ```
-See the chapter below about this layout class for details and have a look at [this example](https://github.com/frauzufall/ofxGuiExtended/tree/master/exampleLayout).
 
 ## Controls
 

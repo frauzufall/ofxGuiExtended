@@ -325,6 +325,7 @@ void ofxGuiToggle::setType(const std::string& type){
 }
 
 void ofxGuiToggle::setType(const ofxGuiToggleType::Type &type){
+	individualConfig[this->type.getName()] = type;
 	this->type.set(type);
 	setNeedsRedraw();
 }

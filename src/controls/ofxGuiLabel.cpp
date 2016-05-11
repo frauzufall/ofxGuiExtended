@@ -78,7 +78,10 @@ float ofxGuiValueLabel<Type>::getMinWidth(){
 	string text = "";
 	if(showName){
 		if(!getName().empty()){
-			text = getName() + ": ";
+			text += getName();
+		}
+		if(!getName().empty() && label.toString() != ""){
+			text += ": ";
 		}
 	}
 	text += label.toString();
@@ -91,7 +94,10 @@ float ofxGuiValueLabel<Type>::getMinHeight(){
 	string text = "";
 	if(showName){
 		if(!getName().empty()){
-			text = getName() + ": ";
+			text += getName();
+		}
+		if(!getName().empty() && label.toString() != ""){
+			text += ": ";
 		}
 	}
 	text += label.toString();
@@ -105,9 +111,12 @@ void ofxGuiValueLabel<Type>::generateDraw(){
 	ofxGuiElement::generateDraw();
 
 	if(showName){
-		string name;
+		string name = "";
 		if(!getName().empty()){
-			name = getName() + ": ";
+			name += getName();
+		}
+		if(!getName().empty() && label.toString() != ""){
+			name += ": ";
 		}
 		textMesh = getTextMesh(name + label.toString(), textPadding, getShape().height / 2 + 4);
 	}else {

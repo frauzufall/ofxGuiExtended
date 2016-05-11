@@ -54,6 +54,7 @@ float ofxGuiFunctionPlotter::getMinHeight(){
 }
 
 void ofxGuiFunctionPlotter::setDecimalPlace(int place){
+	individualConfig[decimalPlace.getName()] = place;
 	decimalPlace = place;
 }
 
@@ -153,6 +154,7 @@ void ofxGuiFunctionPlotter::setFillColor(const ofColor &minColor, const ofColor 
 }
 
 void ofxGuiFunctionPlotter::setPlotterStrokeWidth(float width){
+	individualConfig[plotterStrokeWidth.getName()] = width;
 	plotterStrokeWidth.set(width);
 }
 

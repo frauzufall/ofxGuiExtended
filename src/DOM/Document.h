@@ -82,6 +82,13 @@ public:
 	/// \returns true if the Document size will always match the screen size.
 	bool getAutoFillScreen() const;
 
+	/// \brief Can be used to prevent the layout from being computed.
+	/// \param blocking True if layout computing should be prevented.
+	void setBlockLayout(bool blocking);
+
+	/// \returns True if the layout computing is blocked.
+	bool isBlockingLayout();
+
 	virtual float getMinWidth() override;
 	virtual float getMinHeight() override;
 
@@ -89,6 +96,8 @@ protected:
 
 	/// \brief True if the Document size should always match the screen size.
 	bool _autoFillScreen = true;
+	bool _blockLayout = false;
+	int _blockLayoutCount = 0;
 
 };
 

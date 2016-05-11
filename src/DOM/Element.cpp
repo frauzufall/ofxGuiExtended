@@ -47,7 +47,8 @@ Element::Element(const std::string& id,
 				 float height):
 	_id(id),
 	_shape(x, y, width, height),
-	_sizeInLayout(width, height),
+	_layoutSize(width, height),
+	_sizeSetByParent(0,0),
 	needsRedraw(true)
 {
 	ofAddListener(this->move, this, &Element::_onMoved);
@@ -600,7 +601,7 @@ float Element::getScreenY() const
 
 void Element::setSize(float width, float height)
 {
-	if(_shape.getWidth()!= width || _shape.getHeight() != height || _sizeInLayout.x != width || _sizeInLayout.y != height)
+	if(_shape.getWidth()!= width || _shape.getHeight() != height || _layoutSize.x != width || _layoutSize.y != height)
 	{
 		setAttribute("_width", ofToString(width));
 		setAttribute("_height", ofToString(height));
@@ -609,28 +610,42 @@ void Element::setSize(float width, float height)
 }
 
 
-void Element::setSizeInLayout(float width, float height)
+void Element::setLayoutSize(float width, float height, bool tellParent)
 {
-	if(_sizeInLayout.x!= width || _sizeInLayout.y != height)
+	if(_layoutSize.x!= width || _layoutSize.y != height)
 	{
-		_sizeInLayout.x = width;
-		_sizeInLayout.y = height;
-		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
+		_layoutSize.x = width;
+		_layoutSize.y = height;
+		invalidateChildShape(tellParent);
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
 }
 
 
+void Element::setSizeByParent(float width, float height)
+{
+	_sizeSetByParent.x = width;
+	_sizeSetByParent.y = height;
+}
+
+
 Size Element::getSize() const
 {
-	return Size(_sizeInLayout.x, _sizeInLayout.y);
+	return Size(_layoutSize.x, _layoutSize.y);
+}
+
+
+Size Element::getSizeByParent() const
+{
+	return Size(_sizeSetByParent.x, _sizeSetByParent.y);
 }
 
 
 ///\todo use ofCompareFloat
 void Element::setWidth(float width)
 {
-	if(_shape.getWidth()!= width || _sizeInLayout.x != width)
+	if(_shape.getWidth()!= width || _layoutSize.x != width)
 	{
 		setAttribute("_width", ofToString(width));
 		invalidateChildShape();
@@ -638,12 +653,12 @@ void Element::setWidth(float width)
 }
 
 
-void Element::setWidthInLayout(float width)
+void Element::setLayoutWidth(float width, bool tellParent)
 {
-	if(width != _sizeInLayout.x){
-		_sizeInLayout.x = width;
-		invalidateChildShape();
-		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
+	if(width != _layoutSize.x){
+		_layoutSize.x = width;
+		invalidateChildShape(tellParent);
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
 }
@@ -651,7 +666,7 @@ void Element::setWidthInLayout(float width)
 
 float Element::getWidth() const
 {
-	return _sizeInLayout.x;
+	return _layoutSize.x;
 }
 
 
@@ -664,7 +679,7 @@ float Element::getMinWidth()
 ///\todo use ofCompareFloat
 void Element::setHeight(float height)
 {
-	if(_shape.getHeight() != height || _sizeInLayout.y != height)
+	if(_shape.getHeight() != height || _layoutSize.y != height)
 	{
 		setAttribute("_height", ofToString(height));
 		invalidateChildShape();
@@ -673,19 +688,12 @@ void Element::setHeight(float height)
 
 
 
-void Element::setHeightInLayout(float height)
+void Element::setLayoutHeight(float height, bool tellParent)
 {
-	ofxGuiElement* baseg= dynamic_cast<ofxGuiElement*>(this);
-	if(baseg){
-		if(baseg->getName() == "default"){
-			cout << "aligning elements in " << baseg->getName() << " of size " << baseg->getSize() << " minimal: " << baseg->getMinWidth() << " x " << baseg->getMinHeight() << endl;
-//			cout << _parent->getWidth() - getPaddingHorizontal(_parent) << " " << _parent->getHeight() - getPaddingVertical(_parent) << endl;
-		}
-	}
-	if(height != _sizeInLayout.y){
-		_sizeInLayout.y = height;
-		invalidateChildShape();
-		ResizeEventArgs e(Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y));
+	if(height != _layoutSize.y){
+		_layoutSize.y = height;
+		invalidateChildShape(tellParent);
+		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
 }
@@ -699,12 +707,12 @@ float Element::getMinHeight()
 
 float Element::getHeight() const
 {
-	return _sizeInLayout.y;
+	return _layoutSize.y;
 }
 
 Shape Element::getShape() const
 {
-	return Shape(_shape.x, _shape.y, _sizeInLayout.x, _sizeInLayout.y);
+	return Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y);
 }
 
 
@@ -962,18 +970,50 @@ void Element::setLocked(bool locked_)
 }
 
 
+void Element::blockLayout(bool block){
+	if(DOM::Document* doc = document()){
+		doc->setBlockLayout(block);
+		if(!doc->isBlockingLayout()){
+			//redo layout for all elements
+			doc->redoLayout();
+		}
+	}
+}
+
+
 void Element::invalidateChildShape(bool recursive)
 {
-	_childShapeInvalid = true;
+	if(DOM::Document *doc = document()){
+		if(!doc->isBlockingLayout()){
+			_childShapeInvalid = true;
 
-	if (_parent && recursive)
-	{
-		_parent->invalidateChildShape();
+			if (_parent && recursive)
+			{
+				_parent->invalidateChildShape();
+			}
+
+			if (_layout)
+			{
+				_layout->doLayout();
+			}
+
+			setNeedsRedraw();
+		}
 	}
+}
+
+
+void Element::redoLayout()
+{
 
 	if (_layout)
 	{
 		_layout->doLayout();
+	}
+
+	for(auto *child : children())
+	{
+		child->redoLayout();
 	}
 
 	setNeedsRedraw();

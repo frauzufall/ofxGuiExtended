@@ -87,10 +87,10 @@ void ofApp::setup(){
 	sliders = gui.addPanel("vertical sliders", ofJson({{"direction", "horizontal"}, {"show-header", false}}));
 	sliders->setPosition(colorPanel->getShape().getTopRight()+ofPoint(20,0));
 
-	sliders->add(slider1Val.set("slider1", 1. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 40}, {"height", 130}}));
-	sliders->add(slider2Val.set("slider2", 5. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 50}, {"height", 130}}));
-	sliders->add(slider3Val.set("slider3", 4. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 60}, {"height", 130}}));
-	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"float", "left"}, {"width", 70}, {"height", 130}}));
+	sliders->add(slider1Val.set("slider1", 1. / 7., 0, 1), ofJson({{"width", 40}, {"height", 130}}));
+	sliders->add(slider2Val.set("slider2", 5. / 7., 0, 1), ofJson({{"width", 50}, {"height", 130}}));
+	sliders->add(slider3Val.set("slider3", 4. / 7., 0, 1), ofJson({{"width", 60}, {"height", 130}}));
+	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"width", 70}, {"height", 130}}));
 
 	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"width", 130}, {"height", 130}, {"precision", 2}}));
 

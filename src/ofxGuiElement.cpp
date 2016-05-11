@@ -134,7 +134,9 @@ void ofxGuiElement::setTheme(){
 
 void ofxGuiElement::setTheme(const ofJson &config){
 	theme = config;
+	blockLayout(true);
 	_setConfigUsingClassifiers(config, true);
+	blockLayout(false);
 }
 
 void ofxGuiElement::loadConfig(const string &filename, bool recursive){
@@ -217,7 +219,12 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 
 		//parse margin
 		if(_config.find("margin") != _config.end()){
-			std::string val = ofToString(_config["margin"]);
+			std::string val = "";
+			if(_config["margin"].is_string()){
+				val = _config["margin"];
+			}else{
+				val = ofToString(_config["margin"]);
+			}
 			vector<std::string> margins = ofSplitString(val, " ");
 			std::string val_top, val_right, val_bottom, val_left;
 			if(margins.size() == 1){
@@ -260,7 +267,12 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 
 		//parse padding
 		if(_config.find("padding") != _config.end()){
-			std::string val = ofToString(_config["padding"]);
+			std::string val = "";
+			if(_config["padding"].is_string()){
+				val = _config["padding"];
+			}else{
+				val = ofToString(_config["padding"]);
+			}
 			vector<std::string> paddings = ofSplitString(val, " ");
 			std::string val_top, val_right, val_bottom, val_left;
 			if(paddings.size() == 1){
@@ -339,7 +351,6 @@ void ofxGuiElement::copyLayoutFromDocument(){
 			if(doc){
 				if(doc->layout()){
 					doc->layout()->copyTo(_this);
-					invalidateChildShape();
 				}
 			}
 		}
@@ -350,7 +361,6 @@ void ofxGuiElement::copyLayoutFromDocument(){
 			_child->copyLayoutFromDocument();
 		}
 	}
-	invalidateChildShape();
 
 }
 
@@ -497,33 +507,39 @@ float ofxGuiElement::getBorderWidth() const {
 }
 
 void ofxGuiElement::setBackgroundColor(const ofColor & color){
+	backgroundColor.set(color);
+	individualConfig[backgroundColor.getName()] = ofxGui::colorToString(color);
 	setNeedsRedraw();
-	backgroundColor = color;
 }
 
 void ofxGuiElement::setBorderColor(const ofColor & color){
+	borderColor.set(color);
+	individualConfig[borderColor.getName()] = ofxGui::colorToString(color);
 	setNeedsRedraw();
-	borderColor = color;
 }
 
 void ofxGuiElement::setTextColor(const ofColor & color){
+	textColor.set(color);
+	individualConfig[textColor.getName()] = ofxGui::colorToString(color);
 	setNeedsRedraw();
-	textColor = color;
 }
 
 void ofxGuiElement::setFillColor(const ofColor & color){
+	fillColor.set(color);
+	individualConfig[fillColor.getName()] = ofxGui::colorToString(color);
 	setNeedsRedraw();
-	fillColor = color;
 }
 
 void ofxGuiElement::setBorderWidth(float width){
+	borderWidth.set(width);
+	individualConfig[borderWidth.getName()] = width;
 	setNeedsRedraw();
-	borderWidth = width;
 }
 
 void ofxGuiElement::setFontSize(float size){
-	fontSize = size;
-	invalidateChildShape();
+	fontSize.set(size);
+	individualConfig[fontSize.getName()] = size;
+	setNeedsRedraw();
 }
 
 void ofxGuiElement::setLayoutPosition(DOM::LayoutPosition type){
@@ -538,7 +554,8 @@ DOM::LayoutPosition ofxGuiElement::getLayoutPosition() {
 }
 
 void ofxGuiElement::setShowName(bool show){
-	showName = show;
+	showName.set(show);
+	individualConfig[showName.getName()] = show;
 	setNeedsRedraw();
 }
 
@@ -615,28 +632,10 @@ void ofxGuiElement::loadStencilFromHex(ofImage & img, unsigned char * data){
 
 float ofxGuiElement::getTextWidth(const std::string & text){
 	return getTextBoundingBox(text).width+2*textPadding;
-//	float _width = 0;
-//	ofVboMesh mesh = getTextMesh(text, 0, 0);
-//	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
-//		if(mesh.getVertex(i).x > _width){
-//			_width = mesh.getVertex(i).x;
-//		}
-//	}
-//	_width += textPadding * 2;
-//	return _width;
 }
 
 float ofxGuiElement::getTextHeight(const std::string & text){
 	return getTextBoundingBox(text).height/2+2*textPadding;
-//	float _height = 0;
-//	ofVboMesh mesh = getTextMesh(text, 0, 0);
-//	for(unsigned int i = 0; i < mesh.getVertices().size(); i++){
-//		if(mesh.getVertex(i).y > _height){
-//			_height = mesh.getVertex(i).y;
-//		}
-//	}
-//	_height += textPadding * 2;
-//	return _height;
 }
 
 bool ofxGuiElement::isMouseOver() const{

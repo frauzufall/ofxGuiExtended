@@ -36,8 +36,8 @@ void ofxDOMFlexBoxLayout::doLayout(){
 
 		if(_parent){
 			if(_parent->parent() == nullptr){
-				_parent->setWidthInLayout(DOMLH::getDesiredWidth(_parent));
-				_parent->setHeightInLayout(DOMLH::getDesiredHeight(_parent));
+				_parent->setLayoutWidth(DOMLH::getDesiredWidth(_parent));
+				_parent->setLayoutHeight(DOMLH::getDesiredHeight(_parent));
 			}
 		}
 
@@ -172,9 +172,9 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 					}
 
 					if(horizontal){
-						element->setSizeInLayout(elementMainSize, elementCrossSize);
+						element->setLayoutSize(elementMainSize, elementCrossSize);
 					}else {
-						element->setSizeInLayout(elementCrossSize, elementMainSize);
+						element->setLayoutSize(elementCrossSize, elementMainSize);
 					}
 
 					element->invalidateChildShape(false);
@@ -422,9 +422,9 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 	maxX += DOMLH::getPaddingRight(_parent);
 	maxY += DOMLH::getPaddingBottom(_parent);
 	if(horizontal){
-		_parent->setSizeInLayout(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
+		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
 	}else{
-		_parent->setSizeInLayout(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
+		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
 	}
 
 }
@@ -452,7 +452,7 @@ void ofxDOMFlexBoxLayout::setWidthInLayoutAddPadding(DOM::Element* e, float widt
 		}
 	}
 	width += DOMLH::getPaddingHorizontal(e);
-	e->setWidthInLayout(width);
+	e->setLayoutWidth(width);
 }
 
 void ofxDOMFlexBoxLayout::setLayoutWidthMinusMargin(DOM::Element* e, float width){
@@ -462,7 +462,7 @@ void ofxDOMFlexBoxLayout::setLayoutWidthMinusMargin(DOM::Element* e, float width
 		}
 	}
 	width -= DOMLH::getMarginHorizontal(e);
-	e->setWidthInLayout(width);
+	e->setLayoutWidth(width);
 }
 
 float ofxDOMFlexBoxLayout::getHeightPlusMargin(DOM::Element* e){
@@ -476,7 +476,7 @@ void ofxDOMFlexBoxLayout::setHeightInLayoutAddPadding(DOM::Element* e, float hei
 		}
 	}
 	height += DOMLH::getPaddingVertical(e);
-	e->setHeightInLayout(height);
+	e->setLayoutHeight(height);
 }
 
 void ofxDOMFlexBoxLayout::setLayoutHeightMinusMargin(DOM::Element* e, float height){
@@ -486,7 +486,7 @@ void ofxDOMFlexBoxLayout::setLayoutHeightMinusMargin(DOM::Element* e, float heig
 		}
 	}
 	height -= DOMLH::getMarginVertical(e);
-	e->setHeightInLayout(height);
+	e->setLayoutHeight(height);
 }
 
 ofxDOMFlexBoxLayout::FlexDirection ofxDOMFlexBoxLayout::getFlexDirection(DOM::Element *e, FlexDirection defaultVal){

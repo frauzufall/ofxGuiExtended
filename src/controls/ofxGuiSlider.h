@@ -80,6 +80,7 @@ protected:
 	virtual void generateText();
 	virtual void _generateText(std::string valStr);
 	void valueChanged(DataType & value);
+	virtual std::string getText();
 	ofPath bar;
 	ofVboMesh textMesh;
 
