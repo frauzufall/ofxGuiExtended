@@ -11,8 +11,7 @@ void ofApp::setup(){
 	panel1 = gui.addPanel(renderer1.parameters);
 	panel1->loadTheme("theme_default.json");
 
-	panel2 = gui.addPanel();
-	panel2->add(renderer2.parameters);
+	panel2 = gui.addPanel(renderer2.parameters);
 	panel2->loadTheme("theme_light.json");
 	panel2->setPosition(ofGetWidth()-panel2->getWidth()-20, 20);
 
