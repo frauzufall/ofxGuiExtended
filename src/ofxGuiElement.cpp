@@ -81,7 +81,7 @@ void ofxGuiElement::setup(){
 	borderColor.set("border-color", ofColor(0));
 	textColor.set("text-color", ofColor(0));
 	fillColor.set("fill-color", ofColor(100));
-	fontSize.set("font-size", 5);
+	fontSize.set("font-size", 10);
 	showName.set("show-name", true);
 	borderWidth.set("border-width", 1);
 	setLayoutPosition(DOM::LayoutPosition::STATIC);
@@ -323,15 +323,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		if(_config.find("font-family") != _config.end()){
 
 			std::string family = _config["font-family"];
-			float size = fontSize;
-
-			if(_config.find("font-size") != _config.end()){
-				if(_config["font-size"].is_number()){
-					size = _config["font-size"];
-				}
-			}
-
-			loadFont(family, size);
+			loadFont(family, fontSize);
 		}
 
 		//parse all config entries to attribute values of the element.

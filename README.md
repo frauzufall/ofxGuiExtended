@@ -205,6 +205,18 @@ gui.setup<ofxDOMLayoutCustom>();
         <td>Sets the text alignment. *Currently only affecting fullsize toggles.*</td>
     </tr>
     <tr>
+        <td>`font-family`</td>
+        <td>`string`</td>
+        <td>`"fonts/UbuntuMono-B.ttf"`</td>
+        <td>Sets the font family and changes the font rendering from bitmap font to TTF. Font path is relative to `bin/data`.</td>
+    </tr>
+    <tr>
+        <td>`font-size`</td>
+        <td>`float`</td>
+        <td>`10` (default)</td>
+        <td>Sets the font size. Only works if you set a font family, the default bitmap font has a fixed size. The elements can't currently update their size according to the font size so if you set it high you have to adjust the element size yourself in order to prevent overlapping.</td>
+    </tr>
+    <tr>
         <td>`margin`</td>
         <td>`float`<br>`string`</td>
         <td>`10`<br>`"10 20"`<br>`"10 20 30"`<br>`"10 20 30 40"`</td>
