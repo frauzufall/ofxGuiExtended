@@ -30,7 +30,8 @@ void ofxGuiZoomableGraphics::setup(){
 	ofAddListener(resize, this, &ofxGuiZoomableGraphics::onResize);
 }
 
-void ofxGuiZoomableGraphics::onResize(DOM::ResizeEventArgs&){
+void ofxGuiZoomableGraphics::onResize(DOM::ResizeEventArgs& args){
+	ofxGuiGraphics::onResize(args);
 	contentFbo.clear();
 	if(_bLoaded && getWidth() > 0 && getHeight() > 0){
 		contentFbo.allocate(getWidth(), getHeight(), GL_RGBA);

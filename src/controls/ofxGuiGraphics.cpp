@@ -3,7 +3,7 @@
 using namespace std;
 
 ofxGuiGraphics::~ofxGuiGraphics(){
-//	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
+	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
@@ -28,6 +28,8 @@ ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float 
 }
 
 void ofxGuiGraphics::setup(string canvasName, float w, float h){
+	autoWidth = false;
+	autoHeight = false;
 	setName(canvasName);
 	if(_bLoaded){
 		if(w == 0){
@@ -41,7 +43,7 @@ void ofxGuiGraphics::setup(string canvasName, float w, float h){
 		ofxGuiElement::setSize(w,h);
 	}
 	setTheme();
-//	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
+	ofAddListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
 void ofxGuiGraphics::setGraphics(ofBaseDraws *graphics){
@@ -73,11 +75,24 @@ float ofxGuiGraphics::getMinHeight(){
 }
 
 void ofxGuiGraphics::setAutoHeight(){
+	autoHeight = true;
+	autoWidth = false;
 	setHeight(getWidth() * graphics->getHeight() / graphics->getWidth());
 }
 
 void ofxGuiGraphics::setAutoWidth(){
+	autoHeight = false;
+	autoWidth = true;
 	setWidth(getHeight() * graphics->getWidth() / graphics->getHeight());
+}
+
+void ofxGuiGraphics::onResize(DOM::ResizeEventArgs &args){
+	if(autoHeight){
+		setHeight(args.shape().width * graphics->getHeight() / graphics->getWidth());
+	}
+	if(autoWidth){
+		setWidth(args.shape().height * graphics->getWidth() / graphics->getHeight());
+	}
 }
 
 void ofxGuiGraphics::generateDraw(){

@@ -33,11 +33,15 @@ class ofxGuiGraphics : public ofxGuiElement {
 		}
 		virtual void render() override;
 		virtual void generateDraw() override;
+
+		virtual void onResize(DOM::ResizeEventArgs& args);
+
 		ofPath bg;
 		ofVboMesh textMesh;
 		ofBaseDraws * graphics;
 		ofParameter <std::string> label;
 		bool _bLoaded;
 		bool resizing = false;
+				bool autoWidth, autoHeight;
 
 };
