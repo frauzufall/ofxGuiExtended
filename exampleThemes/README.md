@@ -11,7 +11,7 @@ Pay attention to the structure of the JSON theme file. You'll find more informat
 ### Expected Behavior
 
 When starting the program you see two panels showing settings for a circle renderer. The rendered circles are displayed in the middle. You can control each set of circles with one panel.
-The left panel visualizes the standard theme of ofxGuiExtended (it looks the same if you apply no theme). The regarding JSON file is located under `bin/data/theme_default.json`. The right panel is drawn in a different theme located under `bin/data/theme_light.json`.
+The panels have different styles. The theme JSON file for the left panel is `bin/data/theme_default.json`. The right panel is styled by `bin/data/theme_light.json`.
 
 ### Other classes used in this file
 
