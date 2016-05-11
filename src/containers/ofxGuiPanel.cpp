@@ -58,6 +58,13 @@ void ofxGuiPanelHeader::generateDraw(){
 
 void ofxGuiPanelHeader::render() {
 
+	ofColor c = ofGetStyle().color;
+
+	ofBlendMode blendMode = ofGetStyle().blendingMode;
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableAlphaBlending();
+	}
+
 	ofxGuiElement::render();
 
 	ofSetColor(textColor);
@@ -65,9 +72,13 @@ void ofxGuiPanelHeader::render() {
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
 		if(_parent->getShowName()){
+
+			ofSetColor(textColor);
 			bindFontTexture();
 			textMesh.draw();
 			unbindFontTexture();
+
+
 		}
 	}
 
@@ -77,6 +88,11 @@ void ofxGuiPanelHeader::render() {
 	saveIcon.draw(saveBox);
 	if(texHackEnabled){
 		ofEnableTextureEdgeHack();
+	}
+
+	ofSetColor(c);
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableBlendMode(blendMode);
 	}
 }
 

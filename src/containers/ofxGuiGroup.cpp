@@ -36,18 +36,30 @@ ofxGuiGroupHeader::~ofxGuiGroupHeader(){
 }
 
 void ofxGuiGroupHeader::render() {
-	ofxGuiElement::render();
+	ofColor c = ofGetStyle().color;
 
-	ofSetColor(textColor);
+	ofBlendMode blendMode = ofGetStyle().blendingMode;
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableAlphaBlending();
+	}
+
+	ofxGuiElement::render();
 
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
 		if(_parent->getShowName()){
+
 			ofSetColor(textColor);
 			bindFontTexture();
 			textMesh.draw();
 			unbindFontTexture();
+
 		}
+	}
+
+	ofSetColor(c);
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableBlendMode(blendMode);
 	}
 
 }

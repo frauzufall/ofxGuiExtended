@@ -586,8 +586,19 @@ void ofxGuiElement::generateDraw(){
 
 void ofxGuiElement::render(){
 
+	ofColor c = ofGetStyle().color;
+	ofBlendMode blendMode = ofGetStyle().blendingMode;
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableAlphaBlending();
+	}
+
 	bg.draw();
 	border.draw();
+
+	ofSetColor(c);
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableBlendMode(blendMode);
+	}
 
 }
 
