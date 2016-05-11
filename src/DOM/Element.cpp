@@ -975,7 +975,7 @@ void Element::blockLayout(bool block){
 		doc->setBlockLayout(block);
 		if(!doc->isBlockingLayout()){
 			//redo layout for all elements
-			doc->redoLayout();
+//			doc->redoLayout();
 		}
 	}
 }
@@ -1006,17 +1006,14 @@ void Element::invalidateChildShape(bool recursive)
 void Element::redoLayout()
 {
 
-	if (_layout)
-	{
-		_layout->doLayout();
-	}
-
 	for(auto *child : children())
 	{
 		child->redoLayout();
 	}
 
-	setNeedsRedraw();
+	if(children().size() == 0){
+		invalidateChildShape();
+	}
 }
 
 

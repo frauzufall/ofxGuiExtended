@@ -131,21 +131,21 @@ bool Document::getAutoFillScreen() const
 
 void Document::setBlockLayout(bool blocking)
 {
-	if(blocking){
-		_blockLayoutCount++;
-		_blockLayout = true;
-	}else{
-		_blockLayoutCount--;
-		if(_blockLayoutCount == 0){
-			_blockLayout = false;
-		}
-	}
+//	if(blocking){
+//		_blockLayoutCount++;
+//		_blockLayout = true;
+//	}else{
+//		_blockLayoutCount--;
+//		if(_blockLayoutCount == 0){
+//			_blockLayout = false;
+//		}
+//	}
 }
 
 
 bool Document::isBlockingLayout()
 {
-	return _blockLayout;
+	return false;//_blockLayout;
 }
 
 

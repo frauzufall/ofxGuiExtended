@@ -778,7 +778,7 @@ LayoutType* Element::setLayout(std::unique_ptr<LayoutType> layout)
 		_layout = std::move(layout);
 
 		// Invalidate all cached child shape.
-		invalidateChildShape();
+		invalidateChildShape(false);
 
 		return pLayout;
 	}
