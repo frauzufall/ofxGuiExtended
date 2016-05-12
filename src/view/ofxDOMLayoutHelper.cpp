@@ -29,7 +29,7 @@ float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e){
 }
 
 float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e, float parentWidth){
-	float res = e->getMinWidth() + getPaddingHorizontal(e) + getMarginHorizontal(e);
+	float res = e->getMinWidth() + getPaddingHorizontal(e);
 
 	if(e->hasAttribute("_width")){
 		std::string widthstr = e->getAttribute<std::string>("_width");
@@ -37,10 +37,10 @@ float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e, float parentWidth){
 			vector<std::string> _val = JsonConfigParser::getMatchedStrings(widthstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
-				return parentWidth*amount;
+				return parentWidth*amount-getMarginHorizontal(e);
 			}
 		}else {
-			return ofToFloat(widthstr)+getMarginHorizontal(e);
+			return ofToFloat(widthstr);
 		}
 	}
 
@@ -56,7 +56,7 @@ float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e){
 }
 
 float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e, float parentHeight){
-	float res = e->getMinHeight() + getPaddingVertical(e) + getMarginVertical(e);
+	float res = e->getMinHeight() + getPaddingVertical(e);
 
 	if(e->hasAttribute("_height")){
 		std::string heightstr = e->getAttribute<std::string>("_height");
@@ -64,10 +64,10 @@ float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e, float parentHeight){
 			vector<std::string> _val = JsonConfigParser::getMatchedStrings(heightstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
 			if(_val.size() > 0){
 				float amount = ofToFloat(_val[0])/100.;
-				return parentHeight*amount;
+				return parentHeight*amount-getMarginVertical(e);
 			}
 		}else {
-			return ofToFloat(heightstr)+getMarginVertical(e);
+			return ofToFloat(heightstr);
 		}
 	}
 

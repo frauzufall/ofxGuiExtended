@@ -983,64 +983,72 @@ void Element::blockLayout(bool block){
 
 void Element::invalidateChildShape(bool recursive)
 {
-	if(DOM::Document *doc = document()){
-		if(!doc->isBlockingLayout()){
-			_childShapeInvalid = true;
-
-			if (_parent && recursive)
-			{
-				_parent->invalidateChildShape();
+	if(recursive){
+		if(_parent){
+			Size oldParent = _parent->getSize();
+			if(_parent->layout()){
+				if(_parent->layout()->isDoingLayout()){
+					if (_layout){
+						_layout->doLayout();
+					}
+				}else{
+					_parent->layout()->doLayout();
+					Size newParent = _parent->getSize();
+					if(oldParent != newParent){
+						_parent->invalidateChildShape();
+					}
+				}
 			}
-
-			if (_layout)
-			{
+		}else{
+			if (_layout){
 				_layout->doLayout();
 			}
-
-			setNeedsRedraw();
 		}
 	}
+	setNeedsRedraw();
+
+
 }
 
 
-void Element::redoLayout()
-{
+//void Element::redoLayout()
+//{
 
-	for(auto *child : children())
-	{
-		child->redoLayout();
-	}
+//	for(auto *child : children())
+//	{
+//		child->redoLayout();
+//	}
 
-	if(children().size() == 0){
-		invalidateChildShape();
-	}
-}
+//	if(children().size() == 0){
+//		invalidateChildShape();
+//	}
+//}
 
 
 void Element::_onMoved(MoveEventArgs&)
 {
-//	invalidateChildShape();
+	invalidateChildShape();
 }
 
 
 void Element::_onResized(ResizeEventArgs&)
 {
 //	if(parent()){
-//		parent()->invalidateChildShape(false);
+//		invalidateChildShape();
 //	}
 }
 
 
 void Element::_onChildMoved(MoveEventArgs &args)
 {
-	invalidateChildShape(false);
+//	invalidateChildShape(false);
 	ofNotifyEvent(childMoved, args, this);
 }
 
 
 void Element::_onChildResized(ResizeEventArgs&)
 {
-	invalidateChildShape(false);
+//	invalidateChildShape(false);
 }
 
 

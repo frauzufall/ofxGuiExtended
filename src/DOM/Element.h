@@ -542,8 +542,8 @@ public:
 	/// \brief Called internally to invalidate the child shape tree.
 	virtual void invalidateChildShape(bool recursive = true);
 
-	/// \brief Redo layout and children layouts.
-	virtual void redoLayout();
+//	/// \brief Redo layout and children layouts.
+//	virtual void redoLayout();
 
 
 protected:
@@ -678,7 +678,7 @@ ElementType* Element::add(std::unique_ptr<ElementType> element)
 		_children.push_back(std::move(element));
 
 		// Invalidate all cached child shape.
-		invalidateChildShape();
+		pNode->invalidateChildShape();
 
 		// Alert the node that its parent was set.
 		ElementEventArgs addedEvent(this);
@@ -777,8 +777,11 @@ LayoutType* Element::setLayout(std::unique_ptr<LayoutType> layout)
 		// Take ownership of the layout.
 		_layout = std::move(layout);
 
+		_layoutSize.x = 0;
+		_layoutSize.y = 0;
+
 		// Invalidate all cached child shape.
-		invalidateChildShape(false);
+		invalidateChildShape();
 
 		return pLayout;
 	}

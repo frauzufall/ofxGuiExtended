@@ -345,6 +345,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		}
 
 		invalidateChildShape();
+		setNeedsRedraw();
 
 	}
 
@@ -653,7 +654,7 @@ float ofxGuiElement::getTextWidth(const std::string & text){
 }
 
 float ofxGuiElement::getTextHeight(const std::string & text){
-	return getTextBoundingBox(text).height/2+2*textPadding;
+	return getTextBoundingBox(text).height+2*textPadding;
 }
 
 bool ofxGuiElement::isMouseOver() const{
