@@ -8,6 +8,8 @@ void ofApp::setup(){
 	renderer1.setup("renderer1");
 	renderer2.setup("renderer2");
 
+	gui.setupFlexBoxLayout();
+
 	panel1 = gui.addPanel(renderer1.parameters);
 	panel1->loadTheme("theme_default.json");
 

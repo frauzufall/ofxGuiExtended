@@ -9,9 +9,10 @@ void ofApp::setup(){
 
 	gui.setupFlexBoxLayout();
 
-	ofxGuiGroup* all = gui.addGroup("", ofJson({
+	ofxGuiGroup* all = gui.addGroup("all", ofJson({
 		{"position", "static"},
 		{"height", "100%"},
+		{"width", "100%"},
 		{"show-header", false},
 		{"background-color", "#000000"}
 	}));
@@ -48,7 +49,7 @@ void ofApp::setup(){
 	tabbed_pages->addGroup("page2", ofJson({{"background-color", "#00CA98"}}));
 	tabbed_pages->addGroup("page3", ofJson({{"background-color", "#ffaa00"}}));
 
-	//add footer group
+//	add footer group
 	ofxGuiGroup* footer = all->addGroup("footer", ofJson({
 		{"flex-direction", "row"},
 		{"show-header", false},
