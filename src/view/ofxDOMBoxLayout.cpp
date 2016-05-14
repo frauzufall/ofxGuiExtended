@@ -80,7 +80,7 @@ void ofxDOMBoxLayout::doLayout()
 
 		for (DOM::Element* element : children()){
 			if (element){
-				if(!element->isHidden()){
+				if(element->getVisible().get()){
 
 					float w = DOMLH::getDesiredWidth(element, totalWidth);
 					float h = DOMLH::getDesiredHeight(element, totalHeight);
@@ -95,14 +95,12 @@ void ofxDOMBoxLayout::doLayout()
 						w = element->getWidth();
 						h = element->getHeight();
 
-						if (getDirection(_parent) == Direction::HORIZONTAL)
-						{
+						if (getDirection(_parent) == Direction::HORIZONTAL){
 							totalHeight = std::max(totalHeight, h+DOMLH::getMarginVertical(element));
 							currentX += w + DOMLH::getMarginHorizontal(element);
 							totalWidth = currentX;
 						}
-						else
-						{
+						else{
 							totalWidth = std::max(totalWidth, w + DOMLH::getMarginHorizontal(element));
 							currentY += h + DOMLH::getMarginVertical(element);
 							totalHeight = currentY;
@@ -126,7 +124,7 @@ void ofxDOMBoxLayout::doLayout()
 		{
 			if (element)
 			{
-				if(!element->isHidden()){
+				if(element->getVisible().get()){
 
 					if(!DOMLH::elementAbsolutePositioned(element)){
 

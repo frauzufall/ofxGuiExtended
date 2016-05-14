@@ -51,6 +51,8 @@ Element::Element(const std::string& id,
 	_sizeSetByParent(0,0),
 	needsRedraw(true)
 {
+	_visible.set("visible", true);
+	_visible.addListener(this, &Element::setVisible);
 	ofAddListener(this->move, this, &Element::_onMoved);
 	ofAddListener(this->resize, this, &Element::_onResized);
 }
@@ -58,6 +60,7 @@ Element::Element(const std::string& id,
 
 Element::~Element()
 {
+	_visible.removeListener(this, &Element::setVisible);
 	ofRemoveListener(this->move, this, &Element::_onMoved);
 	ofRemoveListener(this->resize, this, &Element::_onResized);
 }
@@ -612,6 +615,7 @@ void Element::setSize(float width, float height)
 
 void Element::setLayoutSize(float width, float height, bool tellParent)
 {
+
 	if(_layoutSize.x!= width || _layoutSize.y != height)
 	{
 		_layoutSize.x = width;
@@ -620,6 +624,7 @@ void Element::setLayoutSize(float width, float height, bool tellParent)
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
+
 }
 
 
@@ -655,12 +660,14 @@ void Element::setWidth(float width)
 
 void Element::setLayoutWidth(float width, bool tellParent)
 {
+
 	if(width != _layoutSize.x){
 		_layoutSize.x = width;
 		invalidateChildShape(tellParent);
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
+
 }
 
 
@@ -690,12 +697,14 @@ void Element::setHeight(float height)
 
 void Element::setLayoutHeight(float height, bool tellParent)
 {
+
 	if(height != _layoutSize.y){
 		_layoutSize.y = height;
 		invalidateChildShape(tellParent);
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
+
 }
 
 
@@ -947,12 +956,26 @@ bool Element::isHidden() const
 
 void Element::setHidden(bool hidden_)
 {
-	if(hidden_ != _hidden){
-		_hidden = hidden_;
+	_visible.set(!hidden_);
+}
+
+
+void Element::setVisible(bool &visible)
+{
+	if(visible == _hidden){
+		_hidden = !visible;
+		if(!visible){
+			setLayoutSize(0,0);
+		}
 		invalidateChildShape();
 		EnablerEventArgs e(_hidden);
 		ofNotifyEvent(hidden, e, this);
 	}
+}
+
+
+ofParameter<bool>& Element::getVisible(){
+	return _visible;
 }
 
 

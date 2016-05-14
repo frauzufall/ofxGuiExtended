@@ -210,7 +210,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		JsonConfigParser::parse(_config, this);
 
 		//parse position type
-		DOM::LayoutPosition _position = getAttribute<DOM::LayoutPosition>("position");
+		DOM::LayoutPosition _position = getLayoutPosition();
 		JsonConfigParser::parse(_config, "position", _position);
 		if(_position != getLayoutPosition()){
 			setLayoutPosition(_position);

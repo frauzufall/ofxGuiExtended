@@ -8,7 +8,7 @@ ofxDOMLayoutHelper::ofxDOMLayoutHelper()
 }
 
 bool ofxDOMLayoutHelper::elementAbsolutePositioned(DOM::Element* e){
-	if(e->isHidden()){
+	if(!e->getVisible().get()){
 		return false;
 	}
 	if(e->hasAttribute("position")){
@@ -47,6 +47,26 @@ float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e, float parentWidth){
 	return res;
 }
 
+float ofxDOMLayoutHelper::getDesiredWidthStretched(DOM::Element* e, float parentWidth){
+	float res = e->getMinWidth() + getPaddingHorizontal(e);
+
+	if(e->hasAttribute("_width")){
+		std::string widthstr = e->getAttribute<std::string>("_width");
+		if(ofIsStringInString(widthstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(widthstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				return parentWidth*amount-getMarginHorizontal(e);
+			}
+		}else {
+			return ofToFloat(widthstr);
+		}
+	}
+
+	return max(res, parentWidth-getMarginHorizontal(e));
+}
+
+
 float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e){
 	if(e->parent()){
 		return getDesiredHeight(e, e->parent()->getHeight()-getPaddingVertical(e->parent()));
@@ -72,6 +92,25 @@ float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e, float parentHeight){
 	}
 
 	return res;
+}
+
+float ofxDOMLayoutHelper::getDesiredHeightStretched(DOM::Element* e, float parentHeight){
+	float res = e->getMinHeight() + getPaddingVertical(e);
+
+	if(e->hasAttribute("_height")){
+		std::string heightstr = e->getAttribute<std::string>("_height");
+		if(ofIsStringInString(heightstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(heightstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				return parentHeight*amount-getMarginVertical(e);
+			}
+		}else {
+			return ofToFloat(heightstr);
+		}
+	}
+
+	return max(res, parentHeight -getMarginVertical(e));
 }
 
 float ofxDOMLayoutHelper::getMarginHorizontal(DOM::Element *e){

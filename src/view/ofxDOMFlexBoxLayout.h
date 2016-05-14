@@ -108,7 +108,4 @@ protected:
 	static void setLayoutWidthMinusMargin(DOM::Element* e, float width);
 	static void setLayoutHeightMinusMargin(DOM::Element* e, float height);
 
-	static void setWidthInLayoutAddPadding(DOM::Element* e, float width);
-	static void setHeightInLayoutAddPadding(DOM::Element* e, float height);
-
 };

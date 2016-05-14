@@ -1,5 +1,7 @@
 #include "ofxDOMFlexBoxLayout.h"
 #include "ofxDOMLayoutHelper.h"
+#include "ofMain.h"
+#include "ofxGuiElement.h"
 
 typedef ofxDOMLayoutHelper DOMLH;
 
@@ -31,28 +33,16 @@ void ofxDOMFlexBoxLayout::doLayout(){
 
 	if(!_isDoingLayout){
 
-		// Prevent recursive calls to doLayout.
-		_isDoingLayout = true;
-
 		if(_parent){
-			if(_parent->parent() == nullptr){
-				_parent->setLayoutWidth(DOMLH::getDesiredWidth(_parent));
-				_parent->setLayoutHeight(DOMLH::getDesiredHeight(_parent));
-			}
-		}
 
-		if (_parent){
+			// Prevent recursive calls to doLayout.
+			_isDoingLayout = true;
 
-			if(children().size() > 0){
-				align(getFlexDirection(_parent));
-			}/*else{
-				_parent->setSizeInLayout(DOMLH::getDesiredWidth(_parent) - DOMLH::getMarginHorizontal(_parent),
-										 DOMLH::getDesiredHeight(_parent) - DOMLH::getMarginVertical(_parent));
-			}*/
+			align(getFlexDirection(_parent));
+
+			_isDoingLayout = false;
 
 		}
-
-		_isDoingLayout = false;
 
 	}
 
@@ -62,12 +52,24 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 	bool horizontal = direction == FlexDirection::ROW;
 
-//	ofxGuiElement* baseg= dynamic_cast<ofxGuiElement*>(_parent);
-//	if(baseg){
-//		if(baseg->getName() == "default"){
-//			cout << "aligning elements in " << baseg->getName() << " of size " << baseg->getSize() << " minimal: " << baseg->getMinWidth() << " x " << baseg->getMinHeight() << endl;
-//			cout << _parent->getWidth() - getPaddingHorizontal(_parent) << " " << _parent->getHeight() - getPaddingVertical(_parent) << endl;
-//		}
+	float paddingHorizontal = DOMLH::getPaddingHorizontal(_parent);
+	float paddingVertical = DOMLH::getPaddingVertical(_parent);
+
+	float marginHorizontal = DOMLH::getMarginHorizontal(_parent);
+	float marginVertical = DOMLH::getMarginVertical(_parent);
+
+	float wParent = ofGetWidth();
+	float hParent = ofGetHeight();
+	if(_parent->parent()){
+		wParent = _parent->getSizeByParent().x;
+		hParent = _parent->getSizeByParent().y;
+	}
+
+	float totalWidth = DOMLH::getDesiredWidthStretched(_parent, wParent) - paddingHorizontal;
+	float totalHeight = DOMLH::getDesiredHeightStretched(_parent, hParent) - paddingVertical;
+
+//	if(ofxGuiElement* el = dynamic_cast<ofxGuiElement*>(_parent)){
+//		cout << el->getName() << " total size: " << totalWidth << " " << totalHeight << endl;
 //	}
 
 	vector<vector<DOM::Element*>> lines;
@@ -75,14 +77,10 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 	vector<vector<DOM::Element*>> flexItems;
 	vector<vector<float>> flexItemsBasis;
 	vector<float> totalSpaceMainAxis;
-	float mainAxisSize, crossAxisSize;
-	if(horizontal){
-		mainAxisSize = _parent->getWidth() - DOMLH::getPaddingHorizontal(_parent);
-		crossAxisSize = _parent->getHeight() - DOMLH::getPaddingVertical(_parent);
-	}else{
-		mainAxisSize = _parent->getHeight() - DOMLH::getPaddingVertical(_parent);
-		crossAxisSize = _parent->getWidth() - DOMLH::getPaddingHorizontal(_parent);
-	}
+
+	float mainAxisSize =  horizontal ? totalWidth : totalHeight;
+	float crossAxisSize = horizontal ? totalHeight : totalWidth;
+
 	int linecount = 0;
 
 	if(children().size() > 0){
@@ -94,16 +92,38 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 		totalSpaceMainAxis.push_back(mainAxisSize);
 	}
 
-	//sort children according to flex attribute
+	//sort children according to flex attribute and main size of children
 
 	for(unsigned int i = 0; i < children().size(); i++){
 
 		DOM::Element* element = children().at(i);
-		float elementMainSize = horizontal ? DOMLH::getDesiredWidth(element) : DOMLH::getDesiredHeight(element);
-		float elementCrossSize = horizontal ? DOMLH::getDesiredHeight(element) : DOMLH::getDesiredWidth(element);
+		float w, h;
+		if(horizontal){
+			w = DOMLH::getDesiredWidth(element, totalWidth);
+			h = DOMLH::getDesiredHeight(element, totalHeight);
+		}else{
+			w = DOMLH::getDesiredWidth(element, totalWidth);
+			h = DOMLH::getDesiredHeight(element, totalHeight);
+		}
+
+		float elementMainSize = horizontal ? w : h;
+		float elementCrossSize = horizontal ? h : w;
 
 		if(element){
 			if(elementFlexing(element)){
+
+//				element->setSizeByParent(totalWidth, totalHeight);
+
+				// set to minimal size on main axis
+				if(horizontal){
+					element->setSizeByParent(elementMainSize + DOMLH::getMarginHorizontal(element), elementCrossSize + DOMLH::getMarginVertical(element));
+					element->setLayoutSize(elementMainSize, elementCrossSize, true);
+					elementMainSize = element->getWidth() + DOMLH::getMarginHorizontal(element);
+				}else {
+					element->setSizeByParent(elementCrossSize + DOMLH::getMarginHorizontal(element), elementMainSize + DOMLH::getMarginVertical(element));
+					element->setLayoutSize(elementCrossSize, elementMainSize, true);
+					elementMainSize = element->getHeight() + DOMLH::getMarginVertical(element);
+				}
 
 				//if element is flexible, add it to the current line and save the items flex basis
 				if(element->hasAttribute("_flex")){
@@ -127,15 +147,11 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 				// not flexible or no valid flex attribute, not flexing on main axis
 
+				// add to new line if it does not fit and flex-wrap is on
 				if((int)totalSpaceMainAxis.at(linecount) - (int)elementMainSize < 0){
 					FlexWrap _wrap = getFlexWrap(_parent);
 					if(_wrap == FlexWrap::NOWRAP || i == 0){
 						//no new line
-						if(horizontal){
-							setWidthInLayoutAddPadding(_parent, mainAxisSize + elementMainSize-totalSpaceMainAxis.at(linecount));
-						}else {
-							setHeightInLayoutAddPadding(_parent, mainAxisSize + elementMainSize-totalSpaceMainAxis.at(linecount));
-						}
 					}else{
 						//new line
 						linecount++;
@@ -145,39 +161,14 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 						totalSpaceMainAxis.push_back(mainAxisSize);
 					}
 				}
-				// set to minimal size on main axis
-				if(horizontal){
-					setLayoutWidthMinusMargin(element, elementMainSize);
-				}else {
-					setLayoutHeightMinusMargin(element, elementMainSize);
-				}
+
 				lines.at(linecount).push_back(element);
 				totalSpaceMainAxis.at(linecount) -= elementMainSize;
 			}else {
 				//set an absolute positioned element to its desired independent size
 				if(DOMLH::elementAbsolutePositioned(element)){
-//					cout << "absolute element " << elementMainSize << " " << elementCrossSize << endl;
-//					float w = element->getChildShape().getRight()+getPaddingRight(element);
-//					float h = element->getChildShape().getBottom()+getPaddingBottom(element);
-//					if(horizontal){
-//						element->setSizeInLayout(max(w,elementMainSize), max(h,elementCrossSize));
-//					}else {
-//						element->setSizeInLayout(max(w,elementCrossSize), max(h,elementMainSize));
-//					}
 
-					if(element->layout()){
-						if(element->layout()->isDoingLayout()){
-							continue;
-						}
-					}
-
-					if(horizontal){
-						element->setLayoutSize(elementMainSize, elementCrossSize);
-					}else {
-						element->setLayoutSize(elementCrossSize, elementMainSize);
-					}
-
-					element->invalidateChildShape(false);
+					element->setLayoutSize(w, h);
 
 				}
 			}
@@ -191,18 +182,25 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 		for(int parts : flexItemsBasis.at(i)){
 			partscount += parts;
 		}
-		float partsize = totalSpaceMainAxis.at(i)/partscount;
+
 		if(partscount > 0){
+
+			float partsize = totalSpaceMainAxis.at(i)/partscount;
+
 			totalSpaceMainAxis.at(i) = 0;
-		}
-		for(unsigned int j = 0; j < flexItems.at(i).size(); j++){
-			DOM::Element* element = flexItems.at(i).at(j);
-			if(horizontal){
-				setLayoutWidthMinusMargin(element, flexItemsBasis.at(i).at(j)*partsize);
-			}else{
-				setLayoutHeightMinusMargin(element, flexItemsBasis.at(i).at(j)*partsize);
+
+			for(unsigned int j = 0; j < flexItems.at(i).size(); j++){
+				DOM::Element* element = flexItems.at(i).at(j);
+				if(horizontal){
+					element->setSizeByParent(flexItemsBasis.at(i).at(j)*partsize, element->getSizeByParent().y);
+					setLayoutWidthMinusMargin(element, flexItemsBasis.at(i).at(j)*partsize);
+				}else{
+					element->setSizeByParent(element->getSizeByParent().x, flexItemsBasis.at(i).at(j)*partsize);
+					setLayoutHeightMinusMargin(element, flexItemsBasis.at(i).at(j)*partsize);
+				}
 			}
 		}
+
 	}
 
 	//set cross size of items if they stretch
@@ -216,7 +214,9 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 		float lineSize = 0;
 		for(auto e : lines.at(i)){
-			float elementCrossSize = horizontal ? DOMLH::getDesiredHeight(e) : DOMLH::getDesiredWidth(e);
+			float elementCrossSize = horizontal ?
+						e->getHeight()+DOMLH::getMarginVertical(e) :
+						e->getWidth()+DOMLH::getMarginHorizontal(e);
 			AlignSelf alignSelf = getAlignSelf(e);
 			if(((alignSelf != AlignSelf::AUTO) && (alignSelf != AlignSelf::STRETCH)) ||
 			  ((alignSelf == AlignSelf::AUTO) && (alignItems != AlignItems::STRETCH))){
@@ -253,7 +253,10 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 		float lineSize = lineSizes.at(i);
 		for(auto e : lines.at(i)){
-			float elementCrossSize = horizontal ? DOMLH::getDesiredHeight(e) : DOMLH::getDesiredWidth(e);
+			float elementCrossSize = horizontal ?
+						e->getHeight()+DOMLH::getMarginVertical(e) :
+						e->getWidth()+DOMLH::getMarginHorizontal(e);
+
 			if(elementCrossSize > lineSize){
 				lineSize = elementCrossSize;
 			}
@@ -268,7 +271,7 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 	if(newCrossAxisSize > crossAxisSize){
 		totalSpaceCrossAxis = 0;
 //		if(horizontal){
-//			setHeightInLayoutAddPadding(_parent, newCrossAxisSize);
+//			setHeightInLayoutAddPadding_parent, newCrossAxisSize);
 //		}else {
 //			setWidthInLayoutAddPadding(_parent, newCrossAxisSize);
 //		}
@@ -305,14 +308,15 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 		}
 	}
 
+	totalWidth += paddingHorizontal;
+	totalHeight += paddingVertical;
+
 	float parentPaddingLeft = DOMLH::getPaddingLeft(_parent);
 	float parentPaddingTop = DOMLH::getPaddingTop(_parent);
 
 	float currentMainPos = 0;
 	float currentCrossPos = spacingCrossAxisStart;
 	currentCrossPos += horizontal ? parentPaddingTop : parentPaddingLeft;
-
-	float maxX = 0, maxY = 0;
 
 	for(unsigned int i = 0; i < lines.size(); i++){
 
@@ -349,15 +353,11 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 			if(alignSelf == AlignSelf::STRETCH ||
 			  ((alignSelf == AlignSelf::AUTO) && (alignItems == AlignItems::STRETCH))){
 				if(horizontal){
+					element->setSizeByParent(element->getSizeByParent().x, lineSizes.at(i));
 					setLayoutHeightMinusMargin(element, lineSizes.at(i));
 				}else{
+					element->setSizeByParent(lineSizes.at(i), element->getSizeByParent().y);
 					setLayoutWidthMinusMargin(element, lineSizes.at(i));
-				}
-			}else {
-				if(horizontal){
-					setLayoutHeightMinusMargin(element, DOMLH::getDesiredHeight(element));
-				}else{
-					setLayoutWidthMinusMargin(element, DOMLH::getDesiredWidth(element));
 				}
 			}
 
@@ -406,8 +406,8 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 				DOMLH::setPosition(element, ofPoint(elementCrossPos, elementMainPos));
 			}
 
-			maxX = max(maxX, element->getShape().getRight()+DOMLH::getMarginRight(element));
-			maxY = max(maxY, element->getShape().getBottom()+DOMLH::getMarginBottom(element));
+			totalWidth = max(totalWidth, element->getShape().getRight()+DOMLH::getMarginRight(element)+DOMLH::getPaddingRight(_parent));
+			totalHeight = max(totalHeight, element->getShape().getBottom()+DOMLH::getMarginBottom(element)+DOMLH::getPaddingBottom(_parent));
 
 			currentMainPos += elementMainSize + spacingMainAxisBetween;
 
@@ -419,18 +419,25 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 
 	//make sure parent element contains all child elements on the main axis
-	maxX += DOMLH::getPaddingRight(_parent);
-	maxY += DOMLH::getPaddingBottom(_parent);
-	if(horizontal){
-		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
-	}else{
-		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
-	}
+//	maxX += DOMLH::getPaddingRight(_parent);
+//	maxY += DOMLH::getPaddingBottom(_parent);
+//	if(horizontal){
+//		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
+//	}else{
+//		_parent->setLayoutSize(max(maxX,_parent->getWidth()), max(maxY,_parent->getHeight()));
+//	}
+
+//	if(ofxGuiElement* el = dynamic_cast<ofxGuiElement*>(_parent)){
+//		cout << el->getName() << " total size end: " << totalWidth << " " << totalHeight << endl;
+//	}
+
+	_parent->setLayoutSize(totalWidth, totalHeight, false);
+	_parent->setNeedsRedraw();
 
 }
 
 bool ofxDOMFlexBoxLayout::elementFlexing(DOM::Element* e){
-	if(e->isHidden()){
+	if(!e->getVisible().get()){
 		return false;
 	}
 	if(e->hasAttribute("position")){
@@ -445,16 +452,6 @@ float ofxDOMFlexBoxLayout::getWidthPlusMargin(DOM::Element* e){
 	return e->getWidth() + DOMLH::getMarginHorizontal(e);
 }
 
-void ofxDOMFlexBoxLayout::setWidthInLayoutAddPadding(DOM::Element* e, float width){
-	if(e->layout()){
-		if(e->layout()->isDoingLayout()){
-			return;
-		}
-	}
-	width += DOMLH::getPaddingHorizontal(e);
-	e->setLayoutWidth(width);
-}
-
 void ofxDOMFlexBoxLayout::setLayoutWidthMinusMargin(DOM::Element* e, float width){
 	if(e->layout()){
 		if(e->layout()->isDoingLayout()){
@@ -467,16 +464,6 @@ void ofxDOMFlexBoxLayout::setLayoutWidthMinusMargin(DOM::Element* e, float width
 
 float ofxDOMFlexBoxLayout::getHeightPlusMargin(DOM::Element* e){
 	return e->getHeight() + DOMLH::getMarginVertical(e);
-}
-
-void ofxDOMFlexBoxLayout::setHeightInLayoutAddPadding(DOM::Element* e, float height){
-	if(e->layout()){
-		if(e->layout()->isDoingLayout()){
-			return;
-		}
-	}
-	height += DOMLH::getPaddingVertical(e);
-	e->setLayoutHeight(height);
 }
 
 void ofxDOMFlexBoxLayout::setLayoutHeightMinusMargin(DOM::Element* e, float height){

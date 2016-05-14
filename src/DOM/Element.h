@@ -31,6 +31,7 @@
 #include "EventTarget.h"
 #include "Exceptions.h"
 #include "Types.h"
+#include "ofParameter.h"
 
 
 namespace DOM {
@@ -522,12 +523,19 @@ public:
 	/// \param enabled The enabled state to set. True to enable, false to disable.
 	void setEnabled(bool enabled);
 
-	/// \returns true iff the Element is hidden.
+	/// \returns true iff the Element is visible.
 	bool isHidden() const;
 
 	/// \brief Hide or show this Element.
 	/// \param hidden The visible state to set. True to hide, false to show.
 	void setHidden(bool hidden);
+
+	/// \brief Hide or show this Element.
+	/// \param visible The visible state to set. False to hide, true to show.
+	void setVisible(bool& visible);
+
+	/// \returns A parameter that determines if the element is visible or not.
+	ofParameter<bool>& getVisible();
 
 	/// \returns true iff the Element is locked.
 	bool isLocked() const;
@@ -545,6 +553,9 @@ public:
 //	/// \brief Redo layout and children layouts.
 //	virtual void redoLayout();
 
+	/// \brief A method to call generateDraw() next time before the object is rendered
+	void setNeedsRedraw();
+
 
 protected:
 	/// \brief Setup method called by parent Element.
@@ -561,9 +572,6 @@ protected:
 
 	/// \brief Render method to draw content on screen
 	virtual void render(){}
-
-	/// \brief A method to call generateDraw() next time before the object is rendered
-	void setNeedsRedraw();
 
 	/// \brief A method to generate the content drawn by render()
 	virtual void generateDraw(){}
@@ -625,11 +633,13 @@ protected:
 	/// \brief The enabled state of this Element.
 	bool _enabled = true;
 
-	/// \brief The visibility of this Element.
+	/// \brief The hidden state of this Element.
 	bool _hidden = false;
 
 	/// \brief The locked state of this Element.
 	bool _locked = false;
+
+	ofParameter<bool> _visible;
 
 	/// \brief A collection of named attributes.
 	/// \todo This may not be permanent.
