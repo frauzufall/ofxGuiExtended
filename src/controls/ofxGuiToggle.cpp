@@ -101,11 +101,12 @@ bool ofxGuiToggle::mouseReleased(ofMouseEventArgs & args){
 
 void ofxGuiToggle::generateDraw(){
 
+	float maxSize = min(getHeight(), getWidth());
 	switch(type){
 		default:
 		case ofxGuiToggleType::RADIO:
 		case ofxGuiToggleType::CHECKBOX: {
-			checkboxRect.set(0, 0, getHeight(), getHeight());
+			checkboxRect.set(0, (getHeight()-maxSize)/2, maxSize, maxSize);
 			break;
 		}
 		case ofxGuiToggleType::FULLSIZE: {
