@@ -9,6 +9,9 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+		void exit();
+
+		void drawMousePosition(ofEventArgs&);
 
 		void keyPressed  (int key);
 		void keyReleased(int key);
@@ -29,4 +32,9 @@ class ofApp : public ofBaseApp{
 		ofParameter<std::string> testString;
 		ofParameter<ofColor> testColor;
 		ofParameter<ofPoint> testPoint;
+
+		ofPoint dragStart;
+		bool dragging;
+		ofBitmapFont font;
+
 };

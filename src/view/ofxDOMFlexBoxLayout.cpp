@@ -55,9 +55,6 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 	float paddingHorizontal = DOMLH::getPaddingHorizontal(_parent);
 	float paddingVertical = DOMLH::getPaddingVertical(_parent);
 
-	float marginHorizontal = DOMLH::getMarginHorizontal(_parent);
-	float marginVertical = DOMLH::getMarginVertical(_parent);
-
 	float wParent = ofGetWidth();
 	float hParent = ofGetHeight();
 	if(_parent->parent()){

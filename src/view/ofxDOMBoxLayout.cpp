@@ -52,6 +52,8 @@ void ofxDOMBoxLayout::doLayout()
 		// Prevent recursive calls to doLayout.
 		_isDoingLayout = true;
 
+		bool horizontal = getDirection(_parent) == Direction::HORIZONTAL;
+
 //		if(ofxGuiElement* el = dynamic_cast<ofxGuiElement*>(_parent)){
 //			cout << el->getName() << endl;
 //		}
@@ -95,15 +97,15 @@ void ofxDOMBoxLayout::doLayout()
 						w = element->getWidth();
 						h = element->getHeight();
 
-						if (getDirection(_parent) == Direction::HORIZONTAL){
+						if(horizontal){
 							totalHeight = std::max(totalHeight, h+DOMLH::getMarginVertical(element));
 							currentX += w + DOMLH::getMarginHorizontal(element);
-							totalWidth = currentX;
+//							totalWidth = currentX;
 						}
 						else{
 							totalWidth = std::max(totalWidth, w + DOMLH::getMarginHorizontal(element));
 							currentY += h + DOMLH::getMarginVertical(element);
-							totalHeight = currentY;
+//							totalHeight = currentY;
 						}
 					}else{
 						element->setLayoutSize(w, h);
@@ -113,7 +115,14 @@ void ofxDOMBoxLayout::doLayout()
 			}
 		}
 
-		if (getDirection(_parent) == Direction::HORIZONTAL){
+		if(horizontal){
+			totalWidth = max(currentX, totalWidth);
+		}else{
+			totalHeight = max(currentY, totalHeight);
+		}
+
+
+		if (horizontal){
 			totalWidth += DOMLH::getPaddingRight(_parent);
 		}else{
 			totalHeight += DOMLH::getPaddingBottom(_parent);
@@ -128,7 +137,7 @@ void ofxDOMBoxLayout::doLayout()
 
 					if(!DOMLH::elementAbsolutePositioned(element)){
 
-						if (getDirection(_parent) == Direction::HORIZONTAL){
+						if (horizontal){
 							float h = totalHeight-DOMLH::getMarginVertical(element);
 							element->setLayoutHeight(h, true);
 						}else{
@@ -141,7 +150,7 @@ void ofxDOMBoxLayout::doLayout()
 			}
 		}
 
-		if (getDirection(_parent) == Direction::HORIZONTAL){
+		if(horizontal){
 			totalHeight += paddingVertical;
 		}else{
 			totalWidth += paddingHorizontal;
