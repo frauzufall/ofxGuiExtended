@@ -19,7 +19,8 @@ void ofApp::setup(){
 
 	ofxGuiGroup* control = gui_control.addPanel("", ofJson({
 		{"show-header", false},
-		{"direction", "horizontal"}
+		{"direction", "horizontal"},
+		{"left", 300}
 	}));
 	control->setExclusiveToggles(true);
 	control->add(gui_box.getDocument()->getVisible().set("box layout", false));
@@ -33,10 +34,12 @@ void ofApp::setup(){
 
 	for(ofxGui* gui : guis){
 
+		gui->add(testBool, testFloat);
+
 		vector<ofxGuiGroup*> panels;
 
 		ofxGuiGroup* panel1 = gui->addPanel();
-		panel1->setPosition(10, 80);
+		panel1->setPosition(10, 130);
 		panel1->loadTheme("theme_default.json");
 
 		ofxGuiGroup* panel2 = gui->addPanel();
@@ -64,14 +67,14 @@ void ofApp::setup(){
 		panel3->add(testBool);
 		panel3->add(testBool);
 
-		ofxGuiGroup* panel4 = gui->addGroup("", ofJson({
-														   {"width", 270}
-													   }));
+		ofxGuiGroup* panel4 = gui->addPanel();
 		panel4->setPosition(panel3->getPosition().x, panel3->getPosition().y +  panel3->getHeight()+10);
+		panel4->add(testFloat);
 		ofxGuiGroup* panel4_vertical = panel4->addGroup("", ofJson({
 			{"show-header", false},
 			{"direction", "horizontal"},
-			{"flex-direction", "row"}
+			{"flex-direction", "row"},
+			{"width", 270}
 		}));
 		panel4_vertical->add(testBool, ofJson({
 			{"type", "radio"},
@@ -80,7 +83,6 @@ void ofApp::setup(){
 		}));
 		panel4_vertical->add(testFloat, ofJson({{"width", "45%"}}));
 		panel4_vertical->add(testFloat, ofJson({{"width", "45%"}}));
-		panel4->add(testFloat);
 
 
 		//give the flexbox layout a different color to be able to see that something happens when you change the layout

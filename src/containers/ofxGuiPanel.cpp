@@ -200,6 +200,7 @@ void ofxGuiPanel::onHeaderMove(DOM::MoveEventArgs &args){
 	ofPoint screenThisPos = getScreenPosition();
 	ofPoint diff = screenHeaderPos-screenThisPos;
 	setPosition(getPosition()+diff);
+	invalidateChildShape();
 }
 
 void ofxGuiPanel::onLoadPressed(){

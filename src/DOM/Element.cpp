@@ -998,7 +998,7 @@ void Element::blockLayout(bool block){
 		doc->setBlockLayout(block);
 		if(!doc->isBlockingLayout()){
 			//redo layout for all elements
-//			doc->redoLayout();
+			doc->invalidateChildShape();
 		}
 	}
 }
@@ -1006,29 +1006,33 @@ void Element::blockLayout(bool block){
 
 void Element::invalidateChildShape(bool recursive)
 {
-	if(recursive){
-		if(_parent){
-			Size oldParent = _parent->getSize();
-			if(_parent->layout()){
-				if(_parent->layout()->isDoingLayout()){
+	if(DOM::Document* doc = document()){
+		if(!doc->isBlockingLayout()){
+			if(recursive){
+				if(_parent){
+					Size oldParent = _parent->getSize();
+					if(_parent->layout()){
+						if(_parent->layout()->isDoingLayout()){
+							if (_layout){
+								_layout->doLayout();
+							}
+						}else{
+							_parent->layout()->doLayout();
+							Size newParent = _parent->getSize();
+							if(oldParent != newParent){
+								_parent->invalidateChildShape();
+							}
+						}
+					}
+				}else{
 					if (_layout){
 						_layout->doLayout();
 					}
-				}else{
-					_parent->layout()->doLayout();
-					Size newParent = _parent->getSize();
-					if(oldParent != newParent){
-						_parent->invalidateChildShape();
-					}
 				}
 			}
-		}else{
-			if (_layout){
-				_layout->doLayout();
-			}
+			setNeedsRedraw();
 		}
 	}
-	setNeedsRedraw();
 
 
 }
@@ -1050,7 +1054,7 @@ void Element::invalidateChildShape(bool recursive)
 
 void Element::_onMoved(MoveEventArgs&)
 {
-	invalidateChildShape();
+//	invalidateChildShape();
 }
 
 
@@ -1064,7 +1068,7 @@ void Element::_onResized(ResizeEventArgs&)
 
 void Element::_onChildMoved(MoveEventArgs &args)
 {
-//	invalidateChildShape(false);
+//	invalidateChildShape();
 	ofNotifyEvent(childMoved, args, this);
 }
 

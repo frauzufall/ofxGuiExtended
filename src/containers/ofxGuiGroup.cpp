@@ -449,6 +449,7 @@ int ofxGuiGroup::getControlIndex(const std::string& name){
 
 void ofxGuiGroup::minimize(){
 	minimized = true;
+//	blockLayout(true);
 //	widthMaximized = getWidth();
 //	heightMaximized = getHeight();
 
@@ -456,20 +457,21 @@ void ofxGuiGroup::minimize(){
 		child->setHidden(true);
 	}
 
-	invalidateChildShape();
+//	blockLayout(false);
 
 //	setLayoutSize(header->getWidth(), header->getHeight());
 }
 
 void ofxGuiGroup::maximize(){
 	minimized = false;
+//	blockLayout(true);
 
 	for(auto& child : getControls()){
 		child->setHidden(false);
 	}
 //	setLayoutSize(widthMaximized, heightMaximized);
 
-	invalidateChildShape();
+//	blockLayout(false);
 }
 
 void ofxGuiGroup::minimizeAll(){

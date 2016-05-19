@@ -574,14 +574,14 @@ void ofxGuiElement::generateDraw(){
 	bg.setFillColor(backgroundColor);
 	bg.setFilled(true);
 	bg.setStrokeWidth(0);
-	bg.rectangle((int)borderWidth,(int)borderWidth,(int)(getWidth()-borderWidth*2),(int)(getHeight()-borderWidth*2));
+	bg.rectangle(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2);
 
 	border.clear();
 	border.setFilled(true);
 	border.setStrokeWidth(0);
 	border.setFillColor(borderColor);
-	border.rectangle(0,0,(int)getWidth(),(int)getHeight());
-	border.rectangle((int)borderWidth,(int)borderWidth,(int)(getWidth()-borderWidth*2),(int)(getHeight()-borderWidth*2));
+	border.rectangle(0,0,getWidth(),getHeight());
+	border.rectangle(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2);
 
 }
 
