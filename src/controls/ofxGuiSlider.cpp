@@ -52,6 +52,7 @@ template<typename DataType>
 void ofxGuiSlider<DataType>::setup(){
 
 	hasFocus = false;
+	showValue.set("show-value", true);
 	updateOnReleaseOnly.set("update-on-release-only", false);
 	precision.set("precision", 6);
 	type.set("type", ofxGuiSliderType::STRAIGHT);
@@ -71,6 +72,7 @@ void ofxGuiSlider<DataType>::_setConfig(const ofJson &config){
 
 	JsonConfigParser::parse(config, updateOnReleaseOnly);
 	JsonConfigParser::parse(config, precision);
+	JsonConfigParser::parse(config, showValue);
 
 	if (config.find(type.getName()) != config.end()) {
 		std::string val = config[type.getName()];
@@ -303,7 +305,9 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 			if(showName){
 				textMesh.append(getTextMesh(getName(), ofPoint(textPadding, getHeight() / 2 + 4)));
 			}
-			textMesh.append(getTextMesh(valStr, getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4));
+			if(showValue){
+				textMesh.append(getTextMesh(valStr, getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4));
+			}
 		}else{
 			textMesh.clear();
 			if(showName){
@@ -313,10 +317,12 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 				}
 				textMesh.append(getTextMesh(nameStr, textPadding, textPadding + getTextBoundingBox(nameStr, 0, 0).height));
 			}
-			while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && valStr.length() > 1){
-				valStr = valStr.substr(0, valStr.size() - 1);
+			if(showValue){
+				while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && valStr.length() > 1){
+					valStr = valStr.substr(0, valStr.size() - 1);
+				}
+				textMesh.append(getTextMesh(valStr, textPadding, getHeight() - textPadding));
 			}
-			textMesh.append(getTextMesh(valStr, textPadding, getHeight() - textPadding));
 		}
 	}
 	if(type == ofxGuiSliderType::CIRCULAR){
@@ -325,7 +331,9 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 		if(showName){
 			textMesh.append(getTextMesh(getName(), textPadding, getShape().height - textPadding));
 		}
-		textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, getShape().height - textPadding));
+		if(showValue){
+			textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, getShape().height - textPadding));
+		}
 
 	}
 }
@@ -338,7 +346,7 @@ void ofxGuiSlider<DataType>::render(){
 
 	bar.draw();
 
-	if(showName){
+//	if(showName){
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode!=OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();
@@ -353,7 +361,7 @@ void ofxGuiSlider<DataType>::render(){
 		if(blendMode!=OF_BLENDMODE_ALPHA){
 			ofEnableBlendMode(blendMode);
 		}
-	}
+//	}
 }
 
 

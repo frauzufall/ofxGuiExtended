@@ -85,6 +85,7 @@ protected:
 	ofVboMesh textMesh;
 
 	ofParameter<bool> updateOnReleaseOnly;
+	ofParameter<bool> showValue;
 	ofParameter<unsigned int> precision;
 	/// \brief The Slider orientation.
 	bool horizontal;
