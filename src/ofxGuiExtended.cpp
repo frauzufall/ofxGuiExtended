@@ -18,6 +18,10 @@ DOM::Document* ofxGui::getDocument(){
 	return document.get();
 }
 
+ofParameter<bool>& ofxGui::getVisible(){
+	return getDocument()->getVisible();
+}
+
 ofxGuiGroup* ofxGui::addGroup(const std::string& name, const ofJson& config){
 	return getDocument()->add<ofxGuiGroup>(name, rootGroupConfig(config));
 }

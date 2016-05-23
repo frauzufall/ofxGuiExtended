@@ -51,6 +51,9 @@ class ofxGui {
 		/// \returns The root DOM::Document.
 		DOM::Document* getDocument();
 
+		/// \returns A parameter that determines if the gui is visible or not.
+		ofParameter<bool>& getVisible();
+
 		/// \brief Add a group to the document.
 		/// A group is a container of elements with a header to minimize the group.
 		/// \param name The group name.
