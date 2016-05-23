@@ -70,5 +70,9 @@ protected:
 	virtual bool setValue(float mx, float my, bool bCheck) override;
 	virtual void generateDraw() override;
 	void valueChanged(bool & value);
+#ifndef USE_FONTSTASH
 	ofVboMesh textMesh;
+#endif
+	ofPoint textPos;
+
 };

@@ -73,7 +73,22 @@ void ofxGuiElement::setup(){
 
 	bRegisteredForMouseEvents = false;
 	fontLoaded = false;
+	fontSize.set("font-size", 20);
+
+#ifdef USE_FONTSTASH
+	font.setup("Arial Unicode.ttf", //font file, ttf only
+						  1.0,					//lineheight percent
+						  1024,					//texture atlas dimension
+						  true,					//create mipmaps of the font, useful to scale down the font at smaller sizes
+						  8,					//texture atlas element padding, shouldbe >0 if using mipmaps otherwise
+						  2.0f					//dpi scaleup, render textures @2x the reso
+						  );					//lower res mipmaps wil bleed into each other
+	font.setSize(fontSize);
+//	font.loadFont("Arial Unicode.ttf", fontSize);
+#else
 	useTTF = false;
+#endif
+
 
 	textPadding.set("text-padding", 4);
 	headerBackgroundColor.set("header-background-color", ofColor(255));
@@ -81,7 +96,6 @@ void ofxGuiElement::setup(){
 	borderColor.set("border-color", ofColor(0));
 	textColor.set("text-color", ofColor(0));
 	fillColor.set("fill-color", ofColor(100));
-	fontSize.set("font-size", 10);
 	showName.set("show-name", true);
 	borderWidth.set("border-width", 1);
 	setLayoutPosition(DOM::LayoutPosition::STATIC);
@@ -378,11 +392,18 @@ ofAbstractParameter& ofxGuiElement::getParameter(){
 }
 
 void ofxGuiElement::loadFont(const std::string& filename, int fontsize, bool _bAntiAliased, bool _bFullCharacterSet, int dpi){
+#ifdef USE_FONTSTASH
+	font = ofxFontStash();
+	font.loadFont(filename, fontSize);
+	fontSize.set(fontsize);
+#else
 	font.load(filename, fontsize, _bAntiAliased, _bFullCharacterSet, false, 0, dpi);
-	fontLoaded = true;
 	useTTF = true;
+#endif
+	fontLoaded = true;
 }
 
+#ifndef USE_FONTSTASH
 void ofxGuiElement::setUseTTF(bool bUseTTF){
 	if(bUseTTF && !fontLoaded){
 		loadFont(OF_TTF_MONO, fontSize, true, true);
@@ -417,13 +438,18 @@ ofMesh ofxGuiElement::getTextMesh(const string & text, float x, float y){
 		return bitmapFont.getMesh(text, x, y);
 	}
 }
+#endif
 
 ofRectangle ofxGuiElement::getTextBoundingBox(const string & text, float x, float y){
+#ifndef USE_FONTSTASH
 	if(useTTF){
 		return font.getStringBoundingBox(text, x, y);
 	}else{
 		return bitmapFont.getBoundingBox(text, x, y);
 	}
+#else
+	font.getBBox(text, fontSize, x, y);
+#endif
 }
 
 void ofxGuiElement::saveToFile(const std::string& filename){
@@ -651,11 +677,19 @@ void ofxGuiElement::loadStencilFromHex(ofImage & img, unsigned char * data){
 }
 
 float ofxGuiElement::getTextWidth(const std::string & text){
+#ifndef USE_FONTSTASH
 	return getTextBoundingBox(text).width+2*textPadding;
+#else
+	return font.stringWidth(text);
+#endif
 }
 
 float ofxGuiElement::getTextHeight(const std::string & text){
+#ifndef USE_FONTSTASH
 	return getTextBoundingBox(text).height+2*textPadding;
+#else
+	return font.stringHeight(text);
+#endif
 }
 
 bool ofxGuiElement::isMouseOver() const{

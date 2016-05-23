@@ -44,7 +44,11 @@ class ofxGuiGroupHeader : public ofxGuiElement {
 
 		virtual void generateDraw() override;
 		virtual void render() override;
+#ifndef USE_FONTSTASH
 		ofVboMesh textMesh;
+#endif
+		std::string leftStr, rightStr;
+		ofPoint leftStrPos, rightStrPos;
 
 };
 

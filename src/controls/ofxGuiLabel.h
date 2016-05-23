@@ -49,7 +49,10 @@ protected:
 	virtual void generateDraw() override;
 	void valueChanged(Type & value);
 	bool setValue(float mx, float my){return false;}
+#ifndef USE_FONTSTASH
 	ofVboMesh textMesh;
+#endif
+	std::string renderedName;
 };
 
 typedef ofxGuiValueLabel<std::string> ofxGuiLabel;

@@ -65,7 +65,9 @@ protected:
 	virtual void generateDraw() override;
 	virtual void generateText();
 	void valueChanged(Type & value);
+#ifndef USE_FONTSTASH
 	ofVboMesh textMesh;
+#endif
 
 	bool bRegisteredForKeyEvents;
 

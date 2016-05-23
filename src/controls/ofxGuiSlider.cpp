@@ -297,45 +297,58 @@ void ofxGuiSlider<unsigned char>::generateText(){
 
 template<typename DataType>
 void ofxGuiSlider<DataType>::_generateText(std::string valStr){
-
+	_nameStr = "";
+	_valueStr = "";
 	if(type == ofxGuiSliderType::STRAIGHT){
 
 		if(horizontal){
-			textMesh.clear();
 			if(showName){
-				textMesh.append(getTextMesh(getName(), ofPoint(textPadding, getHeight() / 2 + 4)));
+				_nameStr = getName();
+				_namePos = ofPoint(textPadding, getHeight() / 2 + 4);
 			}
 			if(showValue){
-				textMesh.append(getTextMesh(valStr, getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4));
+				_valueStr = valStr;
+				_valuePos = ofPoint(getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4);
 			}
 		}else{
-			textMesh.clear();
 			if(showName){
 				string nameStr = getName();
 				while(getTextBoundingBox(nameStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && nameStr.length() > 1){
 					nameStr = nameStr.substr(0, nameStr.size() - 1);
 				}
-				textMesh.append(getTextMesh(nameStr, textPadding, textPadding + getTextBoundingBox(nameStr, 0, 0).height));
+				_nameStr = nameStr;
+				_namePos = ofPoint(textPadding, textPadding + getTextBoundingBox(nameStr, 0, 0).height);
 			}
 			if(showValue){
 				while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && valStr.length() > 1){
 					valStr = valStr.substr(0, valStr.size() - 1);
 				}
-				textMesh.append(getTextMesh(valStr, textPadding, getHeight() - textPadding));
+				_valueStr = valStr;
+				_valuePos = ofPoint(textPadding, getHeight() - textPadding);
 			}
 		}
 	}
 	if(type == ofxGuiSliderType::CIRCULAR){
 
-		textMesh.clear();
 		if(showName){
-			textMesh.append(getTextMesh(getName(), textPadding, getShape().height - textPadding));
+			_nameStr = getName();
+			_namePos = ofPoint(textPadding, getShape().height - textPadding);
 		}
 		if(showValue){
-			textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, getShape().height - textPadding));
+			_valueStr = valStr;
+			_valuePos = ofPoint(getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, getShape().height - textPadding);
 		}
 
 	}
+#ifndef USE_FONTSTASH
+	textMesh.clear();
+	if(showName){
+		textMesh.append(_nameStr, _namePos);
+	}
+	if(showValue){
+		textMesh.append(_valueStr, _valuePos);
+	}
+#endif
 }
 
 template<typename DataType>
@@ -346,22 +359,29 @@ void ofxGuiSlider<DataType>::render(){
 
 	bar.draw();
 
-//	if(showName){
-		ofBlendMode blendMode = ofGetStyle().blendingMode;
-		if(blendMode!=OF_BLENDMODE_ALPHA){
-			ofEnableAlphaBlending();
-		}
-		ofSetColor(textColor);
+#ifndef USE_FONTSTASH
+	ofBlendMode blendMode = ofGetStyle().blendingMode;
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableAlphaBlending();
+	}
+	ofSetColor(textColor);
 
-		bindFontTexture();
-		textMesh.draw();
-		unbindFontTexture();
+	bindFontTexture();
+	textMesh.draw();
+	unbindFontTexture();
 
-		ofSetColor(c);
-		if(blendMode!=OF_BLENDMODE_ALPHA){
-			ofEnableBlendMode(blendMode);
-		}
-//	}
+	ofSetColor(c);
+	if(blendMode!=OF_BLENDMODE_ALPHA){
+		ofEnableBlendMode(blendMode);
+	}
+#else
+	if(showName){
+		font.drawString(_nameStr, _namePos.x, _namePos.y);
+	}
+	if(showValue){
+		font.drawString(_valueStr, _valuePos.x, _valuePos.y);
+	}
+#endif
 }
 
 

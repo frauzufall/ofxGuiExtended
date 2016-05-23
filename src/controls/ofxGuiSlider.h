@@ -82,7 +82,11 @@ protected:
 	void valueChanged(DataType & value);
 	virtual std::string getText();
 	ofPath bar;
+#ifndef USE_FONTSTASH
 	ofVboMesh textMesh;
+#endif
+	std::string _nameStr, _valueStr;
+	ofPoint _namePos, _valuePos;
 
 	ofParameter<bool> updateOnReleaseOnly;
 	ofParameter<bool> showValue;

@@ -67,7 +67,9 @@ void ofxGuiFunctionPlotter::generateDraw(){
 
 	ofxGuiElement::generateDraw();
 
+#ifndef USE_FONTSTASH
 	textMesh = getTextMesh(this->getName(), textPadding, getShape().getHeight() / 2 + 4);
+#endif
 
 	plot.clear();
 	plot.setFilled(false);
@@ -106,9 +108,16 @@ void ofxGuiFunctionPlotter::render(){
 
 	ofSetColor(textColor);
 
-	bindFontTexture();
-	textMesh.draw();
-	unbindFontTexture();
+	if(showName){
+#ifndef USE_FONTSTASH
+		bindFontTexture();
+		textMesh.draw();
+		unbindFontTexture();
+#else
+		font.drawString(getName(), textPadding, getShape().getHeight() / 2 + 4);
+#endif
+	}
+
 
 }
 

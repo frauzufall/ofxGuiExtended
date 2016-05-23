@@ -83,6 +83,7 @@ void ofxGuiZoomableGraphics::render(){
 	}
 
 	if(showName){
+#ifndef USE_FONTSTASH
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();
@@ -97,6 +98,9 @@ void ofxGuiZoomableGraphics::render(){
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableBlendMode(blendMode);
 		}
+#else
+		font.drawString(getName(), textPadding, getHeight() - textPadding);
+#endif
 	}
 }
 

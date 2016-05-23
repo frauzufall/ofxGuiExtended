@@ -5,13 +5,10 @@ void ofApp::setup(){
 
 	ofSetFrameRate(120);
 
-	renderer1.setup("renderer1");
-	renderer2.setup("renderer2");
-
-	panel1 = gui.addPanel(renderer1.parameters);
+	panel1 = gui.addPanel("panel1");
 	panel1->loadTheme("theme_default.json");
 
-	panel2 = gui.addPanel(renderer2.parameters);
+	panel2 = gui.addPanel("panel2");
 	panel2->loadTheme("theme_light.json");
 	panel2->setPosition(ofGetWidth()-panel2->getWidth()-20, 20);
 
@@ -25,8 +22,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofBackgroundGradient(ofColor::white, ofColor::gray);
-	renderer1.draw();
-	renderer2.draw();
 }
 
 //--------------------------------------------------------------

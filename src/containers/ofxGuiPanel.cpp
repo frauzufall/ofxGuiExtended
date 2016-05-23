@@ -48,12 +48,14 @@ void ofxGuiPanelHeader::generateDraw(){
 	saveBox.set(loadBox);
 	saveBox.x += iconWidth + iconSpacing;
 
+#ifndef USE_FONTSTASH
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
 	if(_parent){
 		if(_parent->getShowName()){
 			textMesh = getTextMesh(_parent->getName(), textPadding, getHeight() / 2 + 4);
 		}
 	}
+#endif
 }
 
 void ofxGuiPanelHeader::render() {
@@ -73,11 +75,14 @@ void ofxGuiPanelHeader::render() {
 	if(_parent){
 		if(_parent->getShowName()){
 
+#ifndef USE_FONTSTASH
 			ofSetColor(textColor);
 			bindFontTexture();
 			textMesh.draw();
 			unbindFontTexture();
-
+#else
+			font.drawString(_parent->getName(), textPadding, getHeight() / 2 + 4);
+#endif
 
 		}
 	}

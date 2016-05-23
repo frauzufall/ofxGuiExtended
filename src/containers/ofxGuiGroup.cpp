@@ -18,17 +18,29 @@ ofxGuiGroupHeader::ofxGuiGroupHeader(const ofJson &config):ofxGuiElement(){
 void ofxGuiGroupHeader::generateDraw(){
 	ofxGuiElement::generateDraw();
 
-	textMesh.clear();
 	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
+	leftStr = "";
+	rightStr = "";
 	if(_parent){
 		if(_parent->getShowName()){
-			textMesh.append(getTextMesh(_parent->getName(), textPadding, getHeight()/ 2 + 4));
+			leftStr = _parent->getName();
+			leftStrPos = ofPoint(textPadding, getHeight()/ 2 + 4);
 		}
 		if(_parent->getMinimized()){
-			textMesh.append(getTextMesh("+", getWidth() - textPadding - 10, getHeight() / 2 + 4));
+			rightStr = "+";
+			rightStrPos = ofPoint(getWidth() - textPadding - 10, getHeight() / 2 + 4);
 		}else{
-			textMesh.append(getTextMesh("-", getWidth()- textPadding - 10, getHeight() / 2 + 4));
+			rightStr = "-";
+			rightStrPos = ofPoint(getWidth() - textPadding - 10, getHeight() / 2 + 4);
 		}
+
+#ifndef USE_FONTSTASH
+		textMesh.clear();
+		if(_parent->getShowName()){
+			textMesh.append(getTextMesh(leftStr, leftStrPos.x, leftStrPos.y);
+		}
+		textMesh.append(getTextMesh(rightStr, rightStrPos.x, rightStrPos.y);
+#endif
 	}
 }
 
@@ -50,10 +62,16 @@ void ofxGuiGroupHeader::render() {
 		if(_parent->getShowName()){
 
 			ofSetColor(textColor);
+#ifndef USE_FONTSTASH
 			bindFontTexture();
 			textMesh.draw();
 			unbindFontTexture();
-
+#else
+			if(_parent->getShowName()){
+				font.drawString(leftStr, leftStrPos.x, leftStrPos.y);
+			}
+			font.drawString(rightStr, rightStrPos.x, rightStrPos.y);
+#endif
 		}
 	}
 

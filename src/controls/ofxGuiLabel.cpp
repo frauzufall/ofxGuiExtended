@@ -110,18 +110,19 @@ void ofxGuiValueLabel<Type>::generateDraw(){
 
 	ofxGuiElement::generateDraw();
 
+	renderedName = "";
 	if(showName){
-		string name = "";
 		if(!getName().empty()){
-			name += getName();
+			renderedName += getName();
 		}
 		if(!getName().empty() && label.toString() != ""){
-			name += ": ";
+			renderedName += ": ";
 		}
-		textMesh = getTextMesh(name + label.toString(), textPadding, getShape().height / 2 + 4);
-	}else {
-		textMesh = getTextMesh(label.toString(), textPadding, getShape().height / 2 + 4);
 	}
+	renderedName += label.toString();
+#ifndef USE_FONTSTASH
+	textMesh = getTextMesh(renderedName, textPadding, getShape().height / 2 + 4);
+#endif
 }
 
 template<typename Type>
@@ -129,6 +130,8 @@ void ofxGuiValueLabel<Type>::render() {
 	ofColor c = ofGetStyle().color;
 
 	ofxGuiElement::render();
+
+#ifndef USE_FONTSTASH
 
 	ofBlendMode blendMode = ofGetStyle().blendingMode;
 	if(blendMode!=OF_BLENDMODE_ALPHA){
@@ -144,6 +147,10 @@ void ofxGuiValueLabel<Type>::render() {
 	if(blendMode!=OF_BLENDMODE_ALPHA){
 		ofEnableBlendMode(blendMode);
 	}
+#else
+	font.drawString(renderedName, textPadding, getShape().height / 2 + 4);
+#endif
+
 }
 
 template<typename Type>

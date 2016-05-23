@@ -8,6 +8,16 @@
 
 #include "DOM/Element.h"
 
+#define USE_FONTSTASH
+#define USE_FONTAWESOME
+
+#ifdef USE_FONTSTASH
+	#include "ofxFontStash.h"
+#endif
+#ifdef USE_FONTAWESOME
+	#include "ofxFontAwesome.h"
+#endif
+
 enum TextAlignment{
 	LEFT,
 	RIGHT,
@@ -70,7 +80,9 @@ class ofxGuiElement : public DOM::Element {
 
 		virtual ofAbstractParameter & getParameter();
 		void loadFont(const std::string& filename, int fontsize, bool _bAntiAliased = true, bool _bFullCharacterSet = false, int dpi = 0);
+#ifndef USE_FONTSTASH
 		void setUseTTF(bool bUseTTF);
+#endif
 
 		/// \returns true if the mouse is over this element.
 		bool isMouseOver() const;
@@ -123,10 +135,12 @@ class ofxGuiElement : public DOM::Element {
 		/// \param my The vertical position
 		/// \param boundaryCheck If true, it checks whether the position is inside of the element. If not, the value won't be changed.
 		virtual bool setValue(float mx, float my, bool boundaryCheck){return false;}
+#ifndef USE_FONTSTASH
 		void bindFontTexture();
 		void unbindFontTexture();
 		ofMesh getTextMesh(const std::string & text, ofPoint p);
 		ofMesh getTextMesh(const std::string & text, float x, float y);
+#endif
 		ofRectangle getTextBoundingBox(const std::string & text, float x=0, float y=0);
 		float getTextWidth(const std::string & text);
 		float getTextHeight(const std::string & text);
@@ -134,11 +148,17 @@ class ofxGuiElement : public DOM::Element {
 		static std::string saveStencilToHex(const ofImage & img);
 		static void loadStencilFromHex(ofImage & img, unsigned char * data);
 
-		ofTrueTypeFont font;
 		bool fontLoaded;
-		bool useTTF;
-		ofBitmapFont bitmapFont;
 		std::shared_ptr <ofBaseFileSerializer> serializer;
+
+#ifdef USE_FONTSTASH
+		ofxFontStash font;
+#else
+		ofTrueTypeFont font;
+		ofBitmapFont bitmapFont;
+		bool useTTF;
+
+#endif
 
 		/// \brief True if the Widget is configured to be dragged.
 		bool _isDraggable = false;

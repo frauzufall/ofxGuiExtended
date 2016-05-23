@@ -366,9 +366,11 @@ void ofxGuiInputField<Type>::generateDraw(){
 
 template<typename Type>
 void ofxGuiInputField<Type>::generateText(){
+#ifndef USE_FONTSTASH
 	string valStr = input;
 	textMesh = getTextMesh(getName(), textPadding, getShape().height / 2 + 4);
 	textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr,0,0).width, getShape().height / 2 + 4));
+#endif
 }
 
 template<typename Type>
@@ -395,21 +397,27 @@ bool ofxGuiInputField<Type>::hasSelectedText(){
 
 template<typename Type>
 void ofxGuiInputField<Type>::drawMesh(){
+
+#ifndef USE_FONTSTASH
 	ofBlendMode blendMode = ofGetStyle().blendingMode;
 	if(blendMode!=OF_BLENDMODE_ALPHA){
 		ofEnableAlphaBlending();
 	}
 	ofSetColor(textColor);
-
 	bindFontTexture();
 	textMesh.draw();
 	unbindFontTexture();
-
 	ofColor c = ofGetStyle().color;
 	ofSetColor(c);
 	if(blendMode!=OF_BLENDMODE_ALPHA){
 		ofEnableBlendMode(blendMode);
 	}
+#else
+	ofSetColor(textColor);
+	font.drawString(getName(), textPadding, getShape().height / 2 + 4);
+	font.drawString(input, getShape().width - textPadding - getTextBoundingBox(input,0,0).width, getShape().height / 2 + 4);
+#endif
+
 }
 
 template<typename Type>

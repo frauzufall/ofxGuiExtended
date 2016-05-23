@@ -88,7 +88,9 @@ void ofxGuiValuePlotter::generateDraw(){
 		label += " " + this->getName();
 	}
 
+#ifndef USE_FONTSTASH
 	textMesh = getTextMesh(label, textPadding, getShape().getHeight() / 2 + 4);
+#endif
 
 	if(plotSize > 0){
 
@@ -118,6 +120,7 @@ void ofxGuiValuePlotter::render(){
 		plot.draw();
 	}
 
+#ifndef USE_FONTSTASH
 	ofBlendMode blendMode = ofGetStyle().blendingMode;
 	if(blendMode != OF_BLENDMODE_ALPHA){
 		ofEnableAlphaBlending();
@@ -132,6 +135,10 @@ void ofxGuiValuePlotter::render(){
 	if(blendMode != OF_BLENDMODE_ALPHA){
 		ofEnableBlendMode(blendMode);
 	}
+#else
+	ofSetColor(textColor);
+	font.drawString(label, textPadding, getShape().getHeight() / 2 + 4);
+#endif
 }
 
 ofAbstractParameter & ofxGuiValuePlotter::getParameter(){

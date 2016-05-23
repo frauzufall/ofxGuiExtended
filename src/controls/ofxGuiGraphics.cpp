@@ -98,9 +98,11 @@ void ofxGuiGraphics::onResize(DOM::ResizeEventArgs &args){
 void ofxGuiGraphics::generateDraw(){
 	ofxGuiElement::generateDraw();
 
+#ifndef USE_FONTSTASH
 	if(showName){
 		textMesh = getTextMesh(getName(), textPadding, getHeight() - textPadding);
 	}
+#endif
 }
 
 void ofxGuiGraphics::render(){
@@ -114,6 +116,7 @@ void ofxGuiGraphics::render(){
 	}
 
 	if(showName){
+#ifndef USE_FONTSTASH
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();
@@ -128,6 +131,9 @@ void ofxGuiGraphics::render(){
 		if(blendMode != OF_BLENDMODE_ALPHA){
 			ofEnableBlendMode(blendMode);
 		}
+#else
+		font.drawString(getName(), textPadding, getHeight() - textPadding);
+#endif
 	}
 }
 

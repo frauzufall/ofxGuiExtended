@@ -36,7 +36,9 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 		virtual void render() override;
 		virtual void generateDraw() override;
 
+	#ifndef USE_FONTSTASH
 		ofVboMesh textMesh;
+	#endif
 		vector <float> buffer;
 		ofPath plot;
 		ofParameter<float> plotterStrokeWidth;

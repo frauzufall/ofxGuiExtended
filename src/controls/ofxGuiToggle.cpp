@@ -196,35 +196,39 @@ void ofxGuiToggle::generateDraw(){
 			default:
 			case ofxGuiToggleType::RADIO:
 			case ofxGuiToggleType::CHECKBOX: {
-
-				// create label
-
-				textMesh = getTextMesh(getName(), textPadding + checkboxRect.width, getShape().getHeight() / 2 + 4);
+				textPos.x = textPadding + checkboxRect.width;
 				break;
 			}
 			case ofxGuiToggleType::FULLSIZE: {
 
-				// create label
 				float textWidth = ofxGuiElement::getTextWidth(getName());
 				switch(textAlignment){
 					default:
 					case TextAlignment::CENTERED:
 						if(getShape().getCenter().x - textWidth/2 > getShape().x+textPadding){
-							textMesh = getTextMesh(getName(), getWidth()/2 - textWidth/2, getHeight()/ 2 + 4);
+							textPos.x = getWidth()/2 - textWidth/2;
 							break;
 						}
 					case TextAlignment::LEFT:
-						textMesh = getTextMesh(getName(), textPadding, getShape().height / 2 + 4);
+						textPos.x = textPadding;
+
 						break;
 					case TextAlignment::RIGHT:
-						textMesh = getTextMesh(getName(), getShape().getWidth() - textWidth - textPadding, getShape().height / 2 + 4);
+						textPos.x = getShape().getWidth() - textWidth - textPadding;
 						break;
 
 				}
 				break;
 			}
 		}
+		textPos.y = getShape().height / 2 + 4;
 	}
+
+#ifndef USE_FONTSTASH
+	if(showName){
+		textMesh = getTextMesh(getName(), textPos.x, textPos.y);
+	}
+#endif
 
 
 }
@@ -235,6 +239,7 @@ void ofxGuiToggle::render(){
 	border.draw();
 
 	if(showName){
+#ifndef USE_FONTSTASH
 		ofColor c = ofGetStyle().color;
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode!=OF_BLENDMODE_ALPHA){
@@ -250,6 +255,10 @@ void ofxGuiToggle::render(){
 		if(blendMode!=OF_BLENDMODE_ALPHA){
 			ofEnableBlendMode(blendMode);
 		}
+#else
+	ofSetColor(textColor);
+	font.drawString(getName(), textPos.x, textPos.y);
+#endif
 	}
 }
 
