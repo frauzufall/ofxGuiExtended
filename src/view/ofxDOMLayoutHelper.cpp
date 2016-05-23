@@ -1,6 +1,7 @@
 #include "ofxDOMLayoutHelper.h"
 #include "JsonConfigParser.h"
 #include "../DOM/Layout.h"
+#include "../ofxGuiElement.h"
 
 ofxDOMLayoutHelper::ofxDOMLayoutHelper()
 {
@@ -40,7 +41,10 @@ float ofxDOMLayoutHelper::getDesiredWidth(DOM::Element* e, float parentWidth){
 				return parentWidth*amount-getMarginHorizontal(e);
 			}
 		}else {
-			return ofToFloat(widthstr);
+			float val = ofToFloat(widthstr);
+			if(val > 0){
+				return val;
+			}
 		}
 	}
 
@@ -59,11 +63,35 @@ float ofxDOMLayoutHelper::getDesiredWidthStretched(DOM::Element* e, float parent
 				return parentWidth*amount-getMarginHorizontal(e);
 			}
 		}else {
-			return ofToFloat(widthstr);
+			float val = ofToFloat(widthstr);
+			if(val > 0){
+				return val;
+			}
 		}
 	}
 
 	return max(res, parentWidth-getMarginHorizontal(e));
+}
+
+float ofxDOMLayoutHelper::getMaxWidth(DOM::Element* e, float parentWidth){
+
+	if(e->hasAttribute("_width")){
+		std::string widthstr = e->getAttribute<std::string>("_width");
+		if(ofIsStringInString(widthstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(widthstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				return parentWidth*amount-getMarginHorizontal(e);
+			}
+		}else {
+			float val = ofToFloat(widthstr);
+			if(val > 0){
+				return val;
+			}
+		}
+	}
+
+	return parentWidth-getMarginHorizontal(e);
 }
 
 
@@ -87,7 +115,10 @@ float ofxDOMLayoutHelper::getDesiredHeight(DOM::Element* e, float parentHeight){
 				return parentHeight*amount-getMarginVertical(e);
 			}
 		}else {
-			return ofToFloat(heightstr);
+			float val = ofToFloat(heightstr);
+			if(val > 0){
+				return val;
+			}
 		}
 	}
 
@@ -106,11 +137,35 @@ float ofxDOMLayoutHelper::getDesiredHeightStretched(DOM::Element* e, float paren
 				return parentHeight*amount-getMarginVertical(e);
 			}
 		}else {
-			return ofToFloat(heightstr);
+			float val = ofToFloat(heightstr);
+			if(val > 0){
+				return val;
+			}
 		}
 	}
 
 	return max(res, parentHeight -getMarginVertical(e));
+}
+
+float ofxDOMLayoutHelper::getMaxHeight(DOM::Element* e, float parentHeight){
+
+	if(e->hasAttribute("_height")){
+		std::string heightstr = e->getAttribute<std::string>("_height");
+		if(ofIsStringInString(heightstr, "%")){
+			vector<std::string> _val = JsonConfigParser::getMatchedStrings(heightstr, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
+			if(_val.size() > 0){
+				float amount = ofToFloat(_val[0])/100.;
+				return parentHeight*amount-getMarginVertical(e);
+			}
+		}else {
+			float val = ofToFloat(heightstr);
+			if(val > 0){
+				return val;
+			}
+		}
+	}
+
+	return parentHeight -getMarginVertical(e);
 }
 
 float ofxDOMLayoutHelper::getMarginHorizontal(DOM::Element *e){

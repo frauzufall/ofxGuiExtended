@@ -204,25 +204,25 @@ void ofxGuiGroup::_setConfig(const ofJson &config){
 
 	ofxGuiElement::_setConfig(config);
 
-	// ugly hack to hide header of horizontally aligned flexbox containers (because the headers don't get aligned well)
-	ofJson _config = config;
-	if(_config.find("flex-direction") != _config.end()){
-		if(_config["flex-direction"] == "row"){
-			if(_config.find("show-header") != _config.end()){
-				_config["show-header"] = false;
-			}
-		}
-	}
-	// ugly hack to hide header of horizontally aligned box containers (because the headers don't get aligned well)
-	if(_config.find("direction") != _config.end()){
-		if(_config["direction"] == "horizontal"){
-			if(_config.find("show-header") != _config.end()){
-				_config["show-header"] = false;
-			}
-		}
-	}
+//	// ugly hack to hide header of horizontally aligned flexbox containers (because the headers don't get aligned well)
+//	ofJson _config = config;
+//	if(_config.find("flex-direction") != _config.end()){
+//		if(_config["flex-direction"] == "row"){
+//			if(_config.find("show-header") != _config.end()){
+//				_config["show-header"] = false;
+//			}
+//		}
+//	}
+//	// ugly hack to hide header of horizontally aligned box containers (because the headers don't get aligned well)
+//	if(_config.find("direction") != _config.end()){
+//		if(_config["direction"] == "horizontal"){
+//			if(_config.find("show-header") != _config.end()){
+//				_config["show-header"] = false;
+//			}
+//		}
+//	}
 
-	JsonConfigParser::parse(_config, showHeader);
+	JsonConfigParser::parse(config, showHeader);
 
 }
 
@@ -641,12 +641,15 @@ void ofxGuiGroup::onChildAdded(DOM::ElementEventArgs& args){
 		parameters.add(e->getParameter());
 		e->setTheme(theme);
 	}
+	args.element()->invalidateChildShape();
 }
 
 void ofxGuiGroup::onParentAdded(DOM::ElementEventArgs& args){
-	parent()->setLayoutSize(0,0);
-	this->setLayoutSize(0,0);
+//	parent()->setLayoutSize(0,0, false);
+//	this->setLayoutSize(0,0, false);
 	copyLayoutFromDocument();
+	_parent->invalidateChildShape();
+	invalidateChildShape();
 }
 
 void ofxGuiGroup::onResize(DOM::ResizeEventArgs & re){

@@ -15,6 +15,8 @@ class ofxGuiPanelHeader : public ofxGuiGroupHeader {
 		~ofxGuiPanelHeader(){
 		}
 
+		virtual float getMinWidth() override;
+
 		virtual bool mousePressed(ofMouseEventArgs & args) override;
 
 		ofEvent<void> loadPressedE;

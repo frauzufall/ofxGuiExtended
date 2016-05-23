@@ -15,6 +15,8 @@ class ofxDOMLayoutHelper
 		static float getDesiredHeight(DOM::Element* e, float parentHeight);
 		static float getDesiredWidthStretched(DOM::Element* e, float parentWidth);
 		static float getDesiredHeightStretched(DOM::Element* e, float parentHeight);
+		static float getMaxWidth(DOM::Element* e, float parentWidth);
+		static float getMaxHeight(DOM::Element* e, float parentHeight);
 
 		static float getMarginHorizontal(DOM::Element* e);
 		static float getMarginVertical(DOM::Element* e);

@@ -54,9 +54,16 @@ void ofxDOMBoxLayout::doLayout()
 
 		bool horizontal = getDirection(_parent) == Direction::HORIZONTAL;
 
+
 //		if(ofxGuiElement* el = dynamic_cast<ofxGuiElement*>(_parent)){
 //			cout << el->getName() << endl;
 //		}
+
+		float paddingHorizontal = DOMLH::getPaddingHorizontal(_parent);
+		float paddingVertical = DOMLH::getPaddingVertical(_parent);
+
+		float marginHorizontal = DOMLH::getMarginHorizontal(_parent);
+		float marginVertical = DOMLH::getMarginVertical(_parent);
 
 		float wParent = ofGetWidth();
 		float hParent = ofGetHeight();
@@ -65,17 +72,11 @@ void ofxDOMBoxLayout::doLayout()
 			hParent = _parent->getSizeByParent().y;
 		}
 
-		float paddingHorizontal = DOMLH::getPaddingHorizontal(_parent);
-		float paddingVertical = DOMLH::getPaddingVertical(_parent);
+		float totalWidth = DOMLH::getDesiredWidth(_parent, wParent) - paddingHorizontal;
+		float totalHeight = DOMLH::getDesiredHeight(_parent, hParent) - paddingVertical;
 
-		float marginHorizontal = DOMLH::getMarginHorizontal(_parent);
-		float marginVertical = DOMLH::getMarginVertical(_parent);
-
-		float totalWidth = DOMLH::getDesiredWidth(_parent);
-		float totalHeight = DOMLH::getDesiredHeight(_parent);
-
-		totalWidth = max(totalWidth, wParent-marginHorizontal)-paddingHorizontal;
-		totalHeight = max(totalHeight, hParent-marginVertical)-paddingVertical;
+		float maxWidth = DOMLH::getMaxWidth(_parent, wParent) - paddingHorizontal;
+		float maxHeight = DOMLH::getMaxHeight(_parent, hParent) - paddingVertical;
 
 		float currentX = DOMLH::getPaddingLeft(_parent);
 		float currentY = DOMLH::getPaddingTop(_parent);
@@ -84,14 +85,20 @@ void ofxDOMBoxLayout::doLayout()
 			if (element){
 				if(element->getVisible().get()){
 
-					float w = DOMLH::getDesiredWidth(element, totalWidth);
-					float h = DOMLH::getDesiredHeight(element, totalHeight);
+					// set to minimal size on main axis
+					if(horizontal){
+						element->setSizeByParent(0, DOMLH::getMaxHeight(element, maxHeight) + DOMLH::getMarginVertical(element));
+					}else{
+						element->setSizeByParent(DOMLH::getMaxWidth(element, maxWidth) + DOMLH::getMarginHorizontal(element),0);
+					}
+
+
+					float w = DOMLH::getDesiredWidth(element, maxWidth);
+					float h = DOMLH::getDesiredHeight(element, maxHeight);
 
 					if(!DOMLH::elementAbsolutePositioned(element)){
 
 						element->setPosition(currentX+DOMLH::getMarginLeft(element), currentY+DOMLH::getMarginTop(element));
-
-						element->setSizeByParent(totalWidth, totalHeight);
 
 						element->setLayoutSize(w, h, true);
 						w = element->getWidth();
@@ -116,16 +123,17 @@ void ofxDOMBoxLayout::doLayout()
 		}
 
 		if(horizontal){
-			totalWidth = max(currentX, totalWidth);
+			totalWidth = max(currentX+DOMLH::getPaddingRight(_parent), DOMLH::getDesiredWidth(_parent, wParent));
 		}else{
-			totalHeight = max(currentY, totalHeight);
+			totalHeight = max(currentY+DOMLH::getPaddingBottom(_parent), DOMLH::getDesiredHeight(_parent, hParent));
 		}
 
-
-		if (horizontal){
-			totalWidth += DOMLH::getPaddingRight(_parent);
-		}else{
-			totalHeight += DOMLH::getPaddingBottom(_parent);
+		if(!DOMLH::elementAbsolutePositioned(_parent)){
+			if(horizontal){
+				totalHeight = max(totalHeight, maxHeight);
+			}else{
+				totalWidth = max(totalWidth, maxWidth);
+			}
 		}
 
 		// set cross axis size of all children to maximum

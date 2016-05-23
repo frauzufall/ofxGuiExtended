@@ -344,6 +344,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 			}
 		}
 
+		setLayoutSize(0,0);
 		invalidateChildShape();
 		setNeedsRedraw();
 

@@ -115,6 +115,20 @@ bool ofxGuiPanelHeader::mousePressed(ofMouseEventArgs & args){
 
 }
 
+float ofxGuiPanelHeader::getMinWidth(){
+	generateDraw();
+	std::string text = "";
+
+	ofxGuiGroup* _parent = dynamic_cast<ofxGuiGroup*>(parent());
+	if(_parent){
+		if(_parent->getShowName()){
+			text += _parent->getName();
+		}
+	}
+
+	return getTextWidth(text)+loadBox.width+saveBox.width+4*textPadding;
+}
+
 std::string ofxGuiPanelHeader::getClassType(){
 	return "panel-header";
 }

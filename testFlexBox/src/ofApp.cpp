@@ -34,7 +34,7 @@ void ofApp::setup(){
 	justifyContent->add<ofxGuiToggle>("space-around");
 	justifyContent->setExclusiveToggles(true);
 	justifyContent->setActiveToggle(0);
-	justifyContent->getActiveToggleIndex().addListener(this, &ofApp::setJustifyContent);
+
 
 	alignItems = control->addGroup("align-items", controlGroupConfig);
 	alignItems->add<ofxGuiToggle>("stretch");
@@ -43,7 +43,6 @@ void ofApp::setup(){
 	alignItems->add<ofxGuiToggle>("center");
 	alignItems->setExclusiveToggles(true);
 	alignItems->setActiveToggle(0);
-	alignItems->getActiveToggleIndex().addListener(this, &ofApp::setAlignItems);
 
 	alignContent = control->addGroup("align-content", controlGroupConfig);
 	alignContent->add<ofxGuiToggle>("stretch");
@@ -54,7 +53,6 @@ void ofApp::setup(){
 	alignContent->add<ofxGuiToggle>("space-around");
 	alignContent->setExclusiveToggles(true);
 	alignContent->setActiveToggle(0);
-	alignContent->getActiveToggleIndex().addListener(this, &ofApp::setAlignContent);
 
 	ofxGuiGroup* groupsGroup = all->addGroup("", ofJson({
 		{"flex-direction", "row"},
@@ -87,6 +85,10 @@ void ofApp::setup(){
 			}));
 		}
 	}
+
+	justifyContent->getActiveToggleIndex().addListener(this, &ofApp::setJustifyContent);
+	alignItems->getActiveToggleIndex().addListener(this, &ofApp::setAlignItems);
+	alignContent->getActiveToggleIndex().addListener(this, &ofApp::setAlignContent);
 
 }
 

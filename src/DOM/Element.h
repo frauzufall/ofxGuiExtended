@@ -548,7 +548,7 @@ public:
 	void blockLayout(bool block);
 
 	/// \brief Called internally to invalidate the child shape tree.
-	virtual void invalidateChildShape(bool recursive = true);
+	virtual void invalidateChildShape();
 
 //	/// \brief Redo layout and children layouts.
 //	virtual void redoLayout();

@@ -620,7 +620,9 @@ void Element::setLayoutSize(float width, float height, bool tellParent)
 	{
 		_layoutSize.x = width;
 		_layoutSize.y = height;
-		invalidateChildShape(tellParent);
+		if(tellParent){
+			invalidateChildShape();
+		}
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
@@ -663,7 +665,9 @@ void Element::setLayoutWidth(float width, bool tellParent)
 
 	if(width != _layoutSize.x){
 		_layoutSize.x = width;
-		invalidateChildShape(tellParent);
+		if(tellParent){
+			invalidateChildShape();
+		}
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
@@ -700,7 +704,9 @@ void Element::setLayoutHeight(float height, bool tellParent)
 
 	if(height != _layoutSize.y){
 		_layoutSize.y = height;
-		invalidateChildShape(tellParent);
+		if(tellParent){
+			invalidateChildShape();
+		}
 		ResizeEventArgs e(Shape(_shape.x, _shape.y, _layoutSize.x, _layoutSize.y));
 		ofNotifyEvent(resize, e, this);
 	}
@@ -964,9 +970,9 @@ void Element::setVisible(bool &visible)
 {
 	if(visible == _hidden){
 		_hidden = !visible;
-		if(!visible){
-			setLayoutSize(0,0);
-		}
+//		if(!visible){
+//			setLayoutSize(0,0);
+//		}
 		invalidateChildShape();
 		EnablerEventArgs e(_hidden);
 		ofNotifyEvent(hidden, e, this);
@@ -1004,36 +1010,33 @@ void Element::blockLayout(bool block){
 }
 
 
-void Element::invalidateChildShape(bool recursive)
+void Element::invalidateChildShape()
 {
 	if(DOM::Document* doc = document()){
 		if(!doc->isBlockingLayout()){
-			if(recursive){
-				if(_parent){
-					Size oldParent = _parent->getSize();
-					if(_parent->layout()){
-						if(_parent->layout()->isDoingLayout()){
-							if (_layout){
-								_layout->doLayout();
-							}
-						}else{
-							_parent->layout()->doLayout();
-							Size newParent = _parent->getSize();
-							if(oldParent != newParent){
-								_parent->invalidateChildShape();
-							}
+			if(_parent){
+				Size oldParent = _parent->getSize();
+				if(_parent->layout()){
+					if(_parent->layout()->isDoingLayout()){
+						if (_layout){
+							_layout->doLayout();
+						}
+					}else{
+						_parent->layout()->doLayout();
+						Size newParent = _parent->getSize();
+						if(oldParent != newParent){
+							_parent->invalidateChildShape();
 						}
 					}
-				}else{
-					if (_layout){
-						_layout->doLayout();
-					}
+				}
+			}else{
+				if (_layout){
+					_layout->doLayout();
 				}
 			}
 			setNeedsRedraw();
 		}
 	}
-
 
 }
 

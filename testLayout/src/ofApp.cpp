@@ -17,10 +17,11 @@ void ofApp::setup(){
 	gui_flex.setupFlexBoxLayout();
 
 
-	ofxGuiGroup* control = gui_control.addPanel("", ofJson({
+	ofxGuiGroup* control = gui_control.addPanel("active layout", ofJson({
 		{"show-header", false},
 		{"direction", "horizontal"},
-		{"left", 300}
+		{"left", 300},
+		{"width", "auto"}
 	}));
 	control->setExclusiveToggles(true);
 	control->add(gui_box.getDocument()->getVisible().set("box layout", false));
@@ -57,8 +58,7 @@ void ofApp::setup(){
 			panel->add(testString);
 		}
 
-		ofxGuiGroup* panel3 = gui->addPanel("", ofJson({
-			{"show-header", false},
+		ofxGuiGroup* panel3 = gui->addPanel("horizontal", ofJson({
 			{"direction", "horizontal"},
 			{"flex-direction", "row"}
 		}));
@@ -71,8 +71,8 @@ void ofApp::setup(){
 		panel4->setPosition(panel3->getPosition().x, panel3->getPosition().y +  panel3->getHeight()+10);
 		panel4->add(testFloat);
 		ofxGuiGroup* panel4_vertical = panel4->addGroup("", ofJson({
-			{"show-header", false},
 			{"direction", "horizontal"},
+			{"show-header", false},
 			{"flex-direction", "row"},
 			{"width", 270}
 		}));
