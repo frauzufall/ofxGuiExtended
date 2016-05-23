@@ -413,9 +413,8 @@ void ofxGuiInputField<Type>::drawMesh(){
 		ofEnableBlendMode(blendMode);
 	}
 #else
-	ofSetColor(textColor);
-	font.drawString(getName(), textPadding, getShape().height / 2 + 4);
-	font.drawString(input, getShape().width - textPadding - getTextBoundingBox(input,0,0).width, getShape().height / 2 + 4);
+	drawString(getName(), textPadding, getShape().height / 2 + 4);
+	drawString(input, getShape().width - textPadding - getTextBoundingBox(input,0,0).width, getShape().height / 2 + 4);
 #endif
 
 }

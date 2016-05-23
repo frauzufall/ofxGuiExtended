@@ -12,7 +12,7 @@
 #define USE_FONTAWESOME
 
 #ifdef USE_FONTSTASH
-	#include "ofxFontStash.h"
+	#include "ofxFontStash2.h"
 #endif
 #ifdef USE_FONTAWESOME
 	#include "ofxFontAwesome.h"
@@ -152,7 +152,9 @@ class ofxGuiElement : public DOM::Element {
 		std::shared_ptr <ofBaseFileSerializer> serializer;
 
 #ifdef USE_FONTSTASH
-		ofxFontStash font;
+		ofxFontStash2 font;
+		ofParameter<std::string> fontID;
+		void drawString(std::string text, float x, float y);
 #else
 		ofTrueTypeFont font;
 		ofBitmapFont bitmapFont;

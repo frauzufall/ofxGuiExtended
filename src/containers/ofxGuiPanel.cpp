@@ -81,7 +81,7 @@ void ofxGuiPanelHeader::render() {
 			textMesh.draw();
 			unbindFontTexture();
 #else
-			font.drawString(_parent->getName(), textPadding, getHeight() / 2 + 4);
+			drawString(_parent->getName(), textPadding, getHeight() / 2 + 4);
 #endif
 
 		}

@@ -256,8 +256,7 @@ void ofxGuiToggle::render(){
 			ofEnableBlendMode(blendMode);
 		}
 #else
-	ofSetColor(textColor);
-	font.drawString(getName(), textPos.x, textPos.y);
+	drawString(getName(), textPos.x, textPos.y);
 #endif
 	}
 }

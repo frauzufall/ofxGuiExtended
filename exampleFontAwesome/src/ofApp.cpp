@@ -5,10 +5,16 @@ void ofApp::setup(){
 
 	ofSetFrameRate(120);
 
-	panel1 = gui.addPanel("panel1");
+	parameters.setName("random values");
+	parameters.add(size.set("size",10,0,100));
+	parameters.add(number.set("number",2,1,20));
+	parameters.add(position.set("position",ofPoint(42,42), ofPoint(0,0), ofPoint(100,100)));
+	parameters.add(color.set("color",ofColor(127),ofColor(0,0),ofColor(255)));
+
+	panel1 = gui.addPanel(parameters);
 	panel1->loadTheme("theme_default.json");
 
-	panel2 = gui.addPanel("panel2");
+	panel2 = gui.addPanel(parameters);
 	panel2->loadTheme("theme_light.json");
 	panel2->setPosition(ofGetWidth()-panel2->getWidth()-20, 20);
 

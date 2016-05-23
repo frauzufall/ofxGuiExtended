@@ -114,7 +114,7 @@ void ofxGuiFunctionPlotter::render(){
 		textMesh.draw();
 		unbindFontTexture();
 #else
-		font.drawString(getName(), textPadding, getShape().getHeight() / 2 + 4);
+		drawString(getName(), textPadding, getShape().getHeight() / 2 + 4);
 #endif
 	}
 

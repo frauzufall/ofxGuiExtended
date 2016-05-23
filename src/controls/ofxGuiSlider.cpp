@@ -376,10 +376,10 @@ void ofxGuiSlider<DataType>::render(){
 	}
 #else
 	if(showName){
-		font.drawString(_nameStr, _namePos.x, _namePos.y);
+		drawString(_nameStr, _namePos.x, _namePos.y);
 	}
 	if(showValue){
-		font.drawString(_valueStr, _valuePos.x, _valuePos.y);
+		drawString(_valueStr, _valuePos.x, _valuePos.y);
 	}
 #endif
 }

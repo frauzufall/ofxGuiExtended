@@ -131,25 +131,26 @@ void ofxGuiValueLabel<Type>::render() {
 
 	ofxGuiElement::render();
 
-#ifndef USE_FONTSTASH
-
 	ofBlendMode blendMode = ofGetStyle().blendingMode;
 	if(blendMode!=OF_BLENDMODE_ALPHA){
 		ofEnableAlphaBlending();
 	}
+
+#ifndef USE_FONTSTASH
 	ofSetColor(textColor);
 
 	bindFontTexture();
 	textMesh.draw();
 	unbindFontTexture();
 
+#else
+	drawString(renderedName, textPadding, getShape().height / 2 + 4);
+#endif
+
 	ofSetColor(c);
 	if(blendMode!=OF_BLENDMODE_ALPHA){
 		ofEnableBlendMode(blendMode);
 	}
-#else
-	font.drawString(renderedName, textPadding, getShape().height / 2 + 4);
-#endif
 
 }
 

@@ -136,8 +136,7 @@ void ofxGuiValuePlotter::render(){
 		ofEnableBlendMode(blendMode);
 	}
 #else
-	ofSetColor(textColor);
-	font.drawString(label, textPadding, getShape().getHeight() / 2 + 4);
+	drawString(label, textPadding, getShape().getHeight() / 2 + 4);
 #endif
 }
 

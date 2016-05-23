@@ -68,9 +68,9 @@ void ofxGuiGroupHeader::render() {
 			unbindFontTexture();
 #else
 			if(_parent->getShowName()){
-				font.drawString(leftStr, leftStrPos.x, leftStrPos.y);
+				drawString(leftStr, leftStrPos.x, leftStrPos.y);
 			}
-			font.drawString(rightStr, rightStrPos.x, rightStrPos.y);
+			drawString(rightStr, rightStrPos.x, rightStrPos.y);
 #endif
 		}
 	}

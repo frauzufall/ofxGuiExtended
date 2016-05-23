@@ -23,7 +23,13 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		ofxFontStash font;
 		ofxGui gui;
 		ofxGuiPanel *panel1, *panel2;
+
+		ofParameterGroup parameters;
+		ofParameter<float> size;
+		ofParameter<int> number;
+		ofParameter<ofVec2f> position;
+
+		ofParameter<ofColor> color;
 };

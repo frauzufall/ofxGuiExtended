@@ -1,3 +1,3 @@
 ofxGuiExtended
 ofxFontAwesome
-ofxFontStash
+ofxFontStash2

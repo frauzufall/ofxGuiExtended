@@ -132,7 +132,7 @@ void ofxGuiGraphics::render(){
 			ofEnableBlendMode(blendMode);
 		}
 #else
-		font.drawString(getName(), textPadding, getHeight() - textPadding);
+		drawString(getName(), textPadding, getHeight() - textPadding);
 #endif
 	}
 }
