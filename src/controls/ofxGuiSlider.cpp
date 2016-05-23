@@ -343,10 +343,10 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 #ifndef USE_FONTSTASH
 	textMesh.clear();
 	if(showName){
-		textMesh.append(_nameStr, _namePos);
+		textMesh.append(getTextMesh(_nameStr, _namePos.x, _namePos.y));
 	}
 	if(showValue){
-		textMesh.append(_valueStr, _valuePos);
+		textMesh.append(getTextMesh(_valueStr, _valuePos.x, _valuePos.y));
 	}
 #endif
 }

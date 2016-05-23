@@ -37,9 +37,9 @@ void ofxGuiGroupHeader::generateDraw(){
 #ifndef USE_FONTSTASH
 		textMesh.clear();
 		if(_parent->getShowName()){
-			textMesh.append(getTextMesh(leftStr, leftStrPos.x, leftStrPos.y);
+			textMesh.append(getTextMesh(leftStr, leftStrPos.x, leftStrPos.y));
 		}
-		textMesh.append(getTextMesh(rightStr, rightStrPos.x, rightStrPos.y);
+		textMesh.append(getTextMesh(rightStr, rightStrPos.x, rightStrPos.y));
 #endif
 	}
 }
