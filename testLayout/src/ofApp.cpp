@@ -84,23 +84,6 @@ void ofApp::setup(){
 		panel4_vertical->add(testFloat, ofJson({{"width", "45%"}}));
 		panel4_vertical->add(testFloat, ofJson({{"width", "45%"}}));
 
-//		ofJson toggleTheme = {{"show-name", false}, {"width", "10%"}};
-//	    ofJson postToggleTheme = {{"fill-color", "rgba(220,80,50,0.5)"}, {"width", "90%"}};
-//	    ofJson postToggle2Theme = {{"fill-color", "rgba(220,80,50,0.5)"}, {"width", "45%"}};
-//	    ofJson groupTheme = {{"flex-direction", "row"}, {"flex-wrap", "wrap"}, {"width", 320}, {"align-content", "space-between"}};
-
-//	    //////  Groups
-
-//	    menuAudioGroup = menuAudioPanel->addGroup("Audio Analyzer");
-
-//	    powerGroup = menuAudioGroup->addGroup("POWER", groupTheme);
-//	    powerGroup->add(energyToggleVal, toggleTheme);
-//	    powerGroup->add(energyMultiplierSliderVal, postToggle2Theme);
-//	    powerGroup->add(intenSmoothSliderVal, postToggle2Theme);
-//	    powerGroup->add<ofxGuiValuePlotter>(energySliderVal);
-//	    powerGroup->add(rmsSliderVal);
-
-
 		//give the flexbox layout a different color to be able to see that something happens when you change the layout
 		if(gui == &gui_flex){
 			ofJson config = {

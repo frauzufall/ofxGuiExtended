@@ -24,7 +24,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		ofxGui gui;
-		ofxGuiPanel *panel1, *panel2;
 		ofParameterGroup parameters;
-		CirclesRenderer renderer1,renderer2;
+		CirclesRenderer renderer1, renderer2, renderer3;
 };

@@ -120,7 +120,7 @@ void ofxGuiToggle::generateDraw(){
 	border.clear();
 	border.setFillColor(borderColor);
 	border.setFilled(true);
-	if(value && (borderWidth <= 0 || type == ofxGuiToggleType::FULLSIZE)){
+	if(value && (borderWidth <= 0 || type != ofxGuiToggleType::CHECKBOX)){
 		bg.setFillColor(fillColor);
 	}else{
 		bg.setFillColor(backgroundColor);
@@ -129,20 +129,23 @@ void ofxGuiToggle::generateDraw(){
 		default:
 		case ofxGuiToggleType::RADIO:{
 			border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3, checkboxRect.getHeight()/3, 0, 360);
-			bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
-			border.append(bg);
+			border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
 			if(value){
-				border.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth-2, checkboxRect.getHeight()/3-borderWidth-2, 0, 360);
+				bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth-2, checkboxRect.getHeight()/3-borderWidth-2, 0, 360);
+			}else{
+				bg.arc(checkboxRect.getCenter(), checkboxRect.getHeight()/3-borderWidth, checkboxRect.getHeight()/3-borderWidth, 0, 360);
 			}
+
 			break;
 		}
 		case ofxGuiToggleType::CHECKBOX: {
-			border.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6,checkboxRect.height/6),
-						 checkboxRect.width/3*2,checkboxRect.height/3*2);
+			border.rectRounded(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6,checkboxRect.height/6),
+						 checkboxRect.width/3*2,checkboxRect.height/3*2, borderRadius);
+
 			if(value){
 				if(borderWidth.get() > 0){
-					border.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
-								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
+					border.rectRounded(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+							 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth, borderRadius);
 					//create cross
 					float bla = sqrt(borderWidth*borderWidth*0.5);
 					ofRectangle checkbox = checkboxRect;
@@ -165,26 +168,26 @@ void ofxGuiToggle::generateDraw(){
 					border.lineTo(checkbox.getCenter() + ofPoint(-bla, 0));
 					border.lineTo(checkbox.getTopLeft() + ofPoint(0, borderWidth));
 					border.close();
-					bg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
-								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
+					bg.rectRounded(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth, borderRadius);
 				}else{
 					bg.append(border);
 				}
 			}else{
-				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
-							 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth);
+				bg.rectRounded(checkboxRect.getTopLeft()+ofPoint(checkboxRect.width/6+borderWidth,checkboxRect.height/6+borderWidth),
+								 checkboxRect.width/3*2-2*borderWidth,checkboxRect.height/3*2 - 2*borderWidth, borderRadius);
 				border.append(bg);
 			}
 
 			break;
 		}
 		case ofxGuiToggleType::FULLSIZE: {
-			border.rectangle(checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height);
+			border.rectRounded(checkboxRect.getTopLeft(),checkboxRect.width,checkboxRect.height, borderRadius);
 			if(value){
 				bg.append(border);
-				border.rectangle(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth);
+				border.rectRounded(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth, borderRadius);
 			}else{
-				bg.rectangle(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth);
+				bg.rectRounded(checkboxRect.getTopLeft()+ofPoint(borderWidth,borderWidth),checkboxRect.width-2*borderWidth,checkboxRect.height-2*borderWidth, borderRadius);
 				border.append(bg);
 			}
 			break;

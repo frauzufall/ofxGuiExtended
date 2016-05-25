@@ -7,15 +7,20 @@ void ofApp::setup(){
 
 	renderer1.setup("renderer1");
 	renderer2.setup("renderer2");
+	renderer3.setup("renderer3");
 
 	gui.setupFlexBoxLayout();
 
-	panel1 = gui.addPanel(renderer1.parameters);
+	ofxGuiPanel* panel1 = gui.addPanel(renderer1.parameters);
 	panel1->loadTheme("theme_default.json");
 
-	panel2 = gui.addPanel(renderer2.parameters);
+	ofxGuiPanel* panel2 = gui.addPanel(renderer2.parameters);
 	panel2->loadTheme("theme_light.json");
-	panel2->setPosition(ofGetWidth()-panel2->getWidth()-20, 20);
+	panel2->setPosition(panel1->getShape().getTopRight()+ofPoint(10, 0));
+
+	ofxGuiPanel* panel3 = gui.addPanel(renderer3.parameters);
+	panel3->loadTheme("theme3.json");
+	panel3->setPosition(panel2->getShape().getTopRight()+ofPoint(10, 0));
 
 }
 
@@ -29,6 +34,7 @@ void ofApp::draw(){
 	ofBackgroundGradient(ofColor::white, ofColor::gray);
 	renderer1.draw();
 	renderer2.draw();
+	renderer3.draw();
 }
 
 //--------------------------------------------------------------
@@ -72,7 +78,6 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	panel2->setPosition(w-panel2->getWidth()-20, 20);
 }
 
 //--------------------------------------------------------------

@@ -84,6 +84,7 @@ void ofxGuiElement::setup(){
 	fontSize.set("font-size", 10);
 	showName.set("show-name", true);
 	borderWidth.set("border-width", 1);
+	borderRadius.set("border-radius", 0);
 	setLayoutPosition(DOM::LayoutPosition::STATIC);
 
 	textAlignment.setName("text-align");
@@ -205,6 +206,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 		JsonConfigParser::parse(_config, fontSize);
 		JsonConfigParser::parse(_config, borderWidth);
 		JsonConfigParser::parse(_config, textPadding);
+		JsonConfigParser::parse(_config, borderRadius);
 
 		//parse size
 		JsonConfigParser::parse(_config, this);
@@ -575,14 +577,15 @@ void ofxGuiElement::generateDraw(){
 	bg.setFillColor(backgroundColor);
 	bg.setFilled(true);
 	bg.setStrokeWidth(0);
-	bg.rectangle(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2);
 
 	border.clear();
 	border.setFilled(true);
 	border.setStrokeWidth(0);
 	border.setFillColor(borderColor);
-	border.rectangle(0,0,getWidth(),getHeight());
-	border.rectangle(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2);
+
+	bg.rectRounded(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2, borderRadius);
+	border.rectRounded(0,0,getWidth(),getHeight(), borderRadius);
+	border.rectRounded(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2, borderRadius);
 
 }
 

@@ -245,9 +245,9 @@ void ofxGuiSlider<DataType>::generateDraw(){
 		bar.setFillColor(fillColor);
 		bar.setFilled(true);
 		if(horizontal){
-			bar.rectangle(borderWidth,borderWidth, valAsPct, getHeight()-borderWidth*2);
+			bar.rectRounded(borderWidth,borderWidth, valAsPct, getHeight()-borderWidth*2, borderRadius);
 		}else{
-			bar.rectangle(borderWidth, getHeight() - valAsPct-borderWidth, getWidth()-borderWidth*2, valAsPct);
+			bar.rectRounded(borderWidth, getHeight() - valAsPct-borderWidth, getWidth()-borderWidth*2, valAsPct, borderRadius);
 		}
 
 	}

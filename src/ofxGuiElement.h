@@ -164,6 +164,7 @@ class ofxGuiElement : public DOM::Element {
 		ofParameter<bool> showName;
 		ofParameter<float> fontSize;
 		ofParameter<float> textPadding;
+		ofParameter<float> borderRadius;
 
 		bool bRegisteredForMouseEvents;
 

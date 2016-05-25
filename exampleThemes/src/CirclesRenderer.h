@@ -16,7 +16,7 @@ class CirclesRenderer;
 
 template<typename ParameterType>
 class ofCirclesRendererParam: public ofReadOnlyParameter<ParameterType,CirclesRenderer>{
-    friend class CirclesRenderer;
+	friend class CirclesRenderer;
 };
 
 class CirclesRenderer {
@@ -29,6 +29,7 @@ public:
 	ofParameterGroup parameters;
 	ofParameter<float> size;
 	ofParameter<int> number;
+	ofParameter<bool> show;
 	ofParameter<ofVec2f> position;
 
 	ofParameter<ofColor> color;
