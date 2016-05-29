@@ -189,7 +189,7 @@ gui.setup<ofxDOMLayoutCustom>();
     <tr>
         <td>`background-color`<br>`border-color`<br>`fill-color`<br>`text-color`<br>`header-background-color`</td>
         <td>`string`</td>
-        <td>`"#ff0000"`<br>`"rgb(255,0,0)"`<br>`"rgba(255,0,0,0.5)"`</td>
+        <td>`"#ff0000"`<br>`"rgb(255,0,0)"`<br>`"rgba(255,0,0,0.5)"`<br>`"transparent"`</td>
         <td>Colors of the element.</td>
     </tr>
     <tr>
@@ -482,14 +482,9 @@ gui.setup<ofxDOMLayoutCustom>();
 ### Create custom layout
 - //TODO
 
-## Known issues
+## Known issues and feature wish list
 - ** *Please report issues!* **
-- The headers of containers with horizontally aligned children (`flex-direction: row` in FlexBoxLayout and `direction: horizontal` in BoxLayout) don't get displayed correctly, hide them with `ofJson({{"show-header", false}})`. Until this is fixed, you can use a vertical container with showing header and add the horizontal container with hidden header.
-- FlexBoxLayout needs optimization.
-
-## Wish list
-- Load attributes by class / element name from file
-- Disable controls
+- Have a look at the [issues on github](https://github.com/frauzufall/ofxGuiExtended/issues), there are up to date posts on bugs and feature requests
 
 ## Credits
 - @arturoc for his work on [ofxGui](https://github.com/openframeworks/openFrameworks/tree/master/addons/ofxGui/src)

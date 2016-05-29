@@ -1,0 +1,25 @@
+{
+    "default": {
+        "base": {
+            "background-color": "rgba(255,255,255,0.2)",
+            "fill-color": "rgba(255,255,255,0.7)",
+            "border-width": 0,
+            "padding": 0,
+            "margin": 0,
+            "text-color": "#000000",
+            "font-family": "fonts/UbuntuMono-B.ttf",
+            "font-size": 10,
+            "text-padding": 2
+        },
+        "group": {
+            "border-color": "rgb(255,255,255)",
+            "padding": 1,
+            "border-width": 1,
+            "margin-left": 10
+        },
+        "group-header": {
+            "background-color": "#2da1e3",
+            "text-color": "#ffffff"
+        }
+    }
+}
