@@ -40,6 +40,11 @@ bool JsonConfigParser::_parse(const ofJson &config, const string &name, ofColor&
 		if(content.is_string()){
 			std::string s_value = content;
 
+			if(s_value == "transparent"){
+				val.set(ofColor(0,0));
+				return true;
+			}
+
 			//look for colors in hex format
 
 			std::string hexval = s_value;

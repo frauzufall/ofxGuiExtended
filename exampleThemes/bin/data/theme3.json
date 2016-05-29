@@ -1,0 +1,48 @@
+{
+    "theme3": {
+        "base": {
+            "background-color": "rgba(0,0,0,0.3)",
+            "fill-color": "rgb(220,180,50)",
+            "border-width": 1,
+            "padding": 2,
+            "border-color": "rgba(0,0,0,0.4)",
+            "margin": 5,
+            "text-color": "#000000",
+            "text-padding": 2,
+            "border-radius": 5
+        },
+
+        "panel": {
+            "width": 300,
+            "direction": "vertical",
+            "show-header": true,
+            "background-color": "transparent",
+            "padding": 10,
+            "show-header": false
+        },
+
+        "group": {
+            "width": "100%",
+            "background-color": "transparent",
+            "padding": 5,
+            "margin": "0 0 5 0"
+        },
+
+        "group-header": {
+            "height": 39,
+            "border-width": 0,
+            "background-color": "transparent",
+            "text-color": "#000000"
+        },
+
+        "slider": {
+          "precision": 3
+        },
+
+        "toggle": {
+          "type": "radio"
+        }
+
+
+    }
+}
