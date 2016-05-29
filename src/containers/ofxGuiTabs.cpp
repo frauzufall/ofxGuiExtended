@@ -44,7 +44,8 @@ void ofxGuiTabs::setup(){
 	tabWidth.set("tab width", 100);
 	tabHeight.set("tab height", 50);
 	setConfig(ofJson({
-		{"flex-direction", "column"}
+		{"flex-direction", "column"},
+		{"direction", "vertical"}
 	 }));
 
 	clear();
@@ -70,6 +71,7 @@ void ofxGuiTabs::clear(){
 		{"border-width", 0},
 		{"padding", "0 10"},
 		{"flex-direction", "row"},
+		{"direction", "horizontal"},
 		{"background-color", "rgba(0,0,0,0)"}
 	}));
 

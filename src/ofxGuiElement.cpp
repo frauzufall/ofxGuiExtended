@@ -89,7 +89,6 @@ void ofxGuiElement::setup(){
 
 	textAlignment.setName("text-align");
 	setTextAlignment("left");
-	setShowName(showName);
 
 	setTheme(ofxGuiDefaultConfig::get());
 

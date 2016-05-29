@@ -189,36 +189,6 @@ bool JsonConfigParser::parse(const ofJson &config, DOM::Element* val){
 				val->setPosition(val->getPosition().x, top);
 			}
 		}
-//		if (config.find("width") != config.end()) {
-//			ofJson width = config["width"];
-//			if(width.is_number()){
-//				val->setWidth(width);
-//				val->setPercentalWidth(false);
-//			}else {
-//				if(ofSplitString(width, "%").size() > 0){
-//					vector<std::string> _val = JsonConfigParser::getMatchedStrings(width, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
-//					if(_val.size() > 0){
-//						float res = ofToFloat(_val[0])/100.;
-//						val->setPercentalWidth(true, res);
-//					}
-//				}
-//			}
-//		}
-//		if (config.find("height") != config.end()) {
-//			ofJson height = config["height"];
-//			if(height.is_number()){
-//				val->setHeight(height);
-//				val->setPercentalHeight(false);
-//			}else {
-//				if(ofSplitString(height, "%").size() > 0){
-//					vector<std::string> _val = JsonConfigParser::getMatchedStrings(height, "(?:\\b|-)([1-9]{1,2}[0]?|100)\\b");
-//					if(_val.size() > 0){
-//						float res = ofToFloat(_val[0])/100.;
-//						val->setPercentalHeight(true, res);
-//					}
-//				}
-//			}
-//		}
 	}
 	return true;
 

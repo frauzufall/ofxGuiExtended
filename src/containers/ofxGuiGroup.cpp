@@ -457,6 +457,8 @@ void ofxGuiGroup::minimize(){
 		child->setHidden(true);
 	}
 
+	invalidateChildShape();
+
 //	blockLayout(false);
 
 //	setLayoutSize(header->getWidth(), header->getHeight());
