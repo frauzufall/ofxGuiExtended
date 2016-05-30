@@ -22,6 +22,14 @@ ofParameter<bool>& ofxGui::getVisible(){
 	return getDocument()->getVisible();
 }
 
+ofxGuiContainer* ofxGui::addContainer(const std::string& name, const ofJson& config){
+	return getDocument()->add<ofxGuiContainer>(name, rootGroupConfig(config));
+}
+
+ofxGuiContainer* ofxGui::addContainer(const ofParameterGroup & parameters, const ofJson& config){
+	return getDocument()->add<ofxGuiContainer>(parameters, rootGroupConfig(config));
+}
+
 ofxGuiGroup* ofxGui::addGroup(const std::string& name, const ofJson& config){
 	return getDocument()->add<ofxGuiGroup>(name, rootGroupConfig(config));
 }

@@ -1,5 +1,5 @@
 #include "ofxGuiToggle.h"
-#include "ofxGuiGroup.h"
+#include "ofxGuiContainer.h"
 #include "ofGraphics.h"
 using namespace std;
 
@@ -283,7 +283,7 @@ bool ofxGuiToggle::setValue(float mx, float my, bool bCheck){
 	if(hasFocus){
 
 		//if group has exclusive toggles and toggle is on, don't to anything
-		ofxGuiGroup* parent = dynamic_cast<ofxGuiGroup*>(this->parent());
+		ofxGuiContainer* parent = dynamic_cast<ofxGuiContainer*>(this->parent());
 		if(parent){
 			if(parent->getTogglesExclusive()){
 				if(value.get()){

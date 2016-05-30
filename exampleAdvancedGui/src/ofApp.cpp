@@ -84,7 +84,7 @@ void ofApp::setup(){
 	/*
 	 *  sliders
 	 */
-	sliders = gui.addPanel("vertical sliders", ofJson({{"direction", "horizontal"}, {"show-header", false}}));
+	sliders = gui.addContainer("vertical sliders", ofJson({{"direction", "horizontal"}}));
 	sliders->setPosition(colorPanel->getShape().getTopRight()+ofPoint(20,0));
 
 	sliders->add(slider1Val.set("slider1", 1. / 7., 0, 1), ofJson({{"width", 40}, {"height", 130}}));
@@ -93,6 +93,25 @@ void ofApp::setup(){
 	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"width", 70}, {"height", 130}}));
 
 	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"width", 130}, {"height", 130}, {"precision", 2}}));
+
+
+	/*
+	 * showing the differences between containers, groups and panels
+	 */
+
+	ofJson containerSettings = {{"width", 400}};
+
+	containerExample = gui.addContainer("Container", containerSettings);
+	containerExample->add(containerLabel.set("Container", "A collection of elements."));
+	containerExample->setPosition(sliders->getShape().getBottomLeft() + ofPoint(20, 170));
+
+	groupExample = gui.addGroup("Group", containerSettings);
+	groupExample->add(groupLabel.set("A container with header to minimize / maximize."));
+	groupExample->setPosition(containerExample->getShape().getBottomLeft() + ofPoint(0, 20));
+
+	panelExample = gui.addPanel("Panel", containerSettings);
+	panelExample->add(panelLabel.set("A container with header to drag, save and load."));
+	panelExample->setPosition(groupExample->getShape().getBottomLeft() + ofPoint(0, 20));
 
 
 	/*
@@ -139,7 +158,6 @@ void ofApp::setHeaderColors(int& index){
 
 	labels->getHeader()->setBackgroundColor(c);
 	buttons->getHeader()->setBackgroundColor(c);
-	sliders->getHeader()->setBackgroundColor(c);
 	colorPanel->getHeader()->setBackgroundColor(c);
 	colorToggles->getHeader()->setBackgroundColor(c);
 

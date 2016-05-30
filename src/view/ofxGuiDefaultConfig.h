@@ -44,16 +44,22 @@ struct ofxGuiDefaultConfig{
 				{
 					ofxGuiLabel::getClassType(), {
 						{"border-width", 0},
-						{"background-color", "rgba(0,0,0,0)"}
+						{"background-color", "transparent"}
+					}
+				},
+
+				/// settings for all containers
+				{
+					ofxGuiContainer::getClassType(), {
+						{"border-color", "rgba(255,255,255,0.7)"},
+						{"padding", 0},
+						{"border-width", 0}
 					}
 				},
 
 				/// settings for all groups
 				{
 					ofxGuiGroup::getClassType(), {
-						{"border-color", "rgba(255,255,255,0.7)"},
-						{"padding", 0},
-						{"border-width", 0}
 					}
 				},
 

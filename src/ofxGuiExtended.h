@@ -54,6 +54,20 @@ class ofxGui {
 		/// \returns A parameter that determines if the gui is visible or not.
 		ofParameter<bool>& getVisible();
 
+		/// \brief Add a container to the document.
+		/// A container is a collection of elements.
+		/// \param name The container name.
+		/// \param config The container configuration.
+		/// \returns The GUI container element.
+		ofxGuiContainer* addContainer(const std::string& name="", const ofJson& config = ofJson());
+
+		/// \brief Add a container to the document.
+		/// A container is a collection of elements.
+		/// \param parameters A parameter group containing parameters that will be added to the container.
+		/// \param config The container configuration.
+		/// \returns The GUI container element.
+		ofxGuiContainer* addContainer(const ofParameterGroup & parameters, const ofJson& config = ofJson());
+
 		/// \brief Add a group to the document.
 		/// A group is a container of elements with a header to minimize the group.
 		/// \param name The group name.

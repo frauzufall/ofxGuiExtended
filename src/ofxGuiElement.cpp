@@ -1,5 +1,5 @@
 #include "ofxGuiElement.h"
-#include "containers/ofxGuiGroup.h"
+#include "containers/ofxGuiContainer.h"
 #include "ofImage.h"
 #include "ofBitmapFont.h"
 #include "view/ofxGuiDefaultConfig.h"
@@ -355,7 +355,7 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 
 void ofxGuiElement::copyLayoutFromDocument(){
 
-	if(ofxGuiGroup* _this = dynamic_cast<ofxGuiGroup*>(this)){
+	if(ofxGuiContainer* _this = dynamic_cast<ofxGuiContainer*>(this)){
 		if(!layout()){
 			DOM::Document* doc = document();
 			if(doc){

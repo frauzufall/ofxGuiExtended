@@ -59,7 +59,11 @@ void setup(){
 ```
 
 ### Using containers
-You can also create containers yourself.
+A container is just a collection of other elements, a group derives from it and has a header to minimize and maximize itself and a panel has a header to move it around and save and load element states.
+
+![example of different container types](exampleAdvancedGui/containers.png)
+
+In the last example, the panel got created automatically, but you can also create containers yourself.
 ```c++
 ofxGuiPanel* panel = gui.addPanel();
 panel->add(..);
@@ -71,7 +75,7 @@ ofxGuiGroup* group = panel->addGroup();
 group->add(..);
 ```
 
-Some parameters automatically create containers if you add them to the gui:
+Some parameters automatically create groups if you add them to the gui:
 
 ```c++
 ofParameter<ofPoint> position;
@@ -195,8 +199,14 @@ gui.setup<ofxDOMLayoutCustom>();
     <tr>
         <td>`border-width`</td>
         <td>`float`</td>
-        <td>`10`</td>
+        <td>`1`</td>
         <td>Width of the border.</td>
+    </tr>
+    <tr>
+        <td>`border-radius`</td>
+        <td>`float`</td>
+        <td>`3`</td>
+        <td>Radius of the border (not implemented for all controls yet).</td>
     </tr>
     <tr>
         <td>`text-align`</td>
@@ -337,9 +347,14 @@ gui.setup<ofxDOMLayoutCustom>();
 
 ## Containers
 
-### `ofxGuiGroup`
+### `ofxGuiContainer`
 - derived from `ofxGuiElement`.
-- Groups other elements according to the current layout
+- Contains other elements according to the current layout
+- class type name for JSON theme: `container`
+
+### `ofxGuiGroup`
+- derived from `ofxGuiContainer`.
+- Groups other elements according to the current layout with a header to minimize or maximize the group
 - class type name for JSON theme: `group`
 - class type name of group header for JSON theme: `group-header`
 <table>

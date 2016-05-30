@@ -26,6 +26,11 @@ class ofApp : public ofBaseApp {
 
 		ofxGui gui;
 
+		ofxGuiContainer *containerExample;
+		ofxGuiGroup *groupExample;
+		ofxGuiPanel *panelExample;
+		ofParameter<string> containerLabel, groupLabel, panelLabel;
+
 		ofxGuiPanel *panel1;
 		ofxGuiGroup *labels, *buttons;
 
@@ -40,7 +45,7 @@ class ofApp : public ofBaseApp {
 		ofParameter <bool> showHeaders;
 
 		//sliders
-		ofxGuiPanel* sliders;
+		ofxGuiContainer* sliders;
 		ofParameter <float> slider1Val, slider2Val, slider3Val, slider4Val;
 		ofParameter <float> circularSliderVal;
 

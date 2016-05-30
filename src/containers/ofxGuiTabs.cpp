@@ -3,7 +3,7 @@
 using namespace std;
 
 ofxGuiTabs::ofxGuiTabs() :
-	ofxGuiGroup(){
+	ofxGuiContainer(){
 
 	setup();
 
@@ -60,14 +60,13 @@ void ofxGuiTabs::clear(){
 		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::setActiveTab);
 	}
 
-	ofxGuiGroup::clear();
+	ofxGuiContainer::clear();
 
-	tabs = addGroup("tabs", ofJson({
+	tabs = addContainer("tabs", ofJson({
 		{"height", tabHeight.get()},
 		{"align-items", "stretch"},
 		{"justify-content", "flex-start"},
 		{"margin", 0},
-		{"show-header", false},
 		{"border-width", 0},
 		{"padding", "0 10"},
 		{"flex-direction", "row"},
@@ -95,7 +94,7 @@ void ofxGuiTabs::generateDraw(){
 		}
 	}
 
-	ofxGuiGroup::generateDraw();
+	ofxGuiContainer::generateDraw();
 
 	border.clear();
 	bg.clear();
@@ -217,27 +216,12 @@ void ofxGuiTabs::setTabWidth(int w){
 	}
 }
 
-void ofxGuiTabs::maximize(){
-	ofxGuiGroup::maximize();
-	for(auto &e : pages){
-		e->setHidden(true);
-	}
-	if(activePage){
-		activePage->setHidden(false);
-	}
-	invalidateChildShape();
-}
-
-void ofxGuiTabs::maximizeAll(){
-	maximize();
-}
-
 std::string ofxGuiTabs::getClassType(){
 	return "tabs";
 }
 
 vector<std::string> ofxGuiTabs::getClassTypes(){
-	vector<std::string> types = ofxGuiGroup::getClassTypes();
+	vector<std::string> types = ofxGuiContainer::getClassTypes();
 	types.push_back(getClassType());
 	return types;
 }
