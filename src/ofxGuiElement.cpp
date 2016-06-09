@@ -90,7 +90,8 @@ void ofxGuiElement::setup(){
 	textAlignment.setName("text-align");
 	setTextAlignment("left");
 
-	setTheme(ofxGuiDefaultConfig::get());
+	theme = ofxGuiDefaultConfig::get();
+	setTheme();
 
 
 	// parameter won't be saved to file
@@ -129,7 +130,7 @@ void ofxGuiElement::setConfig(const ofJson &config, bool recursive){
 }
 
 void ofxGuiElement::setTheme(){
-	setTheme(ofxGuiDefaultConfig::get());
+	setTheme(theme);
 }
 
 void ofxGuiElement::setTheme(const ofJson &config){
@@ -657,7 +658,12 @@ float ofxGuiElement::getTextWidth(const std::string & text){
 }
 
 float ofxGuiElement::getTextHeight(const std::string & text){
-	return getTextBoundingBox(text).height+2*textPadding;
+	std::string _text = text;
+	if(text != ""){
+		//get text height independent of the appearance of letters being low or high
+		_text += "|";
+	}
+	return getTextBoundingBox(_text).height+2*textPadding;
 }
 
 bool ofxGuiElement::isMouseOver() const{
