@@ -106,7 +106,11 @@ class ofxGuiElement : public DOM::Element {
 
 		static std::string getClassType();
 
+		int getObjectCount();
+
 	protected:
+
+		int objCount;
 
 		virtual vector<std::string> getClassTypes();
 

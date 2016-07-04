@@ -91,6 +91,23 @@ public:
 
 protected:
 
+	struct FlexBoxObject {
+		DOM::Element* origin;
+		ofRectangle shape;
+		bool sizeSet = false;
+		bool flex = false;
+		float flexBasis = 0;
+	};
+
+	struct FlexBoxLine {
+		FlexBoxLine(float initialSpaceMainAxis){
+			totalSpaceMainAxis = initialSpaceMainAxis;
+		}
+		vector<FlexBoxObject> items;
+		float totalSpaceMainAxis;
+		float sizeCrossAxis;
+	};
+
 	void align(FlexDirection direction);
 
 	static bool elementFlexing(DOM::Element* e);

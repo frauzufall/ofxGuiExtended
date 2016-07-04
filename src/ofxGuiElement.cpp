@@ -3,6 +3,7 @@
 #include "ofImage.h"
 #include "ofBitmapFont.h"
 #include "view/ofxGuiDefaultConfig.h"
+#include "util/IDGenerator.h"
 #ifndef TARGET_EMSCRIPTEN
 #include "ofXml.h"
 #endif
@@ -47,6 +48,8 @@ bool saveJson(const std::string & filename, ofJson & json){
 
 ofxGuiElement::ofxGuiElement()
 	:DOM::Element("",0,0,0,0){
+
+	objCount = IDGenerator::getInstance().next();
 
 	setup();
 
@@ -761,4 +764,8 @@ vector<std::string> ofxGuiElement::getClassTypes(){
 	vector<std::string> types;
 	types.push_back(getClassType());
 	return types;
+}
+
+int ofxGuiElement::getObjectCount(){
+	return objCount;
 }

@@ -66,6 +66,7 @@ struct ofxGuiDefaultConfig{
 				/// settings for all group headers
 				{
 					ofxGuiGroupHeader::getClassType(), {
+						{"width", "100%"},
 						{"align-self", "stretch"},
 						{"flex","none"},
 						{"margin", 0},

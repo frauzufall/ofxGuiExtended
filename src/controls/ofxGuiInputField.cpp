@@ -305,7 +305,8 @@ bool ofxGuiInputField<Type>::keyPressed(ofKeyEventArgs & args){
 		}else if(args.key == OF_KEY_RETURN){
 			leaveFocus();
 		}else if((args.key >= '!' && args.key <= '~')
-				 || (args.key <= 'a' && args.key >= 'Z')){
+				 || (args.key <= 'a' && args.key >= 'Z')
+				 || (args.key == ' ')){
 			newCursorIdx = insertAlphabetic(ofToString((char)args.key));
 		}
 
