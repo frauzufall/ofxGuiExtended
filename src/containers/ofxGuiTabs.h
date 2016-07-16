@@ -20,7 +20,7 @@ class ofxGuiTabs : public ofxGuiContainer {
 
 		virtual void clear() override;
 
-		void setActiveTab(int &index);
+		void setActiveTab(int index);
 		ofParameter<int> &getActiveTabIndex();
 		Element * getActiveTab();
 
@@ -30,6 +30,8 @@ class ofxGuiTabs : public ofxGuiContainer {
 		static std::string getClassType();
 
 	protected:
+
+		void _setActiveTab(int &index);
 
 		virtual vector<std::string> getClassTypes() override;
 

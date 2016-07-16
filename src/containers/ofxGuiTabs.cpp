@@ -27,7 +27,7 @@ ofxGuiTabs::ofxGuiTabs(string collectionName, string filename, float x, float y)
 
 ofxGuiTabs::~ofxGuiTabs(){
 	if(tabs){
-		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::setActiveTab);
+		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::_setActiveTab);
 	}
 	ofRemoveListener(childAdded, this, &ofxGuiTabs::onChildAdd);
 }
@@ -57,7 +57,7 @@ void ofxGuiTabs::setup(){
 void ofxGuiTabs::clear(){
 
 	if(tabs){
-		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::setActiveTab);
+		tabs->getActiveToggleIndex().removeListener(this, &ofxGuiTabs::_setActiveTab);
 	}
 
 	ofxGuiContainer::clear();
@@ -75,7 +75,7 @@ void ofxGuiTabs::clear(){
 	}));
 
 	tabs->setExclusiveToggles(true);
-	tabs->getActiveToggleIndex().addListener(this, &ofxGuiTabs::setActiveTab);
+	tabs->getActiveToggleIndex().addListener(this, &ofxGuiTabs::_setActiveTab);
 
 }
 
@@ -171,8 +171,7 @@ void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){
 		tab->setTextAlignment(TextAlignment::CENTERED);
 
 		if(pages.size() == 1){
-			int index = 0;
-			setActiveTab(index);
+			setActiveTab(0);
 		}
 
 		invalidateChildShape();
@@ -181,7 +180,11 @@ void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){
 
 }
 
-void ofxGuiTabs::setActiveTab(int &index){
+void ofxGuiTabs::setActiveTab(int index){
+	_setActiveTab(index);
+}
+
+void ofxGuiTabs::_setActiveTab(int &index){
 	tabs->setActiveToggle(index);
 	for(auto &e : tabs->getControls()){
 		e->setConfig(ofJson({{"margin-bottom", "1"}}));
