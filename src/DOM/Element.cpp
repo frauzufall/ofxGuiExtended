@@ -544,7 +544,7 @@ Position Element::screenToParent(const Position& screenPosition) const
 
 void Element::setPosition(float x, float y)
 {
-	if(_shape.getPosition() != ofPoint(x,y))
+	if(ofPoint(_shape.getPosition()) != ofPoint(x,y))
 	{
 		_shape.setPosition(x, y);
 		MoveEventArgs e(getPosition(), this);

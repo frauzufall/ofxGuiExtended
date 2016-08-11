@@ -70,10 +70,6 @@ ofxGuiElement::~ofxGuiElement(){
 
 void ofxGuiElement::setup(){
 
-#ifndef TARGET_EMSCRIPTEN
-	serializer = std::make_shared<ofXml>();
-#endif
-
 	bRegisteredForMouseEvents = false;
 	fontLoaded = false;
 	useTTF = false;
@@ -432,36 +428,49 @@ ofRectangle ofxGuiElement::getTextBoundingBox(const string & text, float x, floa
 }
 
 void ofxGuiElement::saveToFile(const std::string& filename){
-	if(serializer){
-		serializer->load(filename);
-		saveTo(*serializer);
-		serializer->save(filename);
+	auto extension = ofToLower(ofFilePath::getFileExt(filename));
+	if(extension == "xml"){
+		ofXml xml;
+		if(ofFile(filename, ofFile::Reference).exists()){
+			xml.load(filename);
+		}
+		saveTo(xml);
+		xml.save(filename);
+	}else if(extension == "json"){
+		ofJson json;
+		{
+			ofFile jsonFile(filename);
+			if(jsonFile.exists()){
+				jsonFile >> json;
+			}
+		}
+
+		saveTo(json);
+
+		{
+			ofFile jsonFile(filename, ofFile::WriteOnly);
+			jsonFile << json;
+		}
+
 	}else{
-		ofLogError("ofxGui") << "element has no serializer to save to";
+		ofLogError("ofxGuiExtended") << extension << " not recognized, only .xml and .json supported by now";
 	}
 }
 
 void ofxGuiElement::loadFromFile(const std::string& filename){
-	if(serializer){
-		serializer->load(filename);
-		loadFrom(*serializer);
+	auto extension = ofToLower(ofFilePath::getFileExt(filename));
+	if(extension == "xml"){
+		ofXml xml;
+		xml.load(filename);
+		loadFrom(xml);
+	}else if(extension == "json"){
+		ofJson json;
+		ofFile jsonFile(filename);
+		jsonFile >> json;
+		loadFrom(json);
 	}else{
-		ofLogError("ofxGui") << "element has no serializer to load from";
+		ofLogError("ofxGuiExtended") << extension << " not recognized, only .xml and .json supported by now";
 	}
-}
-
-
-void ofxGuiElement::saveTo(ofBaseSerializer & serializer){
-	serializer.serialize(getParameter());
-}
-
-void ofxGuiElement::loadFrom(ofBaseSerializer & serializer){
-	serializer.deserialize(getParameter());
-}
-
-
-void ofxGuiElement::setDefaultSerializer(std::shared_ptr <ofBaseFileSerializer> _serializer){
-	serializer = _serializer;
 }
 
 string ofxGuiElement::getName(){

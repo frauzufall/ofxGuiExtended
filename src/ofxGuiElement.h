@@ -5,6 +5,7 @@
 #include "ofParameter.h"
 #include "ofTrueTypeFont.h"
 #include "ofBitmapFont.h"
+#include "ofJson.h"
 
 #include "DOM/Element.h"
 
@@ -35,10 +36,15 @@ class ofxGuiElement : public DOM::Element {
 		void saveToFile(const std::string& filename);
 		void loadFromFile(const std::string& filename);
 
-		void setDefaultSerializer(std::shared_ptr <ofBaseFileSerializer> serializer);
+		template<class T>
+		void saveTo(T & serializer){
+			ofSerialize(serializer, getParameter());
+		}
 
-		virtual void saveTo(ofBaseSerializer & serializer);
-		virtual void loadFrom(ofBaseSerializer & serializer);
+		template<class T>
+		void loadFrom(T & serializer){
+			ofDeserialize(serializer, getParameter());
+		}
 
 		virtual std::string getName();
 		virtual void setName(const std::string& name);
@@ -142,7 +148,6 @@ class ofxGuiElement : public DOM::Element {
 		bool fontLoaded;
 		bool useTTF;
 		ofBitmapFont bitmapFont;
-		std::shared_ptr <ofBaseFileSerializer> serializer;
 
 		/// \brief True if the Widget is configured to be dragged.
 		bool _isDraggable = false;

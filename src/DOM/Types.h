@@ -27,6 +27,7 @@
 
 
 #include "ofBaseTypes.h"
+#include "ofPoint.h"
 
 
 #include <type_traits>
