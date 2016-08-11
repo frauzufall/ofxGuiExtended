@@ -475,6 +475,7 @@ const Document* Element::document() const
 
 std::unique_ptr<Layout> Element::removeLayout(){
 	// TODO
+	return nullptr;
 }
 
 Layout* Element::layout(){
