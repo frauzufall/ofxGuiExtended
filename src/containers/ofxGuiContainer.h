@@ -21,6 +21,7 @@ typedef ofxGuiColorSlider_<unsigned char> ofxGuiColorSlider;
 typedef ofxGuiColorSlider_<unsigned short> ofxGuiShortColorSlider;
 typedef ofxGuiColorSlider_<float> ofxGuiFloatColorSlider;
 
+class ofxGuiRectangleSlider;
 class ofxGuiGroup;
 class ofxGuiPanel;
 class ofxGuiTabs;
@@ -55,6 +56,7 @@ class ofxGuiContainer : public ofxGuiElement {
 		ofxGuiColorSlider* add(ofParameter <ofColor> & parameter, const ofJson & config = ofJson());
 		ofxGuiShortColorSlider* add(ofParameter <ofShortColor> & parameter, const ofJson & config = ofJson());
 		ofxGuiFloatColorSlider* add(ofParameter <ofFloatColor> & parameter, const ofJson & config = ofJson());
+		ofxGuiRectangleSlider *add(ofParameter <ofRectangle> & parameter, const ofJson & config = ofJson());
 
 		void add(const ofParameterGroup& parameters);
 

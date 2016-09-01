@@ -182,6 +182,10 @@ ofxGuiFloatColorSlider* ofxGuiContainer::add(ofParameter <ofFloatColor> & parame
 	return add<ofxGuiFloatColorSlider>(parameter, config);
 }
 
+ofxGuiRectangleSlider* ofxGuiContainer::add(ofParameter <ofRectangle> & parameter, const ofJson & config){
+	return add<ofxGuiRectangleSlider>(parameter, config);
+}
+
 void ofxGuiContainer::add(const ofParameterGroup &parameters){
 	addParametersFrom(parameters);
 }

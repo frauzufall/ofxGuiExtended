@@ -124,6 +124,139 @@ template class ofxGuiVecSlider_<ofVec3f>;
 template class ofxGuiVecSlider_<ofVec4f>;
 
 
+// RECTANGLE SLIDER
+
+ofxGuiRectangleSlider::ofxGuiRectangleSlider()
+	:ofxGuiGroup(){
+
+	setup();
+
+}
+
+ofxGuiRectangleSlider::ofxGuiRectangleSlider(const ofJson &config)
+	:ofxGuiRectangleSlider(){
+
+	_setConfig(config);
+
+}
+
+ofxGuiRectangleSlider::ofxGuiRectangleSlider(ofParameter<ofRectangle> &value, const ofJson & config)
+:ofxGuiRectangleSlider(){
+
+	setName(value.getName());
+
+	names.clear();
+	names.push_back("x");
+	names.push_back("y");
+	names.push_back("width");
+	names.push_back("height");
+
+	this->value.makeReferenceTo(value);
+	this->value.addListener(this, & ofxGuiRectangleSlider::changeValue);
+
+	ofRectangle val = value;
+	ofRectangle min = value.getMin();
+	ofRectangle max = value.getMax();
+	ofParameter<float> px(names[0], val.x, min.x, max.x);
+	ofParameter<float> py(names[1], val.y, min.y, max.y);
+	ofParameter<float> pw(names[2], val.width, min.width, max.width);
+	ofParameter<float> ph(names[3], val.height, min.height, max.height);
+	add(px);
+	add(py);
+	add(pw);
+	add(ph);
+	px.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	py.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	pw.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	ph.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+
+	_setConfig(config);
+
+}
+
+ofxGuiRectangleSlider::ofxGuiRectangleSlider(const std::string& controlName, const ofRectangle & v, const ofRectangle & min, const ofRectangle & max, const ofJson & config)
+	:ofxGuiRectangleSlider(config){
+
+	names.clear();
+	names.push_back("x");
+	names.push_back("y");
+	names.push_back("width");
+	names.push_back("height");
+
+
+	value.set(controlName,v,min,max);
+
+	this->value.addListener(this, & ofxGuiRectangleSlider::changeValue);
+
+	ofRectangle val = value;
+	ofParameter<float> px(names[0], val.x, min.x, max.x);
+	ofParameter<float> py(names[1], val.y, min.y, max.y);
+	ofParameter<float> pw(names[2], val.width, min.width, max.width);
+	ofParameter<float> ph(names[3], val.height, min.height, max.height);
+	add(px);
+	add(py);
+	add(pw);
+	add(ph);
+	px.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	py.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	pw.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+	ph.addListener(this, & ofxGuiRectangleSlider::changeSlider);
+
+}
+
+void ofxGuiRectangleSlider::setup(){
+
+	sliderChanging = false;
+
+}
+
+void ofxGuiRectangleSlider::changeSlider(const void * parameter, float & _value){
+	sliderChanging = true;
+	ofParameter<float> & param = *(ofParameter<float>*)parameter;
+	int i = getControlIndex(param.getName()) - getControlIndex(names[0]);
+	ofRectangle data = value;
+	switch(i){
+		case 0: data.x = _value; break;
+		case 1: data.y = _value; break;
+		case 2: data.width = _value; break;
+		case 3: data.height = _value; break;
+	}
+	value = data;
+	sliderChanging = false;
+}
+
+void ofxGuiRectangleSlider::changeValue(ofRectangle & value){
+	if (sliderChanging){
+		return;
+	}
+	getControl("x")->getParameter().template cast<float>() = value.x;
+	getControl("y")->getParameter().template cast<float>() = value.y;
+	getControl("width")->getParameter().template cast<float>() = value.width;
+	getControl("height")->getParameter().template cast<float>() = value.height;
+}
+
+ofAbstractParameter & ofxGuiRectangleSlider::getParameter(){
+	return value;
+}
+
+ofRectangle ofxGuiRectangleSlider::operator=(const ofRectangle & v){
+	value = v;
+	return value;
+}
+
+ofxGuiRectangleSlider::operator const ofRectangle & (){
+	return value;
+}
+
+const ofRectangle * ofxGuiRectangleSlider::operator->(){
+	return &value.get();
+}
+
+
+
+// COLOR SLIDER
+
+
 template<class ColorType>
 ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_()
 	:ofxGuiGroup(){

@@ -27,6 +27,29 @@ protected:
 	vector<std::string> names;
 };
 
+class ofxGuiRectangleSlider : public ofxGuiGroup {
+public:
+
+	ofxGuiRectangleSlider();
+	ofxGuiRectangleSlider(const ofJson & config);
+	ofxGuiRectangleSlider(ofParameter<ofRectangle> &value, const ofJson & config = ofJson());
+	ofxGuiRectangleSlider(const std::string& controlName, const ofRectangle & value, const ofRectangle & min, const ofRectangle & max, const ofJson & config = ofJson());
+
+	void setup();
+
+	ofAbstractParameter & getParameter();
+
+	ofRectangle operator=(const ofRectangle & v);
+	operator const ofRectangle & ();
+	const ofRectangle * operator->();
+protected:
+	void changeSlider(const void * parameter, float & value);
+	void changeValue(ofRectangle & value);
+	ofParameter<ofRectangle> value;
+	bool sliderChanging;
+	vector<std::string> names;
+};
+
 template<typename ColorType>
 class ofxGuiColorSlider_: public ofxGuiGroup{
 
