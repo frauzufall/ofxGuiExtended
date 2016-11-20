@@ -430,11 +430,11 @@ ofRectangle ofxGuiElement::getTextBoundingBox(const string & text, float x, floa
 void ofxGuiElement::saveToFile(const std::string& filename){
 	auto extension = ofToLower(ofFilePath::getFileExt(filename));
 	if(extension == "xml"){
-		ofXml xml;
+		ofxXmlSettings xml;
 		if(ofFile(filename, ofFile::Reference).exists()){
 			xml.load(filename);
 		}
-		//saveTo(xml);
+		saveTo(xml);
 		xml.save(filename);
 	}else if(extension == "json"){
 		ofJson json;
