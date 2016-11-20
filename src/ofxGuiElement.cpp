@@ -434,7 +434,7 @@ void ofxGuiElement::saveToFile(const std::string& filename){
 		if(ofFile(filename, ofFile::Reference).exists()){
 			xml.load(filename);
 		}
-		saveTo(xml);
+		//saveTo(xml);
 		xml.save(filename);
 	}else if(extension == "json"){
 		ofJson json;
@@ -460,7 +460,7 @@ void ofxGuiElement::saveToFile(const std::string& filename){
 void ofxGuiElement::loadFromFile(const std::string& filename){
 	auto extension = ofToLower(ofFilePath::getFileExt(filename));
 	if(extension == "xml"){
-		ofXml xml;
+		ofxXmlSettings xml;
 		xml.load(filename);
 		loadFrom(xml);
 	}else if(extension == "json"){
