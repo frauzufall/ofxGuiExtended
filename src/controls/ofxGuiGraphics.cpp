@@ -9,6 +9,7 @@ ofxGuiGraphics::~ofxGuiGraphics(){
 ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
 	:ofxGuiElement(){
 	_bLoaded = false;
+	graphics = nullptr;
 	setup(canvasName);
 	_setConfig(config);
 }
@@ -109,7 +110,7 @@ void ofxGuiGraphics::render(){
 
 	ofColor c = ofGetStyle().color;
 
-	if(_bLoaded){
+	if(_bLoaded && graphics){
 		graphics->draw(0, 0, getWidth(), getHeight());
 	}
 
