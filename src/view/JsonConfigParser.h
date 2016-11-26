@@ -34,7 +34,7 @@ class JsonConfigParser {
 		static bool parse(const ofJson &config, DOM::Element* val);
 
 		///\brief regex helper function copied from https://github.com/openframeworks/openFrameworks/issues/1110
-		static vector <std::string> getMatchedStrings (std::string contents, string regex);
+		static vector<std::string> getMatchedStrings(std::string contents, string regex);
 
 	protected:
 
