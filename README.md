@@ -8,9 +8,9 @@ This is a gui addon displaying `ofParameter` based data with a focus on simplici
 ![exampleLayout](exampleLayout/layoutExample.png)
 
 ## System requirements
-Since ofJson got just recently added to openFrameworks, you have to use the current master branch in order for it to work. I am using commit c9cd3e9 right now.
+Since ofJson just recently got added to openFrameworks, you have to use the current master branch in order for it to work. Please report an issue if ofxGuiExtended is not compatible with the latest openFrameworks version.
 
-This addon is tested on Ubuntu 15.10 64bit. Please tell me if it runs on other systems or if you have issues.
+This addon is tested on Ubuntu 16.04 64bit. Please tell me if it runs on other systems or if you have issues.
 
 ## Versions and dependencies
 This addon was first built as an extension for the OF core ofxGui addon. You can download this version [here](https://github.com/frauzufall/ofxGuiExtended/releases/tag/v0.1).
