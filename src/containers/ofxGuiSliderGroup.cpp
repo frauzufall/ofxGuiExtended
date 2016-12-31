@@ -71,6 +71,14 @@ ofxGuiVecSlider_<VecType>::ofxGuiVecSlider_(const std::string& controlName, cons
 }
 
 template<class VecType>
+ofxGuiVecSlider_<VecType>::~ofxGuiVecSlider_(){
+	this->value.removeListener(this, & ofxGuiVecSlider_::changeValue);
+	for (int i=0; i<VecType::DIM; i++) {
+		getControl(names[i])->getParameter().template cast<float>().removeListener(this, &ofxGuiVecSlider_::changeSlider);
+	}
+}
+
+template<class VecType>
 void ofxGuiVecSlider_<VecType>::setup(){
 
 	sliderChanging = false;
@@ -204,6 +212,13 @@ ofxGuiRectangleSlider::ofxGuiRectangleSlider(const std::string& controlName, con
 
 }
 
+ofxGuiRectangleSlider::~ofxGuiRectangleSlider(){
+	this->value.removeListener(this, & ofxGuiRectangleSlider::changeValue);
+	for (int i=0; i<4; i++){
+		getControl(names[i])->getParameter().template cast<float>().removeListener(this, &ofxGuiRectangleSlider::changeSlider);
+	}
+}
+
 void ofxGuiRectangleSlider::setup(){
 
 	sliderChanging = false;
@@ -335,6 +350,16 @@ ofxGuiColorSlider_<ColorType>::ofxGuiColorSlider_(const std::string& controlName
 	sliderChanging = false;
 
 }
+
+
+template<class ColorType>
+ofxGuiColorSlider_<ColorType>::~ofxGuiColorSlider_(){
+	this->value.removeListener(this, & ofxGuiColorSlider_::changeValue);
+	for (int i=0; i<4; i++){
+		getControl(names[i])->getParameter().template cast<ColorType>().removeListener(this, &ofxGuiColorSlider_::changeSlider);
+	}
+}
+
 
 template<class ColorType>
 void ofxGuiColorSlider_<ColorType>::setup(){
