@@ -13,7 +13,7 @@ bool ofxDOMLayoutHelper::elementAbsolutePositioned(DOM::Element* e){
 		return false;
 	}
 	if(e->hasAttribute("position")){
-		if(e->getAttribute<DOM::LayoutPosition>("position") == DOM::LayoutPosition::ABSOLUTE){
+		if(e->getAttribute<DOM::LayoutPosition>("position") == DOM::LayoutPosition::POSITION_ABSOLUTE){
 			return true;
 		}
 	}

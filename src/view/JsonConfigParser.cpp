@@ -168,11 +168,11 @@ bool JsonConfigParser::_parse(const ofJson &config, const string &name, DOM::Lay
 	if (config.find(name) != config.end()) {
 		ofJson content = config[name];
 		if(content == "static"){
-			val = DOM::LayoutPosition::STATIC;
+			val = DOM::LayoutPosition::POSITION_STATIC;
 			return true;
 		}
 		if(content == "absolute"){
-			val = DOM::LayoutPosition::ABSOLUTE;
+			val = DOM::LayoutPosition::POSITION_ABSOLUTE;
 			return true;
 		}
 	}

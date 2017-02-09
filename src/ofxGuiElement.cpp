@@ -84,7 +84,7 @@ void ofxGuiElement::setup(){
 	showName.set("show-name", true);
 	borderWidth.set("border-width", 1);
 	borderRadius.set("border-radius", 0);
-	setLayoutPosition(DOM::LayoutPosition::STATIC);
+	setLayoutPosition(DOM::LayoutPosition::POSITION_STATIC);
 
 	textAlignment.setName("text-align");
 	setTextAlignment("left");
@@ -571,7 +571,7 @@ void ofxGuiElement::setLayoutPosition(DOM::LayoutPosition type){
 
 DOM::LayoutPosition ofxGuiElement::getLayoutPosition() {
 	if(!hasAttribute("position")){
-		setAttribute("position", DOM::LayoutPosition::STATIC);
+		setAttribute("position", DOM::LayoutPosition::POSITION_STATIC);
 	}
 	return getAttribute<DOM::LayoutPosition>("position");
 }
