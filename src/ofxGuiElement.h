@@ -6,6 +6,7 @@
 #include "ofTrueTypeFont.h"
 #include "ofBitmapFont.h"
 #include "ofJson.h"
+#include "ofxXmlSettings.h"
 
 #include "DOM/Element.h"
 
