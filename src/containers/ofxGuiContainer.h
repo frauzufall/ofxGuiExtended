@@ -59,6 +59,7 @@ class ofxGuiContainer : public ofxGuiElement {
 		ofxGuiRectangleSlider *add(ofParameter <ofRectangle> & parameter, const ofJson & config = ofJson());
 
 		void add(const ofParameterGroup& parameters);
+		ofxGuiElement* add(ofAbstractParameter & parameter, const ofJson & config = ofJson());
 
 		ofxGuiLabel* addLabel(const std::string& label, const ofJson& config = ofJson());
 		ofxGuiElement* addSpacer(float width, float height);

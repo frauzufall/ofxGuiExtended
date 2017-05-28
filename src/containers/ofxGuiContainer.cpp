@@ -89,59 +89,64 @@ void ofxGuiContainer::_setConfig(const ofJson &config){
 
 }
 
+ofxGuiElement* ofxGuiContainer::add(ofAbstractParameter & parameter, const ofJson & config){
+	ofAbstractParameter* p = &parameter;
+	if(p->isReadOnly()){
+		ofLogWarning("ofxGui") << "Trying to add " << p->getName() << ": read only parameters not supported yet in ofxGui";
+		return NULL;
+	}
+	string type = p->type();
+	// TODO is this neccessary?
+	if(type == typeid(ofParameter <int32_t> ).name()){
+		return add(p->cast<int>(), config);
+	}else if(type == typeid(ofParameter <uint32_t> ).name()){
+		return add(p->cast<uint32_t>(), config);
+	}else if(type == typeid(ofParameter <int64_t> ).name()){
+		return add(p->cast<int64_t>(), config);
+	}else if(type == typeid(ofParameter <uint64_t> ).name()){
+		return add(p->cast<uint64_t>(), config);
+	}else if(type == typeid(ofParameter <int8_t> ).name()){
+		return add(p->cast<int8_t>(), config);
+	}else if(type == typeid(ofParameter <uint8_t> ).name()){
+		return add(p->cast<uint8_t>(), config);
+	}else if(type == typeid(ofParameter <int16_t> ).name()){
+		return add(p->cast<int16_t>(), config);
+	}else if(type == typeid(ofParameter <uint16_t> ).name()){
+		return add(p->cast<uint16_t>(), config);
+	}else if(type == typeid(ofParameter<float>).name()){
+		return add(p->cast<float>(), config);
+	}else if(type == typeid(ofParameter <double> ).name()){
+		return add(p->cast<double>(), config);
+	}else if(type == typeid(ofParameter<void>).name()){
+		return add(p->cast<void>(), config);
+	}else if(type == typeid(ofParameter<bool>).name()){
+		return add(p->cast<bool>(), config);
+	}else if(type == typeid(ofParameter<ofVec2f>).name()){
+		return add(p->cast<ofVec2f>(), config);
+	}else if(type == typeid(ofParameter<ofVec3f>).name()){
+		return add(p->cast<ofVec3f>(), config);
+	}else if(type == typeid(ofParameter<ofVec4f>).name()){
+		return add(p->cast<ofVec4f>(), config);
+	}else if(type == typeid(ofParameter<ofColor>).name()){
+		return add(p->cast<ofColor>(), config);
+	}else if(type == typeid(ofParameter<ofShortColor>).name()){
+		return add(p->cast<ofShortColor>(), config);
+	}else if(type == typeid(ofParameter<ofFloatColor>).name()){
+		return add(p->cast<ofFloatColor>(), config);
+	}else if(type == typeid(ofParameter<string>).name()){
+		return add(p->cast<string>(), config);
+	}else if(type == typeid(ofParameterGroup).name()){
+		//add<ofxGuiContainer>(p->castGroup());
+		return addGroup(p->castGroup(), config);
+	}else{
+		ofLogWarning("ofxGui") << "Trying to add " << p->getName() << ": ofxBaseGroup; no control for parameter of type " << type;
+		return NULL;
+	}
+}
+
 void ofxGuiContainer::addParametersFrom(const ofParameterGroup & parameters){
 	for(auto & p: parameters){
-		if(p->isReadOnly()){
-			ofLogWarning("ofxGui") << "Trying to add " << p->getName() << ": read only parameters not supported yet in ofxGui";
-			continue;
-		}
-		string type = p->type();
-		// TODO is this neccessary?
-		if(type == typeid(ofParameter <int32_t> ).name()){
-			add(p->cast<int>());
-		}else if(type == typeid(ofParameter <uint32_t> ).name()){
-			add(p->cast<uint32_t>());
-		}else if(type == typeid(ofParameter <int64_t> ).name()){
-			add(p->cast<int64_t>());
-		}else if(type == typeid(ofParameter <uint64_t> ).name()){
-			add(p->cast<uint64_t>());
-		}else if(type == typeid(ofParameter <int8_t> ).name()){
-			add(p->cast<int8_t>());
-		}else if(type == typeid(ofParameter <uint8_t> ).name()){
-			add(p->cast<uint8_t>());
-		}else if(type == typeid(ofParameter <int16_t> ).name()){
-			add(p->cast<int16_t>());
-		}else if(type == typeid(ofParameter <uint16_t> ).name()){
-			add(p->cast<uint16_t>());
-		}else if(type == typeid(ofParameter<float>).name()){
-			add(p->cast<float>());
-		}else if(type == typeid(ofParameter <double> ).name()){
-			add(p->cast<double>());
-		}else if(type == typeid(ofParameter<void>).name()){
-			add(p->cast<void>());
-		}else if(type == typeid(ofParameter<bool>).name()){
-			add(p->cast<bool>());
-		}else if(type == typeid(ofParameter<ofVec2f>).name()){
-			add(p->cast<ofVec2f>());
-		}else if(type == typeid(ofParameter<ofVec3f>).name()){
-			add(p->cast<ofVec3f>());
-		}else if(type == typeid(ofParameter<ofVec4f>).name()){
-			add(p->cast<ofVec4f>());
-		}else if(type == typeid(ofParameter<ofColor>).name()){
-			add(p->cast<ofColor>());
-		}else if(type == typeid(ofParameter<ofShortColor>).name()){
-			add(p->cast<ofShortColor>());
-		}else if(type == typeid(ofParameter<ofFloatColor>).name()){
-			add(p->cast<ofFloatColor>());
-		}else if(type == typeid(ofParameter<string>).name()){
-			add(p->cast<string>());
-		}else if(type == typeid(ofParameterGroup).name()){
-			//add<ofxGuiContainer>(p->castGroup());
-			add<ofxGuiContainer>(static_cast<ofParameterGroup& >(*p));
-		}else{
-			ofLogWarning("ofxGui") << "Trying to add " << p->getName() << ": ofxBaseGroup; no control for parameter of type " << type;
-
-		}
+        add(*p);
 	}
 	this->parameters = parameters;
 }
