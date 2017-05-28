@@ -137,7 +137,7 @@ ofxGuiElement* ofxGuiContainer::add(ofAbstractParameter & parameter, const ofJso
 		return add(p->cast<string>(), config);
 	}else if(type == typeid(ofParameterGroup).name()){
 		//add<ofxGuiContainer>(p->castGroup());
-		return addGroup(p->castGroup(), config);
+		return add<ofxGuiContainer>(static_cast<ofParameterGroup& >(*p));
 	}else{
 		ofLogWarning("ofxGui") << "Trying to add " << p->getName() << ": ofxBaseGroup; no control for parameter of type " << type;
 		return NULL;
