@@ -146,7 +146,7 @@ ofxGuiElement* ofxGuiContainer::add(ofAbstractParameter & parameter, const ofJso
 
 void ofxGuiContainer::addParametersFrom(const ofParameterGroup & parameters){
 	for(auto & p: parameters){
-        add(*p);
+		add(*p);
 	}
 	this->parameters = parameters;
 }
