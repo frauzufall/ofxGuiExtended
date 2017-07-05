@@ -168,6 +168,7 @@ void ofxGuiTabs::onChildAdd(DOM::ElementEventArgs &args){
 			{"border-width", 0}
 		};
 		ofxGuiElement* tab = tabs->add<ofxGuiToggle>(name, toggleconfig);
+		tab->getParameter().cast<ofParameter<bool>>().setSerializable(false);
 		tab->setTextAlignment(TextAlignment::CENTERED);
 
 		if(pages.size() == 1){
