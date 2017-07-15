@@ -34,7 +34,7 @@ void ofApp::setup(){
 	auto sinusfunction = [&] (float x) { return sin(x); };
 
 	sinus.set("sinus", ofPoint(0,0), ofPoint(0, -1), ofPoint(4*PI, 1));
-	panel1->add<ofxGuiFunctionPlotter>(sinus, sinusfunction);
+	panel1->add<ofxGuiFunctionPlotter>(sinus, sinusfunction, ofJson({}));
 
 	panel1->add<ofxGuiValuePlotter>(randomVal.set("random value", 0, 0, 9), ofJson({{"precision", 2}}));
 
@@ -61,7 +61,7 @@ void ofApp::setup(){
 	/*
 	 *  range slider
 	 */
-	panel1->addRangeSlider(rangesliderStart.set("range slider",2,0,5), rangesliderEnd.set(3));
+	panel1->addRangeSlider(rangesliderStart.set("range",2,0,5), rangesliderEnd.set(3), ofJson({{"precision", 2}}));
 
 	/*
 	 * ofParameterGroup example with radio toggles, listener to show current index and name

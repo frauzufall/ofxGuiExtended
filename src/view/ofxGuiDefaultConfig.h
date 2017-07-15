@@ -40,6 +40,13 @@ struct ofxGuiDefaultConfig{
 					}
 				},
 
+				/// settings for all rangesliders
+				{
+					ofxGuiFloatRangeSlider::getClassType(), {
+
+					}
+				},
+
 				/// settings for all labels
 				{
 					ofxGuiLabel::getClassType(), {

@@ -7,15 +7,13 @@ using namespace std;
 template<typename DataType>
 ofxGuiSlider<DataType>::ofxGuiSlider()
 	:ofxGuiElement(){
-
-	setup();
-
 }
 
 template<typename DataType>
 ofxGuiSlider<DataType>::ofxGuiSlider(const ofJson &config)
 	:ofxGuiSlider(){
 
+	setup();
 	_setConfig(config);
 
 }

@@ -6,7 +6,7 @@ using namespace std;
 
 template<typename DataType>
 ofxGuiRangeSlider<DataType>::ofxGuiRangeSlider()
-	:ofxGuiElement(){
+	:ofxGuiSlider<DataType>(){
 
 	setup();
 
@@ -16,20 +16,20 @@ template<typename DataType>
 ofxGuiRangeSlider<DataType>::ofxGuiRangeSlider(const ofJson &config)
 	:ofxGuiRangeSlider(){
 
-	_setConfig(config);
+	this->_setConfig(config);
 
 }
 
 template<typename DataType>
 ofxGuiRangeSlider<DataType>::ofxGuiRangeSlider(ofParameter<DataType>& _valStart, ofParameter<DataType> &_valEnd, const ofJson &config)
-:ofxGuiElement(){
+:ofxGuiSlider<DataType>(){
 
 	valueStart.makeReferenceTo(_valStart);
 	valueEnd.makeReferenceTo(_valEnd);
 	setup();
 	valueStart.addListener(this,&ofxGuiRangeSlider::valueStartChanged);
 	valueEnd.addListener(this,&ofxGuiRangeSlider::valueEndChanged);
-	_setConfig(config);
+	this->_setConfig(config);
 
 }
 
@@ -49,7 +49,6 @@ ofxGuiRangeSlider<DataType>::~ofxGuiRangeSlider(){
 
 	valueStart.removeListener(this,&ofxGuiRangeSlider::valueStartChanged);
 	valueEnd.removeListener(this,&ofxGuiRangeSlider::valueEndChanged);
-	ofRemoveListener(resize, this, &ofxGuiRangeSlider<DataType>::resized);
 
 }
 
@@ -60,32 +59,21 @@ void ofxGuiRangeSlider<DataType>::setup(){
 
 	values.add(valueStart);
 	values.add(valueEnd);
+	values.setName(valueStart.getName());
 
 	valueEnd.setMin(valueStart.get());
 	valueEnd.setMax(valueStart.getMax());
 	valueStart.setMax(valueEnd.get());
 
-	hasFocus = false;
-	showValue.set("show-value", true);
-	updateOnReleaseOnly.set("update-on-release-only", false);
-	precision.set("precision", 6);
-	horizontal = getWidth() > getHeight();
+	this->hasFocus = false;
+	this->showValue.set("show-value", true);
+	this->updateOnReleaseOnly.set("update-on-release-only", false);
+	this->precision.set("precision", 6);
+	this->horizontal = this->getWidth() > this->getHeight();
 
-	setTheme();
+	this->setTheme();
 
-	ofAddListener(resize, this, &ofxGuiRangeSlider<DataType>::resized);
-	registerMouseEvents();
-
-}
-
-template<typename DataType>
-void ofxGuiRangeSlider<DataType>::_setConfig(const ofJson &config){
-
-	ofxGuiElement::_setConfig(config);
-
-	JsonConfigParser::parse(config, updateOnReleaseOnly);
-	JsonConfigParser::parse(config, precision);
-	JsonConfigParser::parse(config, showValue);
+	this->registerMouseEvents();
 
 }
 
@@ -110,77 +98,39 @@ DataType ofxGuiRangeSlider<DataType>::getMax(){
 }
 
 template<typename DataType>
-void ofxGuiRangeSlider<DataType>::resized(DOM::ResizeEventArgs &){
-	horizontal = getWidth() > getHeight();
-}
-
-template<typename DataType>
-void ofxGuiRangeSlider<DataType>::setPrecision(int precision){
-	individualConfig[this->precision.getName()] = precision;
-	this->precision = precision;
-}
-
-template<typename DataType>
-bool ofxGuiRangeSlider<DataType>::mousePressed(ofMouseEventArgs & args){
-
-	ofxGuiElement::mousePressed(args);
-
-	if(updateOnReleaseOnly){
-		valueStart.disableEvents();
-		valueEnd.disableEvents();
-	}
-	return setValue(args.x, args.y, true);
-
-}
-
-template<typename DataType>
-bool ofxGuiRangeSlider<DataType>::mouseDragged(ofMouseEventArgs & args){
-
-	ofxGuiElement::mouseDragged(args);
-
-	return setValue(args.x, args.y, false);
-
-}
-
-template<typename DataType>
 bool ofxGuiRangeSlider<DataType>::mouseReleased(ofMouseEventArgs & args){
 
-	ofxGuiElement::mouseReleased(args);
+	bool res = ofxGuiSlider<DataType>::mouseReleased(args);
 
-	if(updateOnReleaseOnly){
-		valueStart.enableEvents();
-		valueEnd.enableEvents();
-	}
-	bool attended = setValue(args.x, args.y, false);
 	activeValue = nullptr;
-	hasFocus = false;
-	return attended;
+
+	return res;
 
 }
 
 template<typename DataType>
 void ofxGuiRangeSlider<DataType>::generateDraw(){
 
-	horizontal = getWidth() > getHeight();
+	ofxGuiSlider<DataType>::generateDraw();
 
-	ofxGuiElement::generateDraw();
-
-	bar.clear();
-
+	this->bar.clear();
 	float valStartAsPct, valEndAsPct;
-	if(horizontal){
-		valStartAsPct = ofMap(valueStart, getMin(), getMax(), 0, getWidth()-borderWidth*2, true);
-		valEndAsPct = ofMap(valueEnd, getMin(), getMax(), 0, getWidth()-borderWidth*2, true);
+	if(this->horizontal){
+		valStartAsPct = ofMap(valueStart, getMin(), getMax(), 0, this->getWidth()-this->borderWidth*2, true);
+		valEndAsPct = ofMap(valueEnd, getMin(), getMax(), 0, this->getWidth()-this->borderWidth*2, true);
 	}else{
-		valStartAsPct = ofMap(valueStart, getMin(), getMax(), 0, getHeight()-borderWidth*2, true);
-		valEndAsPct = ofMap(valueEnd, getMin(), getMax(), 0, getHeight()-borderWidth*2, true);
+		valStartAsPct = ofMap(valueStart, getMin(), getMax(), 0, this->getHeight()-this->borderWidth*2, true);
+		valEndAsPct = ofMap(valueEnd, getMin(), getMax(), 0, this->getHeight()-this->borderWidth*2, true);
 	}
-	bar.setFillColor(fillColor);
-	bar.setFilled(true);
-	if(horizontal){
-		bar.rectRounded(borderWidth+valStartAsPct,borderWidth, valEndAsPct-valStartAsPct, getHeight()-borderWidth*2, borderRadius);
+	if(valStartAsPct-valEndAsPct<0.01){
+		valEndAsPct++;
+	}
+	this->bar.setFillColor(this->fillColor);
+	this->bar.setFilled(true);
+	if(this->horizontal){
+		this->bar.rectRounded(this->borderWidth+valStartAsPct,this->borderWidth, valEndAsPct-valStartAsPct, this->getHeight()-this->borderWidth*2, this->borderRadius);
 	}else{
-		bar.rectRounded(borderWidth, getHeight() - valEndAsPct-borderWidth, getWidth()-borderWidth*2, valEndAsPct-valStartAsPct, borderRadius);
+		this->bar.rectRounded(this->borderWidth, this->getHeight() - valEndAsPct-this->borderWidth, this->getWidth()-this->borderWidth*2, valEndAsPct-valStartAsPct, this->borderRadius);
 	}
 
 	generateText();
@@ -190,9 +140,9 @@ void ofxGuiRangeSlider<DataType>::generateDraw(){
 template<typename DataType>
 void ofxGuiRangeSlider<DataType>::generateText(){
 
-	string valStr = ofToString(valueStart.get(), precision) + " - "
-			+ ofToString(valueEnd.get(), precision);
-	_generateText(valStr);
+	string valStr = ofToString(valueStart.get(), this->precision) + " - "
+			+ ofToString(valueEnd.get(), this->precision);
+	this->_generateText(valStr);
 }
 
 template<>
@@ -200,34 +150,35 @@ void ofxGuiRangeSlider<unsigned char>::generateText(){
 
 	string valStr = ofToString((int)valueStart, precision) + " - "
 			+ ofToString((int)valueEnd, precision);
-	_generateText(valStr);
+	this->_generateText(valStr);
 }
 
 template<typename DataType>
 void ofxGuiRangeSlider<DataType>::_generateText(std::string valStr){
 
-	if(horizontal){
-		textMesh.clear();
-		if(showName){
-			textMesh.append(getTextMesh(getName(), ofPoint(textPadding, getHeight() / 2 + 4)));
+	if(this->horizontal){
+		this->textMesh.clear();
+		if(this->showName){
+			this->textMesh.append(this->getTextMesh(this->getName(), ofPoint(this->textPadding, this->getHeight() / 2 + 4)));
 		}
-		if(showValue){
-			textMesh.append(getTextMesh(valStr, getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4));
+		if(this->showValue){
+			this->textMesh.append(this->getTextMesh(valStr, this->getShape().getWidth() - this->textPadding
+										- this->getTextBoundingBox(valStr,0,0).width, this->getHeight() / 2 + 4));
 		}
 	}else{
-		textMesh.clear();
-		if(showName){
-			string nameStr = getName();
-			while(getTextBoundingBox(nameStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && nameStr.length() > 1){
+		this->textMesh.clear();
+		if(this->showName){
+			string nameStr = this->getName();
+			while(this->getTextBoundingBox(nameStr, 0, 0).getWidth() + this->textPadding * 2 > this->getWidth() && nameStr.length() > 1){
 				nameStr = nameStr.substr(0, nameStr.size() - 1);
 			}
-			textMesh.append(getTextMesh(nameStr, textPadding, textPadding + getTextBoundingBox(nameStr, 0, 0).height));
+			this->textMesh.append(this->getTextMesh(nameStr, this->textPadding, this->textPadding + this->getTextBoundingBox(nameStr, 0, 0).height));
 		}
-		if(showValue){
-			while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && valStr.length() > 1){
+		if(this->showValue){
+			while(this->getTextBoundingBox(valStr, 0, 0).getWidth() + this->textPadding * 2 > this->getWidth() && valStr.length() > 1){
 				valStr = valStr.substr(0, valStr.size() - 1);
 			}
-			textMesh.append(getTextMesh(valStr, textPadding, getHeight() - textPadding));
+			this->textMesh.append(this->getTextMesh(valStr, this->textPadding, this->getHeight() - this->textPadding));
 		}
 	}
 }
@@ -238,18 +189,18 @@ void ofxGuiRangeSlider<DataType>::render(){
 
 	ofxGuiElement::render();
 
-	bar.draw();
+	this->bar.draw();
 
 //	if(showName){
 		ofBlendMode blendMode = ofGetStyle().blendingMode;
 		if(blendMode!=OF_BLENDMODE_ALPHA){
 			ofEnableAlphaBlending();
 		}
-		ofSetColor(textColor);
+		ofSetColor(this->textColor);
 
-		bindFontTexture();
-		textMesh.draw();
-		unbindFontTexture();
+		this->bindFontTexture();
+		this->textMesh.draw();
+		this->unbindFontTexture();
 
 		ofSetColor(c);
 		if(blendMode!=OF_BLENDMODE_ALPHA){
@@ -262,19 +213,19 @@ void ofxGuiRangeSlider<DataType>::render(){
 template<typename DataType>
 bool ofxGuiRangeSlider<DataType>::setValue(float mx, float my, bool bCheck){
 
-	if(isHidden()){
-		hasFocus = false;
+	if(this->isHidden()){
+		this->hasFocus = false;
 		return false;
 	}
 
 	if(bCheck){
-		hasFocus = isMouseOver();
+		this->hasFocus = this->isMouseOver();
 	}
 
-	if(hasFocus){
+	if(this->hasFocus){
 
-		ofPoint topleft = localToScreen(ofPoint(0, 0));
-		ofPoint bottomright = localToScreen(ofPoint(getWidth(), getHeight()));
+		ofPoint topleft = this->localToScreen(ofPoint(0, 0));
+		ofPoint bottomright = this->localToScreen(ofPoint(this->getWidth(), this->getHeight()));
 
 		if(!activeValue){
 			DataType valStartX = ofMap(valueStart, getMin(), getMax(), topleft.x, bottomright.x, true);
@@ -297,14 +248,19 @@ bool ofxGuiRangeSlider<DataType>::setValue(float mx, float my, bool bCheck){
 		}
 
 		DataType newval;
-		if(horizontal){
+		if(this->horizontal){
 			newval = ofMap(mx, topleft.x, bottomright.x, getMin(), getMax(), true);
 		}else{
 			newval = ofMap(my, bottomright.y, topleft.y, getMin(), getMax(), true);
 		}
-		if(newval <= activeValue->getMax() && newval >= activeValue->getMin()){
-			activeValue->set(newval);
+		if(newval > activeValue->getMax()){
+			newval = activeValue->getMax();
+		}else{
+			if(newval < activeValue->getMin()){
+				newval = activeValue->getMin();
+			}
 		}
+		activeValue->set(newval);
 		return true;
 
 	}
@@ -320,25 +276,25 @@ ofAbstractParameter & ofxGuiRangeSlider<DataType>::getParameter(){
 template<typename DataType>
 void ofxGuiRangeSlider<DataType>::valueStartChanged(DataType & value){
 	valueEnd.setMin(value);
-	setNeedsRedraw();
+	this->setNeedsRedraw();
 }
 
 template<typename DataType>
 void ofxGuiRangeSlider<DataType>::valueEndChanged(DataType & value){
 	valueStart.setMax(value);
-	setNeedsRedraw();
+	this->setNeedsRedraw();
 }
 
 template<typename DataType>
 std::string ofxGuiRangeSlider<DataType>::getText(){
 
 	string res = "";
-	if(showName){
-		res += getName();
+	if(this->showName){
+		res += this->getName();
 	}
-	res += ofToString(valueStart.get(), precision);
+	res += ofToString(valueStart.get(), this->precision);
 	res += " - ";
-	res += ofToString(valueEnd.get(), precision);
+	res += ofToString(valueEnd.get(), this->precision);
 
 	return res;
 
@@ -359,23 +315,13 @@ std::string ofxGuiRangeSlider<unsigned char>::getText(){
 }
 
 template<typename DataType>
-float ofxGuiRangeSlider<DataType>::getMinWidth(){
-	return ofxGuiElement::getTextWidth(getText());
-}
-
-template<typename DataType>
-float ofxGuiRangeSlider<DataType>::getMinHeight(){
-	return ofxGuiElement::getTextHeight(getText());
-}
-
-template<typename DataType>
 std::string ofxGuiRangeSlider<DataType>::getClassType(){
 	return "rangeslider";
 }
 
 template<typename DataType>
 vector<std::string> ofxGuiRangeSlider<DataType>::getClassTypes(){
-	vector<std::string> types = ofxGuiElement::getClassTypes();
+	vector<std::string> types = ofxGuiSlider<DataType>::getClassTypes();
 	types.push_back(getClassType());
 	return types;
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../ofxGuiElement.h"
+#include "ofxGuiSlider.h"
 #include "ofParameter.h"
 
 template<typename DataType>
-class ofxGuiRangeSlider : public ofxGuiElement {
+class ofxGuiRangeSlider : public ofxGuiSlider<DataType> {
 public:
 
 	ofxGuiRangeSlider();
@@ -19,15 +19,6 @@ public:
 	void setMax(DataType max);
 	DataType getMax();
 
-	virtual float getMinWidth() override;
-	virtual float getMinHeight() override;
-
-	void setPrecision(int precision);
-
-	void setUpdateOnReleaseOnly(bool bUpdateOnReleaseOnly);
-
-	virtual bool mousePressed(ofMouseEventArgs & args) override;
-	virtual bool mouseDragged(ofMouseEventArgs & args) override;
 	virtual bool mouseReleased(ofMouseEventArgs & args) override;
 
 	template<class ListenerClass, typename ListenerMethod>
@@ -60,30 +51,17 @@ protected:
 
 	virtual vector<std::string> getClassTypes() override;
 
-	virtual void _setConfig(const ofJson & config) override;
 	virtual void render() override;
-
-	virtual void resized(DOM::ResizeEventArgs&);
 
 	ofParameter<DataType> valueStart,valueEnd;
 	ofParameterGroup values;
 	virtual bool setValue(float mx, float my, bool bCheck) override;
 	virtual void generateDraw() override;
-	virtual void generateText();
-	virtual void _generateText(std::string valStr);
+	virtual void generateText() override;
+	virtual void _generateText(std::string valStr) override;
 	void valueStartChanged(DataType & value);
 	void valueEndChanged(DataType & value);
 	virtual std::string getText();
-	ofPath bar;
-	ofVboMesh textMesh;
-
-	ofParameter<bool> updateOnReleaseOnly;
-	ofParameter<bool> showValue;
-	ofParameter<unsigned int> precision;
-	/// \brief The Slider orientation.
-	bool horizontal;
-
-	bool hasFocus;
 
 	ofParameter<DataType> *activeValue;
 
