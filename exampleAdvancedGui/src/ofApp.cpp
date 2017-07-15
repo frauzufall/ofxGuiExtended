@@ -56,6 +56,13 @@ void ofApp::setup(){
 	panel1->add<ofxGuiFloatInputField>(floatfieldVal.set("float input",3.5,0,500));
 	panel1->add<ofxGuiTextField>(textfieldVal.set("text input","type in here"));
 
+	panel1->addSpacer(0, 20);
+
+	/*
+	 *  range slider
+	 */
+	panel1->addRangeSlider(rangesliderStart.set("range slider",2,0,5), rangesliderEnd.set(3));
+
 	/*
 	 * ofParameterGroup example with radio toggles, listener to show current index and name
 	 */

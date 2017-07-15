@@ -49,6 +49,9 @@ class ofApp : public ofBaseApp {
 		ofParameter <float> slider1Val, slider2Val, slider3Val, slider4Val;
 		ofParameter <float> circularSliderVal;
 
+		//rangeslider
+		ofParameter<float> rangesliderStart, rangesliderEnd;
+
 		//color panel
 		ofxGuiPanel* colorPanel;
 		ofxGuiGroup *colorToggles;

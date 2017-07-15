@@ -2,6 +2,7 @@
 #include "../ofxGuiElement.h"
 
 #include "../controls/ofxGuiSlider.h"
+#include "../controls/ofxGuiRangeSlider.h"
 #include "../controls/ofxGuiButton.h"
 #include "../controls/ofxGuiLabel.h"
 #include "ofParameterGroup.h"
@@ -64,6 +65,9 @@ class ofxGuiContainer : public ofxGuiElement {
 		ofxGuiElement* addSpacer(float width, float height);
 		ofxGuiElement* addSpacer(const ofJson & config = ofJson());
 		ofxGuiFpsPlotter* addFpsPlotter(const ofJson & config = ofJson());
+
+		template<typename T>
+		typename std::enable_if<std::is_arithmetic<T>::value, ofxGuiRangeSlider<T>*>::type addRangeSlider(ofParameter<T> & pStart, ofParameter<T> & pEnd, const ofJson & config = ofJson());
 
 		ofxGuiContainer* addContainer(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiContainer* addContainer(const ofParameterGroup & parameters, const ofJson& config = ofJson());
@@ -171,5 +175,10 @@ ControlType* ofxGuiContainer::getControlType(const int& index){
 template<typename T>
 typename std::enable_if<std::is_arithmetic<T>::value, ofxGuiSlider<T>*>::type ofxGuiContainer::add(ofParameter<T> & p, const ofJson & config){
 	return add<ofxGuiSlider<T>>(p,config);
+}
+
+template<typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, ofxGuiRangeSlider<T>*>::type ofxGuiContainer::addRangeSlider(ofParameter<T> & pStart, ofParameter<T> & pEnd, const ofJson & config){
+	return add<ofxGuiRangeSlider<T>>(pStart, pEnd, config);
 }
 
