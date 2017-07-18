@@ -61,7 +61,9 @@ void ofApp::setup(){
 	/*
 	 *  range slider
 	 */
-	panel1->addRangeSlider(rangesliderStart.set("range",2,0,5), rangesliderEnd.set(3), ofJson({{"precision", 2}}));
+	rangesliderStart.set("range",2,0,5); //use the first parameter to set the initial lower value and the min and max value
+	rangesliderEnd.set(3); // use the second parameter to set the initial upper value
+	panel1->add<ofxGuiFloatRangeSlider>(rangesliderStart, rangesliderEnd, ofJson({{"precision", 2}}));
 
 	/*
 	 * ofParameterGroup example with radio toggles, listener to show current index and name
