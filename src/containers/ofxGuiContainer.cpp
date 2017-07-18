@@ -132,6 +132,8 @@ void ofxGuiContainer::add(const std::shared_ptr<ofAbstractParameter> & p){
 		add(p->cast<ofShortColor>());
 	}else if(type == typeid(ofParameter<ofFloatColor>).name()){
 		add(p->cast<ofFloatColor>());
+	}else if(type == typeid(ofParameter<ofRectangle>).name()){
+		add(p->cast<ofRectangle>());
 	}else if(type == typeid(ofParameter<string>).name()){
 		add(p->cast<string>());
 	}else if(type == typeid(ofParameterGroup).name()){
@@ -274,6 +276,8 @@ void ofxGuiContainer::addToMenu(const std::shared_ptr<ofAbstractParameter> & p){
 		add<ofxGuiMenuShortColor>(p->cast<ofShortColor>());
 	}else if(type == typeid(ofParameter<ofFloatColor>).name()){
 		add<ofxGuiMenuFloatColor>(p->cast<ofFloatColor>());
+	}else if(type == typeid(ofParameter<ofRectangle>).name()){
+		add<ofxGuiMenuRectangle>(p->cast<ofRectangle>());
 	}else if(type == typeid(ofParameterGroup).name()){
 		ofxGuiMenu* c = add<ofxGuiMenu>(p->getName());
 		c->addMenuItems(dynamic_cast<ofParameterGroup*>(p.get()));
