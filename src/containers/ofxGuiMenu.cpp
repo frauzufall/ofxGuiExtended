@@ -18,7 +18,7 @@ void ofxGuiMenuLabel::generateDraw(){
 	float lineW = 4;
 	float height = this->getHeight();
 	float width = height;
-	float x = this->getWidth()-2-width/6*5;
+	float x = this->getWidth()-width/6*5;
 	icon.clear();
 	icon.setColor(this->getTextColor());
 	icon.setFilled(true);
