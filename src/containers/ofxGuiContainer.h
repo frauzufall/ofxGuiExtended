@@ -10,22 +10,40 @@
 
 template<class VecType>
 class ofxGuiVecSlider_;
+
 template<class VecType>
 class ofxGuiColorSlider_;
+
+template<class VecType>
+class ofxGuiMenuColor_;
+
+template<class VecType>
+class ofxGuiMenuVec_;
 
 typedef ofxGuiVecSlider_<ofVec3f> ofxGuiVec3Slider;
 typedef ofxGuiVecSlider_<ofVec2f> ofxGuiVec2Slider;
 typedef ofxGuiVecSlider_<ofVec4f> ofxGuiVec4Slider;
 typedef ofxGuiVecSlider_<ofVec3f> ofxGuiPointSlider;
 
+typedef ofxGuiMenuVec_<ofVec3f> ofxGuiMenuVec3;
+typedef ofxGuiMenuVec_<ofVec2f> ofxGuiMenuVec2;
+typedef ofxGuiMenuVec_<ofVec4f> ofxGuiMenuVec4;
+typedef ofxGuiMenuVec_<ofVec3f> ofxGuiMenuPoint;
+
 typedef ofxGuiColorSlider_<unsigned char> ofxGuiColorSlider;
 typedef ofxGuiColorSlider_<unsigned short> ofxGuiShortColorSlider;
 typedef ofxGuiColorSlider_<float> ofxGuiFloatColorSlider;
 
+typedef ofxGuiMenuColor_<unsigned char> ofxGuiMenuColor;
+typedef ofxGuiMenuColor_<unsigned short> ofxGuiMenuShortColor;
+typedef ofxGuiMenuColor_<float> ofxGuiMenuFloatColor;
+
 class ofxGuiRectangleSlider;
+class ofxGuiMenuRectangle;
 class ofxGuiGroup;
 class ofxGuiPanel;
 class ofxGuiTabs;
+class ofxGuiMenu;
 class ofxGuiFpsPlotter;
 
 
@@ -59,6 +77,7 @@ class ofxGuiContainer : public ofxGuiElement {
 		ofxGuiFloatColorSlider* add(ofParameter <ofFloatColor> & parameter, const ofJson & config = ofJson());
 		ofxGuiRectangleSlider *add(ofParameter <ofRectangle> & parameter, const ofJson & config = ofJson());
 
+		void add(const std::shared_ptr<ofAbstractParameter> &p);
 		void add(const ofParameterGroup& parameters);
 
 		ofxGuiLabel* addLabel(const std::string& label, const ofJson& config = ofJson());
@@ -73,6 +92,10 @@ class ofxGuiContainer : public ofxGuiElement {
 		ofxGuiPanel* addPanel(const std::string& name="", const ofJson& config = ofJson());
 		ofxGuiPanel* addPanel(const ofParameterGroup & parameters, const ofJson& config = ofJson());
 		ofxGuiTabs* addTabs(const std::string& name="", const ofJson& config = ofJson());
+
+		ofxGuiMenu* addMenu(ofParameterGroup &content, const ofJson& config = ofJson());
+		void addMenuItems(ofParameterGroup *content);
+		void addToMenu(const std::shared_ptr<ofAbstractParameter> &p);
 
 		virtual void clear() override;
 

@@ -78,6 +78,15 @@ void ofxGui::setConfig(const ofJson &config){
 	}
 }
 
+ofxGuiContainer* ofxGui::addMenu(ofParameterGroup &content, const ofJson& config){
+	ofJson res = config;
+	res["width"] = 50;
+	ofxGuiContainer* root = addContainer("",res);
+	ofxGuiMenu* c = root->add<ofxGuiRootMenu>("", rootGroupConfig(config));
+	c->addMenuItems(&content);
+	return root;
+}
+
 std::string ofxGui::colorToString(const ofColor& color){
 	std::stringstream strstr;
 	strstr << "rgba(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << ((float)color.a)/255. << ")";

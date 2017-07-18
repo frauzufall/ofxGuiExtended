@@ -4,6 +4,7 @@
 #include "containers/ofxGuiGroup.h"
 #include "containers/ofxGuiSliderGroup.h"
 #include "containers/ofxGuiPanel.h"
+#include "containers/ofxGuiMenu.h"
 #include "containers/ofxGuiTabs.h"
 #include "controls/ofxGuiToggle.h"
 #include "controls/ofxGuiSlider.h"
@@ -130,6 +131,8 @@ class ofxGui {
 			getDocument()->blockLayout(false);
 		}
 
+		ofxGuiContainer *addMenu(ofParameterGroup &content, const ofJson &config = ofJson());
+
 		/// \brief Converts ofColor data type to a CSS-like rgba string.
 		/// example: ofColor(255,0,0,127.5) -> "rgba(255,0,0,0.5)"
 		/// \param color The color to be converted
@@ -143,6 +146,6 @@ class ofxGui {
 
 		ofJson rootGroupConfig(const ofJson& config = ofJson());
 
-		ofxGuiGroup* defaultPanel = nullptr;
+		ofxGuiContainer* defaultPanel = nullptr;
 };
 
