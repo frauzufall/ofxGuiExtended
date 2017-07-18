@@ -62,6 +62,7 @@ class ofxGuiMenu : public ofxGuiContainer {
 
 		bool onMenuLabel;
 		bool rootMenu;
+		bool changeLabelColor;
 
 };
 

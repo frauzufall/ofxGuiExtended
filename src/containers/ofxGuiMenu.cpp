@@ -112,6 +112,7 @@ void ofxGuiMenu::setup(){
 	label = nullptr;
 	onMenuLabel = false;
 	rootMenu = false;
+	changeLabelColor = true;
 
 	setTheme();
 
@@ -168,6 +169,7 @@ void ofxGuiMenu::onAdded(DOM::ElementEventArgs &args){
 		}
 		if(label){
 			this->setPosition(label->getShape().getTopRight());
+			this->generateDraw();
 		}
 	}
 }
@@ -178,7 +180,13 @@ bool ofxGuiMenu::mouseMoved(ofMouseEventArgs & args){
 		if(label->isMouseOver()){
 			if(!onMenuLabel){
 				onMenuLabel = true;
-				this->setHidden(false);
+				if(isHidden()){
+					if(changeLabelColor){
+						label->setBackgroundColor(label->getTextColor());
+						label->setTextColor(label->getTextColor().getInverted());
+					}
+					this->setHidden(false);
+				}
 				hideOtherMenusDown(this, nullptr);
 				if(ofxGuiContainer* parent = dynamic_cast<ofxGuiContainer*>(this->parent())){
 					hideOtherMenusUp(parent, this);
@@ -196,7 +204,13 @@ bool ofxGuiMenu::mousePressed(ofMouseEventArgs & args){
 	if(label){
 		if(!label->isMouseOver()){
 			if(!isMouseOver(this)){
-				this->setHidden(true);
+				if(!isHidden()){
+					this->setHidden(true);
+					if(changeLabelColor){
+						label->setBackgroundColor(ofColor(0,0,0,0));
+						label->setTextColor(label->getTextColor().getInverted());
+					}
+				}
 			}
 			hideOtherMenusUpPress(this, this);
 		}
@@ -238,7 +252,13 @@ void ofxGuiMenu::hideOtherMenusDown(DOM::Element* parent, ofxGuiMenu* exception)
 		for(DOM::Element* child : parent->children()){
 			if(ofxGuiMenu* menu = dynamic_cast<ofxGuiMenu*>(child)){
 				if(menu != exception){
-					menu->setHidden(true);
+					if(!menu->isHidden()){
+						menu->setHidden(true);
+						if(menu->changeLabelColor){
+							menu->label->setBackgroundColor(ofColor(0,0,0,0));
+							menu->label->setTextColor(menu->label->getTextColor().getInverted());
+						}
+					}
 					hideOtherMenusDown(menu, exception);
 				}
 			}else{
@@ -265,7 +285,13 @@ void ofxGuiMenu::hideOtherMenusDownPress(ofxGuiContainer* parent, ofxGuiMenu* ex
 			if(ofxGuiMenu* menu = dynamic_cast<ofxGuiMenu*>(child)){
 				if(menu != exception){
 					if(!isMouseOver(menu) && ! menu->getMenuLabel()->isMouseOver()){
-						menu->setHidden(true);
+						if(!menu->isHidden()){
+							menu->setHidden(true);
+							if(menu->changeLabelColor){
+								menu->label->setBackgroundColor(ofColor(0,0,0,0));
+								menu->label->setTextColor(menu->label->getTextColor().getInverted());
+							}
+						}
 					}
 					hideOtherMenusDownPress(menu, exception);
 				}
@@ -304,6 +330,8 @@ ofxGuiRootMenu::~ofxGuiRootMenu(){
 template<class ColorType>
 ofxGuiMenuColor_<ColorType>::ofxGuiMenuColor_(ofParameter<ofColor_<ColorType>> &value, const ofJson &config)
 	:ofxGuiMenu(){
+
+	changeLabelColor = false;
 
 	setName(value.getName());
 
@@ -379,10 +407,10 @@ void ofxGuiMenuColor_<ColorType>::changeValue(ofColor_<ColorType> & value){
 
 template<class ColorType>
 void ofxGuiMenuColor_<ColorType>::generateDraw(){
-	ofxGuiMenu::generateDraw();
 	if(label){
 		label->setBackgroundColor(value.get());
 	}
+	ofxGuiMenu::generateDraw();
 }
 
 template<class ColorType>
