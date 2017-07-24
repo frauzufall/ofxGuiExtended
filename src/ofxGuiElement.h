@@ -31,7 +31,7 @@ class ofxGuiElement : public DOM::Element {
 		void setTheme();
 		void setTheme(const ofJson &config);
 		void loadConfig(const std::string &filename, bool recursive = false);
-		void loadTheme(const std::string &filename);
+		void loadTheme(const std::string &filename, bool updateOnFileChange = false);
 
 		void saveToFile(const std::string& filename);
 		void loadFromFile(const std::string& filename);
@@ -178,6 +178,10 @@ class ofxGuiElement : public DOM::Element {
 		bool bRegisteredForMouseEvents;
 
 		ofJson theme, individualConfig;
+		std::string themeFilename;
+		bool updateOnThemeChange;
+		void watchTheme(ofEventArgs& args);
+		std::time_t themeUpdated;
 
 		ofParameter<void> parameter;
 

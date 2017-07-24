@@ -65,6 +65,9 @@ ofxGuiElement::ofxGuiElement(const ofJson &config)
 ofxGuiElement::~ofxGuiElement(){
 
 	unregisterMouseEvents();
+	if(updateOnThemeChange){
+		ofRemoveListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
+	}
 
 }
 
@@ -73,6 +76,9 @@ void ofxGuiElement::setup(){
 	bRegisteredForMouseEvents = false;
 	fontLoaded = false;
 	useTTF = false;
+	themeUpdated = 0;
+	themeFilename = "";
+	updateOnThemeChange = false;
 
 	textPadding.set("text-padding", 4);
 	headerBackgroundColor.set("header-background-color", ofColor(255));
@@ -148,13 +154,35 @@ void ofxGuiElement::loadConfig(const string &filename, bool recursive){
 	}
 }
 
-void ofxGuiElement::loadTheme(const string &filename){
+void ofxGuiElement::loadTheme(const string &filename, bool updateOnFileChange){
 	ofJson config = loadJson(filename);
+	if(updateOnFileChange){
+		if(!updateOnThemeChange){
+			updateOnThemeChange = true;
+			themeFilename = filename;
+			themeUpdated = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+			ofAddListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
+		}
+	}else{
+		if(updateOnThemeChange){
+			updateOnThemeChange = false;
+			ofRemoveListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
+		}
+	}
 	if(config.size() > 0){
 		setTheme(config.begin().value());
 	}else{
 		ofLogError("ofxGuiElement::loadTheme") << "Could not load config from " << filename << ". File is empty or does not exist." << endl;
 	}
+}
+
+void ofxGuiElement::watchTheme(ofEventArgs &args){
+	std::time_t newthemeUpdated = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+	if(newthemeUpdated != themeUpdated){
+		themeUpdated = newthemeUpdated;
+		loadTheme(themeFilename, true);
+	}
+
 }
 
 void ofxGuiElement::_setConfigUsingClassifiers(const ofJson &config, bool recursive){
