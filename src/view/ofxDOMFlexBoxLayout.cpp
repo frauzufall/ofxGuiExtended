@@ -1,7 +1,9 @@
 #include "ofxDOMFlexBoxLayout.h"
 #include "ofxDOMLayoutHelper.h"
 #include "ofMain.h"
-//#include "ofxGuiElement.h"
+#include "ofxGuiElement.h"
+//#include "ofxXmlSettings.h"
+#include "DOM/Document.h"
 
 typedef ofxDOMLayoutHelper DOMLH;
 
@@ -48,6 +50,64 @@ void ofxDOMFlexBoxLayout::doLayout(){
 
 }
 
+//void saveDebug(DOM::Element* element){
+
+//	ofxXmlSettings xml;
+
+//	std::string path = "ofxGuiDebugLog.txt";
+
+//	xml.clear();
+//	if(!xml.loadFile(path)){
+//		xml.addTag("alignments");
+//	}
+//	xml.pushTag("alignments");
+
+//	int alignments = xml.getNumTags("alignment");
+
+//	std::string name = "";
+//	int id = -1;
+//	int time = ofGetElapsedTimeMicros();
+//	int parentId = -100;
+
+//	if(ofxGuiElement* _element = dynamic_cast<ofxGuiElement*>(element)){
+
+//		id = _element->getObjectCount();
+//		name =_element->getName();
+//		if(ofxGuiElement* parent = dynamic_cast<ofxGuiElement*>(element->parent())){
+//			parentId = parent->getObjectCount();
+//		}else{
+//			if(dynamic_cast<DOM::Document*>(element->parent())){
+//				parentId = -1;
+//			}
+//		}
+
+//	}else{
+//		if(dynamic_cast<DOM::Document*>(element)){
+//			id = -1;
+//			name = "document";
+//		}
+//	}
+
+//	xml.addTag("alignment");
+//	xml.pushTag("alignment", alignments);
+
+//	xml.addValue("id", id);
+//	xml.addValue("name", name);
+//	xml.addValue("parent", parentId);
+//	xml.addValue("time", time);
+//	xml.addValue("width", element->getWidth());
+//	xml.addValue("height", element->getHeight());
+//	xml.addValue("x", element->getScreenPosition().x);
+//	xml.addValue("y", element->getScreenPosition().y);
+
+//	xml.popTag();
+
+//	xml.popTag();
+
+//	xml.saveFile(path);
+
+//}
+
 void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 
 	bool horizontal = direction == FlexDirection::ROW;
@@ -69,6 +129,7 @@ void ofxDOMFlexBoxLayout::align(FlexDirection direction){
 //		cout << el->getName() << " total size: " << totalWidth << " " << totalHeight << endl;
 //	}
 
+//	saveDebug(_parent);
 
 	vector<FlexBoxLine> lines;
 
