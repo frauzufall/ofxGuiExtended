@@ -12,14 +12,14 @@ void ofApp::setup(){
 	gui.setupFlexBoxLayout();
 
 	ofxGuiPanel* panel1 = gui.addPanel(renderer1.parameters);
-	panel1->loadTheme("theme_default.json");
+	panel1->loadTheme("theme_default.json", true);
 
 	ofxGuiPanel* panel2 = gui.addPanel(renderer2.parameters);
-	panel2->loadTheme("theme_light.json");
+	panel2->loadTheme("theme_light.json", true);
 	panel2->setPosition(panel1->getShape().getTopRight()+ofPoint(10, 0));
 
 	ofxGuiPanel* panel3 = gui.addPanel(renderer3.parameters);
-	panel3->loadTheme("theme3.json");
+	panel3->loadTheme("theme3.json", true);
 	panel3->setPosition(panel2->getShape().getTopRight()+ofPoint(10, 0));
 
 }
