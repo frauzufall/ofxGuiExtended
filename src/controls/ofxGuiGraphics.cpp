@@ -6,7 +6,7 @@ ofxGuiGraphics::~ofxGuiGraphics(){
 	ofRemoveListener(resize, this, &ofxGuiGraphics::onResize);
 }
 
-ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
+ofxGuiGraphics::ofxGuiGraphics(std::string canvasName, const ofJson& config)
 	:ofxGuiElement(){
 	_bLoaded = false;
 	graphics = nullptr;
@@ -14,7 +14,7 @@ ofxGuiGraphics::ofxGuiGraphics(string canvasName, const ofJson& config)
 	_setConfig(config);
 }
 
-ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
+ofxGuiGraphics::ofxGuiGraphics(std::string canvasName, ofBaseDraws * graphics, const ofJson& config)
 	:ofxGuiElement(){
 	_bLoaded = false;
 	setGraphics(graphics);
@@ -22,13 +22,13 @@ ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const 
 	_setConfig(config);
 }
 
-ofxGuiGraphics::ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h){
+ofxGuiGraphics::ofxGuiGraphics(std::string canvasName, ofBaseDraws * graphics, float w, float h){
 	_bLoaded = false;
 	setGraphics(graphics);
 	setup(canvasName,w,h);
 }
 
-void ofxGuiGraphics::setup(string canvasName, float w, float h){
+void ofxGuiGraphics::setup(std::string canvasName, float w, float h){
 	autoWidth = false;
 	autoHeight = false;
 	setName(canvasName);

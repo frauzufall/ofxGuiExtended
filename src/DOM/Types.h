@@ -85,7 +85,7 @@ enum class LayoutPosition {
 };
 
 template <class T>
-using StorageType = typename decay<T>::type;
+using StorageType = typename std::decay<T>::type;
 
 /// \brief C++11 Any class.
 /// \sa https://codereview.stackexchange.com/questions/20058/c11-any-class
@@ -117,7 +117,7 @@ struct Any
 		auto derived = dynamic_cast<Derived<T>*> (ptr);
 
 		if (!derived)
-			throw bad_cast();
+			throw std::bad_cast();
 
 		return derived->value;
 	}
@@ -194,7 +194,7 @@ private:
 	template <typename T>
 	struct Derived: Base
 	{
-		template <typename U> Derived(U&& value) : value(forward<U>(value)) { }
+		template <typename U> Derived(U&& value) : value(std::forward<U>(value)) { }
 
 		T value;
 

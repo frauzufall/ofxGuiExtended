@@ -33,7 +33,7 @@ class ofxGuiTabs : public ofxGuiContainer {
 
 		void _setActiveTab(int &index);
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 
@@ -43,7 +43,7 @@ class ofxGuiTabs : public ofxGuiContainer {
 		ofParameter<float> tabHeight;
 
 		ofxGuiContainer * tabs;
-		vector<Element*> pages;
+		std::vector<Element*> pages;
 		Element * activePage;
 		ofxGuiElement * activeToggle;
 

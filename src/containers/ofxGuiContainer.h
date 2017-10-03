@@ -141,7 +141,7 @@ class ofxGuiContainer : public ofxGuiElement {
 
 	protected:
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		ofParameterGroup parameters;
 

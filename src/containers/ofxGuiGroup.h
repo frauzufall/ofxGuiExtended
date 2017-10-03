@@ -17,7 +17,7 @@ class ofxGuiGroupHeader : public ofxGuiElement {
 
 	protected:
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 		virtual void render() override;
@@ -56,7 +56,7 @@ class ofxGuiGroup : public ofxGuiContainer {
 
 	protected:
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void _setConfig(const ofJson & config) override;
 

@@ -27,7 +27,7 @@ ofxGuiValuePlotter::ofxGuiValuePlotter(ofParameter<float> &value, const ofJson &
 	_setConfig(config);
 }
 
-ofxGuiValuePlotter::ofxGuiValuePlotter(string label, float minValue, float maxValue, int plotSize, const ofJson & config)
+ofxGuiValuePlotter::ofxGuiValuePlotter(std::string label, float minValue, float maxValue, int plotSize, const ofJson & config)
 	:ofxGuiValuePlotter(config){
 
 	minVal = minValue;

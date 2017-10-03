@@ -5,9 +5,9 @@
 class ofxGuiGraphics : public ofxGuiElement {
 	public:
 
-		ofxGuiGraphics(string canvasName="", const ofJson& config = ofJson());
-		ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config = ofJson());
-		ofxGuiGraphics(string canvasName, ofBaseDraws * graphics, float w, float h = 0);
+		ofxGuiGraphics(std::string canvasName="", const ofJson& config = ofJson());
+		ofxGuiGraphics(std::string canvasName, ofBaseDraws * graphics, const ofJson& config = ofJson());
+		ofxGuiGraphics(std::string canvasName, ofBaseDraws * graphics, float w, float h = 0);
 		virtual ~ofxGuiGraphics();
 
 		virtual float getMinWidth() override;
@@ -24,9 +24,9 @@ class ofxGuiGraphics : public ofxGuiElement {
 
 	protected:
 
-		void setup(string canvasName = "", float w = 0, float h = 0);
+		void setup(std::string canvasName = "", float w = 0, float h = 0);
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		bool setValue(float mx, float my, bool bCheckBounds) override {
 			return false;

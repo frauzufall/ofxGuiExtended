@@ -103,7 +103,7 @@ protected:
 		FlexBoxLine(float initialSpaceMainAxis){
 			totalSpaceMainAxis = initialSpaceMainAxis;
 		}
-		vector<FlexBoxObject> items;
+		std::vector<FlexBoxObject> items;
 		float totalSpaceMainAxis;
 		float sizeCrossAxis;
 	};

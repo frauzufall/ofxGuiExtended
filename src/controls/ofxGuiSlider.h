@@ -66,7 +66,7 @@ protected:
 
 	void setup();
 
-	virtual vector<std::string> getClassTypes() override;
+	virtual std::vector<std::string> getClassTypes() override;
 
 	virtual void _setConfig(const ofJson & config) override;
 	virtual void render() override;

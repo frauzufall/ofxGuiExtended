@@ -109,7 +109,7 @@ void ofxGuiInputField<Type>::calculateSelectionArea(int selectIdx1, int selectId
 
 template<typename Type>
 float ofxGuiInputField<Type>::getMinWidth(){
-	string text = ofToString(value.get());
+	std::string text = ofToString(value.get());
 	if(showName){
 		if(!getName().empty()){
 			text = getName() + ": ";
@@ -121,7 +121,7 @@ float ofxGuiInputField<Type>::getMinWidth(){
 
 template<typename Type>
 float ofxGuiInputField<Type>::getMinHeight(){
-	string text = ofToString(value.get());
+	std::string text = ofToString(value.get());
 	if(showName){
 		if(!getName().empty()){
 			text = getName() + ": ";
@@ -234,7 +234,7 @@ bool ofxGuiInputField<Type>::mouseScrolled(ofMouseEventArgs & args){
 }
 
 template<>
-bool ofxGuiInputField<string>::mouseScrolled(ofMouseEventArgs & args){
+bool ofxGuiInputField<std::string>::mouseScrolled(ofMouseEventArgs & args){
 	if(mouseInside || hasFocus){
 		return true;
 	}else{
@@ -341,7 +341,7 @@ int ofxGuiInputField<Type>::insertAlphabetic(const std::string &){
 }
 
 template<>
-int ofxGuiInputField<string>::insertAlphabetic(const std::string & character){
+int ofxGuiInputField<std::string>::insertAlphabetic(const std::string & character){
 	return insertKeystroke(character);
 }
 
@@ -367,7 +367,7 @@ void ofxGuiInputField<Type>::generateDraw(){
 
 template<typename Type>
 void ofxGuiInputField<Type>::generateText(){
-	string valStr = input;
+	std::string valStr = input;
 	textMesh = getTextMesh(getName(), textPadding, getShape().height / 2 + 4);
 	textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr,0,0).width, getShape().height / 2 + 4));
 }
@@ -461,7 +461,7 @@ void ofxGuiInputField<Type>::parseInput(){
 }
 
 template<>
-void ofxGuiInputField<string>::parseInput(){
+void ofxGuiInputField<std::string>::parseInput(){
 	bChangedInternally = true;
 	value = input;
 }
@@ -497,8 +497,8 @@ std::string ofxGuiInputField<Type>::getClassType(){
 }
 
 template<typename Type>
-vector<std::string> ofxGuiInputField<Type>::getClassTypes(){
-	vector<std::string> types = ofxGuiElement::getClassTypes();
+std::vector<std::string> ofxGuiInputField<Type>::getClassTypes(){
+	std::vector<std::string> types = ofxGuiElement::getClassTypes();
 	types.push_back(getClassType());
 	return types;
 }
@@ -513,4 +513,4 @@ template class ofxGuiInputField<int64_t>;
 template class ofxGuiInputField<uint64_t>;
 template class ofxGuiInputField<float>;
 template class ofxGuiInputField<double>;
-template class ofxGuiInputField<string>;
+template class ofxGuiInputField<std::string>;

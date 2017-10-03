@@ -118,7 +118,7 @@ class ofxGuiElement : public DOM::Element {
 
 		int objCount;
 
-		virtual vector<std::string> getClassTypes();
+		virtual std::vector<std::string> getClassTypes();
 
 		virtual void generateDraw();
 		virtual void render();

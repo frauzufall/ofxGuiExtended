@@ -26,7 +26,7 @@ protected:
 	void changeValue(VecType & value);
 	ofParameter<VecType> value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
 
 class ofxGuiRectangleSlider : public ofxGuiGroup {
@@ -51,7 +51,7 @@ protected:
 	void changeValue(ofRectangle & value);
 	ofParameter<ofRectangle> value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
 
 template<typename ColorType>
@@ -77,6 +77,6 @@ protected:
 	void changeValue(ofColor_<ColorType> & value);
 	ofParameter<ofColor_<ColorType> > value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
 

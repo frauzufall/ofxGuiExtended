@@ -6,9 +6,9 @@
 class ofxGuiZoomableGraphics : public ofxGuiGraphics {
 	public:
 
-		ofxGuiZoomableGraphics(string canvasName="", const ofJson& config = ofJson());
-		ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config = ofJson());
-		ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h = 0);
+		ofxGuiZoomableGraphics(std::string canvasName="", const ofJson& config = ofJson());
+		ofxGuiZoomableGraphics(std::string canvasName, ofBaseDraws * graphics, const ofJson& config = ofJson());
+		ofxGuiZoomableGraphics(std::string canvasName, ofBaseDraws * graphics, float w, float h = 0);
 
 		virtual ~ofxGuiZoomableGraphics();
 

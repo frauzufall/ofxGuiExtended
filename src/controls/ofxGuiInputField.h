@@ -54,7 +54,7 @@ protected:
 
 	void setup();
 
-	virtual vector<std::string> getClassTypes() override;
+	virtual std::vector<std::string> getClassTypes() override;
 
 	virtual void render() override;
 	ofParameter<Type> value;
@@ -95,4 +95,4 @@ protected:
 
 typedef ofxGuiInputField<float> ofxGuiFloatInputField;
 typedef ofxGuiInputField<int> ofxGuiIntInputField;
-typedef ofxGuiInputField<string> ofxGuiTextField;
+typedef ofxGuiInputField<std::string> ofxGuiTextField;

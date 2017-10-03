@@ -26,7 +26,7 @@ class ofxGuiPanelHeader : public ofxGuiGroupHeader {
 
 	protected:
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 		virtual void render() override;
@@ -59,7 +59,7 @@ class ofxGuiPanel : public ofxGuiGroup {
 		static std::string getClassType();
 
 	protected:
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 	private:
 

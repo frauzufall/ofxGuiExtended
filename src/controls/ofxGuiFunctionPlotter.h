@@ -30,17 +30,17 @@ class ofxGuiFunctionPlotter : public ofxGuiElement {
 
 		void setup();
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void _setConfig(const ofJson & config) override;
 		virtual void render() override;
 		virtual void generateDraw() override;
 
 		ofVboMesh textMesh;
-		vector <float> buffer;
+		std::vector <float> buffer;
 		ofPath plot;
 		ofParameter<float> plotterStrokeWidth;
-		ofParameter <string> label;
+		ofParameter <std::string> label;
 		ofParameter<ofPoint> value;
 		std::function<float (float)> function;
 

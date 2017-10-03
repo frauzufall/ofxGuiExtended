@@ -342,7 +342,7 @@ std::string ofxGuiToggle::getClassType(){
 	return "toggle";
 }
 
-vector<std::string> ofxGuiToggle::getClassTypes(){
+std::vector<std::string> ofxGuiToggle::getClassTypes(){
 	vector<std::string> types = ofxGuiElement::getClassTypes();
 	types.push_back(getClassType());
 	return types;

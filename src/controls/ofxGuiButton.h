@@ -34,7 +34,7 @@ protected:
 
 	void setup();
 
-	virtual vector<std::string> getClassTypes() override;
+	virtual std::vector<std::string> getClassTypes() override;
 
 	virtual void generateDraw() override;
 	virtual bool setValue(float mx, float my, bool bCheck) override;

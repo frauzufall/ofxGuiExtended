@@ -2,19 +2,19 @@
 #include "ofGraphics.h"
 using namespace std;
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, const ofJson& config)
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(std::string canvasName, const ofJson& config)
 	:ofxGuiGraphics(canvasName){
 	_setConfig(config);
 	setup();
 }
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, const ofJson& config)
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(std::string canvasName, ofBaseDraws * graphics, const ofJson& config)
 	:ofxGuiGraphics(canvasName, graphics){
 	_setConfig(config);
 	setup();
 }
 
-ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(string canvasName, ofBaseDraws * graphics, float w, float h)
+ofxGuiZoomableGraphics::ofxGuiZoomableGraphics(std::string canvasName, ofBaseDraws * graphics, float w, float h)
 	:ofxGuiGraphics(canvasName, graphics, w, h){
 	setup();
 }

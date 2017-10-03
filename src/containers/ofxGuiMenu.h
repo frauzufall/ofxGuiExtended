@@ -50,7 +50,7 @@ class ofxGuiMenu : public ofxGuiContainer {
 		void hideOtherMenusDownPress(ofxGuiContainer *parent, ofxGuiMenu* exception);
 		bool isMouseOver(ofxGuiElement *el);
 
-		virtual vector<std::string> getClassTypes() override;
+		virtual std::vector<std::string> getClassTypes() override;
 
 		virtual void generateDraw() override;
 
@@ -90,7 +90,7 @@ protected:
 	void changeValue(ofColor_<ColorType> & value);
 	ofParameter<ofColor_<ColorType> > value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
 
 template<class VecType>
@@ -112,7 +112,7 @@ protected:
 	void changeValue(VecType & value);
 	ofParameter<VecType> value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
 
 class ofxGuiMenuRectangle : public ofxGuiMenu {
@@ -133,5 +133,5 @@ protected:
 	void changeValue(ofRectangle & value);
 	ofParameter<ofRectangle> value;
 	bool sliderChanging;
-	vector<std::string> names;
+	std::vector<std::string> names;
 };
