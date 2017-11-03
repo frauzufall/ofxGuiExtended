@@ -183,78 +183,78 @@ gui.setup<ofxDOMLayoutCustom>();
 	<col width="15%" />
 	<col width="25%" />
 	<col width="25%" />
-	<tr>
-		<td>**Attribute**</td>
-		<td>**Value**</td>
-		<td>**Example**</td>
-		<td>**Description**</td>
-	</tr>
-	<tr>
-		<td>`show-name`</td>
-		<td>`bool`</td>
-		<td>`true`</td>
-		<td>Display or hide the name of the element.</td>
-	</tr>
-	<tr>
-		<td>`background-color`<br>`border-color`<br>`fill-color`<br>`text-color`<br>`header-background-color`</td>
-		<td>`string`</td>
-		<td>`"#ff0000"`<br>`"rgb(255,0,0)"`<br>`"rgba(255,0,0,0.5)"`<br>`"transparent"`</td>
-		<td>Colors of the element.</td>
-	</tr>
-	<tr>
-		<td>`border-width`</td>
-		<td>`float`</td>
-		<td>`1`</td>
-		<td>Width of the border.</td>
-	</tr>
-	<tr>
-		<td>`border-radius`</td>
-		<td>`float`</td>
-		<td>`3`</td>
-		<td>Radius of the border (not implemented for all controls yet).</td>
-	</tr>
-	<tr>
-		<td>`text-align`</td>
-		<td>`string`</td>
-		<td>`left`<br>`right`<br>`center`</td>
-		<td>Sets the text alignment. *Currently only affecting fullsize toggles.*</td>
-	</tr>
-	<tr>
-		<td>`font-family`</td>
-		<td>`string`</td>
-		<td>`"fonts/UbuntuMono-B.ttf"`</td>
-		<td>Sets the font family and changes the font rendering from bitmap font to TTF. Font path is relative to `bin/data`.</td>
-	</tr>
-	<tr>
-		<td>`font-size`</td>
-		<td>`float`</td>
-		<td>`10` (default)</td>
-		<td>Sets the font size. Only works if you set a font family, the default bitmap font has a fixed size. The elements can't currently update their size according to the font size so if you set it high you have to adjust the element size yourself in order to prevent overlapping.</td>
-	</tr>
-	<tr>
-		<td>`margin`</td>
-		<td>`float`<br>`string`</td>
-		<td>`10`<br>`"10 20"`<br>`"10 20 30"`<br>`"10 20 30 40"`</td>
-		<td>Set the margin of the element. Analog to CSS margin.</td>
-	</tr>
-	<tr>
-		<td>`margin-top`<br>`margin-right`<br>`margin-bottom`<br>`margin-left`</td>
-		<td>`float`</td>
-		<td>`10`</td>
-		<td>Set the margin for the specified side of the element.</td>
-	</tr>
-	<tr>
-		<td>`padding`</td>
-		<td>`float`<br>`string`</td>
-		<td>`10`<br>`"10 20"`<br>`"10 20 30"`<br>`"10 20 30 40"`</td>
-		<td>Set the padding of the element. Analog to CSS padding. Padding currently only has an effect on containers, not on controls.</td>
-	</tr>
-	<tr>
-		<td>`padding-top`<br>`padding-right`<br>`padding-bottom`<br>`padding-left`</td>
-		<td>`float`</td>
-		<td>`10`</td>
-		<td>Set the padding for the specified side of the element.</td>
-	</tr>
+		<tr>
+			<td><strong>Attribute</strong></td>
+			<td><strong>Value</strong></td>
+			<td><strong>Example</strong></td>
+			<td><strong>Description</strong></td>
+		</tr>
+		<tr>
+			<td><code>show-name</code></td>
+			<td><code>bool</code></td>
+			<td><code>true</code></td>
+			<td>Display or hide the name of the element.</td>
+		</tr>
+		<tr>
+			<td><code>background-color</code><br><code>border-color</code><br><code>fill-color</code><br><code>text-color</code><br><code>header-background-color</code></td>
+			<td><code>string</code></td>
+			<td><code>"#ff0000"</code><br><code>"rgb(255,0,0)"</code><br><code>"rgba(255,0,0,0.5)"</code><br><code>"transparent"</code></td>
+			<td>Colors of the element.</td>
+		</tr>
+		<tr>
+			<td><code>border-width</code></td>
+			<td><code>float</code></td>
+			<td><code>1</code></td>
+			<td>Width of the border.</td>
+		</tr>
+		<tr>
+			<td><code>border-radius</code></td>
+			<td><code>float</code></td>
+			<td><code>3</code></td>
+			<td>Radius of the border (not implemented for all controls yet).</td>
+		</tr>
+		<tr>
+			<td><code>text-align</code></td>
+			<td><code>string</code></td>
+			<td><code>left</code><br><code>right</code><br><code>center</code></td>
+			<td>Sets the text alignment. *Currently only affecting fullsize toggles.*</td>
+		</tr>
+		<tr>
+			<td><code>font-family</code></td>
+			<td><code>string</code></td>
+			<td><code>"fonts/UbuntuMono-B.ttf"</code></td>
+			<td>Sets the font family and changes the font rendering from bitmap font to TTF. Font path is relative to <code>bin/data</code>.</td>
+		</tr>
+		<tr>
+			<td><code>font-size</code></td>
+			<td><code>float</code></td>
+			<td><code>10</code> (default)</td>
+			<td>Sets the font size. Only works if you set a font family, the default bitmap font has a fixed size. The elements can't currently update their size according to the font size so if you set it high you have to adjust the element size yourself in order to prevent overlapping.</td>
+		</tr>
+		<tr>
+			<td><code>margin</code></td>
+			<td><code>float</code><br><code>string</code></td>
+			<td><code>10</code><br><code>"10 20"</code><br><code>"10 20 30"</code><br><code>"10 20 30 40"</code></td>
+			<td>Set the margin of the element. Analog to CSS margin.</td>
+		</tr>
+		<tr>
+			<td><code>margin-top</code><br><code>margin-right</code><br><code>margin-bottom</code><br><code>margin-left</code></td>
+			<td><code>float</code></td>
+			<td><code>10</code></td>
+			<td>Set the margin for the specified side of the element.</td>
+		</tr>
+		<tr>
+			<td><code>padding</code></td>
+			<td><code>float`<br>`string</code></td>
+			<td><code>10</code><br><code>"10 20"</code><br><code>"10 20 30"</code><br><code>"10 20 30 40"</code></td>
+			<td>Set the padding of the element. Analog to CSS padding. Padding currently only has an effect on containers, not on controls.</td>
+		</tr>
+		<tr>
+			<td><code>padding-top</code><br><code>padding-right</code><br><code>padding-bottom</code><br><code>padding-left</code></td>
+			<td><code>float</code></td>
+			<td><code>10</code></td>
+			<td>Set the padding for the specified side of the element.</td>
+		</tr>
 </table>
 
 
@@ -268,15 +268,15 @@ gui.setup<ofxDOMLayoutCustom>();
 	<col width="30%" />
 	<col width="25%" />
 	<tr>
-		<td>**Attribute**</td>
-		<td>**Value**</td>
-		<td>**Example**</td>
-		<td>**Description**</td>
+		<td><strong>Attribute</strong></td>
+		<td><strong>Value</strong></td>
+		<td><strong>Example</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`type`</td>
-		<td>`string`</td>
-		<td>`"checkbox"` (default)<br>`"radio"`<br>`"fullsize"`</td>
+		<td><code>type</code></td>
+		<td><code>string</code></td>
+		<td><code>"checkbox"</code> (default)<br><code>"radio"</code><br><code>"fullsize"</code></td>
 		<td> Visual type of toggle.</td>
 	</tr>
   </table>
@@ -296,27 +296,27 @@ gui.setup<ofxDOMLayoutCustom>();
 	<col width="30%" />
 	<col width="25%" />
 	<tr>
-		<td>**Attribute**</td>
-		<td>**Value**</td>
-		<td>**Example**</td>
-		<td>**Description**</td>
+		<td><strong>Attribute</strong></td>
+		<td><strong>Value</strong></td>
+		<td><strong>Example</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`type`</td>
-		<td>`string`</td>
-		<td>`"straight"` (default)<br>`"circular"`</td>
+		<td><code>type</code></td>
+		<td><code>string</code></td>
+		<td><code>"straight"</code> (default)<br><code>"circular"</code></td>
 		<td> Visual type of slider. The straight type will appear as a horizontal or vertical slider depending on the aspect ration of its size.</td>
 	</tr>
 	<tr>
-		<td>`precision`</td>
-		<td>`int`</td>
-		<td>`6` (default)</td>
-		<td>Sets the displayed precision of a `float` value. The value of the parameter won't be changed.</td>
+		<td><code>precision</code></td>
+		<td><code>int</code></td>
+		<td><code>6</code> (default)</td>
+		<td>Sets the displayed precision of a <code>float</code> value. The value of the parameter won't be changed.</td>
 	</tr>
 	<tr>
-		<td>`update-on-release-only`</td>
-		<td>`bool`</td>
-		<td>`false` (default)</td>
+		<td><code>update-on-release-only</code></td>
+		<td><code>bool</code></td>
+		<td><code>false</code> (default)</td>
 		<td>If true, the slider will trigger on release only.</td>
 	</tr>
   </table>
@@ -368,15 +368,15 @@ gui.setup<ofxDOMLayoutCustom>();
   <col width="30%" />
   <col width="25%" />
   <tr>
-	  <td>**Attribute**</td>
-	  <td>**Value**</td>
-	  <td>**Example**</td>
-	  <td>**Description**</td>
+	  <td><strong>Attribute</strong></td>
+	  <td><strong>Value</strong></td>
+	  <td><strong>Example</strong></td>
+	  <td><strong>Description</strong></td>
   </tr>
   <tr>
-	  <td>`show-header`</td>
-	  <td>`bool`</td>
-	  <td>`true` (default)</td>
+	  <td><code>show-header</code></td>
+	  <td><code>bool</code></td>
+	  <td><code>true</code> (default)</td>
 	  <td>Show or hide the header of the group.</td>
   </tr>
 </table>
@@ -405,21 +405,21 @@ gui.setup<ofxDOMLayoutCustom>();
 	<col width="30%" />
 	<col width="25%" />
 	<tr>
-		<td>**Attribute**</td>
-		<td>**Value**</td>
-		<td>**Example**</td>
-		<td>**Description**</td>
+		<td><strong>Attribute</strong></td>
+		<td><strong>Value</strong></td>
+		<td><strong>Example</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`width`<br>`height`</td>
-		<td>`float`<br>`string`</td>
-		<td>`800`<br>`"70%"`</td>
+		<td><code>width</code><br><code>height</code></td>
+		<td><code>float</code><br><code>string</code></td>
+		<td><code>800</code><br><code>"70%"</code></td>
 		<td>Size of the element.</td>
 	</tr>
 	<tr>
-		<td>`direction`</td>
-		<td>`string`</td>
-		<td>`"vertical"` (default)<br>`"horizontal"`</td>
+		<td><code>direction</code></td>
+		<td><code>string</code></td>
+		<td><code>"vertical"</code> (default)<br><code>"horizontal"</code></td>
 		<td>The direction child elements get aligned.</td>
 	</tr>
 </table>
@@ -435,57 +435,57 @@ gui.setup<ofxDOMLayoutCustom>();
   <col width="30%" />
   <col width="25%" />
   <tr>
-	  <td>**Attribute**</td>
-	  <td>**Value**</td>
-	  <td>**Example**</td>
-	  <td>**Description**</td>
+	  <td><strong>Attribute</strong></td>
+	  <td><strong>Value</strong></td>
+	  <td><strong>Example</strong></td>
+	  <td><strong>Description</strong></td>
   </tr>
   <tr>
-	  <td>`width`<br>`height`</td>
-	  <td>`float`<br>`string`</td>
-	  <td>`800`<br>`"70%"`</td>
+	  <td><code>width</code><br><code>height</code></td>
+	  <td><code>float</code><br><code>string</code></td>
+	  <td><code>800</code><br><code>"70%"</code></td>
 	  <td>Size of the element.</td>
   </tr>
   <tr>
-	  <td>`flex`</td>
-	  <td>`string`<br>`float`</td>
-	  <td>`"none"` (default)<br>`"auto"`<br>`3`</td>
+	  <td><code>flex</code></td>
+	  <td><code>string</code><br><code>float</code></td>
+	  <td><code>"none"</code> (default)<br><code>"auto"</code><br><code>3</code></td>
 	  <td>Flex attribute of the element [[source](https://www.w3.org/TR/css-flexbox/#flex-property)].</td>
   </tr>
   <tr>
-	  <td>`flex-direction`</td>
-	  <td>`string`</td>
-	  <td>`"column"` (default)<br>`"row"`</td>
+	  <td><code>flex-direction</code></td>
+	  <td><code>string</code></td>
+	  <td><code>"column"</code> (default)<br><code>"row"</code></td>
 	  <td>The direction child elements get aligned.</td>
   </tr>
   <tr>
-	  <td>`flex-wrap`</td>
-	  <td>`string`</td>
-	  <td>`"nowrap"` (default)<br>`"wrap"`</td>
+	  <td><code>flex-wrap</code></td>
+	  <td><code>string</code></td>
+	  <td><code>"nowrap"</code> (default)<br><code>"wrap"</code></td>
 	  <td>Determines if the child elements are aligned on one or multiple lines if space is insufficient
   </tr>
   <tr>
-	  <td>`justify-content`</td>
-	  <td>`string`</td>
-	  <td>`"flex-start"` (default)<br>`"flex-end"`<br>`"center"`<br>`"space-between"`<br>`"space-around"`</td>
+	  <td><code>justify-content</code></td>
+	  <td><code>string</code></td>
+	  <td><code>"flex-start"</code> (default)<br><code>"flex-end"</code><br><code>"center"</code><br><code>"space-between"</code><br><code>"space-around"</code></td>
 	  <td>How to align the child items along the main axis.</td>
   </tr>
   <tr>
-	  <td>`align-items`</td>
-	  <td>`string`</td>
-	  <td>`"stretch"` (default)<br>`"flex-start"`<br>`"flex-end"`<br>`"center"`</td>
+	  <td><code>align-items`</td>
+	  <td><code>string`</td>
+	  <td><code>"stretch"</code> (default)<br><code>"flex-start"</code><br><code>"flex-end"</code><br><code>"center"</code></td>
 	  <td>How to align child items along the cross axis.</td>
   </tr>
   <tr>
-	  <td>`align-content`</td>
-	  <td>`string`</td>
-	  <td>`"stretch"` (default)<br>`"flex-start"`<br>`"flex-end"`<br>`"center"`<br>`"space-between"`<br>`"space-around"`</td>
+	  <td><code>align-content</code></td>
+	  <td><code>string</code></td>
+	  <td><code>"stretch"</code> (default)<br><code>"flex-start"</code><br><code>"flex-end"</code><br><code>"center"</code><br><code>"space-between"</code><br><code>"space-around"</code></td>
 	  <td>Alignment options for item lines when there is space in the container along the cross axis, only used if multiple rows / columns are present.</td>
   </tr>
   <tr>
-	  <td>`align-self`</td>
-	  <td>`string`</td>
-	  <td>`"auto"` (default)<br>`"flex-start"`<br>`"flex-end"`<br>`"center"`<br>`"stretch"`</td>
+	  <td><code>align-self`</td>
+	  <td><code>string`</td>
+	  <td><code>"auto"</code> (default)<br><code>"flex-start"</code><br><code>"flex-end"</code><br><code>"center"</code><br><code>"stretch"</code></td>
 	  <td>Individual alignment options for a flex item along the cross axis.</td>
   </tr>
 </table>
