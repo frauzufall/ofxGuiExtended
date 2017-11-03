@@ -140,9 +140,9 @@ void ofxGuiElement::setTheme(){
 
 void ofxGuiElement::setTheme(const ofJson &config){
 	theme = config;
-	blockLayout(true);
+//	blockLayout(true);
 	_setConfigUsingClassifiers(config, true);
-	blockLayout(false);
+//	blockLayout(false);
 }
 
 void ofxGuiElement::loadConfig(const string &filename, bool recursive){

@@ -9,8 +9,6 @@ void ofApp::setup(){
 
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGB);
 
-	data.setName("menu");
-
 	data.add(addCircle.set("draw circle"));
 	data.add(addRectangle.set("draw rectangle"));
 
@@ -44,7 +42,7 @@ void ofApp::setup(){
 
 	ofxGuiContainer* menu = gui.addMenu(data);
 
-	menu->loadTheme("theme_light.json");
+	menu->loadTheme("theme_light.json", true);
 
 	addCircle.addListener(this, &ofApp::drawCircle);
 	addRectangle.addListener(this, &ofApp::drawRectangle);
