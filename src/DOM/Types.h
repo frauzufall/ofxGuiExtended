@@ -26,15 +26,14 @@
 #pragma once
 
 
-#include "ofBaseTypes.h"
-#include "ofPoint.h"
-
-
 #include <type_traits>
 #include <utility>
 #include <typeinfo>
 #include <string>
 #include <cassert>
+#include "ofPoint.h"
+#include "ofRectangle.h"
+#include "ofTypes.h"
 
 
 namespace DOM {
