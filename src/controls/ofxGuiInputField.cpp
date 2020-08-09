@@ -268,6 +268,8 @@ bool ofxGuiInputField<Type>::keyPressed(ofKeyEventArgs & args){
 		if(args.key >= '0' && args.key <= '9'){
 			int digit = args.key - '0';
 			newCursorIdx = insertKeystroke(ofToString(digit));
+		}else if(args.key == '-' ){
+			newCursorIdx = insertKeystroke("-");
 		}else if(args.key == '.' ){
 			newCursorIdx = insertKeystroke(".");
 		}else if(args.key == OF_KEY_BACKSPACE || args.key == OF_KEY_DEL){
