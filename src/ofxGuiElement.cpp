@@ -821,6 +821,10 @@ bool ofxGuiElement::isMouseOver() const{
 	return _isMouseOver;
 }
 
+bool ofxGuiElement::isMousePressed() const{
+	return _isMousePressed;
+}
+
 void ofxGuiElement::setDraggable(bool draggable){
 	_isDraggable = draggable;
 }
@@ -857,7 +861,7 @@ bool ofxGuiElement::mouseDragged(ofMouseEventArgs & args){
 bool ofxGuiElement::mousePressed(ofMouseEventArgs & args){
 	if(!isHidden()){
 		if(localToScreen(ofRectangle(0,0,getWidth(),getHeight())).inside(args.x, args.y)){
-			_isMouseOver = true;
+			_isMouseOver = _isMousePressed = true;
 			if(_isDraggable){
 				_isDragging = true;
 				grabPoint = ofPoint(args.x, args.y) - getScreenPosition();
@@ -866,10 +870,12 @@ bool ofxGuiElement::mousePressed(ofMouseEventArgs & args){
 		}else {
 			_isDragging = false;
 			_isMouseOver = false;
+			_isMousePressed = false;
 		}
 	}else {
 		_isDragging = false;
 		_isMouseOver= false;
+		_isMousePressed = false;
 	}
 	return false;
 }
@@ -896,6 +902,7 @@ bool ofxGuiElement::mouseReleased(ofMouseEventArgs & args){
 			_isMouseOver = false;
 		}
 	}
+	_isMousePressed = false;
 	_isDragging = false;
 	return false;
 }

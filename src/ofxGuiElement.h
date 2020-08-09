@@ -172,6 +172,9 @@ class ofxGuiElement : public DOM::Element {
 		/// \brief True if the pointer is over the widget.
 		bool _isMouseOver = false;
 
+		/// \brief True if the pointer is pressed over the widget.
+		bool _isMousePressed = false;
+
 		/// \brief Point where element is grabbed for dragging in screen coordinates
 		ofPoint grabPoint;
 
