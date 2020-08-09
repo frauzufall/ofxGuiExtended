@@ -54,6 +54,12 @@ void ofApp::setup(){
 	alignContent->setExclusiveToggles(true);
 	alignContent->setActiveToggle(0);
 
+	wrapItems = control->addGroup("flex-wrap", controlGroupConfig);
+	wrapItems->add<ofxGuiToggle>("wrap");
+	wrapItems->add<ofxGuiToggle>("nowrap");
+	wrapItems->setExclusiveToggles(true);
+	wrapItems->setActiveToggle(0);
+
 	ofxGuiGroup* groupsGroup = all->addGroup("", ofJson({
 		{"flex-direction", "row"},
 		{"flex", 1},
@@ -80,8 +86,8 @@ void ofApp::setup(){
 		for(int i = 0; i < 22; i++){
 			group->addLabel(ofToString(i), ofJson({
 				{"border-width", 1},
-				{"width", ofRandom(20, 70)},
-				{"height", ofRandom(20, 70)}
+				{"width", ofToString(ofRandom(3, 20)) + ofToString("%")},
+				{"height", ofToString(ofRandom(3, 20)) + ofToString("%")}
 			}));
 		}
 	}
@@ -89,6 +95,7 @@ void ofApp::setup(){
 	justifyContent->getActiveToggleIndex().addListener(this, &ofApp::setJustifyContent);
 	alignItems->getActiveToggleIndex().addListener(this, &ofApp::setAlignItems);
 	alignContent->getActiveToggleIndex().addListener(this, &ofApp::setAlignContent);
+	wrapItems->getActiveToggleIndex().addListener(this, &ofApp::setWrapItems);
 
 }
 
@@ -96,6 +103,7 @@ void ofApp::exit(){
 	justifyContent->getActiveToggleIndex().removeListener(this, &ofApp::setJustifyContent);
 	alignItems->getActiveToggleIndex().removeListener(this, &ofApp::setAlignItems);
 	alignContent->getActiveToggleIndex().removeListener(this, &ofApp::setAlignContent);
+	wrapItems->getActiveToggleIndex().removeListener(this, &ofApp::setWrapItems);
 }
 
 void ofApp::setAlignContent(int &index){
@@ -140,6 +148,18 @@ void ofApp::setJustifyContent(int &index){
 
 	for(ofxGuiGroup* group : groups){
 		group->setConfig(ofJson({{"justify-content", value}}));
+	}
+}
+
+void ofApp::setWrapItems(int &index){
+	std::string value;
+	switch(index){
+		case 1:	value = "nowrap"; break;
+		default: case 0:	value = "wrap"; break;
+	}
+
+	for(ofxGuiGroup* group : groups){
+		group->setConfig(ofJson({{"flex-wrap", value}}));
 	}
 }
 

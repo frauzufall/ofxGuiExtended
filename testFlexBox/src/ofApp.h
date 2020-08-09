@@ -26,6 +26,7 @@ class ofApp : public ofBaseApp{
 		void setJustifyContent(int& index);
 		void setAlignItems(int& index);
 		void setAlignContent(int& index);
+		void setWrapItems(int& index);
 
 		ofxGui gui;
 
@@ -34,5 +35,6 @@ class ofApp : public ofBaseApp{
 		ofxGuiGroup* justifyContent;
 		ofxGuiGroup* alignItems;
 		ofxGuiGroup* alignContent;
+		ofxGuiGroup* wrapItems;
 
 };
