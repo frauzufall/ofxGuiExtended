@@ -101,6 +101,8 @@ bool ofxGuiToggle::mouseReleased(ofMouseEventArgs & args){
 
 void ofxGuiToggle::generateDraw(){
 
+	ofxGuiElement::generateDraw();
+
 	float maxSize = min(getHeight(), getWidth());
 	switch(type){
 		default:
@@ -234,8 +236,7 @@ void ofxGuiToggle::generateDraw(){
 
 void ofxGuiToggle::render(){
 
-	bg.draw();
-	border.draw();
+	ofxGuiElement::render();
 
 	if(showName){
 		ofColor c = ofGetStyle().color;

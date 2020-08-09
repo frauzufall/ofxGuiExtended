@@ -255,7 +255,20 @@ gui.setup<ofxDOMLayoutCustom>();
 			<td><code>10</code></td>
 			<td>Set the padding for the specified side of the element.</td>
 		</tr>
+		<tr>
+			<td><code>background-image</code></td>
+			<td><code>string</code></td>
+			<td><code>images/ente.jpg</code></td>
+			<td>Set the background image path of the element, relative to the bin directory of the application.</td>
+		</tr>
+		<tr>
+			<td><code>background-size</code></td>
+			<td><code>string</code></td>
+			<td><code>cover</code> (default)<br><code>contain</code><br><code>scale</code></td>
+			<td>Set how the background image is sized - <code>contain</code> makes the whole image fit inside the element by keeping it's proportions, <code>cover</code> makes the image cover the element by keeping it's proportions, <code>scale</code> scales the image to the same size as the element.</td>
+		</tr>
 </table>
+
 
 
 ### `ofxGuiToggle`

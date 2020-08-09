@@ -5,6 +5,7 @@
 #include "ofTrueTypeFont.h"
 #include "ofBitmapFont.h"
 #include "ofJson.h"
+#include "ofImage.h"
 
 #include "DOM/Element.h"
 
@@ -12,6 +13,12 @@ enum TextAlignment{
 	LEFT,
 	RIGHT,
 	CENTERED
+};
+
+enum BackgroundSize {
+	SCALE,
+	CONTAIN,
+	COVER
 };
 
 class ofxGuiElement : public DOM::Element {
@@ -54,6 +61,14 @@ class ofxGuiElement : public DOM::Element {
 
 		virtual void setLayoutPosition(DOM::LayoutPosition type);
 		virtual DOM::LayoutPosition getLayoutPosition();
+
+		virtual void setBackgroundSize(const BackgroundSize& backgroundSize=BackgroundSize::COVER);
+		virtual void setBackgroundSize(const std::string& backgroundSize);
+		BackgroundSize getBackgroundSize() const;
+
+		virtual void setBackgroundImage(ofTexture *texture);
+		virtual void setBackgroundImage(const std::string& backgroundImageSrc);
+		ofTexture* getBackgroundImage() const;
 
 		ofColor getHeaderBackgroundColor() const;
 		ofColor getBackgroundColor() const;
@@ -173,6 +188,11 @@ class ofxGuiElement : public DOM::Element {
 		ofParameter<float> fontSize;
 		ofParameter<float> textPadding;
 		ofParameter<float> borderRadius;
+		ofParameter<BackgroundSize> backgroundSize;
+
+		ofTexture* backgroundTexture;
+		ofImage backgroundImg;
+		ofRectangle backgroundImgPos, backgroundTexPos;
 
 		bool bRegisteredForMouseEvents;
 

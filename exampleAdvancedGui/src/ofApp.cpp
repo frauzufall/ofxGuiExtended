@@ -47,6 +47,9 @@ void ofApp::setup(){
 	buttons->add<ofxGuiButton>("fullsize button", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
 	buttons->add<ofxGuiButton>("checkbox button", ofJson({{"type", "checkbox"}}));
 	buttons->add<ofxGuiButton>("radio button", ofJson({{"type", "radio"}}));
+	buttons->add<ofxGuiButton>("image button (scale)", ofJson({{"type", "fullsize"}, {"padding", "20"}, {"background-image", "images/ente.jpg"}, {"background-size", "scale"}}));
+	buttons->add<ofxGuiButton>("image button (cover)", ofJson({{"type", "fullsize"}, {"padding", "20"}, {"background-image", "images/ente.jpg"}, {"background-size", "cover"}}));
+	buttons->add<ofxGuiButton>("image button (contain)", ofJson({{"type", "fullsize"}, {"padding", "20"}, {"background-image", "images/ente.jpg"}, {"background-size", "contain"}}));
 
 	panel1->addSpacer(0, 20);
 

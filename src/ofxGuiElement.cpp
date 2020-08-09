@@ -68,6 +68,9 @@ ofxGuiElement::~ofxGuiElement(){
 	if(updateOnThemeChange){
 		ofRemoveListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
 	}
+	if(backgroundTexture != NULL) {
+		backgroundTexture = NULL;
+	}
 
 }
 
@@ -90,10 +93,14 @@ void ofxGuiElement::setup(){
 	showName.set("show-name", true);
 	borderWidth.set("border-width", 1);
 	borderRadius.set("border-radius", 0);
+	backgroundTexture = NULL;
+	backgroundSize.set("background-size", BackgroundSize::COVER);
 	setLayoutPosition(DOM::LayoutPosition::POSITION_STATIC);
 
 	textAlignment.setName("text-align");
 	setTextAlignment("left");
+
+	setBackgroundSize("auto");
 
 	theme = ofxGuiDefaultConfig::get();
 	setTheme();
@@ -355,6 +362,17 @@ void ofxGuiElement::_setConfig(const ofJson &config){
 			loadFont(family, fontSize);
 		}
 
+		//parse background image
+		if (config.find("background-image") != config.end()) {
+			std::string url = config["background-image"];
+			setBackgroundImage(url);
+		}
+
+		if (config.find("background-size") != config.end()) {
+			std::string size = config[backgroundSize.getName()];
+			setBackgroundSize(size);
+		}
+
 		//parse all config entries to attribute values of the element.
 		//WARNING this will crash if there are non string keys in the config
 		for (ofJson::const_iterator it = _config.begin(); it != _config.end(); ++it) {
@@ -510,7 +528,8 @@ void ofxGuiElement::setName(const std::string& _name){
 }
 
 void ofxGuiElement::setTextAlignment(const TextAlignment &textLayout){
-	this->textAlignment = textLayout;
+	textAlignment.set(textLayout);
+	setNeedsRedraw();
 }
 
 void ofxGuiElement::setTextAlignment(const std::string &textLayout){
@@ -523,6 +542,48 @@ void ofxGuiElement::setTextAlignment(const std::string &textLayout){
 	else if(textLayout == "center"){
 		setTextAlignment(TextAlignment::CENTERED);
 	}
+}
+
+void ofxGuiElement::setBackgroundSize(const BackgroundSize &backgroundSize){
+	this->backgroundSize.set(backgroundSize);
+	setNeedsRedraw();
+}
+
+void ofxGuiElement::setBackgroundSize(const std::string &backgroundSize){
+	if(backgroundSize == "cover"){
+		setBackgroundSize(BackgroundSize::COVER);
+	}
+	else if(backgroundSize == "contain"){
+		setBackgroundSize(BackgroundSize::CONTAIN);
+	}
+	else if(backgroundSize == "scale"){
+		setBackgroundSize(BackgroundSize::SCALE);
+	}
+}
+
+void ofxGuiElement::setBackgroundImage(const string &src) {
+	ofFile imgFile = ofFile(src);
+	if(imgFile.exists()) {
+		backgroundImg.load(src);
+		backgroundTexture = &backgroundImg.getTexture();
+		backgroundImgPos = ofRectangle(0, 0, backgroundImg.getWidth(), backgroundImg.getHeight());
+		setNeedsRedraw();
+	} else {
+		cout << "Background image does not exist: " << imgFile.getAbsolutePath() << endl;
+	}
+}
+
+void ofxGuiElement::setBackgroundImage(ofTexture* texture) {
+	backgroundTexture = texture;
+	backgroundImgPos = ofRectangle(0, 0, texture->getWidth(), texture->getHeight());
+}
+
+BackgroundSize ofxGuiElement::getBackgroundSize() const {
+	return backgroundSize;
+}
+
+ofTexture* ofxGuiElement::getBackgroundImage() const {
+	return backgroundTexture;
 }
 
 TextAlignment ofxGuiElement::getTextAlignment() const {
@@ -627,6 +688,40 @@ void ofxGuiElement::generateDraw(){
 	border.rectRounded(0,0,getWidth(),getHeight(), borderRadius);
 	border.rectRounded(borderWidth,borderWidth,getWidth()-borderWidth*2,getHeight()-borderWidth*2, borderRadius);
 
+	if(backgroundTexture != NULL) {
+		if(backgroundTexture->isAllocated()) {
+			float imgRatio = backgroundTexture->getWidth() / backgroundTexture->getHeight();
+			float thisRatio = getWidth() / getHeight();
+			backgroundImgPos.setWidth(backgroundTexture->getWidth());
+			backgroundImgPos.setHeight(backgroundTexture->getHeight());
+			backgroundImgPos.setPosition(0, 0);
+			backgroundTexPos.setWidth(getWidth());
+			backgroundTexPos.setHeight(getHeight());
+			backgroundTexPos.setPosition(0, 0);
+			switch(backgroundSize) {
+			case BackgroundSize::CONTAIN:
+				if(thisRatio < imgRatio) {
+					backgroundTexPos.setHeight(backgroundTexPos.width/imgRatio);
+					backgroundTexPos.setPosition(0, (backgroundTexPos.width/thisRatio-backgroundTexPos.height)/2.);
+				} else {
+					backgroundTexPos.setWidth(backgroundTexPos.height*imgRatio);
+					backgroundTexPos.setPosition((backgroundTexPos.height*thisRatio-backgroundTexPos.width)/2., 0);
+				}
+				break;
+			case BackgroundSize::COVER:
+				if(thisRatio < imgRatio) {
+					backgroundImgPos.setWidth(backgroundImgPos.height*thisRatio);
+					backgroundImgPos.setPosition((backgroundImgPos.height*imgRatio-backgroundImgPos.width)/2., 0);
+				} else {
+					backgroundImgPos.setHeight(backgroundImgPos.width/thisRatio);
+					backgroundImgPos.setPosition(0, (backgroundImgPos.width/imgRatio-backgroundImgPos.height)/2.);
+				}
+				break;
+
+			}
+		}
+	}
+
 }
 
 void ofxGuiElement::render(){
@@ -637,6 +732,22 @@ void ofxGuiElement::render(){
 		ofEnableAlphaBlending();
 	}
 
+	if(backgroundTexture != NULL) {
+		if(backgroundTexture->isAllocated()){
+			backgroundTexture->bind();
+			glBegin(GL_QUADS);
+			glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y);
+			glVertex2f(backgroundTexPos.x, backgroundTexPos.y);
+			glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y);
+			glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y);
+			glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y+backgroundImgPos.height);
+			glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y+backgroundTexPos.height);
+			glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y+backgroundImgPos.height);
+			glVertex2f(backgroundTexPos.x, backgroundTexPos.y+backgroundTexPos.height);
+			glEnd();
+			backgroundTexture->unbind();
+		}
+	}
 	bg.draw();
 	border.draw();
 
