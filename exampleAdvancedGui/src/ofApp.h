@@ -32,7 +32,7 @@ class ofApp : public ofBaseApp {
 		ofParameter<string> containerLabel, groupLabel, panelLabel;
 
 		ofxGuiPanel *panel1;
-		ofxGuiGroup *labels, *buttons;
+		ofxGuiGroup *labels, *buttons, *specialSliders;
 
 		//plotter
 		ofParameter<ofPoint> sinus;
@@ -51,6 +51,9 @@ class ofApp : public ofBaseApp {
 
 		//rangeslider
 		ofParameter<float> rangesliderStart, rangesliderEnd;
+
+		//exponential slider
+		ofParameter<float> exponentialSlider;
 
 		//color panel
 		ofxGuiPanel* colorPanel;

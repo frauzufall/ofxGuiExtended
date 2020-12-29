@@ -76,10 +76,15 @@ protected:
 	ofParameter<DataType> value;
 	ofParameter<ofxGuiSliderType::Type> type;
 	virtual bool setValue(float mx, float my, bool bCheck) override;
+	virtual bool setValue(float mx, float my, bool bCheck, ofParameter<DataType>* referenceValue);
+	virtual void setValue(DataType value);
 	virtual void generateDraw() override;
 	virtual void generateText();
 	virtual void _generateText(std::string valStr);
+	virtual void generateShapes(ofParameter<DataType>* valueReference);
+	virtual void setSliderBarValue(DataType value);
 	void valueChanged(DataType & value);
+	void handleMousePressed(float x, float y, ofParameter<DataType>* referenceValue);
 	virtual std::string getText();
 	ofPath bar;
 	ofVboMesh textMesh;

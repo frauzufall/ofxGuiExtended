@@ -9,6 +9,7 @@
 #include "controls/ofxGuiToggle.h"
 #include "controls/ofxGuiSlider.h"
 #include "controls/ofxGuiRangeSlider.h"
+#include "controls/ofxGuiFunctionSlider.h"
 #include "controls/ofxGuiButton.h"
 #include "controls/ofxGuiLabel.h"
 #include "controls/ofxGuiValuePlotter.h"

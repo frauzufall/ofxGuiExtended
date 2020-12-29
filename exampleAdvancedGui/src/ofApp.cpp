@@ -1,5 +1,13 @@
 #include "ofApp.h"
 
+float exponentialFunction(float x) {
+	return pow(10, x);
+}
+
+float reversedExponentialFunction(float y) {
+	return log10(y);
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 
@@ -59,15 +67,6 @@ void ofApp::setup(){
 	panel1->add<ofxGuiFloatInputField>(floatfieldVal.set("float input",3.5,0,500));
 	panel1->add<ofxGuiTextField>(textfieldVal.set("text input","type in here"));
 
-	panel1->addSpacer(0, 20);
-
-	/*
-	 *  range slider
-	 */
-	rangesliderStart.set("range",2,0,5); //use the first parameter to set the initial lower value and the min and max value
-	rangesliderEnd.set(3); // use the second parameter to set the initial upper value
-	panel1->add<ofxGuiFloatRangeSlider>(rangesliderStart, rangesliderEnd, ofJson({{"precision", 2}}));
-
 	/*
 	 * ofParameterGroup example with radio toggles, listener to show current index and name
 	 */
@@ -96,6 +95,25 @@ void ofApp::setup(){
 	/*
 	 *  sliders
 	 */
+
+	specialSliders = colorPanel->addGroup("special sliders");
+	/*
+	 *  range slider
+	 */
+	rangesliderStart.set("range",2,0,5); //use the first parameter to set the initial lower value and the min and max value
+	rangesliderEnd.set(3); // use the second parameter to set the initial upper value
+	specialSliders->add<ofxGuiFloatRangeSlider>(rangesliderStart, rangesliderEnd, ofJson({{"precision", 2}}));
+
+	/*
+	 * exponential slider
+	 */
+	ofxGuiFloatFunctionSlider* functionSlider = specialSliders->add<ofxGuiFloatFunctionSlider>(exponentialSlider.set("exponential", 2, 1, 10000));
+	functionSlider->setFunctions(exponentialFunction, reversedExponentialFunction);
+	specialSliders->add<ofxGuiValuePlotter>(exponentialSlider, ofJson({{"show-name", false}, {"height", 70}}));
+
+	/*
+	 * vertical sliders
+	 */
 	sliders = gui.addContainer("vertical sliders", ofJson({{"direction", "horizontal"}}));
 	sliders->setPosition(colorPanel->getShape().getTopRight()+ofPoint(20,0));
 
@@ -104,8 +122,10 @@ void ofApp::setup(){
 	sliders->add(slider3Val.set("slider3", 4. / 7., 0, 1), ofJson({{"width", 60}, {"height", 130}}));
 	sliders->add(slider4Val.set("slider4", 6. / 7., 0, 1), ofJson({{"width", 70}, {"height", 130}}));
 
+	/*
+	 * circular slider
+	 */
 	sliders->add(circularSliderVal.set("slider", 0.5, 0, 1), ofJson({{"type", "circular"}, {"width", 130}, {"height", 130}, {"precision", 2}}));
-
 
 	/*
 	 * showing the differences between containers, groups and panels
@@ -172,6 +192,7 @@ void ofApp::setHeaderColors(int& index){
 	buttons->getHeader()->setBackgroundColor(c);
 	colorPanel->getHeader()->setBackgroundColor(c);
 	colorToggles->getHeader()->setBackgroundColor(c);
+	specialSliders->getHeader()->setBackgroundColor(c);
 
 	color = c;
 }
@@ -181,6 +202,7 @@ void ofApp::toggleGroupHeader(bool & val){
 	buttons->setShowHeader(val);
 	colorPanel->setShowHeader(val);
 	colorToggles->setShowHeader(val);
+	specialSliders->setShowHeader(val);
 }
 
 //--------------------------------------------------------------

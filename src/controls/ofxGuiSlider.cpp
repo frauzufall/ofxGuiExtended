@@ -138,21 +138,26 @@ bool ofxGuiSlider<DataType>::mousePressed(ofMouseEventArgs & args){
 
 	ofxGuiElement::mousePressed(args);
 
-	if((type == ofxGuiSliderType::CIRCULAR) && isMouseOver()){
-
-		ofPoint pos = screenToLocal(ofPoint(args.x, args.y));
-
-		DataType firstClickVal = ofMap(pos.y, getShape().getHeight(), 0, 0, 1, true);
-		DataType lastVal = ofMap(value, value.getMin(), value.getMax(), 0, 1, true);
-		_mouseOffset = (firstClickVal - lastVal) * getShape().height;
-
-	}
+	handleMousePressed(args.x, args.y, &value);
 
 	if(updateOnReleaseOnly){
 		value.disableEvents();
 	}
 	return setValue(args.x, args.y, true);
 
+}
+
+template<typename DataType>
+void ofxGuiSlider<DataType>::handleMousePressed(float x, float y, ofParameter<DataType>* referenceValue) {
+	if((type == ofxGuiSliderType::CIRCULAR) && isMouseOver()){
+
+		ofPoint pos = screenToLocal(ofPoint(x, y));
+
+		DataType firstClickVal = ofMap(pos.y, getShape().getHeight(), 0, 0, 1, true);
+		DataType lastVal = ofMap(referenceValue->get(), referenceValue->getMin(), referenceValue->getMax(), 0, 1, true);
+		_mouseOffset = (firstClickVal - lastVal) * getShape().height;
+
+	}
 }
 
 template<typename DataType>
@@ -204,7 +209,7 @@ bool ofxGuiSlider<DataType>::mouseScrolled(ofMouseEventArgs & args){
 			double range = getRange(value.getMin(),value.getMax(), getWidth());
 			DataType newValue = value + ofMap(args.scrollY,-1,1,-range, range);
 			newValue = ofClamp(newValue,value.getMin(),value.getMax());
-			value = newValue;
+			setValue(newValue);
 		}
 		return true;
 	}else{
@@ -213,8 +218,13 @@ bool ofxGuiSlider<DataType>::mouseScrolled(ofMouseEventArgs & args){
 }
 
 template<typename DataType>
+void ofxGuiSlider<DataType>::setValue(DataType value) {
+	this->value.set(value);
+}
+
+template<typename DataType>
 double ofxGuiSlider<DataType>::operator=(DataType v){
-	value = v;
+	setValue(v);
 	return v;
 }
 
@@ -225,7 +235,12 @@ ofxGuiSlider<DataType>::operator const DataType & (){
 
 template<typename DataType>
 void ofxGuiSlider<DataType>::generateDraw(){
+	generateShapes(&value);
+	generateText();
+}
 
+template<typename DataType>
+void ofxGuiSlider<DataType>::generateShapes(ofParameter<DataType>* valueReference) {
 	if(type == ofxGuiSliderType::STRAIGHT){
 
 		horizontal = getWidth() > getHeight();
@@ -236,9 +251,9 @@ void ofxGuiSlider<DataType>::generateDraw(){
 
 		float valAsPct;
 		if(horizontal){
-			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getWidth()-borderWidth*2, true);
+			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, getWidth()-borderWidth*2, true);
 		}else{
-			valAsPct = ofMap(value, value.getMin(), value.getMax(), 0, getHeight()-borderWidth*2, true);
+			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, getHeight()-borderWidth*2, true);
 		}
 		bar.setFillColor(fillColor);
 		bar.setFilled(true);
@@ -268,14 +283,12 @@ void ofxGuiSlider<DataType>::generateDraw(){
 		bg.setFilled(true);
 		arcStrip(bg, center, outer_r-1, inner_r+1, 1);
 
-		float val = ofMap(value, value.getMin(), value.getMax(), 0, 1);
+		float val = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, 1);
 		bar.setFillColor(fillColor);
 		bar.setFilled(true);
 		arcStrip(bar, center, outer_r - 1, inner_r + 1, val);
 
 	}
-
-	generateText();
 }
 
 
@@ -362,9 +375,13 @@ void ofxGuiSlider<DataType>::render(){
 //	}
 }
 
-
 template<typename DataType>
 bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck){
+	return setValue(mx, my, bCheck, &value);
+}
+
+template<typename DataType>
+bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck, ofParameter<DataType>* valueReference) {
 
 	if(isHidden()){
 		hasFocus = false;
@@ -382,9 +399,9 @@ bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck){
 			ofPoint topleft = localToScreen(ofPoint(0, 0));
 			ofPoint bottomright = localToScreen(ofPoint(getWidth(), getHeight()));
 			if(horizontal){
-				value = ofMap(mx, topleft.x, bottomright.x, value.getMin(), value.getMax(), true);
+				setSliderBarValue(ofMap(mx, topleft.x, bottomright.x, valueReference->getMin(), valueReference->getMax(), true));
 			}else{
-				value = ofMap(my, bottomright.y, topleft.y, value.getMin(), value.getMax(), true);
+				setSliderBarValue(ofMap(my, bottomright.y, topleft.y, valueReference->getMin(), valueReference->getMax(), true));
 			}
 			return true;
 
@@ -396,10 +413,10 @@ bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck){
 			DataType res = ofMap(pos.y,
 							 getHeight() - _mouseOffset,
 							 - _mouseOffset,
-							 value.getMin(),
-							 value.getMax(),
+							 valueReference->getMin(),
+							 valueReference->getMax(),
 							 true);
-			value.set(res);
+			setSliderBarValue(res);
 			return true;
 
 		}
@@ -407,6 +424,11 @@ bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck){
 	}
 
 	return false;
+}
+
+template<typename DataType>
+void ofxGuiSlider<DataType>::setSliderBarValue(DataType value) {
+	this->value.set(value);
 }
 
 template<typename DataType>
