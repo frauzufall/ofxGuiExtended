@@ -210,14 +210,14 @@ std::string EventArgs::toString() const
 }
 
 
-const std::string KeyboardUIEventArgs::KEY_DOWN = "keydown";
-const std::string KeyboardUIEventArgs::KEY_UP = "keyup";
+const std::string KeyboardUIEventArgs::DOM_KEY_DOWN = "keydown";
+const std::string KeyboardUIEventArgs::DOM_KEY_UP = "keyup";
 
 
 KeyboardUIEventArgs::KeyboardUIEventArgs(const ofKeyEventArgs& args,
 										 Element* source,
 										 Element* target):
-	UIEventArgs(args.type == ofKeyEventArgs::Pressed ? KEY_DOWN : KEY_UP,
+	UIEventArgs(args.type == ofKeyEventArgs::Pressed ? DOM_KEY_DOWN : DOM_KEY_UP,
 				source,
 				target,
 				true,

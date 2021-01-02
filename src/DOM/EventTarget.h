@@ -226,8 +226,8 @@ EventTarget<EventTargetType>::EventTarget()
 	// theoretically not having any events registered woudl make isEventTypeRegistered much faster.
 	_eventRegistry = {
 
-		{ KeyboardUIEventArgs::KEY_DOWN, &keyDown },
-		{ KeyboardUIEventArgs::KEY_UP, &keyUp }
+		{ KeyboardUIEventArgs::DOM_KEY_DOWN, &keyDown },
+		{ KeyboardUIEventArgs::DOM_KEY_UP, &keyUp }
 	};
 }
 

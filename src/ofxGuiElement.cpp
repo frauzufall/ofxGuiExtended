@@ -735,16 +735,42 @@ void ofxGuiElement::render(){
 	if(backgroundTexture != NULL) {
 		if(backgroundTexture->isAllocated()){
 			backgroundTexture->bind();
-			glBegin(GL_QUADS);
-			glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y);
-			glVertex2f(backgroundTexPos.x, backgroundTexPos.y);
-			glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y);
-			glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y);
-			glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y+backgroundImgPos.height);
-			glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y+backgroundTexPos.height);
-			glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y+backgroundImgPos.height);
-			glVertex2f(backgroundTexPos.x, backgroundTexPos.y+backgroundTexPos.height);
-			glEnd();
+#ifdef TARGET_OPENGLES
+            GLfloat vtx1[] = {
+                backgroundTexPos.x, backgroundTexPos.y,
+                backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y,
+                backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y+backgroundTexPos.height,
+                backgroundTexPos.x, backgroundTexPos.y+backgroundTexPos.height
+            };
+            GLfloat tex1[] = {
+                backgroundImgPos.x, backgroundImgPos.y,
+                backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y,
+                backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y+backgroundImgPos.height,
+                backgroundImgPos.x, backgroundImgPos.y+backgroundImgPos.height
+            };
+            
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            
+            glVertexPointer(2, GL_FLOAT, 0, vtx1);
+            glTexCoordPointer(2, GL_FLOAT, 0, tex1);
+            glDrawArrays(GL_TRIANGLE_FAN,0,4);
+            
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            
+#else
+            glBegin(GL_QUADS);
+            glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y);
+            glVertex2f(backgroundTexPos.x, backgroundTexPos.y);
+            glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y);
+            glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y);
+            glTexCoord2f(backgroundImgPos.x + backgroundImgPos.width, backgroundImgPos.y+backgroundImgPos.height);
+            glVertex2f(backgroundTexPos.x + backgroundTexPos.width, backgroundTexPos.y+backgroundTexPos.height);
+            glTexCoord2f(backgroundImgPos.x, backgroundImgPos.y+backgroundImgPos.height);
+            glVertex2f(backgroundTexPos.x, backgroundTexPos.y+backgroundTexPos.height);
+            glEnd();
+#endif
 			backgroundTexture->unbind();
 		}
 	}

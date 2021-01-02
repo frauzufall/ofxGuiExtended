@@ -246,8 +246,8 @@ public:
 
 	const ofKeyEventArgs& key() const;
 
-	static const std::string KEY_DOWN;
-	static const std::string KEY_UP;
+	static const std::string DOM_KEY_DOWN;
+	static const std::string DOM_KEY_UP;
 
 protected:
 	ofKeyEventArgs _key;
