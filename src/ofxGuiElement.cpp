@@ -1,4 +1,8 @@
 #include "ofxGuiElement.h"
+
+#include <chrono>
+#include <ctime>
+
 #include "containers/ofxGuiContainer.h"
 #include "ofImage.h"
 #include "ofBitmapFont.h"
@@ -167,7 +171,13 @@ void ofxGuiElement::loadTheme(const string &filename, bool updateOnFileChange){
 		if(!updateOnThemeChange){
 			updateOnThemeChange = true;
 			themeFilename = filename;
-			themeUpdated = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+			auto ftime =
+				std::filesystem::last_write_time(ofToDataPath(themeFilename));
+			auto sctp = std::chrono::time_point_cast<
+				std::chrono::system_clock::duration>(
+				ftime - decltype(ftime)::clock::now() +
+				std::chrono::system_clock::now());
+			themeUpdated = std::chrono::system_clock::to_time_t(sctp);
 			ofAddListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
 		}
 	}else{
@@ -184,7 +194,12 @@ void ofxGuiElement::loadTheme(const string &filename, bool updateOnFileChange){
 }
 
 void ofxGuiElement::watchTheme(ofEventArgs &args){
-	std::time_t newthemeUpdated = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+	auto ftime = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+	auto sctp =
+		std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+			ftime - decltype(ftime)::clock::now() +
+			std::chrono::system_clock::now());
+	std::time_t newthemeUpdated = std::chrono::system_clock::to_time_t(sctp);
 	if(newthemeUpdated != themeUpdated){
 		themeUpdated = newthemeUpdated;
 		loadTheme(themeFilename, true);
