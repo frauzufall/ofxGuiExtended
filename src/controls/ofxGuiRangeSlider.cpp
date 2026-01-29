@@ -125,7 +125,7 @@ void ofxGuiRangeSlider<DataType>::generateDraw(){
 	if(valStartAsPct-valEndAsPct<0.01){
 		valEndAsPct++;
 	}
-	this->bar.setFillColor(this->fillColor);
+	this->bar.setFillColor(ofFloatColor(this->fillColor.get()));
 	this->bar.setFilled(true);
 	if(this->horizontal){
 		this->bar.rectRounded(this->borderWidth+valStartAsPct,this->borderWidth, valEndAsPct-valStartAsPct, this->getHeight()-this->borderWidth*2, this->borderRadius);

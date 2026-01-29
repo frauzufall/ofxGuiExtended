@@ -104,7 +104,7 @@ void ofxGuiValuePlotter::generateDraw(){
 			plot.lineTo(getShape().getWidth(), getShape().getHeight());
 			plot.close();
 			plot.setFilled(true);
-			plot.setFillColor(fillColor);
+			plot.setFillColor(ofFloatColor(fillColor.get()));
 		}
 	}
 }

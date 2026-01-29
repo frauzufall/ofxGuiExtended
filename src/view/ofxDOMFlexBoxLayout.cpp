@@ -17,7 +17,7 @@ bool isInteger(const std::string & s){
 bool isFloat( std::string myString ) {
 	std::istringstream iss(myString);
 	float f;
-	iss >> noskipws >> f; // noskipws considers leading whitespace invalid
+	iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
 	// Check the entire string was consumed and if either failbit or badbit is set
 	return iss.eof() && !iss.fail();
 }
