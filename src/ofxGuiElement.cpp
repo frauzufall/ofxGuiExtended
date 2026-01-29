@@ -167,7 +167,10 @@ void ofxGuiElement::loadTheme(const string &filename, bool updateOnFileChange){
 		if(!updateOnThemeChange){
 			updateOnThemeChange = true;
 			themeFilename = filename;
-			themeUpdated = std::chrono::duration_cast<std::chrono::seconds>(std::filesystem::last_write_time(ofToDataPath(themeFilename)).time_since_epoch()).count();
+			const auto fileTime = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+			const auto systemTime = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+				std::chrono::file_clock::to_sys(fileTime));
+			themeUpdated = std::chrono::system_clock::to_time_t(systemTime);
 			ofAddListener(ofEvents().update, this, &ofxGuiElement::watchTheme);
 		}
 	}else{
@@ -184,7 +187,10 @@ void ofxGuiElement::loadTheme(const string &filename, bool updateOnFileChange){
 }
 
 void ofxGuiElement::watchTheme(ofEventArgs &args){
-	std::time_t newthemeUpdated = std::chrono::duration_cast<std::chrono::seconds>(std::filesystem::last_write_time(ofToDataPath(themeFilename)).time_since_epoch()).count();
+	const auto fileTime = std::filesystem::last_write_time(ofToDataPath(themeFilename));
+	const auto systemTime = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+		std::chrono::file_clock::to_sys(fileTime));
+	std::time_t newthemeUpdated = std::chrono::system_clock::to_time_t(systemTime);
 	if(newthemeUpdated != themeUpdated){
 		themeUpdated = newthemeUpdated;
 		loadTheme(themeFilename, true);
