@@ -6,7 +6,6 @@
 #include "../controls/ofxGuiButton.h"
 #include "../controls/ofxGuiLabel.h"
 #include "ofParameter.h"
-#include "ofParameter.h"
 
 template<class VecType>
 class ofxGuiVecSlider_;
