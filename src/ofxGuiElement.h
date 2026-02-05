@@ -6,6 +6,8 @@
 #include "ofBitmapFont.h"
 #include "ofJson.h"
 #include "ofImage.h"
+#include "ofPath.h"
+#include "ofVboMesh.h"
 
 #include "DOM/Element.h"
 

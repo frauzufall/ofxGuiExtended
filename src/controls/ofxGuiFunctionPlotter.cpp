@@ -72,7 +72,7 @@ void ofxGuiFunctionPlotter::generateDraw(){
 	plot.clear();
 	plot.setFilled(false);
 	plot.setStrokeWidth(plotterStrokeWidth);
-	plot.setStrokeColor(ofColor::white);
+	plot.setStrokeColor(ofFloatColor(ofColor::white));
 	for(unsigned i = plotterStrokeWidth; i < getWidth()-plotterStrokeWidth; i++){
 		float y_norm = ofMap(function(
 								 ofMap(i,

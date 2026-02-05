@@ -54,12 +54,12 @@ void ofxGuiSlider<DataType>::setup(){
 	updateOnReleaseOnly.set("update-on-release-only", false);
 	precision.set("precision", 6);
 	type.set("type", ofxGuiSliderType::STRAIGHT);
-	horizontal = getWidth() > getHeight();
+	horizontal = this->getWidth() > this->getHeight();
 
-	setTheme();
+	this->setTheme();
 
-	ofAddListener(resize, this, &ofxGuiSlider<DataType>::resized);
-	registerMouseEvents();
+	ofAddListener(this->resize, this, &ofxGuiSlider<DataType>::resized);
+	this->registerMouseEvents();
 
 }
 
@@ -124,7 +124,7 @@ ofxGuiSliderType::Type ofxGuiSlider<DataType>::getType(){
 
 template<typename DataType>
 void ofxGuiSlider<DataType>::resized(DOM::ResizeEventArgs &){
-	horizontal = getWidth() > getHeight();
+	horizontal = this->getWidth() > this->getHeight();
 }
 
 template<typename DataType>
@@ -153,9 +153,9 @@ void ofxGuiSlider<DataType>::handleMousePressed(float x, float y, ofParameter<Da
 
 		ofPoint pos = screenToLocal(ofPoint(x, y));
 
-		DataType firstClickVal = ofMap(pos.y, getShape().getHeight(), 0, 0, 1, true);
+		DataType firstClickVal = ofMap(pos.y, this->getShape().getHeight(), 0, 0, 1, true);
 		DataType lastVal = ofMap(referenceValue->get(), referenceValue->getMin(), referenceValue->getMax(), 0, 1, true);
-		_mouseOffset = (firstClickVal - lastVal) * getShape().height;
+		_mouseOffset = (firstClickVal - lastVal) * this->getShape().height;
 
 	}
 }
@@ -206,7 +206,7 @@ bool ofxGuiSlider<DataType>::mouseScrolled(ofMouseEventArgs & args){
 
 	if(isMouseOver()){
 		if(args.scrollY>0 || args.scrollY<0){
-			double range = getRange(value.getMin(),value.getMax(), getWidth());
+			double range = getRange(value.getMin(),value.getMax(), this->getWidth());
 			DataType newValue = value + ofMap(args.scrollY,-1,1,-range, range);
 			newValue = ofClamp(newValue,value.getMin(),value.getMax());
 			setValue(newValue);
@@ -243,7 +243,7 @@ template<typename DataType>
 void ofxGuiSlider<DataType>::generateShapes(ofParameter<DataType>* valueReference) {
 	if(type == ofxGuiSliderType::STRAIGHT){
 
-		horizontal = getWidth() > getHeight();
+		horizontal = this->getWidth() > this->getHeight();
 
 		ofxGuiElement::generateDraw();
 
@@ -251,22 +251,22 @@ void ofxGuiSlider<DataType>::generateShapes(ofParameter<DataType>* valueReferenc
 
 		float valAsPct;
 		if(horizontal){
-			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, getWidth()-borderWidth*2, true);
+			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, this->getWidth()-borderWidth*2, true);
 		}else{
-			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, getHeight()-borderWidth*2, true);
+			valAsPct = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, this->getHeight()-borderWidth*2, true);
 		}
-		bar.setFillColor(fillColor);
+		bar.setFillColor(ofFloatColor(fillColor.get()));
 		bar.setFilled(true);
 		if(horizontal){
-			bar.rectRounded(borderWidth,borderWidth, valAsPct, getHeight()-borderWidth*2, borderRadius);
+			bar.rectRounded(borderWidth,borderWidth, valAsPct, this->getHeight()-borderWidth*2, borderRadius);
 		}else{
-			bar.rectRounded(borderWidth, getHeight() - valAsPct-borderWidth, getWidth()-borderWidth*2, valAsPct, borderRadius);
+			bar.rectRounded(borderWidth, this->getHeight() - valAsPct-borderWidth, this->getWidth()-borderWidth*2, valAsPct, borderRadius);
 		}
 
 	}
 	if(type == ofxGuiSliderType::CIRCULAR){
 
-		ofPoint center = ofPoint(getWidth()/2, getHeight()/2);
+		ofPoint center = ofPoint(this->getWidth()/2, this->getHeight()/2);
 		if(showName){
 			center.y -= getTextHeight(getName());
 		}
@@ -277,14 +277,14 @@ void ofxGuiSlider<DataType>::generateShapes(ofParameter<DataType>* valueReferenc
 		bg.clear();
 		bar.clear();
 
-		bg.setStrokeColor(borderColor);
+		bg.setStrokeColor(ofFloatColor(borderColor.get()));
 		bg.setStrokeWidth(1);
-		bg.setFillColor(backgroundColor);
+		bg.setFillColor(ofFloatColor(backgroundColor.get()));
 		bg.setFilled(true);
 		arcStrip(bg, center, outer_r-1, inner_r+1, 1);
 
 		float val = ofMap(valueReference->get(), valueReference->getMin(), valueReference->getMax(), 0, 1);
-		bar.setFillColor(fillColor);
+		bar.setFillColor(ofFloatColor(fillColor.get()));
 		bar.setFilled(true);
 		arcStrip(bar, center, outer_r - 1, inner_r + 1, val);
 
@@ -314,25 +314,25 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 		if(horizontal){
 			textMesh.clear();
 			if(showName){
-				textMesh.append(getTextMesh(getName(), ofPoint(textPadding, getHeight() / 2 + 4)));
+				textMesh.append(getTextMesh(getName(), ofPoint(textPadding, this->getHeight() / 2 + 4)));
 			}
 			if(showValue){
-				textMesh.append(getTextMesh(valStr, getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, getHeight() / 2 + 4));
+				textMesh.append(getTextMesh(valStr, this->getShape().getWidth() - textPadding - getTextBoundingBox(valStr,0,0).width, this->getHeight() / 2 + 4));
 			}
 		}else{
 			textMesh.clear();
 			if(showName){
 				string nameStr = getName();
-				while(getTextBoundingBox(nameStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && nameStr.length() > 1){
+				while(getTextBoundingBox(nameStr, 0, 0).getWidth() + textPadding * 2 > this->getWidth() && nameStr.length() > 1){
 					nameStr = nameStr.substr(0, nameStr.size() - 1);
 				}
 				textMesh.append(getTextMesh(nameStr, textPadding, textPadding + getTextBoundingBox(nameStr, 0, 0).height));
 			}
 			if(showValue){
-				while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > getWidth() && valStr.length() > 1){
+				while(getTextBoundingBox(valStr, 0, 0).getWidth() + textPadding * 2 > this->getWidth() && valStr.length() > 1){
 					valStr = valStr.substr(0, valStr.size() - 1);
 				}
-				textMesh.append(getTextMesh(valStr, textPadding, getHeight() - textPadding));
+				textMesh.append(getTextMesh(valStr, textPadding, this->getHeight() - textPadding));
 			}
 		}
 	}
@@ -340,10 +340,10 @@ void ofxGuiSlider<DataType>::_generateText(std::string valStr){
 
 		textMesh.clear();
 		if(showName){
-			textMesh.append(getTextMesh(getName(), textPadding, getShape().height - textPadding));
+			textMesh.append(getTextMesh(getName(), textPadding, this->getShape().height - textPadding));
 		}
 		if(showValue){
-			textMesh.append(getTextMesh(valStr, getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, getShape().height - textPadding));
+			textMesh.append(getTextMesh(valStr, this->getShape().width - textPadding - getTextBoundingBox(valStr, 0, 0).width, this->getShape().height - textPadding));
 		}
 
 	}
@@ -397,7 +397,7 @@ bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck, ofParamet
 		if(type == ofxGuiSliderType::STRAIGHT){
 
 			ofPoint topleft = localToScreen(ofPoint(0, 0));
-			ofPoint bottomright = localToScreen(ofPoint(getWidth(), getHeight()));
+			ofPoint bottomright = localToScreen(ofPoint(this->getWidth(), this->getHeight()));
 			if(horizontal){
 				setSliderBarValue(ofMap(mx, topleft.x, bottomright.x, valueReference->getMin(), valueReference->getMax(), true));
 			}else{
@@ -411,7 +411,7 @@ bool ofxGuiSlider<DataType>::setValue(float mx, float my, bool bCheck, ofParamet
 			ofPoint pos = screenToLocal(ofPoint(mx,my));
 
 			DataType res = ofMap(pos.y,
-							 getHeight() - _mouseOffset,
+							 this->getHeight() - _mouseOffset,
 							 - _mouseOffset,
 							 valueReference->getMin(),
 							 valueReference->getMax(),
@@ -472,12 +472,12 @@ std::string ofxGuiSlider<unsigned char>::getText(){
 
 template<typename DataType>
 float ofxGuiSlider<DataType>::getMinWidth(){
-	return ofxGuiElement::getTextWidth(getText());
+	return this->getTextWidth(getText());
 }
 
 template<typename DataType>
 float ofxGuiSlider<DataType>::getMinHeight(){
-	return ofxGuiElement::getTextHeight(getText());
+	return this->getTextHeight(getText());
 }
 
 /*
